@@ -1,0 +1,29 @@
+{
+	"name": "oat-sa/extension-parcc-tei",
+		"description" : "",
+		"type" : "tao-extension",
+		"authors" : [
+		{
+			"name": "Open Assessment Technologies"
+		}],
+		"keywords" : [
+			"tao",
+		"computer-based-assessment"
+			],
+		"homepage" : "http://www.taotesting.com",
+		"license" : [
+			"PARCC"
+			],
+		"extra" : {
+			"tao-extension-name" : "parccTei"
+		},
+		"minimum-stability" : "dev",
+		"require": {
+			"oat-sa/oatbox-extension-installer": "dev-master"
+		},
+		"autoload" : {
+			"psr-4" : {
+				"oat\\parccTei\\" : ""
+			}
+		}
+}
