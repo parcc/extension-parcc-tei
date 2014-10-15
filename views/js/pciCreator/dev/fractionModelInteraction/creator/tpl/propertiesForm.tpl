@@ -2,11 +2,7 @@
     <label for="someProp">{{__ "Some Property"}}</label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
     <span class="tooltip-content">{{__ "Some Property Description"}}</span>
-    <select name="someProp" class="select2" data-has-search="false">
-        {{#each someProps}}
-        <option value="{{@key}}" {{#if selected}}selected="selected"{{/if}}>{{label}}</option>
-        {{/each}}
-    </select>
+    <input type="text" name="someProp" value="{{someProp}}"/>
 </div>
 
 <div class="panel">
