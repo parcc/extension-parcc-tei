@@ -1,8 +1,8 @@
 {
-    "typeIdentifier": "fractionModelInteraction",
-    "label": "Fraction Model",
-    "short": "Fractions",
-    "description": "Select one or more fraction",
+    "typeIdentifier": "graphFunctionInteraction",
+    "label": "Graphing Function",
+    "short": "Graphing f(x)",
+    "description": "Graphing functions",
     "version": "0.1",
     "author": "Sam Sipasseuth",
     "email": "sam@taotesting.com",
@@ -10,9 +10,9 @@
         "IMSGlobal/jquery_2_1_1"
     ],
     "css": [
-        "runtime/css/fractionModelInteraction.css"
+        "runtime/css/graphFunctionInteraction.css"
     ],
-    "entryPoint": "runtime/fractionModelInteraction.js",
+    "entryPoint": "runtime/graphFunctionInteraction.js",
     "tags": [],
     "icon": "creator/img/icon.svg",
     "response": {

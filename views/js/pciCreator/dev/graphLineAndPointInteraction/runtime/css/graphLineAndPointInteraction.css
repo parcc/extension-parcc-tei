@@ -1,0 +1,28 @@
+/*add some style, need to scope (using the typeIdentifier as class prefix) every style declaration to prevent collision */
+
+.graphLineAndPointInteraction{
+    width:100%;
+    padding:30px 30px 50px;
+    background-color:#f5f3f2;
+    margin:20px 0;
+}
+
+.graphLineAndPointInteraction ul.likert{
+    list-style-type: none;
+    margin-top: 10px;
+    padding: 0;
+}
+
+.graphLineAndPointInteraction ul.likert li{
+    float: left;
+    text-align: left;
+    list-style-type: none;
+}
+
+.graphLineAndPointInteraction ul.likert li input{margin: 0 3px;}
+
+.graphLineAndPointInteraction .prompt {position:relative;}
+
+.graphLineAndPointInteraction .likert-label {min-width:90px; color: #444;}
+.graphLineAndPointInteraction .likert-label-min {text-align: right;}
+.graphLineAndPointInteraction .likert-label-max {text-align: left;}
