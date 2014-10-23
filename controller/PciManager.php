@@ -29,7 +29,7 @@ class PciManager extends ParentPciManager
     public function __construct(){
         parent::__construct();
         //overwrite the parent registry
-        $this->registry = CreatorRegistry::singleton();
+        $this->registry = new CreatorRegistry();
     }
 
 }

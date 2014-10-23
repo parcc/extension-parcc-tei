@@ -39,10 +39,10 @@ class CreatorHook implements Hook
      */
     public function init(Config $config){
 
-        $registry = CreatorRegistry::singleton();
+        $registry = new CreatorRegistry();
 
         //get info controls directly located in views/js/picCreator/dev/myInfoControl
-        $hooks = $registry->getDevInteractions();
+        $hooks = $registry->getDevImplementations();
         foreach($hooks as $hook){
             
             unset($hook['directory']);

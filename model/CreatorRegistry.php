@@ -31,32 +31,14 @@ use \common_ext_ExtensionsManager;
 class CreatorRegistry extends ParentRegistry
 {
     
-    /**
-     * The singleton
-     * 
-     * @var CreatorRegistry 
-     */
-    protected static $instance;
-    
-    /**
-     * @return tao_models_classes_service_FileStorage
-     */
-    public static function singleton(){
-
-        if(is_null(self::$instance)){
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-    
-    protected function __construct(){
-        
-        parent::__construct();
-        
-        //overwrite the parent baseDevDir and baseDevUrl
+    protected function getBaseDevDir(){
         $extension = common_ext_ExtensionsManager::singleton()->getExtensionById('parccTei');
-        $this->baseDevDir = $extension->getConstant('DIR_VIEWS').'js/pciCreator/dev/';
-        $this->baseDevUrl = $extension->getConstant('BASE_WWW').'js/pciCreator/dev/';
+        return $extension->getConstant('DIR_VIEWS').'js/pciCreator/dev/'; 
     }
+    
+    protected function getBaseDevUrl(){
+        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById('parccTei');
+        return $extension->getConstant('BASE_WWW').'js/pciCreator/dev/'; 
+    }
+    
 }
