@@ -26,10 +26,8 @@ use oat\parccTei\model\CreatorRegistry;
 class PciManager extends ParentPciManager
 {
     
-    public function __construct(){
-        parent::__construct();
-        //overwrite the parent registry
-        $this->registry = new CreatorRegistry();
+    protected function getCreatorRegistry(){
+        return new CreatorRegistry();
     }
 
 }
