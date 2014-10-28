@@ -4,13 +4,14 @@ define([
     'fractionModelInteraction/creator/widget/Widget',
     'tpl!fractionModelInteraction/creator/tpl/markup'
 ], function(_, ciRegistry, Widget, markupTpl){
+    'use strict';
 
     var _typeIdentifier = 'fractionModelInteraction';
 
     var likertScaleInteractionCreator = {
         /**
          * (required) Get the typeIdentifier of the custom interaction
-         * 
+         *
          * @returns {String}
          */
         getTypeIdentifier : function(){
@@ -28,28 +29,36 @@ define([
         /**
          * (optional) Get the default properties values of the pci.
          * Used on new pci instance creation
-         * 
+         *
          * @returns {Object}
          */
         getDefaultProperties : function(pci){
             return {
-                level : 5,
-                'label-min' : 'min',
-                'label-max' : 'max'
+                'title' : '',
+                'radius' : 100,
+                'selectedPartitionsColor' : '#FF0000',
+                'partitionColor' : '#FFFFFF',
+                'outlineColor' : '#000000',
+                'outlineThickness' : 1,
+                'partitionMax' : 12,
+                'partitionMin' : 1,
+                'partitionInit' : 2,
+                'selectedPartitionsInit' : 0
+
             };
         },
         /**
-         * (optional) Callback to execute on the 
+         * (optional) Callback to execute on the
          * Used on new pci instance creation
-         * 
+         *
          * @returns {Object}
          */
         afterCreate : function(pci){
             //do some stuff
         },
         /**
-         * (required) Gives the qti pci xml template 
-         * 
+         * (required) Gives the qti pci xml template
+         *
          * @returns {function} handlebar template
          */
         getMarkupTemplate : function(){

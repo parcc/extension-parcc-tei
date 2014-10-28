@@ -4,13 +4,14 @@
     "short": "Fractions",
     "description": "Select one or more fraction",
     "version": "0.1",
-    "author": "Sam Sipasseuth",
-    "email": "sam@taotesting.com",
+    "author": "Thibault Milan",
+    "email": "thibault.milan@vesperiagroup.com",
     "libraries": [
-        "IMSGlobal/jquery_2_1_1"
+        "IMSGlobal/jquery_2_1_1",
+        "./runtime/libs/pieChart"
     ],
     "css": [
-        "runtime/css/fractionModelInteraction.css"
+        "./runtime/css/fractionModelInteraction.css"
     ],
     "entryPoint": "runtime/fractionModelInteraction.js",
     "tags": [],
