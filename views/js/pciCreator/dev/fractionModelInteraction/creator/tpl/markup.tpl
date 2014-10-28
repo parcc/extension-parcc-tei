@@ -6,9 +6,9 @@
         <h2 class="shape-title">{{title}}</h2>
         <div class="shape-container"></div>
         <div class="shape-controls">
-            <button value="fewer" class="fewer btn" type="button">Fewer</button>
-            <button value="more" class="more btn" type="button">More</button>
-            <button value="reset" class="reset btn" type="button">Reset</button>
+            <button value="fewer" class="fewer btn btn-info" type="button">Fewer</button>
+            <button value="more" class="more btn btn-info" type="button">More</button>
+            <button value="reset" class="reset btn btn-info" type="button" disabled>Reset</button>
         </div>
     </div>
 </div>
