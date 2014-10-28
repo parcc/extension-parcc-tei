@@ -34,11 +34,11 @@ define([
                     if(String(this.attrs.fill) === String(config.partitionColor)){
                         chart.selected += 1;
                         this.attr({fill: config.selectedPartitionsColor});
-                        $(document.body).trigger('select_slice.pieChart');
+                        $(config.dom).trigger('select_slice.pieChart');
                     }else{
                         chart.selected -= 1;
                         this.attr({fill: config.partitionColor});
-                        $(document.body).trigger('unselect_slice.pieChart');
+                        $(config.dom).trigger('unselect_slice.pieChart');
                     }
                 });
             };
@@ -48,6 +48,6 @@ define([
         for (i = 0; i < ii; i++) {
             process(i);
         }
-        return chart;
+        $(config.dom).trigger('drawn.pieChart');
     };
 });
