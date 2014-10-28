@@ -1,8 +1,9 @@
 define([
     'IMSGlobal/jquery_2_1_1',
     'qtiCustomInteractionContext',
+    'OAT/scale.raphael',
     'fractionModelInteraction/runtime/libs/pieChart'
-    ], function($, qtiCustomInteractionContext,Raphael){
+    ], function($, qtiCustomInteractionContext,scaleRaphael){
 
     'use strict';
 
@@ -35,22 +36,28 @@ define([
             var $container = $(dom);
 
             // Create the canvas
-            var canvas = new Raphael('holder',0,0,250,250);
+            var canvas = scaleRaphael($('.shape-container',$container)[0],250,250);
+            canvas.scaleAll();
             // Init the pieChart
-            var chart = canvas.pieChart(150, 150, 100, this.values, this.config);
+            var chart = canvas.pieChart(150, 150, this.values(), this.config);
             // Catch click on more or less
-            $container.on('click','button.more',function(){
-                if (this.denominator < this.config.partitionMax){
-                    this.denominator += 1;
-                    chart =  canvas.pieChart(150, 150, 100, this.values, this.config);
+            $container.on('click','button.more',this,function(event){
+                if (event.data.denominator < event.data.config.partitionMax){
+                    event.data.denominator += 1;
+                    $(event.data.dom).trigger('changeResponse.fraction');
                 }
-            }).on('click','button.few',function(){
-                if(this.denominator > this.config.partitionMin){
-                    this.denominator -= 1;
-                    chart =  canvas.pieChart(150, 150, 100, this.values, this.config);
+            }).on('click','button.fewer',this,function(event){
+                if(event.data.denominator > event.data.config.partitionMin){
+                    event.data.denominator -= 1;
+                    $(event.data.dom).trigger('changeResponse.fraction');
                 }
-            }).on('click','button.reset',function(){
-                chart =  canvas.pieChart(150, 150, 100, this.values, this.config);
+            }).on('click','button.reset',this,function(event){
+                event.data.numerator = event.data.config.selectedPartitionsInit;
+                event.data.denominator = event.data.config.partitionInit;
+                $(event.data.dom).trigger('reset.fraction');
+            }).on('changeResponse.fraction reset.fraction',this,function(event){
+                // Redraw the pieChart
+                chart =  canvas.pieChart(150, 150, event.data.values(), event.data.config);
             });
 
 
@@ -66,7 +73,7 @@ define([
             if(response && response.directedPair){
                 this.numerator = response.pair[0];
                 this.denominator = response.pair[1];
-                $(this.dom).trigger('changeresponse.fraction');
+                $(this.dom).trigger('changeResponse.fraction');
             }
         },
         /**
