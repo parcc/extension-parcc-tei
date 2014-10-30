@@ -1,18 +1,52 @@
 <div class="panel">
-    <label for="someProp">{{__ "Some Property"}}</label>
+    <label for="someProp">{{__ "Radius"}}</label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
-    <span class="tooltip-content">{{__ "Some Property Description"}}</span>
-    <input type="text" name="someProp" value="{{someProp}}"/>
+    <span class="tooltip-content">{{__ "Radius Description"}}</span>
+    <input type="number" name="radius" value="{{radius}}" min="0"/>
 </div>
+<div class="item-editor-color-picker">
+    <div class="color-picker-container sidebar-popup">
+        <h3 id="color-picker-title"></h3>
 
+        <div class="color-picker"></div>
+        <input class="color-picker-input" type="text" value="#000000">
+
+        <a class="closer" href="#" data-close="#color-picker-container"></a>
+    </div>
+    <div class="panel">
+        <label for="partitionsColor">{{__ "Default Partition"}}</label>
+        <span class="icon-eraser reset-button" title="{{__ "Remove custom default partition color"}}"></span>
+        <span class="color-trigger" id="partitionsColor"></span>
+        <input type="hidden" name="partitionsColor" value="{{partitionsColor}}"/>
+    </div>
+    <div class="panel">
+        <label for="selectedPartitionsColor">{{__ "Selected Partition"}}</label>
+        <span class="icon-eraser reset-button" title="{{__ "Remove custom default partition color"}}"></span>
+        <span class="color-trigger" id="selectedPartitionsColor"></span>
+        <input type="hidden" name="selectedPartitionsColor" value="{{selectedPartitionsColor}}" min="0"/>
+    </div>
+    <div class="panel">
+        <label for="outlineColor">{{__ "Outline"}}</label>
+        <span class="icon-eraser reset-button" title="{{__ "Remove custom default partition color"}}"></span>
+        <span class="color-trigger" id="outlineColor"></span>
+        <input type="hidden" name="outlineColor" value="{{outlineColor}}"/>
+    </div>
+</div>
 <div class="panel">
-    <label for="" class="has-icon">{{__ "Response identifier"}}</label>
+    <label for="outlineThickness">{{__ "Outline Thickness"}}</label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
-    <div class="tooltip-content">{{__ 'The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore ("_") and contain only Letters, underscores, hyphens ("-"), period (".", a.k.a. full-stop), Digits, CombiningChars and Extenders.'}}</div>
-
-    <input type="text" 
-           name="identifier" 
-           value="{{identifier}}" 
-           placeholder="e.g. RESPONSE" 
-           data-validate="$notEmpty; $qtiIdentifier; $availableIdentifier(serial={{serial}});">
+    <span class="tooltip-content">{{__ "Outline Thickness Description"}}</span>
+    <input type="number" name="outlineThickness" value="{{outlineThickness}}" min="0"/>
+</div>
+<div class="panel">
+    <label for="partitionMin">{{__ "Minimum Partitions"}}</label>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">{{__ "Minimum Partitions Description"}}</span>
+    <input type="nulber" name="partitionMin" value="{{partitionMin}}" disabled/>
+</div>
+<div class="panel">
+    <label for="partitionMax">{{__ "Maximum Partitions"}}</label>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">{{__ "Maximum Partitions Description"}}</span>
+    <input type="number" name="partitionMax" value="{{partitionMax}}" disabled/>
 </div>
