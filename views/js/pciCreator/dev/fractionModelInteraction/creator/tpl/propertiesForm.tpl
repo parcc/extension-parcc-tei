@@ -6,9 +6,9 @@
         <a class="closer" href="#" data-close="#color-picker-container"></a>
     </div>
     <div class="panel">
-        <label for="partitionsColor">{{__ "Default Partition"}}</label>
-        <span class="color-trigger" id="partitionsColor"></span>
-        <input type="hidden" name="partitionsColor" value="{{partitionsColor}}"/>
+        <label for="partitionColor">{{__ "Default Partition"}}</label>
+        <span class="color-trigger" id="partitionColor"></span>
+        <input type="hidden" name="partitionColor" value="{{partitionColor}}"/>
     </div>
     <div class="panel">
         <label for="selectedPartitionsColor">{{__ "Selected Partition"}}</label>
