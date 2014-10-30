@@ -9,6 +9,14 @@ define([
 ], function(stateFactory, Question, formElement, editor, formTpl, _){
     'use strict';
     var StateQuestion = stateFactory.extend(Question, function(){
+
+        $('.color-trigger',this.widget.$form).each(function(){
+            var $context = $(this).closest('.panel'),
+                color = $('input',$context).val();
+            console.log($context,this,color);
+            $(this).css('background-color',color);
+        });
+
         //code to execute when entering this state
         $('.color-trigger').on('click',function(){
             var $context = $(this).closest('.item-editor-color-picker'),
