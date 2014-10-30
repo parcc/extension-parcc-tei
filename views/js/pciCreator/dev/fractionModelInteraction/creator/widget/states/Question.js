@@ -39,14 +39,26 @@ define([
         var widget = this.widget,
             interaction = widget.element,
             $form = widget.$form,
-            response = interaction.getResponseDeclaration(),
-            somePropValue = 'some prop value';
+            response = interaction.getResponseDeclaration();
 
         //render the form using the form template
+        function _getChangeCallback(refresh){
+            return function(interaction,value,name){
+                interaction.prop(name,value);
+                console.log(name,value);
+                if(refresh){widget.refresh();}
+            };
+        }
+
+
         $form.html(formTpl({
             serial : response.serial,
-            someProp : somePropValue,
-            identifier : interaction.attr('responseIdentifier')
+            radius : interaction.prop('radius'),
+            selectedPartitionsColor : interaction.prop('selectedPartitionsColor'),
+            partitionColor : interaction.prop('partitionColor'),
+            outlineColor : interaction.prop('outlineColor'),
+            outlineThickness : interaction.prop('outlineThickness'),
+            identifier : interaction.attr('responseIdentifier'),
         }));
 
         //init form javascript
@@ -54,15 +66,11 @@ define([
 
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, {
-            someProp : function(interaction, value){
-
-                //update the pci property value:
-                interaction.prop('someProp', value);
-
-                //update rendering (if required to update the visual)
-                //warning heavy operation : might be a good idea to use lodash.throttle()
-                widget.refresh();
-            },
+            radius : _getChangeCallback(true),
+            selectedPartitionsColor : _getChangeCallback(true),
+            partitionColor : _getChangeCallback(true),
+            outlineColor : _getChangeCallback(true),
+            outlineThickness : _getChangeCallback(true),
             identifier : function(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
