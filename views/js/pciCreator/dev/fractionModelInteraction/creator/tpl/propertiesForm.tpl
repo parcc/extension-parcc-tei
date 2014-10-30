@@ -1,10 +1,5 @@
-<div class="panel">
-    <label for="someProp">{{__ "Radius"}}</label>
-    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
-    <span class="tooltip-content">{{__ "Radius Description"}}</span>
-    <input type="number" name="radius" value="{{radius}}" min="0"/>
-</div>
 <div class="item-editor-color-picker">
+    <h3>{{__ "Pie Chart Colors"}}</h3>
     <div class="color-picker-container sidebar-popup">
         <div class="color-picker"></div>
         <input class="color-picker-input" type="text" value="#000000">
@@ -26,21 +21,16 @@
         <input type="hidden" name="outlineColor" value="{{outlineColor}}"/>
     </div>
 </div>
+<hr>
 <div class="panel">
-    <label for="outlineThickness">{{__ "Outline Thickness"}}</label>
+    <label for="outlineThickness" class="spinner">{{__ "Outline Thickness"}}</label>
+    <input name="outlineThickness" value="{{outlineThickness}}" data-increment="1" data-min="0" type="text" class="incrementer">
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
     <span class="tooltip-content">{{__ "Outline Thickness Description"}}</span>
-    <input type="number" name="outlineThickness" value="{{outlineThickness}}" min="0"/>
 </div>
 <div class="panel">
-    <label for="partitionMin">{{__ "Minimum Partitions"}}</label>
+    <label for="someProp" class="spinner">{{__ "Radius"}}</label>
+    <input name="radius" value="{{radius}}" data-increment="10" data-min="0" type="text" class="incrementer">
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
-    <span class="tooltip-content">{{__ "Minimum Partitions Description"}}</span>
-    <input type="nulber" name="partitionMin" value="{{partitionMin}}" disabled/>
-</div>
-<div class="panel">
-    <label for="partitionMax">{{__ "Maximum Partitions"}}</label>
-    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
-    <span class="tooltip-content">{{__ "Maximum Partitions Description"}}</span>
-    <input type="number" name="partitionMax" value="{{partitionMax}}" disabled/>
+    <span class="tooltip-content">{{__ "Radius Description"}}</span>
 </div>
