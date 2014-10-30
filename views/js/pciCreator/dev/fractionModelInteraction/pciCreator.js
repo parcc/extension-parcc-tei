@@ -20,7 +20,7 @@ define([
         /**
          * (required) Get the widget prototype
          * Used in the renderer
-         * 
+         *
          * @returns {Object} Widget
          */
         getWidget : function(){
@@ -36,8 +36,8 @@ define([
             return {
                 'title' : '',
                 'radius' : 100,
-                'selectedPartitionsColor' : '#FF0000',
-                'partitionColor' : '#FFFFFF',
+                'selectedPartitionsColor' : '#ff0000',
+                'partitionColor' : '#ffffff',
                 'outlineColor' : '#000000',
                 'outlineThickness' : 1,
                 'partitionMax' : 12,
@@ -66,21 +66,21 @@ define([
         },
         /**
          * (optional) Allows passing additional data to xml template
-         * 
+         *
          * @returns {function} handlebar template
          */
         getMarkupData : function(pci, defaultData){
-            
+
             var hook = ciRegistry.get(_typeIdentifier),
                 manifest = hook.manifest;
-            
+
             defaultData = _.defaults(defaultData , {
                 someData : pci.data('someData'),
                 typeIdentifier : _typeIdentifier,
                 label : manifest.label,
                 description : manifest.description
             });
-            
+
             return defaultData;
         }
     };

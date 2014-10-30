@@ -13,7 +13,6 @@ define([
         $('.color-trigger',this.widget.$form).each(function(){
             var $context = $(this).closest('.panel'),
                 color = $('input',$context).val();
-            console.log($context,this,color);
             $(this).css('background-color',color);
         });
 
@@ -22,10 +21,14 @@ define([
             var $context = $(this).closest('.item-editor-color-picker'),
                 $this = $(this),
                 input = $this.siblings('input[type="hidden"]')[0],
-                $container = $($('.color-picker-container',$context)).show();
+                $container = $($('.color-picker-container',$context)).show(),
+                color = $('input',$(this).closest('.panel')).val();
 
+            // Init the color picker
             $('.color-picker',$context).farbtastic('.color-picker-input',$context);
-
+            // Set the color to the currently set on the form init
+            $('.color-picker-input',$context).val(color).trigger('keyup');
+            // Populate the input with the color on quitting the modal
             $('[data-close]',$container).off('click').on('click', function(){
                 var color = $('.color-picker-input',$context).val();
                 $container.hide();
@@ -48,16 +51,15 @@ define([
             $form = widget.$form,
             response = interaction.getResponseDeclaration();
 
-        //render the form using the form template
         function _getChangeCallback(refresh){
             return function(interaction,value,name){
                 interaction.prop(name,value);
-                console.log(name,value);
                 if(refresh){widget.refresh();}
             };
         }
 
 
+        //render the form using the form template
         $form.html(formTpl({
             serial : response.serial,
             radius : interaction.prop('radius'),
