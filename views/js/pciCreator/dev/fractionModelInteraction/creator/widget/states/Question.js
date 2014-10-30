@@ -4,15 +4,21 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'tpl!fractionModelInteraction/creator/tpl/propertiesForm',
-    'lodash'
+    'lodash',
+    'taoQtiItem/qtiCreator/editor/styleEditor/farbtastic/farbtastic'
 ], function(stateFactory, Question, formElement, editor, formTpl, _){
-
+    'use strict';
     var StateQuestion = stateFactory.extend(Question, function(){
-        
+
         //code to execute when entering this state
+        $('.color-trigger').on('click',function(){
+            var $context = $(this).closest('.item-editor-color-picker');
+            $('.color-picker-container',$context).show();
+            $('.color-picker',$context).farbtastic('.color-picker-input',$context);
+        });
 
     }, function(){
-        
+
         //code to execute when leaving this state
 
     });
@@ -20,20 +26,20 @@ define([
     StateQuestion.prototype.initForm = function(){
 
         //code to init your interaction property form (on the right side bar)
-        
-        var widget = this.widget, 
+
+        var widget = this.widget,
             interaction = widget.element,
             $form = widget.$form,
             response = interaction.getResponseDeclaration(),
             somePropValue = 'some prop value';
-        
+
         //render the form using the form template
         $form.html(formTpl({
             serial : response.serial,
             someProp : somePropValue,
             identifier : interaction.attr('responseIdentifier')
         }));
-        
+
         //init form javascript
         formElement.initWidget($form);
 
