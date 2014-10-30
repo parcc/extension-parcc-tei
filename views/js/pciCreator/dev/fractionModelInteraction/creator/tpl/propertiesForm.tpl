@@ -6,28 +6,22 @@
 </div>
 <div class="item-editor-color-picker">
     <div class="color-picker-container sidebar-popup">
-        <h3 id="color-picker-title"></h3>
-
         <div class="color-picker"></div>
         <input class="color-picker-input" type="text" value="#000000">
-
         <a class="closer" href="#" data-close="#color-picker-container"></a>
     </div>
     <div class="panel">
         <label for="partitionsColor">{{__ "Default Partition"}}</label>
-        <span class="icon-eraser reset-button" title="{{__ "Remove custom default partition color"}}"></span>
         <span class="color-trigger" id="partitionsColor"></span>
         <input type="hidden" name="partitionsColor" value="{{partitionsColor}}"/>
     </div>
     <div class="panel">
         <label for="selectedPartitionsColor">{{__ "Selected Partition"}}</label>
-        <span class="icon-eraser reset-button" title="{{__ "Remove custom default partition color"}}"></span>
         <span class="color-trigger" id="selectedPartitionsColor"></span>
-        <input type="hidden" name="selectedPartitionsColor" value="{{selectedPartitionsColor}}" min="0"/>
+        <input type="hidden" name="selectedPartitionsColor" value="{{selectedPartitionsColor}}"/>
     </div>
     <div class="panel">
         <label for="outlineColor">{{__ "Outline"}}</label>
-        <span class="icon-eraser reset-button" title="{{__ "Remove custom default partition color"}}"></span>
         <span class="color-trigger" id="outlineColor"></span>
         <input type="hidden" name="outlineColor" value="{{outlineColor}}"/>
     </div>

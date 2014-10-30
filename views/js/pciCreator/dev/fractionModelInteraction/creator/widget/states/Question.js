@@ -9,18 +9,19 @@ define([
 ], function(stateFactory, Question, formElement, editor, formTpl, _){
     'use strict';
     var StateQuestion = stateFactory.extend(Question, function(){
-
         //code to execute when entering this state
         $('.color-trigger').on('click',function(){
-            var $context = $(this).closest('.item-editor-color-picker');
-            var $this = $(this);
-            var input = $this.siblings('input[type="hidden"]')[0];
-            var $container = $('.color-picker-container',$context).show();
+            var $context = $(this).closest('.item-editor-color-picker'),
+                $this = $(this),
+                input = $this.siblings('input[type="hidden"]')[0],
+                $container = $($('.color-picker-container',$context)).show();
+
             $('.color-picker',$context).farbtastic('.color-picker-input',$context);
-            $('[data-close]',$container).on('click', function(){
+
+            $('[data-close]',$container).off('click').on('click', function(){
                 var color = $('.color-picker-input',$context).val();
                 $container.hide();
-                $(input).val(color);
+                $(input,$context).val(color);
                 $this.css('background-color',color);
             });
         });
