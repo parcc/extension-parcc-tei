@@ -30,7 +30,6 @@ define([
                 var color = $('.color-picker-input',$context).val();
                 $container.hide();
                 $(input,$context).val(color).trigger('change');
-                $this.css('background-color',color);
             });
         });
 
