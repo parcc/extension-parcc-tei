@@ -44,7 +44,7 @@ define([
                 'partitionMin' : 1,
                 'partitionInit' : 2,
                 'selectedPartitionsInit' : 0,
-                'selectedPratitions' : null
+                'selectedPartitions' : '[]'
 
             };
         },
