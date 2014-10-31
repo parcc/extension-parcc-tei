@@ -12,7 +12,8 @@ define([
         // read some stuff from config & reformat datas
         cx = parseInt(config.radius);
         cy = parseInt(config.radius);
-        config.selectedPartitions = JSON.parse(config.selectedPartitions);
+        // If the selectedPartitions comes in a JSON string format, parse them
+        if (typeof config.selectedPartitions === 'string'){config.selectedPartitions = JSON.parse(config.selectedPartitions);}
         // Initialised the selected slice internal counter
         chart.selected = _.compact(config.selectedPartitions).length;
 
