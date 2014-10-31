@@ -6,9 +6,9 @@ define([
     'use strict';
     Raphael.fn.pieChart = function (cx, cy, values, config) {
         var paper = this,
-            chart = this.set();
+            chart = this.set(),
         // Math Constant
-        const rad = Math.PI / 180;
+            rad = Math.PI / 180;
         // read some stuff from config & reformat datas
         cx = parseInt(config.radius);
         cy = parseInt(config.radius);
