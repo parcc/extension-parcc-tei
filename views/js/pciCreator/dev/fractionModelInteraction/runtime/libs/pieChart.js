@@ -10,10 +10,10 @@ define([
         // Math Constant
             rad = Math.PI / 180;
         // read some stuff from config & reformat datas
-        cx = parseInt(config.radius);
-        cy = parseInt(config.radius);
-        // If the selectedPartitions comes in a JSON string format, parse them
-        if (typeof config.selectedPartitions === 'string'){config.selectedPartitions = JSON.parse(config.selectedPartitions);}
+        cx = config.radius;
+        cy = config.radius;
+        console.log(config);
+        console.log(values);
         // Initialised the selected slice internal counter
         chart.selected = _.compact(config.selectedPartitions).length;
 
@@ -32,7 +32,7 @@ define([
                 x2 = cx + r * Math.cos(-endAngle * rad),
                 y1 = cy + r * Math.sin(-startAngle * rad),
                 y2 = cy + r * Math.sin(-endAngle * rad);
-            return paper.path(['M', cx, cy, 'L', x1, y1, 'A', parseInt(config.radius), parseInt(config.radius), 0, +(endAngle - startAngle > 180), 0, x2, y2, 'z']).attr(params);
+            return paper.path(['M', cx, cy, 'L', x1, y1, 'A', config.radius, config.radius, 0, +(endAngle - startAngle > 180), 0, x2, y2, 'z']).attr(params);
         }
 
         var angle = 0,
@@ -52,7 +52,7 @@ define([
                     // else get the regular color
                     bcolor = (config.selectedPartitions.length >= j && config.selectedPartitions[j]) ? config.selectedPartitionsColor : config.partitionColor,
                     // Slice , also called sector.
-                    p = sector(cx, cy, parseInt(config.radius), angle, angle + angleplus, {fill: bcolor, stroke: config.outlineColor, 'stroke-width': config.outlineThickness});
+                    p = sector(cx, cy, config.radius, angle, angle + angleplus, {fill: bcolor, stroke: config.outlineColor, 'stroke-width': config.outlineThickness});
                 angle += angleplus;
                 // Register this slice into the canvas
                 chart.push(p);
@@ -60,7 +60,7 @@ define([
                 start += 0.1;
                 // Register events on the slice / sector
                 p.click(function(){
-                    if(String(this.attrs.fill) === String(config.partitionColor)){
+                    if(String(this.attrs.fill) === config.partitionColor){
                         // if the color was previously the default color ,
                         // this slice / sector is unselected
                         chart.selected += 1;
