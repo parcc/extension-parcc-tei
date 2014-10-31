@@ -23,8 +23,20 @@ define([
             this.id = id;
             this.dom = dom;
             this.config = config || {};
-            this.numerator = this.config.selectedPartitionsInit;
-            this.denominator = this.config.partitionInit;
+            // Make sure everything has the correct type
+            this.numerator = parseInt(this.config.selectedPartitionsInit);
+            this.denominator = parseInt(this.config.partitionInit);
+            this.partitionMax = parseInt(this.partitionMax);
+            this.partitionMin = parseInt(this.partitionMin);
+            config.radius = parseInt(config.radius);
+            config.partitionColor = String(config.partitionColor);
+            config.selectedPartitions = JSON.parse(config.selectedPartitions);
+            /**
+             * Return an array well formated to initialise the pieChart with equal
+             * sections / slices
+             * @return {array} the array to use as values for pieChart()
+             */
+            console.log(this.denominator);
             this.values = function(){
                 var tmp = [];
                 for (var i = this.denominator - 1; i >= 0; i--) {
