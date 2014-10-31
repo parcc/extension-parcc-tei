@@ -67,7 +67,7 @@ define([
             partitionColor : interaction.prop('partitionColor'),
             outlineColor : interaction.prop('outlineColor'),
             outlineThickness : interaction.prop('outlineThickness'),
-            identifier : interaction.attr('responseIdentifier'),
+            identifier : interaction.attr('responseIdentifier')
         }));
 
         //init form javascript
