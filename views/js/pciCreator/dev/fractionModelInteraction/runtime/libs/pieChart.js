@@ -12,8 +12,13 @@ define([
         // read some stuff from config & reformat datas
         cx = config.radius;
         cy = config.radius;
-        console.log(config);
-        console.log(values);
+
+        if (typeof config.selectedPartitions === 'string') {
+            if (config.selectedPartitions !== ' ' || config.selectedPartitions !== ''){
+                config.selectedPartitions = '[]';
+            }
+            config.selectedPartitions = JSON.parse(config.selectedPartitions);
+        }
         // Initialised the selected slice internal counter
         chart.selected = _.compact(config.selectedPartitions).length;
 
