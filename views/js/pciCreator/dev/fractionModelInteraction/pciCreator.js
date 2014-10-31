@@ -43,7 +43,8 @@ define([
                 'partitionMax' : 12,
                 'partitionMin' : 1,
                 'partitionInit' : 2,
-                'selectedPartitionsInit' : 0
+                'selectedPartitionsInit' : 0,
+                'selectedPratitions' : null
 
             };
         },
