@@ -35,7 +35,16 @@ define([
                 $(input,$context).val(color).trigger('change');
             });
         });
-
+        
+        var interaction = this.widget.element;
+        
+        interaction.data('pci')._onResponseChange(function(response) {
+            
+            if(response && response.base && response.base.directedPair){
+                interaction.prop('selectedPartitionsInit', response.base.directedPair[1]);
+            }
+            
+        });
     }, function(){
 
         //code to execute when leaving this state

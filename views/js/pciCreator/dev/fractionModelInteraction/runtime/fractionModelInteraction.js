@@ -70,6 +70,9 @@ define([
             }).on('changeResponse.fraction reset.fraction',this,function(event){
                 // Redraw the pieChart
                 chart =  canvas.pieChart(150, 150, event.data.values(), event.data.config);
+                if(typeof this._onResponseChange === 'function'){
+                    this._onResponseChange(this.getResponse());
+                }
             });
 
 
@@ -140,6 +143,13 @@ define([
         getSerializedState : function(){
 
             return {};
+        },
+        _onResponseChange : function(callback) {
+            this._callback = callback;
+        },
+        
+        _forgetResponseChange : function() {
+            this._callback = null;
         }
     };
 
