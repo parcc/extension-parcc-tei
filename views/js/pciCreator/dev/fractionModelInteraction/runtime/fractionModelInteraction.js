@@ -29,14 +29,11 @@ define([
             this.partitionMax = parseInt(this.partitionMax);
             this.partitionMin = parseInt(this.partitionMin);
             config.radius = parseInt(config.radius);
-            config.partitionColor = String(config.partitionColor);
-            config.selectedPartitions = JSON.parse(config.selectedPartitions);
             /**
              * Return an array well formated to initialise the pieChart with equal
              * sections / slices
              * @return {array} the array to use as values for pieChart()
              */
-            console.log(this.denominator);
             this.values = function(){
                 var tmp = [];
                 for (var i = this.denominator - 1; i >= 0; i--) {
