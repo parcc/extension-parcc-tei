@@ -1,19 +1,20 @@
 define([
     'IMSGlobal/jquery_2_1_1',
-    'OAT/raphael'
-],function($,Raphael){
+    'OAT/raphael',
+    'lodash'
+],function($,Raphael,_){
     'use strict';
     Raphael.fn.pieChart = function (cx, cy, values, config) {
         var paper = this,
             chart = this.set();
         // Math Constant
         const rad = Math.PI / 180;
-        // Initialised the selected slice internal counter
-        chart.selected = 0 ;
         // read some stuff from config & reformat datas
         cx = parseInt(config.radius);
         cy = parseInt(config.radius);
-        config.selectedPratitions = JSON.parse(config.selectedPratitions);
+        config.selectedPartitions = JSON.parse(config.selectedPartitions);
+        // Initialised the selected slice internal counter
+        chart.selected = _.compact(config.selectedPartitions).length;
 
         /**
          * Create a new sector to draw
@@ -44,7 +45,11 @@ define([
                 var value = values[j],
                     angleplus = 360 * value / total,
                     // Slice Background Color
-                    bcolor = (config.selectedPratitions.length >= j && config.selectedPratitions[j]) ? config.selectedPartitionsColor : config.partitionColor,
+                    //
+                    // Test if there's enought stuff registerred regarding on wich slice we are,
+                    // and test if we got something for the current slice. Get the selected color if,
+                    // else get the regular color
+                    bcolor = (config.selectedPartitions.length >= j && config.selectedPartitions[j]) ? config.selectedPartitionsColor : config.partitionColor,
                     // Slice , also called sector.
                     p = sector(cx, cy, parseInt(config.radius), angle, angle + angleplus, {fill: bcolor, stroke: config.outlineColor, 'stroke-width': config.outlineThickness});
                 angle += angleplus;
