@@ -1,11 +1,10 @@
 define([
     'IMSGlobal/jquery_2_1_1',
     'qtiCustomInteractionContext',
-    'OAT/lodash',
     'OAT/util/event',
     'OAT/scale.raphael',
     'fractionModelInteraction/runtime/libs/pieChart'
-    ], function($, qtiCustomInteractionContext, _, event, scaleRaphael){
+    ], function($, qtiCustomInteractionContext, event, scaleRaphael){
 
     'use strict';
     
