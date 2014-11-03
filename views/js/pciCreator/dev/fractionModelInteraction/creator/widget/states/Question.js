@@ -38,13 +38,16 @@ define([
         
         var interaction = this.widget.element;
         
-        interaction.data('pci')._onResponseChange(function(response) {
-            
-            if(response && response.base && response.base.directedPair){
-                interaction.prop('selectedPartitionsInit', response.base.directedPair[1]);
-            }
-            
-        });
+        _.delay(function(){
+            console.log('attach repsonse change event');
+            interaction.data('pci')._onResponseChange(function(response) {
+                debugger;
+                if(response && response.base && response.base.directedPair){
+                    interaction.prop('partitionInit', response.base.directedPair[1]);
+                }
+            });
+        }, 6000);
+        
     }, function(){
 
         //code to execute when leaving this state

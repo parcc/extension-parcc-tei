@@ -50,6 +50,7 @@ define([
             // Init the pieChart
             var chart = canvas.pieChart(150, 150, this.values(), this.config);
             // Catch click on more or less
+            var _this = this;
             $container.on('click','button.more',this,function(event){
                 if (event.data.denominator < event.data.config.partitionMax){
                     event.data.denominator += 1;
@@ -67,8 +68,9 @@ define([
             }).on('changeResponse.fraction reset.fraction',this,function(event){
                 // Redraw the pieChart
                 chart =  canvas.pieChart(150, 150, event.data.values(), event.data.config);
-                if(typeof this._onResponseChange === 'function'){
-                    this._onResponseChange(this.getResponse());
+                if(typeof _this._callback === 'function'){
+                    console.log('on change')
+                    _this._callback(_this.getResponse());
                 }
             });
 
