@@ -5,9 +5,10 @@ define([
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
+    'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!fractionModelInteraction/creator/tpl/propertiesForm',
     'taoQtiItem/qtiCreator/editor/styleEditor/farbtastic/farbtastic'
-], function(_, $, stateFactory, Question, formElement, editor, formTpl){
+], function(_, $, stateFactory, Question, formElement, simpeEditor, containerEditor, formTpl){
 
     'use strict';
 
@@ -38,7 +39,8 @@ define([
                 $(input, $context).val(color).trigger('change');
             });
         });
-
+        
+        //init event listeners
         var interaction = this.widget.element;
         interaction.onPci('responsechange.question', function(response){
             if(response && response.base && response.base.directedPair){
@@ -50,8 +52,8 @@ define([
         });
 
     }, function(){
-
-        //code to execute when leaving this state
+        
+        //remove event listeners
         this.widget.element.offPci('.question');
     });
 

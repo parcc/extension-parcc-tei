@@ -4,14 +4,16 @@ define([
     'lodash'
 ],function($,Raphael,_){
     'use strict';
-    Raphael.fn.pieChart = function (cx, cy, values, config, dom) {
+    Raphael.fn.pieChart = function (values, config, dom) {
+        
         var paper = this,
             chart = this.set(),
-        // Math Constant
+            padding = config.padding || 2,
+            // read some stuff from config & reformat datas
+            cx = config.radius + padding,
+            cy = config.radius + padding,
+            // Math Constant
             rad = Math.PI / 180;
-        // read some stuff from config & reformat datas
-        cx = config.radius;
-        cy = config.radius;
         
         if (typeof config.selectedPartitions === 'string') {
             if (config.selectedPartitions.trim() === ''){

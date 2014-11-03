@@ -50,10 +50,12 @@ define([
             var $container = $(dom);
 
             // Create the canvas
-            var canvas = scaleRaphael($('.shape-container',$container)[0],250,250);
+            config.padding = 10;
+            var canvasSize = 2 * (parseInt(config.radius) + parseInt(config.padding) + parseInt(config.outlineThickness));
+            var canvas = scaleRaphael($('.shape-container',$container)[0],canvasSize,canvasSize);
             canvas.scaleAll();
             // Init the pieChart
-            var chart = canvas.pieChart(150, 150, this.values(), this.config, dom);
+            var chart = canvas.pieChart(this.values(), this.config, dom);
             // Catch click on more or less
             var _this = this;
             $container.on('click','button.more',this,function(event){
@@ -72,7 +74,7 @@ define([
                 $(event.data.dom).trigger('reset.fraction');
             }).on('changeResponse.fraction reset.fraction',this,function(event){
                 // Redraw the pieChart
-                chart =  canvas.pieChart(150, 150, event.data.values(), event.data.config, dom);
+                chart =  canvas.pieChart(event.data.values(), event.data.config, dom);
                 //communicate the response change to the interaction
                 _this.trigger('responsechange', [_this.getResponse()]);
             }).on('select_slice.pieChart unselect_slice.pieChart', function(e, selectedPartitions){

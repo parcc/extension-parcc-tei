@@ -26,3 +26,7 @@
 .fractionModelInteraction .likert-label {min-width:90px; color: #444;}
 .fractionModelInteraction .likert-label-min {text-align: right;}
 .fractionModelInteraction .likert-label-max {text-align: left;}
+
+.fractionModelInteraction .shape-container {padding-top : 10px;}
+
+.fractionModelInteraction .shape-controls {margin-left: 20px;}
