@@ -8,19 +8,63 @@ define([
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!fractionModelInteraction/creator/tpl/propertiesForm',
     'taoQtiItem/qtiCreator/editor/styleEditor/farbtastic/farbtastic'
-], function(_, $, stateFactory, Question, formElement, simpeEditor, containerEditor, formTpl){
+], function(_, $, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl){
 
     'use strict';
-
+    
     var StateQuestion = stateFactory.extend(Question, function(){
+        
+        var interaction = this.widget.element, 
+            $container = this.widget.$container;
+        
+        //inti color pickers
+        this.initColorPickers();
+        
+        //init title editor
+        simpleEditor.create($container, '.shape-title', function(text){
+            interaction.prop('title', text);
+            interaction.updateMarkup();
+        });
+        
+        //init prompt editor
+        containerEditor.create($container.find('.prompt'), {
+            change : function(text){
+                interaction.data('prompt', text);
+                interaction.updateMarkup();
+            },
+            markup : interaction.markup,
+            markupSelector : '.prompt',
+            related : interaction
+        });
+        
+        //init event listeners
+        interaction.onPci('responsechange.question', function(response){
+            if(response && response.base && response.base.directedPair){
+                interaction.prop('selectedPartitionsInit', response.base.directedPair[0]);
+                interaction.prop('partitionInit', response.base.directedPair[1]);
+            }
+        }).onPci('selectedparition', function(selectedPartitions){
+            interaction.prop('selectedPartitions', JSON.stringify(_.values(selectedPartitions)));
+        });
 
+    }, function(){
+        
+        //remove event listeners
+        this.widget.element.offPci('.question');
+        
+        //destroy editors
+        simpleEditor.destroy(this.widget.$container);
+        containerEditor.destroy(this.widget.$container.find('.prompt'));
+    });
+    
+    StateQuestion.prototype.initColorPickers = function(){
+        
         $('.color-trigger', this.widget.$form).each(function(){
             var $context = $(this).closest('.panel'),
                 color = $('input', $context).val();
             $(this).css('background-color', color);
         });
 
-        //code to execute when entering this state
         $('.color-trigger').on('click', function(){
             var $context = $(this).closest('.item-editor-color-picker'),
                 $this = $(this),
@@ -39,24 +83,8 @@ define([
                 $(input, $context).val(color).trigger('change');
             });
         });
-        
-        //init event listeners
-        var interaction = this.widget.element;
-        interaction.onPci('responsechange.question', function(response){
-            if(response && response.base && response.base.directedPair){
-                interaction.prop('selectedPartitionsInit', response.base.directedPair[0]);
-                interaction.prop('partitionInit', response.base.directedPair[1]);
-            }
-        }).onPci('selectedparition', function(selectedPartitions){
-            interaction.prop('selectedPartitions', JSON.stringify(_.values(selectedPartitions)));
-        });
-
-    }, function(){
-        
-        //remove event listeners
-        this.widget.element.offPci('.question');
-    });
-
+    };
+    
     StateQuestion.prototype.initForm = function(){
 
         //code to init your interaction property form (on the right side bar)
