@@ -4,7 +4,7 @@ define([
     'lodash'
 ],function($,Raphael,_){
     'use strict';
-    Raphael.fn.pieChart = function (cx, cy, values, config) {
+    Raphael.fn.pieChart = function (cx, cy, values, config, dom) {
         var paper = this,
             chart = this.set(),
         // Math Constant
@@ -12,9 +12,9 @@ define([
         // read some stuff from config & reformat datas
         cx = config.radius;
         cy = config.radius;
-
+        
         if (typeof config.selectedPartitions === 'string') {
-            if (config.selectedPartitions !== ' ' || config.selectedPartitions !== ''){
+            if (config.selectedPartitions.trim() === ''){
                 config.selectedPartitions = '[]';
             }
             config.selectedPartitions = JSON.parse(config.selectedPartitions);
@@ -40,9 +40,11 @@ define([
             return paper.path(['M', cx, cy, 'L', x1, y1, 'A', config.radius, config.radius, 0, +(endAngle - startAngle > 180), 0, x2, y2, 'z']).attr(params);
         }
 
-        var angle = 0,
+        var $container = $(dom),
+            angle = 0,
             total = 0,
             start = 0,
+            selectedPartitions = {},
             /**
              * Iterational function that draw every slice
              * @param  {int} j slice number
@@ -50,12 +52,19 @@ define([
             process = function (j) {
                 var value = values[j],
                     angleplus = 360 * value / total,
+                    bcolor, p;
                     // Slice Background Color
                     //
                     // Test if there's enought stuff registerred regarding on wich slice we are,
                     // and test if we got something for the current slice. Get the selected color if,
                     // else get the regular color
-                    bcolor = (config.selectedPartitions.length >= j && config.selectedPartitions[j]) ? config.selectedPartitionsColor : config.partitionColor,
+                    if(config.selectedPartitions.length >= j && config.selectedPartitions[j]){
+                        bcolor = config.selectedPartitionsColor;
+                        selectedPartitions[j] = true;
+                    }else{
+                        bcolor = config.partitionColor;
+                        selectedPartitions[j] = false;
+                    }
                     // Slice , also called sector.
                     p = sector(cx, cy, config.radius, angle, angle + angleplus, {fill: bcolor, stroke: config.outlineColor, 'stroke-width': config.outlineThickness});
                 angle += angleplus;
@@ -71,13 +80,17 @@ define([
                         chart.selected += 1;
                         // Change the color of the background
                         this.attr({fill: config.selectedPartitionsColor});
-                        $(config.dom).trigger('select_slice.pieChart');
+                        // update the configuration 
+                        selectedPartitions[j] = true;
+                        $container.trigger('select_slice.pieChart', selectedPartitions);
                     }else{
                         // else, this slice / sector is already selected
                         chart.selected -= 1;
                         // Change the background color to the default unselected value
                         this.attr({fill: config.partitionColor});
-                        $(config.dom).trigger('unselect_slice.pieChart');
+                        // update the configuration 
+                        selectedPartitions[j] = false;
+                        $container.trigger('unselect_slice.pieChart', selectedPartitions);
                     }
                 });
             };
@@ -87,6 +100,6 @@ define([
         for (i = 0; i < ii; i++) {
             process(i);
         }
-        $(config.dom).trigger('drawn.pieChart');
+        $container.trigger('drawn.pieChart');
     };
 });

@@ -1,12 +1,14 @@
 define([
     'IMSGlobal/jquery_2_1_1',
     'qtiCustomInteractionContext',
+    'OAT/lodash',
+    'OAT/util/event',
     'OAT/scale.raphael',
     'fractionModelInteraction/runtime/libs/pieChart'
-    ], function($, qtiCustomInteractionContext,scaleRaphael){
+    ], function($, qtiCustomInteractionContext, _, event, scaleRaphael){
 
     'use strict';
-
+    
     var fractionModelInteraction = {
         id : -1,
         getTypeIdentifier : function(){
@@ -19,7 +21,10 @@ define([
          * @param {Object} config - json
          */
         initialize : function(id, dom, config){
-
+            
+            //add method on(), off() and trigger() to the current object
+            event.addEventMgr(this);
+                        
             this.id = id;
             this.dom = dom;
             this.config = config || {};
@@ -29,6 +34,7 @@ define([
             this.partitionMax = parseInt(this.partitionMax);
             this.partitionMin = parseInt(this.partitionMin);
             config.radius = parseInt(config.radius);
+            
             /**
              * Return an array well formated to initialise the pieChart with equal
              * sections / slices
@@ -48,7 +54,7 @@ define([
             var canvas = scaleRaphael($('.shape-container',$container)[0],250,250);
             canvas.scaleAll();
             // Init the pieChart
-            var chart = canvas.pieChart(150, 150, this.values(), this.config);
+            var chart = canvas.pieChart(150, 150, this.values(), this.config, dom);
             // Catch click on more or less
             var _this = this;
             $container.on('click','button.more',this,function(event){
@@ -67,14 +73,12 @@ define([
                 $(event.data.dom).trigger('reset.fraction');
             }).on('changeResponse.fraction reset.fraction',this,function(event){
                 // Redraw the pieChart
-                chart =  canvas.pieChart(150, 150, event.data.values(), event.data.config);
-                if(typeof _this._callback === 'function'){
-                    console.log('on change')
-                    _this._callback(_this.getResponse());
-                }
+                chart =  canvas.pieChart(150, 150, event.data.values(), event.data.config, dom);
+                _this.trigger('responsechange', [_this.getResponse()]);
+            }).on('select_slice.pieChart unselect_slice.pieChart', function(e, selectedPartitions){
+                //to be tested
+                _this.trigger('selectedparition', [selectedPartitions]);
             });
-
-
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -142,13 +146,6 @@ define([
         getSerializedState : function(){
 
             return {};
-        },
-        _onResponseChange : function(callback) {
-            this._callback = callback;
-        },
-        
-        _forgetResponseChange : function() {
-            this._callback = null;
         }
     };
 

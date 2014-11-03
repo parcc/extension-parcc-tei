@@ -45,7 +45,6 @@ define([
                 'partitionInit' : 2,
                 'selectedPartitionsInit' : 0,
                 'selectedPartitions' : '[]'
-
             };
         },
         /**
