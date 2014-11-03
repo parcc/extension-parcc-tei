@@ -73,9 +73,10 @@ define([
             }).on('changeResponse.fraction reset.fraction',this,function(event){
                 // Redraw the pieChart
                 chart =  canvas.pieChart(150, 150, event.data.values(), event.data.config, dom);
+                //communicate the response change to the interaction
                 _this.trigger('responsechange', [_this.getResponse()]);
             }).on('select_slice.pieChart unselect_slice.pieChart', function(e, selectedPartitions){
-                //to be tested
+                //communicate the state change to the interaction
                 _this.trigger('selectedparition', [selectedPartitions]);
             });
         },
@@ -101,7 +102,8 @@ define([
          * @returns {Object}
          */
         getResponse : function(){
-            return {base : {directedPair : [this.numerator, this.denominator]}};
+            //@todo to be correct to the correct baseType once the response processing story has been clarified
+            return {base : {directedPair : [this.numerator.toString(), this.denominator.toString()]}};
         },
         /**
          * Remove the current response set in the interaction
