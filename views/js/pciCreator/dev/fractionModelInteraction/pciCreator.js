@@ -71,17 +71,10 @@ define([
          */
         getMarkupData : function(pci, defaultData){
 
-            var hook = ciRegistry.get(_typeIdentifier),
-                manifest = hook.manifest;
-
-            defaultData = _.defaults(defaultData , {
-                someData : pci.data('someData'),
-                typeIdentifier : _typeIdentifier,
-                label : manifest.label,
-                description : manifest.description
+            return _.defaults(defaultData , {
+                title : pci.prop('title'),
+                prompt : pci.data('prompt')
             });
-
-            return defaultData;
         }
     };
 
