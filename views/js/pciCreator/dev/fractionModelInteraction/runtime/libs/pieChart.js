@@ -29,7 +29,7 @@ define([
                         'fill-opacity' : 0.7
                     });
                 }, function(){
-                    this.attr({
+                    this.stop().attr({
                         'fill-opacity' : 1
                     });
                 });
@@ -86,26 +86,26 @@ define([
                 p = sector(cx, cy, r, angle, angle + angleplus, getStyle(selected));
                 //increase the andle
                 angle += angleplus;
-                
+
                 //add hover style
                 setHoverStyle(p);
-                
+
                 // Register this slice into the canvas
                 chart.push(p);
-                
+
                 // Register events on the slice / sector
                 p.click(getClickCallback(j));
             },
             drawCircle = function(){
-                
+
                 var c = paper.circle(cx, cy, r).attr(getStyle(false));
-                
+
                 //add hover style
                 setHoverStyle(c);
-                
+
                 // Register this slice into the canvas
                 chart.push(c);
-                
+
                 // Register events on the slice / sector
                 c.click(getClickCallback(0));
             },
@@ -130,12 +130,12 @@ define([
                         $container.trigger('unselect_slice.pieChart', selectedPartitions);
                     }
                 }
-            }    
+            }
 
         for(var i = 0, ii = values.length; i < ii; i++){
             total += values[i];
         }
-        
+
         if(ii > 1){
             for(i = 0; i < ii; i++){
                 drawSlice(i);
