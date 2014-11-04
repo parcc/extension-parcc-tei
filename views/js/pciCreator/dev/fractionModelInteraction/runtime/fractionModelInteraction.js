@@ -81,6 +81,7 @@ define([
                 $(event.data.dom).trigger('reset.fraction');
             }).on('changeResponse.fraction reset.fraction',this,function(event){
                 // Redraw the pieChart
+                canvas.clear();
                 chart =  canvas.pieChart(event.data.values(), event.data.config, dom);
                 //communicate the response change to the interaction
                 _this.trigger('responsechange', [_this.getResponse()]);
