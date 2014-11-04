@@ -2,21 +2,42 @@ define([
     'IMSGlobal/jquery_2_1_1',
     'OAT/raphael',
     'lodash'
-],function($,Raphael,_){
+], function($, Raphael, _){
     'use strict';
-    Raphael.fn.pieChart = function (values, config, dom) {
-        
+    Raphael.fn.pieChart = function(values, config, dom){
+
         var paper = this,
             chart = this.set(),
             padding = config.padding || 2,
+            r = config.radius,
             // read some stuff from config & reformat datas
-            cx = config.radius + padding,
-            cy = config.radius + padding,
+            cx = r + padding,
+            cy = r + padding,
             // Math Constant
-            rad = Math.PI / 180;
-        
-        if (typeof config.selectedPartitions === 'string') {
-            if (config.selectedPartitions.trim() === ''){
+            rad = Math.PI / 180,
+            getStyle = function(selected){
+                return {
+                    fill : selected ? config.selectedPartitionsColor : config.partitionColor,
+                    cursor : 'pointer',
+                    stroke : config.outlineColor,
+                    'stroke-width' : config.outlineThickness
+                };
+            },
+            setHoverStyle = function(raphaelObject){
+                raphaelObject.hover(function(){
+                    this.animate({
+                        'fill-opacity' : 0.7
+                    });
+                }, function(){
+                    this.attr({
+                        'fill-opacity' : 1
+                    });
+                });
+            };
+
+        //@todo clean this
+        if(typeof config.selectedPartitions === 'string'){
+            if(config.selectedPartitions.trim() === ''){
                 config.selectedPartitions = '[]';
             }
             config.selectedPartitions = JSON.parse(config.selectedPartitions);
@@ -34,90 +55,95 @@ define([
          * @param  {object|array} params        params passed to Raphael .attr()
          * @return {object}                     Raphael path
          */
-        function sector(cx, cy, r, startAngle, endAngle, params) {
+        function sector(cx, cy, r, startAngle, endAngle, params){
             var x1 = cx + r * Math.cos(-startAngle * rad),
                 x2 = cx + r * Math.cos(-endAngle * rad),
                 y1 = cy + r * Math.sin(-startAngle * rad),
                 y2 = cy + r * Math.sin(-endAngle * rad);
-            return paper.path(['M', cx, cy, 'L', x1, y1, 'A', config.radius, config.radius, 0, +(endAngle - startAngle > 180), 0, x2, y2, 'z']).attr(params);
+            return paper.path(['M', cx, cy, 'L', x1, y1, 'A', r, r, 0, +(endAngle - startAngle > 180), 0, x2, y2, 'z']).attr(params);
         }
 
         var $container = $(dom),
             angle = 0,
             total = 0,
-            start = 0,
+            //internal state for every sector
             selectedPartitions = {},
             /**
              * Iterational function that draw every slice
              * @param  {int} j slice number
              */
-            process = function (j) {
+            drawSlice = function(j){
+
                 var value = values[j],
                     angleplus = 360 * value / total,
-                    bcolor, p;
-                    // Slice Background Color
-                    //
-                    // Test if there's enought stuff registerred regarding on wich slice we are,
-                    // and test if we got something for the current slice. Get the selected color if,
-                    // else get the regular color
-                    if(config.selectedPartitions.length >= j && config.selectedPartitions[j]){
-                        bcolor = config.selectedPartitionsColor;
-                        selectedPartitions[j] = true;
-                    }else{
-                        bcolor = config.partitionColor;
-                        selectedPartitions[j] = false;
-                    }
-                    
-                    // Slice , also called sector.
-                    p = sector(cx, cy, config.radius, angle, angle + angleplus, {
-                        fill: bcolor,
-                        cursor : 'pointer',
-                        stroke: config.outlineColor,
-                        'stroke-width': config.outlineThickness
-                    });
-                    
-                    p.hover(function(){
-                        this.animate({
-                            'fill-opacity' : 0.5
-                        });
-                    }, function(){
-                        this.attr({
-                            'fill-opacity' : 1
-                        });
-                    });
+                    selected = (config.selectedPartitions.length >= j && config.selectedPartitions[j]),
+                    p;
+
+                //modify the internal state
+                selectedPartitions[j] = selected;
+
+                // Slice , also called sector.
+                p = sector(cx, cy, r, angle, angle + angleplus, getStyle(selected));
+                //increase the andle
                 angle += angleplus;
+                
+                //add hover style
+                setHoverStyle(p);
+                
                 // Register this slice into the canvas
                 chart.push(p);
-                // I don't f*cking now what it is. It's taken from the original RapahelJS Exemple
-                start += 0.1;
+                
                 // Register events on the slice / sector
-                p.click(function(){
+                p.click(getClickCallback(j));
+            },
+            drawCircle = function(){
+                
+                var c = paper.circle(cx, cy, r).attr(getStyle(false));
+                
+                //add hover style
+                setHoverStyle(c);
+                
+                // Register this slice into the canvas
+                chart.push(c);
+                
+                // Register events on the slice / sector
+                c.click(getClickCallback(0));
+            },
+            getClickCallback = function(j){
+                return function(){
                     if(String(this.attrs.fill) === config.partitionColor){
                         // if the color was previously the default color ,
                         // this slice / sector is unselected
                         chart.selected += 1;
                         // Change the color of the background
-                        this.attr({fill: config.selectedPartitionsColor});
-                        // update the configuration 
+                        this.attr(getStyle(true));
+                        // update the internal state 
                         selectedPartitions[j] = true;
                         $container.trigger('select_slice.pieChart', selectedPartitions);
                     }else{
                         // else, this slice / sector is already selected
                         chart.selected -= 1;
                         // Change the background color to the default unselected value
-                        this.attr({fill: config.partitionColor});
-                        // update the configuration 
+                        this.attr(getStyle(false));
+                        // update the internal state 
                         selectedPartitions[j] = false;
                         $container.trigger('unselect_slice.pieChart', selectedPartitions);
                     }
-                });
-            };
-        for (var i = 0, ii = values.length; i < ii; i++) {
+                }
+            }    
+
+        for(var i = 0, ii = values.length; i < ii; i++){
             total += values[i];
         }
-        for (i = 0; i < ii; i++) {
-            process(i);
+        
+        if(ii > 1){
+            for(i = 0; i < ii; i++){
+                drawSlice(i);
+            }
+        }else{
+            drawCircle();
         }
+
         $container.trigger('drawn.pieChart');
     };
 });
