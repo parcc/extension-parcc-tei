@@ -67,8 +67,24 @@ define([
                         bcolor = config.partitionColor;
                         selectedPartitions[j] = false;
                     }
+                    
                     // Slice , also called sector.
-                    p = sector(cx, cy, config.radius, angle, angle + angleplus, {fill: bcolor, stroke: config.outlineColor, 'stroke-width': config.outlineThickness});
+                    p = sector(cx, cy, config.radius, angle, angle + angleplus, {
+                        fill: bcolor,
+                        cursor : 'pointer',
+                        stroke: config.outlineColor,
+                        'stroke-width': config.outlineThickness
+                    });
+                    
+                    p.hover(function(){
+                        this.animate({
+                            'fill-opacity' : 0.5
+                        });
+                    }, function(){
+                        this.attr({
+                            'fill-opacity' : 1
+                        });
+                    });
                 angle += angleplus;
                 // Register this slice into the canvas
                 chart.push(p);
