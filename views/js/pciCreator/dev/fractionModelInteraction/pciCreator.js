@@ -34,7 +34,7 @@ define([
          */
         getDefaultProperties : function(pci){
             return {
-                'title' : '',
+                'title' : 'Fraction Model',
                 'radius' : 100,
                 'selectedPartitionsColor' : '#ff0000',
                 'partitionColor' : '#ffffff',

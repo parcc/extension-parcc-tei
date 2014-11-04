@@ -53,7 +53,14 @@ define([
             config.padding = 10;
             var canvasSize = 2 * (parseInt(config.radius) + parseInt(config.padding) + parseInt(config.outlineThickness));
             var canvas = scaleRaphael($('.shape-container',$container)[0],canvasSize,canvasSize);
-            canvas.scaleAll();
+            
+//            var containerWidth  = $container.innerWidth();
+//            var height = canvasSize;
+//            var factor =  1;
+//            
+//            canvas.changeSize(containerWidth, height * factor, false, false);
+//            canvas.scaleAll( factor );
+            
             // Init the pieChart
             var chart = canvas.pieChart(this.values(), this.config, dom);
             // Catch click on more or less
