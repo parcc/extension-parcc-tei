@@ -44,10 +44,6 @@ class CreatorHook implements Hook
         //get info controls directly located in views/js/picCreator/dev/myInfoControl
         $hooks = $registry->getDevImplementations();
         foreach($hooks as $hook){
-            
-            unset($hook['directory']);
-            $hook['addRequiredResources'] = _url('addRequiredResources', 'PciManager', 'parccTei');
-            
             $config->addInteraction($hook);
         }
     }
