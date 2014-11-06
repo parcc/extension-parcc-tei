@@ -1,7 +1,7 @@
 define([
     'IMSGlobal/jquery_2_1_1',
     'OAT/raphael',
-    'lodash'
+    'OAT/lodash'
 ], function($, Raphael, _){
     'use strict';
     Raphael.fn.pieChart = function(values, config, dom){
