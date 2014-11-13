@@ -19,7 +19,7 @@ define([], function(){
             spacingX : options.spacingX || 1,
             spacingY : options.spacingY || 1,
             unit : options.unit || 20,
-            children : options.raphael.set(),
+            children : paper.set(),
             snapping : options.snapping || false,
             /**
              * Rendering function
