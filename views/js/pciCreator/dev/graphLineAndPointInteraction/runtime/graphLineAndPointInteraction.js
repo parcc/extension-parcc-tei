@@ -1,4 +1,12 @@
-define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qtiCustomInteractionContext){
+define([
+    'IMSGlobal/jquery_2_1_1',
+    'qtiCustomInteractionContext',
+    'OAT/scale.raphael',
+    'graphLineAndPointInteraction/runtime/libs/gridFactory',
+    'graphLineAndPointInteraction/runtime/libs/pointFactory'
+    ], function($, qtiCustomInteractionContext){
+
+    'use strict';
 
     var graphLineAndPointInteraction = {
         id : -1,
