@@ -3,14 +3,14 @@ define([], function(){
 
     /**
      * Grid Factory
-     * @param  {object} paper               Raphael paper / canvas object
-     * @param  {object} options             Grid options
-     * @param  {int}    option.unit         in px, it's the base unit used for your grid
-     * @param  {int}    options.spacingX    On how each units in the x axis you want to repeat your grid
-     * @param  {int}    options.spacingY    On how each units in the y axis you want to repeat your grid
-     * @param  {bool}   options.snapping    Is elements should be snapped on this grid
+     * @param  {Object}    paper               Raphael paper / canvas object
+     * @param  {Object}    options             Grid options
+     * @param  {Number}    options.unit        in px, it's the base unit used for your grid
+     * @param  {Number}    options.spacingX    On how each units in the x axis you want to repeat your grid
+     * @param  {Number}    options.spacingY    On how each units in the y axis you want to repeat your grid
+     * @param  {Boolean}   options.snapping    Is elements should be snapped on this grid
      * @throws {unit must be > 0}           If you specified and options.unit <= 0
-     * @return {object}                     Grid object
+     * @return {Object}                     Grid object
      */
     function gridFactory(paper,options){
         if (options.unit === 0){ throw 'unit must be > 0';}
@@ -39,7 +39,7 @@ define([], function(){
             },
             /**
              * Return a callback function to determine for a value the corrected value according grid snapping
-             * @return {function} callback function
+             * @return {Function} callback function
              */
             snap : function(){
                 var self = this;
