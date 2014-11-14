@@ -4,10 +4,12 @@
     "short": "Line & Point",
     "description": "Graphing Line And Point",
     "version": "0.1",
-    "author": "Sam Sipasseuth",
-    "email": "sam@taotesting.com",
+    "author": "Thibault Milan",
+    "email": "thibault.milan@vesperiagroup.com",
     "libraries": [
-        "IMSGlobal/jquery_2_1_1"
+        "IMSGlobal/jquery_2_1_1",
+        "./runtime/libs/gridFactory",
+        "./runtime/libs/pointFactory"
     ],
     "css": [
         "runtime/css/graphLineAndPointInteraction.css"
