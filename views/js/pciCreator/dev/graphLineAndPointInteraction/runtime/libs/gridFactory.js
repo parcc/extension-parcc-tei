@@ -9,8 +9,8 @@ define([], function(){
      * @param  {Number}    options.spacingX    On how each units in the x axis you want to repeat your grid
      * @param  {Number}    options.spacingY    On how each units in the y axis you want to repeat your grid
      * @param  {Boolean}   options.snapping    Is elements should be snapped on this grid
-     * @throws {unit must be > 0}           If you specified and options.unit <= 0
-     * @return {Object}                     Grid object
+     * @throws {unit must be > 0}              If you specified and options.unit <= 0
+     * @return {Object}                        Grid object
      */
     function gridFactory(paper,options){
         if (options.unit === 0){ throw 'unit must be > 0';}
@@ -27,9 +27,9 @@ define([], function(){
             render : function(){
                 var height = window.screen.height,
                 width  = window.screen.width,
-                /** @type {int} spacing in px for x axis*/
+                /** @type {Number} spacing in px for x axis*/
                 spacingX = this.spacingX * this.unit,
-                /** @type {int} spacing in px for y axis */
+                /** @type {Number} spacing in px for y axis */
                 spacingY = this.spacingY * this.unit;
                 for(var y = 0; y <= height; y += (spacingY)) {
                     for(var x = 0; x <= width; x += (spacingX)) {

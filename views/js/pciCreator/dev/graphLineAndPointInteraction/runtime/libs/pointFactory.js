@@ -11,7 +11,7 @@ define([], function(){
      * @param  {Number} [options.glowRadius=30]             size of the radius around the point
      * @throws {Missing Parameters. Need to specify x,y}    If there's missing x / y
      *
-     * @return {[type]}         [description]
+     * @return {Object}                                     point Object
      */
     function pointFactory(paper,options) {
         /**
