@@ -1,10 +1,18 @@
 define([
     'IMSGlobal/jquery_2_1_1',
     'qtiCustomInteractionContext',
+    'OAT/util/event',
     'OAT/scale.raphael',
     'graphLineAndPointInteraction/runtime/libs/gridFactory',
     'graphLineAndPointInteraction/runtime/libs/pointFactory'
-    ], function($, qtiCustomInteractionContext){
+    ], function(
+        $,
+        qtiCustomInteractionContext,
+        event,
+        scaleRaphael,
+        gridFactory,
+        pointFactory
+    ){
 
     'use strict';
 
@@ -26,6 +34,19 @@ define([
             this.config = config || {};
 
             var $container = $(dom);
+
+            this.config.grid  = {
+                unit : 20,
+                spacingX: 1,
+                spacingY : 1
+            };
+            ///////////////////
+            // Create Canvas //
+            ///////////////////
+            var canvas = scaleRaphael($('.shape-container',$container)[0],500,400);
+
+            var grid = gridFactory(canvas,this.config.grid);
+
 
         },
         /**
