@@ -68,4 +68,5 @@ define([], function(){
         };
         return obj;
     }
+    return pointFactory;
 });
