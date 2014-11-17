@@ -49,10 +49,20 @@ define([], function(){
                     if (self.snapping) {return paper.snapTo(this.unit,val,this.unit);}
                     else {return val;}
                 };
+            },
+            /**
+             * Create a transparent rectangle object in front of every element
+             * inside the set to gain clickability
+             */
+            clickable : function(){
+                var clickableArea = paper.rec(0,0, this._widthX, this._widthY);
+                clickableArea.attr('fill','rgba(0,0,0,0)');
+                this.children.push(clickableArea);
             }
         };
         obj.render();
         return obj;
-
     }
+    console.log('grid factory loaded');
+    return gridFactory;
 });
