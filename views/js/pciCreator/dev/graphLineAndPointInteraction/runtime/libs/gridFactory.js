@@ -21,10 +21,20 @@ define([], function(){
             unit : options.unit || 20,
             children : paper.set(),
             snapping : options.snapping || false,
-            _widthX : function(){
+            /**
+             * return the width of the grid in px
+             * @private
+             * @return {Number} width X in px
+             */
+            _width : function(){
                 return this.spacingX * this.unit;
             },
-            _widthY : function(){
+            /**
+             * return the height of the grid in px
+             * @private
+             * @return {Number} height Y in px
+             */
+            _height : function(){
                 return this.spacingY * this.unit;
             },
             /**
@@ -33,9 +43,9 @@ define([], function(){
             render : function(){
                 var height = window.screen.height,
                 width  = window.screen.width;
-                for(var y = 0; y <= height; y += this._widthY){
-                    for(var x = 0; x <= width; x += this._widthX) {
-                        this.children.push(paper.rect(x,y,this._widthX,this._widthY).attr('stroke', this.color));
+                for(var y = 0; y <= height; y += this._height){
+                    for(var x = 0; x <= width; x += this._width) {
+                        this.children.push(paper.rect(x,y,this._width,this._height).attr('stroke', this.color));
                     }
                 }
             },
@@ -55,7 +65,8 @@ define([], function(){
              * inside the set to gain clickability
              */
             clickable : function(){
-                var clickableArea = paper.rec(0,0, this._widthX, this._widthY);
+                /** @type {Object} Rectangle Object to cover the all grid area */
+                var clickableArea = paper.rec(0,0, this._width, this._height);
                 clickableArea.attr('fill','rgba(0,0,0,0)');
                 this.children.push(clickableArea);
             }
