@@ -21,19 +21,21 @@ define([], function(){
             unit : options.unit || 20,
             children : paper.set(),
             snapping : options.snapping || false,
+            _widthX : function(){
+                return this.spacingX * this.unit;
+            },
+            _widthY : function(){
+                return this.spacingY * this.unit;
+            },
             /**
              * Rendering function
              */
             render : function(){
                 var height = window.screen.height,
-                width  = window.screen.width,
-                /** @type {Number} spacing in px for x axis*/
-                spacingX = this.spacingX * this.unit,
-                /** @type {Number} spacing in px for y axis */
-                spacingY = this.spacingY * this.unit;
-                for(var y = 0; y <= height; y += (spacingY)) {
-                    for(var x = 0; x <= width; x += (spacingX)) {
-                        this.children.push(paper.rect(x,y,spacingX,spacingY).attr('stroke', this.color));
+                width  = window.screen.width;
+                for(var y = 0; y <= height; y += this._widthY){
+                    for(var x = 0; x <= width; x += this._widthX) {
+                        this.children.push(paper.rect(x,y,this._widthX,this._widthY).attr('stroke', this.color));
                     }
                 }
             },
