@@ -18,27 +18,67 @@ define([], function(){
          * Test if requirement are met or not
          */
         if(!options.x || !options.y){throw 'Missing Parameters. Need to specify x,y';}
+        /** @type {String} color */
+        var _color = options.color || '#f00',
+        /** @type {Number} radius of the point representation */
+        _r = parseInt(options.radius) || 20,
+        /** @type {Number} x coordinate (in px) */
+        _x = parseInt(options.x),
+        /** @type {Number} y coordinate (in px) */
+        _y = parseInt(options.y),
+        /** @type {Number} radius for the glowing effect */
+        _rGlow = parseInt(options.glowRadius) || 30;
 
         var obj = {
-            color : options.color || '#f00',
-            r : options.radius || 20,
-            x : options.x,
-            y : options.y,
-            rGlow : options.glowRadius || 30,
             /** @type {Object} Paper.set of elements */
             children : paper.set(),
+            /**
+             * Set _color value
+             * @param {String} color
+             */
+            setColor : function(color){
+                _color = String(color);
+            },
+            /**
+             * Set _x value
+             * @param {Number} val in px
+             */
+            setX : function(val){
+                _x = parseInt(val);
+            },
+            /**
+             * Set _y value
+             * @param {Number} val in px
+             */
+            setY : function(val){
+                _y = parseInt(val);
+            },
+            /**
+             * Set _r value
+             * @param {Number} val in px
+             */
+            setR : function(val){
+                _r = parseInt(val);
+            },
+            /**
+             * Set _rGlow value
+             * @param {Number} val in px
+             */
+            setRGlow : function(val){
+                _rGlow = parseInt(val);
+            },
             /**
              * Draw the point with his glow around him
              */
             render : function(){
                 /** @type {Object} Raphaël element object with type “circle” */
-                var circle = paper.circle(this.x,this.y,this.r);
-                circle.attr('fill', this.color);
-                circle.attr('stroke', this.color);
+                var circle = paper.circle(_x,_y,_r);
+                circle.attr('fill', _color);
+                circle.attr('stroke', _color);
                 /** @type {Object} Paper.set of elements that represents glow */
                 var glow = circle.glow({
-                    color : this.color,
-                    width: this.rGlow
+                    color : _color,
+                    width: _rGlow
                 });
                 this.children.push(circle,glow);
             },
