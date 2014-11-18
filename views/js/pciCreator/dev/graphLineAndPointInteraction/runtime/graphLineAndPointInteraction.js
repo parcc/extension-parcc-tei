@@ -38,14 +38,36 @@ define([
             this.config.grid  = {
                 unit : 20,
                 spacingX: 1,
-                spacingY : 1
+                spacingY : 1,
+                snapping : true
             };
             ///////////////////
             // Create Canvas //
             ///////////////////
-            var canvas = scaleRaphael($('.shape-container',$container)[0],500,400);
+            var paper = scaleRaphael($('.shape-container',$container)[0],500,400);
+            //////////////////////////////
+            // Instanciate a basic grid //
+            //////////////////////////////
+            var grid = gridFactory(paper,this.config.grid);
+            ///////////////////////
+            // Make it clickable //
+            ///////////////////////
+            grid.clickable();
+            grid.children.click(function(event){
+                var bnds = event.target.getBoundingClientRect(),
+                wfactor = paper.w / paper.width,
+                fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
+                fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
+                console.log(fx,fy);
+                console.log(grid.snap()(fx),grid.snap()(fy));
+                console.log('________________');
+                var point = pointFactory(paper,{
+                    x : fx,
+                    y : fy
+                });
+                point.render();
+            });
 
-            var grid = gridFactory(canvas,this.config.grid);
 
 
         },
