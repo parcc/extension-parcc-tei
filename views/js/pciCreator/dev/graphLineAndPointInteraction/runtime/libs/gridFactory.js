@@ -24,10 +24,8 @@ define([], function(){
         _spacingY = options.spacingY || 1,
         /** @type {Number} Unit in px */
         _unit = options.unit || 20,
-        /** @type {Number} width in px of the grid */
-        _width = _spacingX * _unit,
-        /** @type {Number} height in px of the grid */
-        _height = _spacingY * _unit;
+        /** @type {Object} [description] */
+        _borderBox = {};
 
         var obj = {
             children : paper.set(),
@@ -38,7 +36,6 @@ define([], function(){
              */
             setSpacingX : function(val){
                 _spacingX = parseInt(val);
-                _width =  _spacingX * _unit;
             },
             /**
              * Set _spacingY value
@@ -46,7 +43,6 @@ define([], function(){
              */
             setSpacingY : function(val){
                 _spacingY = parseInt(val);
-                _height = _spacingY * _unit;
             },
             /**
              * Set _unit value
@@ -54,8 +50,6 @@ define([], function(){
              */
             setUnit : function(val){
                 _unit = parseInt(val);
-                _width =  _spacingX * _unit;
-                _height = _spacingY * _unit;
             },
             /**
              * Set _color value
@@ -65,16 +59,31 @@ define([], function(){
                 _color = String(color);
             },
             /**
+             * Get width of the _borderBox
+             * @return {Number} width of the set of all elements
+             */
+            getWidth : function(){
+                return _borderBox.width;
+            },
+            /**
+             * Get height of the _borderBox
+             * @return {Number} height of the set of all elements
+             */
+            getHeight : function(){
+                return _borderBox.height;
+            },
+            /**
              * Rendering function
              */
             render : function(){
                 var height = window.screen.height,
                 width  = window.screen.width;
-                for(var y = 0; y <= height; y += _height){
-                    for(var x = 0; x <= width; x += _width) {
-                        this.children.push(paper.rect(x,y,_width,_height).attr('stroke', _color));
+                for(var y = 0; y <= height; y += _spacingY * _unit){
+                    for(var x = 0; x <= width; x += _spacingX * _unit) {
+                        this.children.push(paper.rect(x,y,_spacingX * _unit,_spacingY * _unit).attr('stroke', _color));
                     }
                 }
+                _borderBox = this.children.getBBox();
             },
             /**
              * Return a callback function to determine for a value the corrected value according grid snapping
@@ -93,9 +102,10 @@ define([], function(){
              */
             clickable : function(){
                 /** @type {Object} Rectangle Object to cover the all grid area */
-                var clickableArea = paper.rect(0,0, _width, _height);
+                var clickableArea = paper.rect(_borderBox.x,_borderBox.y, _borderBox.width, _borderBox.height);
                 clickableArea.attr('fill','rgba(0,0,0,0)');
                 this.children.push(clickableArea);
+                console.log('grid now clickable');
             }
         };
         obj.render();
