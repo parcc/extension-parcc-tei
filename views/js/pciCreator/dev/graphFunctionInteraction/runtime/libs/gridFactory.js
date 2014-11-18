@@ -110,6 +110,6 @@ define([], function(){
         obj.render();
         return obj;
     }
-    console.log('grid factory loaded');
+    
     return gridFactory;
 });

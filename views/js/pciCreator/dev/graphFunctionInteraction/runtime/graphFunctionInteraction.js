@@ -16,6 +16,55 @@ define([
 
     'use strict';
 
+    function _round(number, decimal){
+        var m = Math.pow(10, parseInt(decimal));
+        return Math.round(number * m) / m;
+    }
+
+    function plotQuadraticEquation(canvas, equation, config){
+
+        function calc(equation, x){
+
+            var a = equation[0],
+                b = equation[1],
+                c = equation[2];
+
+            return a * Math.pow(x, 2) + b * x + c;
+        }
+
+        var path = 'M',
+            startingPoint = {
+                x : parseInt(config.startingPoint.x),
+                y : parseInt(config.startingPoint.y)
+            };
+
+        path += startingPoint.x + ' ' + startingPoint.y;
+
+        var step = config.precision * config.unitSize.x;
+
+        var x = config.start;
+        var y;
+        var startingCoords = {
+            x : parseInt(config.start * config.unitSize.x),
+            y : parseInt(calc(equation, config.start) * config.unitSize.y)
+        };
+        var coordinates = [];
+        while(x < config.end){
+
+            y = calc(equation, x);
+            coordinates.push([_round(x, 3), _round(y, 3)]);
+
+            //translate into path:
+            path += 'L' + _round(x * config.unitSize.x - startingCoords.x, 3) + ' ' + _round(y * config.unitSize.y + startingCoords.y, 3);
+
+            //update x for the next step:
+            x += config.precision;
+        }
+
+        console.log(coordinates);
+        console.log(path);
+        canvas.path(path);
+    }
 
     var graphFunctionInteraction = {
         id : -1,
@@ -53,6 +102,28 @@ define([
             // Instanciate a basic grid //
             //////////////////////////////
             var grid = gridFactory(canvas, this.config.grid);
+
+            //a quadratic equation e.g. 2x² + 3x + 1
+            var equation = [2, 3, 1],
+                curveConfig = {
+                    //starting unit
+                    start : -4,
+                    end : 2,
+                    precision : 0.1,
+                    //unit size in px
+                    unitSize : {
+                        x : 10,
+                        y : 10
+                    },
+                    //starting point
+                    startingPoint : {
+                        x : 0,
+                        y : 200
+                    }
+                };
+
+
+            plotQuadraticEquation(canvas, equation, curveConfig);
         },
         /**
          * Programmatically set the response following the json schema described in
