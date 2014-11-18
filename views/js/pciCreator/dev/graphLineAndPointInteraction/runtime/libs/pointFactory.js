@@ -21,13 +21,13 @@ define([], function(){
         /** @type {String} color */
         var _color = options.color || '#f00',
         /** @type {Number} radius of the point representation */
-        _r = parseInt(options.radius) || 20,
+        _r = parseInt(options.radius) || 10,
         /** @type {Number} x coordinate (in px) */
         _x = parseInt(options.x),
         /** @type {Number} y coordinate (in px) */
         _y = parseInt(options.y),
         /** @type {Number} radius for the glowing effect */
-        _rGlow = parseInt(options.glowRadius) || 30;
+        _rGlow = parseInt(options.glowRadius) || _r;
 
         var obj = {
             /** @type {Object} Paper.set of elements */
