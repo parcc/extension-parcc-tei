@@ -33,9 +33,16 @@ define([
          */
         getDefaultProperties : function(pci){
             return {
-                level : 5,
-                'label-min' : 'min',
-                'label-max' : 'max'
+                'radius' : 100,
+                'selectedPartitionsColor' : '#ff0000',
+                'partitionColor' : '#ffffff',
+                'outlineColor' : '#000000',
+                'outlineThickness' : 1,
+                'partitionMax' : 12,
+                'partitionMin' : 1,
+                'partitionInit' : 2,
+                'selectedPartitionsInit' : 0,
+                'selectedPartitions' : '[]'
             };
         },
         /**
@@ -62,14 +69,8 @@ define([
          */
         getMarkupData : function(pci, defaultData){
             
-            var hook = ciRegistry.get(_typeIdentifier),
-                manifest = hook.manifest;
-            
-            defaultData = _.defaults(defaultData , {
-                someData : pci.data('someData'),
-                typeIdentifier : _typeIdentifier,
-                label : manifest.label,
-                description : manifest.description
+            return _.defaults(defaultData , {
+                prompt : pci.data('prompt')
             });
             
             return defaultData;
