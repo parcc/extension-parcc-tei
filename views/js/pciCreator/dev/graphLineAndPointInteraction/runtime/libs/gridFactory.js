@@ -78,10 +78,11 @@ define([], function(){
             render : function(){
                 var height = window.screen.height,
                 width  = window.screen.width;
-                for(var y = 0; y <= height; y += _spacingY * _unit){
-                    for(var x = 0; x <= width; x += _spacingX * _unit) {
-                        this.children.push(paper.rect(x,y,_spacingX * _unit,_spacingY * _unit).attr('stroke', _color));
-                    }
+                for(var y = 1; y <= height; y += _spacingY * _unit){
+                    this.children.push(paper.path('M0 ' + y + 'H' + width).attr('stroke', _color).attr('stroke-width', 1));
+                }
+                for(var x = 1; x <= width; x += _spacingX * _unit) {
+                    this.children.push(paper.path('M' + x + ' 0V' + height).attr('stroke', _color));
                 }
                 _borderBox = this.children.getBBox();
             },
