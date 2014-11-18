@@ -87,14 +87,12 @@ define([], function(){
             },
             /**
              * Return a callback function to determine for a value the corrected value according grid snapping
-             * @return {Function} callback function
+             * @return {Number} snapped to grid value
              */
-            snap : function(){
+            snap : function(val){
                 var self = this;
-                return function(val){
-                    if (self.snapping) {return paper.snapTo(_unit,val,_unit);}
-                    else {return val;}
-                };
+                if (self.snapping) {return paper.raphael.snapTo(_unit,val,_unit / 2);}
+                else {return val;}
             },
             /**
              * Create a transparent rectangle object in front of every element
