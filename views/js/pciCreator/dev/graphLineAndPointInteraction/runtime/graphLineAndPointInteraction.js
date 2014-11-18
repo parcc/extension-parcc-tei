@@ -37,33 +37,30 @@ define([
 
             this.config.grid  = {
                 unit : 20,
-                spacingX: 1,
-                spacingY : 1,
+                spacingX: 2,
+                spacingY : 2,
                 snapping : true
             };
             ///////////////////
             // Create Canvas //
             ///////////////////
-            var paper = scaleRaphael($('.shape-container',$container)[0],500,400);
+            var canvas = scaleRaphael($('.shape-container',$container)[0],500,400);
             //////////////////////////////
             // Instanciate a basic grid //
             //////////////////////////////
-            var grid = gridFactory(paper,this.config.grid);
+            var grid = gridFactory(canvas,this.config.grid);
             ///////////////////////
             // Make it clickable //
             ///////////////////////
             grid.clickable();
             grid.children.click(function(event){
                 var bnds = event.target.getBoundingClientRect(),
-                wfactor = paper.w / paper.width,
+                wfactor = canvas.w / canvas.width,
                 fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
                 fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
-                console.log(fx,fy);
-                console.log(grid.snap()(fx),grid.snap()(fy));
-                console.log('________________');
-                var point = pointFactory(paper,{
-                    x : fx,
-                    y : fy
+                var point = pointFactory(canvas,{
+                    x : grid.snap(fx),
+                    y : grid.snap(fy)
                 });
                 point.render();
             });

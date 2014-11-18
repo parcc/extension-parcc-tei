@@ -27,7 +27,7 @@ define([], function(){
         /** @type {Number} y coordinate (in px) */
         _y = parseInt(options.y),
         /** @type {Number} radius for the glowing effect */
-        _rGlow = parseInt(options.glowRadius) || _r;
+        _rGlow = parseInt(options.glowRadius) || _r * 2;
 
         var obj = {
             /** @type {Object} Paper.set of elements */
