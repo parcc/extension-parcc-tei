@@ -32,37 +32,31 @@ define([
             return a * Math.pow(x, 2) + b * x + c;
         }
 
-        var path = 'M',
-            startingPoint = {
-                x : parseInt(config.startingPoint.x),
-                y : parseInt(config.startingPoint.y)
-            };
-
-        path += startingPoint.x + ' ' + startingPoint.y;
-
-        var step = config.precision * config.unitSize.x;
-
         var x = config.start;
         var y;
-        var startingCoords = {
-            x : parseInt(config.start * config.unitSize.x),
-            y : parseInt(calc(equation, config.start) * config.unitSize.y)
-        };
+        var path = '';
         var coordinates = [];
+        var prefix = '';
+
         while(x < config.end){
 
             y = calc(equation, x);
-            coordinates.push([_round(x, 3), _round(y, 3)]);
 
-            //translate into path:
-            path += 'L' + _round(x * config.unitSize.x - startingCoords.x, 3) + ' ' + _round(y * config.unitSize.y + startingCoords.y, 3);
+            //translate new point into path segment
+            if(coordinates.length){
+                prefix = 'L';
+            }else{
+                prefix = 'M';
+            }
+            path += prefix + _round(x * config.unitSize.x + config.origin.x, 3) + ' ' + _round(-y * config.unitSize.y + config.origin.y, 3);
+
+            //save coords
+            coordinates.push([_round(x, 3), _round(y, 3)]);
 
             //update x for the next step:
             x += config.precision;
         }
 
-        console.log(coordinates);
-        console.log(path);
         canvas.path(path);
     }
 
@@ -97,7 +91,9 @@ define([
             ///////////////////
             // Create Canvas //
             ///////////////////
-            var canvas = scaleRaphael($('.shape-container', $container)[0], 500, 400);
+            var canvasHeight = 600, 
+                canvasWidth = 600;
+            var canvas = scaleRaphael($('.shape-container', $container)[0], canvasHeight, canvasWidth);
             //////////////////////////////
             // Instanciate a basic grid //
             //////////////////////////////
@@ -106,22 +102,21 @@ define([
             //a quadratic equation e.g. 2x² + 3x + 1
             var equation = [2, 3, 1],
                 curveConfig = {
-                    //starting unit
+                    //starting unit (in true cartesian coordinate system)
                     start : -4,
-                    end : 2,
+                    end : 3,
                     precision : 0.1,
-                    //unit size in px
+                    //unit size in px (relative to canvas)
                     unitSize : {
-                        x : 10,
-                        y : 10
+                        x : 30,
+                        y : 30
                     },
-                    //starting point
-                    startingPoint : {
-                        x : 0,
-                        y : 200
+                    //origine of the axis in px (relative to canvas)
+                    origin : {
+                        x : canvasWidth/2,
+                        y : canvasHeight/2
                     }
                 };
-
 
             plotQuadraticEquation(canvas, equation, curveConfig);
         },
