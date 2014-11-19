@@ -55,6 +55,16 @@ define([], function(){
                 _y = parseInt(val);
             },
             /**
+             * Set new coordinates for the point
+             * @param {Number} x
+             * @param {Number} y
+             */
+            setCoord : function(x,y){
+                var coord = grid.snap(parseInt(x),parseInt(y));
+                _x = coord[0];
+                _y = coord[1];
+            },
+            /**
              * Set _r value
              * @param {Number} val in px
              */
@@ -82,6 +92,7 @@ define([], function(){
                     color : _color,
                     width: _rGlow
                 });
+                if (this.children.length > 0) { this.children.remove().clear();}
                 this.children.push(circle,glow);
             },
             /**
@@ -105,6 +116,12 @@ define([], function(){
                     self._x = coord[0];
                     self._y = coord[1];
                 });
+            },
+            /**
+             * De-Activate the drag'n'drop capavility provided by RapahelJS
+             */
+            unDrag : function(){
+                this.children.undrag();
             }
         };
         return obj;

@@ -33,7 +33,9 @@ define([
             this.dom = dom;
             this.config = config || {};
 
-            var $container = $(dom);
+            var $container = $(dom),
+            pointA,
+            pointB;
 
             this.config.grid  = {
                 x: {
@@ -73,12 +75,26 @@ define([
                 wfactor = canvas.w / canvas.width,
                 fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
                 fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
-                var point = pointFactory(canvas,grid,{
-                    x : fx,
-                    y : fy
-                });
-                point.render();
-                point.drag();
+                if (typeof pointA === 'undefined') {
+                    pointA = pointFactory(canvas,grid,{
+                        x : fx,
+                        y : fy
+                    });
+                    pointA.render();
+                    pointA.drag();
+                }else if (typeof pointB === 'undefined'){
+                    pointB = pointFactory(canvas, grid, {
+                        x: fx,
+                        y:fy
+                    });
+                    pointB.render();
+                    pointA.unDrag();
+                    pointB.drag();
+                }else{
+                    pointB.setCoord(fx, fy);
+                    pointB.render();
+                    pointB.drag();
+                }
 
             });
 
