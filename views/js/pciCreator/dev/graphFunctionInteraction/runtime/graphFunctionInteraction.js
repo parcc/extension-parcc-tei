@@ -20,7 +20,24 @@ define([
         var m = Math.pow(10, parseInt(decimal));
         return Math.round(number * m) / m;
     }
-
+    
+    function isPoint(point){
+        return point.x !== undefined && point.y !== undefined;
+    }
+    
+    function hasDifferentAbscisse(point1, point2){
+        return point1.x !== point2.x;
+    }
+    
+    function getQuadraticEquationFromPoints(vertex, point){
+        if(isPoint(vertex) && isPoint(point) && hasDifferentAbscisse(vertex, point)){
+            var a = (point.y - vertex.y)/Math.pow(point.x-vertex.x, 2);
+            var b = -2*a*vertex.x;
+            var c = vertex.y + a*Math.pow(vertex.x, 2);
+            return [a, b, c];
+        }
+    }
+    
     function plotQuadraticEquation(canvas, equation, config){
 
         function calc(equation, x){
@@ -91,7 +108,7 @@ define([
             ///////////////////
             // Create Canvas //
             ///////////////////
-            var canvasHeight = 600, 
+            var canvasHeight = 600,
                 canvasWidth = 600;
             var canvas = scaleRaphael($('.shape-container', $container)[0], canvasHeight, canvasWidth);
             //////////////////////////////
@@ -103,8 +120,8 @@ define([
             var equation = [2, 3, 1],
                 curveConfig = {
                     //starting unit (in true cartesian coordinate system)
-                    start : -4,
-                    end : 3,
+                    start : -5,
+                    end : 5,
                     precision : 0.1,
                     //unit size in px (relative to canvas)
                     unitSize : {
@@ -113,12 +130,25 @@ define([
                     },
                     //origine of the axis in px (relative to canvas)
                     origin : {
-                        x : canvasWidth/2,
-                        y : canvasHeight/2
+                        x : canvasWidth / 2,
+                        y : canvasHeight / 2
                     }
                 };
 
             plotQuadraticEquation(canvas, equation, curveConfig);
+
+
+            var vertex = {
+                x : -.75,
+                y : -.125
+            },
+            point2 = {
+                x : 1,
+                y : 6
+            };
+
+            var equation = getQuadraticEquationFromPoints(vertex, point2);
+            console.log(equation);
         },
         /**
          * Programmatically set the response following the json schema described in
