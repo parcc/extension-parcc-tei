@@ -3,6 +3,7 @@ define([], function(){
     /**
      * Point Factory
      * @param  {Object} paper                               Raphael paper / canvas object
+     * @param  {Object} grid                                Grid
      * @param  {Object} options                             Point options
      * @param  {String} [options.color="#fff"]              color of the point
      * @param  {Number} [options.radius=20]                 radius in px for your point
@@ -13,7 +14,7 @@ define([], function(){
      *
      * @return {Object}                                     point Object
      */
-    function pointFactory(paper,options) {
+    function pointFactory(paper,grid,options) {
         /**
          * Test if requirement are met or not
          */
@@ -72,7 +73,8 @@ define([], function(){
              */
             render : function(){
                 /** @type {Object} Raphaël element object with type “circle” */
-                var circle = paper.circle(_x,_y,_r);
+                var coord = grid.snap(_x,_y);
+                var circle = paper.circle(coord[0],coord[1],_r);
                 circle.attr('fill', _color);
                 circle.attr('stroke', _color);
                 /** @type {Object} Paper.set of elements that represents glow */
@@ -92,17 +94,16 @@ define([], function(){
                     var bb = self.children.getBBox(),
                     newX = (self.oBB.x - bb.x + dx),
                     newY = (self.oBB.y - bb.y + dy);
-                    // Apply the translation
-                    if (options){
-                        newX = options.snap(newX);
-                        newY = options.snap(newY);
-                    }
                     self.children.translate(newX,newY);
                 },function () {
                     /** @type {Object} Store the original bounding box
                                        Since it's not just circle, it's impossible to use cx & cy
                                        instead, we'll use a bounding box representation and use their values*/
-                    self.oBB = this.children.getBBox();
+                    self.oBB = self.children.getBBox();
+                },function(dx,dy){
+                    var coord = grid.snap(dx,dy);
+                    self._x = coord[0];
+                    self._y = coord[1];
                 });
             }
         };

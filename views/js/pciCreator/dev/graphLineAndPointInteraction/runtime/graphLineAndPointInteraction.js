@@ -73,12 +73,12 @@ define([
                 wfactor = canvas.w / canvas.width,
                 fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
                 fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
-                var coords = grid.snap(fx,fy);
-                var point = pointFactory(canvas,{
-                    x : coords[0],
-                    y : coords[1]
+                var point = pointFactory(canvas,grid,{
+                    x : fx,
+                    y : fy
                 });
                 point.render();
+                point.drag();
 
             });
 
