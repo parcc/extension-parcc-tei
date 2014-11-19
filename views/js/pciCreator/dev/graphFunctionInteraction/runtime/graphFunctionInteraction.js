@@ -110,6 +110,35 @@ define([
         });
     }
 
+    function getCosineEquation(point1, point2){
+
+        if(isPoint(point1) &&
+            isPoint(point2) &&
+            hasDifferentAbscisse(point1, point2)){
+
+            var d = point2.y;
+            var a = point1.y - point2.y;
+            var b = Math.PI / (2 * (point2.x - point1.x));
+            var c = -b * point1.x;
+
+            return [a, b, c, d];
+        }
+    }
+
+    function plotCosineEquation(canvas, equation, config){
+
+        plotCurvedEquation(canvas, equation, config, function(equation, x){
+
+            var a = equation[0],
+                b = equation[1],
+                c = equation[2],
+                d = equation[3];
+
+            return a * Math.cos(b * x + c) + d;
+
+        });
+    }
+
     function plotCurvedEquation(canvas, equation, config, calc){
 
         var x = config.start;
@@ -126,7 +155,7 @@ define([
                 x += config.precision;
                 continue;
             }
-            
+
             //translate new point into path segment
             if(coordinates.length){
                 prefix = 'L';
@@ -188,8 +217,8 @@ define([
             var equation = [2, 3, 1],
                 curveConfig = {
                     //starting unit (in true cartesian coordinate system)
-                    start : -5,
-                    end : 5,
+                    start : -10,
+                    end : 10,
                     precision : 0.1,
                     //unit size in px (relative to canvas)
                     unitSize : {
@@ -229,7 +258,21 @@ define([
             console.log(equation);
 
             plotExponentialEquation(canvas, equation, curveConfig);
-            
+
+
+            var pMax = {
+                x : -.5,
+                y : 8
+            }, pZero = {
+                x : -3.5,
+                y : 3
+            };
+            equation = getCosineEquation(pMax, pZero);
+            console.log(equation);
+
+            plotCosineEquation(canvas, equation, curveConfig);
+
+
             var p1 = {
                 x : 0.683,
                 y : 3.982
@@ -239,7 +282,7 @@ define([
             };
             equation = getLogarithmicEquation(p1, p2);
             console.log(equation);
-            
+
             curveConfig.precision = .01;
             plotLogarithmicEquation(canvas, equation, curveConfig);
         },
