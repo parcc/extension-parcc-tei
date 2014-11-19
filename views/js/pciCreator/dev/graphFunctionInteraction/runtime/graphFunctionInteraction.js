@@ -77,6 +77,39 @@ define([
         });
     }
 
+    function getLogarithmicEquation(point1, point2){
+
+        if(isPoint(point1) &&
+            isPoint(point2) &&
+            hasDifferentAbscisse(point1, point2)){
+
+            var b = Math.exp(point2.y / point1.y) / (point2.x - point1.x);
+
+            if(b * point1.x > 0){
+                var a = point1.y / Math.log(b * point1.x);
+                return [a, b];
+            }else{
+                throw 'invalid pair of points';
+            }
+        }
+    }
+
+    function plotLogarithmicEquation(canvas, equation, config){
+
+        plotCurvedEquation(canvas, equation, config, function(equation, x){
+
+            var a = equation[0],
+                b = equation[1];
+
+            if(b * x > 0){
+                return a * Math.log(b * x);
+            }else{
+                return false;//undefined funciton value for this value of x
+            }
+
+        });
+    }
+
     function plotCurvedEquation(canvas, equation, config, calc){
 
         var x = config.start;
@@ -88,7 +121,12 @@ define([
         while(x < config.end){
 
             y = calc(equation, x);
-
+            if(y === false){
+                //undefined funciton value for this value of x
+                x += config.precision;
+                continue;
+            }
+            
             //translate new point into path segment
             if(coordinates.length){
                 prefix = 'L';
@@ -189,8 +227,21 @@ define([
             };
             equation = getExponentialEquation(p1, p2);
             console.log(equation);
-            
+
             plotExponentialEquation(canvas, equation, curveConfig);
+            
+            var p1 = {
+                x : 0.683,
+                y : 3.982
+            }, p2 = {
+                x : 5,
+                y : 0
+            };
+            equation = getLogarithmicEquation(p1, p2);
+            console.log(equation);
+            
+            curveConfig.precision = .01;
+            plotLogarithmicEquation(canvas, equation, curveConfig);
         },
         /**
          * Programmatically set the response following the json schema described in
