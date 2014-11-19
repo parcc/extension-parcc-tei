@@ -20,34 +20,64 @@ define([
         var m = Math.pow(10, parseInt(decimal));
         return Math.round(number * m) / m;
     }
-    
+
     function isPoint(point){
         return point.x !== undefined && point.y !== undefined;
     }
-    
+
     function hasDifferentAbscisse(point1, point2){
         return point1.x !== point2.x;
     }
-    
+
     function getQuadraticEquationFromPoints(vertex, point){
         if(isPoint(vertex) && isPoint(point) && hasDifferentAbscisse(vertex, point)){
-            var a = (point.y - vertex.y)/Math.pow(point.x-vertex.x, 2);
-            var b = -2*a*vertex.x;
-            var c = vertex.y + a*Math.pow(vertex.x, 2);
+            var a = (point.y - vertex.y) / Math.pow(point.x - vertex.x, 2);
+            var b = -2 * a * vertex.x;
+            var c = vertex.y + a * Math.pow(vertex.x, 2);
             return [a, b, c];
         }
     }
-    
+
     function plotQuadraticEquation(canvas, equation, config){
 
-        function calc(equation, x){
+        plotCurvedEquation(canvas, equation, config, function(equation, x){
 
             var a = equation[0],
                 b = equation[1],
                 c = equation[2];
 
             return a * Math.pow(x, 2) + b * x + c;
+        });
+    }
+
+    function getExponentialEquation(point1, point2){
+
+        if(isPoint(point1) &&
+            isPoint(point2) &&
+            hasDifferentAbscisse(point1, point2) &&
+            point1.y > 0 &&
+            point2.y > 0){
+
+            var b = Math.log(point2.y / point1.y) / (point2.x - point1.x);
+            var a = point1.y / Math.exp(b * point1.x);
+
+            return [a, b];
         }
+
+    }
+
+    function plotExponentialEquation(canvas, equation, config){
+
+        plotCurvedEquation(canvas, equation, config, function(equation, x){
+
+            var a = equation[0],
+                b = equation[1];
+
+            return a * Math.exp(b * x);
+        });
+    }
+
+    function plotCurvedEquation(canvas, equation, config, calc){
 
         var x = config.start;
         var y;
@@ -147,8 +177,20 @@ define([
                 y : 6
             };
 
-            var equation = getQuadraticEquationFromPoints(vertex, point2);
+            equation = getQuadraticEquationFromPoints(vertex, point2);
             console.log(equation);
+
+            var p1 = {
+                x : 0,
+                y : 1
+            }, p2 = {
+                x : 2,
+                y : 2
+            };
+            equation = getExponentialEquation(p1, p2);
+            console.log(equation);
+            
+            plotExponentialEquation(canvas, equation, curveConfig);
         },
         /**
          * Programmatically set the response following the json schema described in
