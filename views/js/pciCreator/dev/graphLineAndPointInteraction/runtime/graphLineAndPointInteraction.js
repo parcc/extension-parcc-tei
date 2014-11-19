@@ -70,11 +70,21 @@ define([
             // Make it clickable //
             ///////////////////////
             grid.clickable();
+            ///////////////////////////
+            // Catch the Click Event //
+            ///////////////////////////
             grid.children.click(function(event){
+                ////////////////////////////////////
+                // Get the coordinate for a click //
+                ////////////////////////////////////
                 var bnds = event.target.getBoundingClientRect(),
                 wfactor = canvas.w / canvas.width,
                 fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
                 fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
+                ////////////////////////////////////////////////////////////////
+                // Create the first point or the second or replace the second //
+                // According the rules defined by the client                  //
+                ////////////////////////////////////////////////////////////////
                 if (typeof pointA === 'undefined') {
                     pointA = pointFactory(canvas,grid,{
                         x : fx,
@@ -82,18 +92,21 @@ define([
                     });
                     pointA.render();
                     pointA.drag();
+                    pointA.click();
                 }else if (typeof pointB === 'undefined'){
                     pointB = pointFactory(canvas, grid, {
                         x: fx,
-                        y:fy
+                        y: fy
                     });
                     pointB.render();
                     pointA.unDrag();
                     pointB.drag();
+                    pointB.click();
                 }else{
                     pointB.setCoord(fx, fy);
                     pointB.render();
                     pointB.drag();
+                    pointB.click();
                 }
 
             });
