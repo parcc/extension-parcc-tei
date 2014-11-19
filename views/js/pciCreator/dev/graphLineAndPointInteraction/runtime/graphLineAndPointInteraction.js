@@ -36,15 +36,30 @@ define([
             var $container = $(dom);
 
             this.config.grid  = {
-                unit : 20,
-                spacingX: 2,
-                spacingY : 2,
-                snapping : true
+                x: {
+                    start : -10,
+                    end : 10,
+                    label : 'X Axys',
+                    step : 1,
+                    color :'#000',
+                    weight : 2
+                },
+                y: {
+                    start : -10,
+                    end : 10,
+                    label : 'Y Axys',
+                    step : 1,
+                    color :'#000',
+                    weight : 2
+                },
+                color:'#666',
+                weight: 1
             };
             ///////////////////
             // Create Canvas //
             ///////////////////
             var canvas = scaleRaphael($('.shape-container',$container)[0],500,400);
+
             //////////////////////////////
             // Instanciate a basic grid //
             //////////////////////////////
@@ -58,13 +73,14 @@ define([
                 wfactor = canvas.w / canvas.width,
                 fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
                 fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
+                var coords = grid.snap(fx,fy);
                 var point = pointFactory(canvas,{
-                    x : grid.snap(fx),
-                    y : grid.snap(fy)
+                    x : coords[0],
+                    y : coords[1]
                 });
                 point.render();
-            });
 
+            });
 
 
         },
