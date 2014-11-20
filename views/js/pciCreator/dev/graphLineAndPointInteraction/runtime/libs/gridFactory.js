@@ -1,14 +1,9 @@
 define(['OAT/lodash'], function( _){
     'use strict';
 
-    /**
-     * Grid Factory
-     * @param  {Object}    paper               Raphael paper / canvas object
-     * @param  {Object}    options             Grid options
-     * @return {Object}                        Grid object
-     */
     function gridFactory(paper,options){
         if (typeof options.x !== 'object' && typeof options.y !== 'object'){ throw 'I need x and y axis';}
+        if (options.x.start >= options.x.end || options.y.start >= options.y.end) { throw 'Start must be minus than end';}
         /** @type {String} Color of the grid's lines */
         var _color = options.color || '#000',
         /** @type {Number} line weight of grid */
