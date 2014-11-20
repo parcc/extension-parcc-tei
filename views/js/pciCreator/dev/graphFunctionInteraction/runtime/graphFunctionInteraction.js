@@ -4,14 +4,16 @@ define([
     'OAT/util/event',
     'OAT/scale.raphael',
     'graphFunctionInteraction/runtime/libs/gridFactory',
-    'graphFunctionInteraction/runtime/libs/pointFactory'
+    'graphFunctionInteraction/runtime/libs/pointFactory',
+    'OAT/lodash'
 ], function(
     $,
     qtiCustomInteractionContext,
     event,
     scaleRaphael,
     gridFactory,
-    pointFactory
+    pointFactory,
+    _
     ){
 
     'use strict';
@@ -183,15 +185,15 @@ define([
     }
 
     function plotLinearEquation(canvas, equation, config){
-        
+
         function calc(equation, x){
-            
+
             var a = equation[0],
                 b = equation[1];
 
             return a * x + b;
         }
-        
+
         var startPosition = {
             left : _round(config.start * config.unitSize.x + config.origin.x, 3),
             top : _round(-calc(equation, config.start) * config.unitSize.y + config.origin.y, 3)
@@ -201,7 +203,51 @@ define([
             top : _round(-calc(equation, config.end) * config.unitSize.y + config.origin.y, 3)
         };
 
-        var path = 'M' + startPosition.left+' '+startPosition.top + 'L'+ endPosition.left+' '+endPosition.top;
+        var path = 'M' + startPosition.left + ' ' + startPosition.top + 'L' + endPosition.left + ' ' + endPosition.top;
+        return canvas.path(path);
+    }
+
+    function getAbsoluteEquation(point1, point2){
+
+        if(isPoint(point1) &&
+            isPoint(point2) &&
+            hasDifferentAbscisse(point1, point2)){
+
+            var a = (point2.y - point1.y) / Math.abs(point2.x - point1.x);
+            var b = -point1.x;
+            var c = point1.y;
+            return [a, b, c];
+        }
+    }
+
+    function plotAbsoluteEquation(canvas, equation, config){
+
+        function calc(equation, x){
+
+            var a = equation[0],
+                b = equation[1],
+                c = equation[2];
+
+            return a * Math.abs(x + b) + c;
+        }
+
+        var startPosition = {
+            left : _round(config.start * config.unitSize.x + config.origin.x, 3),
+            top : _round(-calc(equation, config.start) * config.unitSize.y + config.origin.y, 3)
+        };
+        var middlePosition = {
+            left : _round(-equation[1] * config.unitSize.x + config.origin.x, 3),
+            top : _round(-calc(equation, -equation[1]) * config.unitSize.y + config.origin.y, 3)
+        };
+        var endPosition = {
+            left : _round(config.end * config.unitSize.x + config.origin.x, 3),
+            top : _round(-calc(equation, config.end) * config.unitSize.y + config.origin.y, 3)
+        };
+
+        var path = 'M' + startPosition.left + ' ' + startPosition.top
+            + 'L' + middlePosition.left + ' ' + middlePosition.top
+            + 'L' + endPosition.left + ' ' + endPosition.top;
+
         return canvas.path(path);
     }
 
@@ -400,10 +446,14 @@ define([
 
 
             plotTangentEquation(canvas, getTangentEquation({x : 0, y : 0}, {x : .8, y : -1}), curveConfig).attr({'stroke-width' : 3, stroke : '#FC8B0A'});
-            
-            
+
+
             equation = getLinearEquation({x : 4, y : 0}, {x : 0, y : 4});
             plotLinearEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#36EB45'});
+
+
+            equation = getAbsoluteEquation({x : -2, y : 6}, {x : 1, y : 0});
+            plotAbsoluteEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#FC2D8B'});
         },
         /**
          * Programmatically set the response following the json schema described in
