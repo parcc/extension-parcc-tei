@@ -1,20 +1,49 @@
 define(['OAT/lodash'], function(_){
 
     'use strict';
-
+    
+    /**
+     * Round the given number to a specific decimal
+     * 
+     * @param {Float} number
+     * @param {Integer} decimal
+     * @returns {Number}
+     */
     function _round(number, decimal){
         var m = Math.pow(10, parseInt(decimal));
         return Math.round(number * m) / m;
     }
 
-    function isPoint(point){
+    /**
+     * Check if the argument is a correct point object
+     * 
+     * @param {Object} point
+     * @returns {Boolean}
+     */
+    function _isPoint(point){
         return point.x !== undefined && point.y !== undefined;
     }
 
+    /**
+     * Check if the pair of object are correct pair of points for equation evaluation
+     * 
+     * @param {Object} point1
+     * @param {Object} point2
+     * @returns {Boolean}
+     */
     function checkPairOfPoints(point1, point2){
-        return isPoint(point1) && isPoint(point2) && point1.x !== point2.x
+        return _isPoint(point1) && _isPoint(point2) && point1.x !== point2.x
     }
-
+    
+    /**
+     * Plot a curved function based on its equation and plotting algorithm
+     * 
+     * @param {Object} canvas - Raphaeljs object
+     * @param {Array} equation
+     * @param {Object} config
+     * @param {Function} calc
+     * @returns {Object} Raphaeljs path object
+     */
     function plotCurvedEquation(canvas, equation, config, calc){
 
         var x = config.start;
@@ -25,12 +54,25 @@ define(['OAT/lodash'], function(_){
         var path = '';
         var pathMove = true;
         var prefix = '';
-
+        
+        /**
+         * Stop drawing and continue later
+         * 
+         * @returns {undefined}
+         */
         function jump(){
             x += config.precision;
             pathMove = true;
         }
-
+        
+        /**
+         * Add the new position to the path
+         * e.g. {left:250, top:150}
+         * The position is relative to the canvas origin
+         * 
+         * @param {Object} newPosition
+         * @returns {undefined}
+         */
         function appendPath(newPosition){
             prefix = 'L';
             if(pathMove){
@@ -83,7 +125,8 @@ define(['OAT/lodash'], function(_){
         //return the raphael "path" object
         return canvas.path(path);
     }
-
+    
+    
     var quadratic = {
         get : function(vertex, point){
 
@@ -133,14 +176,14 @@ define(['OAT/lodash'], function(_){
     };
 
     var cosine = {
-        get : function(point1, point2){
+        get : function(start, inflection){
 
-            if(checkPairOfPoints(point1, point2)){
+            if(checkPairOfPoints(start, inflection)){
 
-                var d = point2.y;
-                var a = point1.y - point2.y;
-                var b = Math.PI / (2 * (point2.x - point1.x));
-                var c = -b * point1.x;
+                var d = inflection.y;
+                var a = start.y - inflection.y;
+                var b = Math.PI / (2 * (inflection.x - start.x));
+                var c = -b * start.x;
 
                 return [a, b, c, d];
             }
@@ -193,14 +236,14 @@ define(['OAT/lodash'], function(_){
     };
 
     var tangent = {
-        get : function(point1, point2){
+        get : function(start, inflection){
 
-            if(checkPairOfPoints(point1, point2)){
+            if(checkPairOfPoints(start, inflection)){
 
-                var d = point1.y;
-                var b = Math.PI / (4 * (point2.x - point1.x));
-                var c = -b * point1.x;
-                var a = (point2.y - d) / Math.tan(b * point2.x + c);
+                var d = start.y;
+                var b = Math.PI / (4 * (inflection.x - start.x));
+                var c = -b * start.x;
+                var a = (inflection.y - d) / Math.tan(b * inflection.x + c);
 
                 return [a, b, c, d];
             }
@@ -299,6 +342,7 @@ define(['OAT/lodash'], function(_){
     }
 
     return {
+        checkPairOfPoints : checkPairOfPoints,
         linear : linear,
         absolute : absolute,
         quadratic : quadratic,
