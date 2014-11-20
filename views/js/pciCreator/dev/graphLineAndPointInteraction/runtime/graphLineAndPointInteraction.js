@@ -41,13 +41,11 @@ define([
                 x: {
                     start : -10,
                     end : 10,
-                    color : '#00f',
                     unit : 20
                 },
                 y: {
                     start : -10,
                     end : 10,
-                    color : '#0f0',
                     unit : 20
                 },
             };
