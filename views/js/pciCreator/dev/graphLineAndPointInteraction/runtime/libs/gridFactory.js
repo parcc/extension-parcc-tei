@@ -42,7 +42,59 @@ define(['OAT/lodash'], function( _){
             weight : 2
         }),
         /** @type {Object} [description] */
-        _borderBox = {};
+        _borderBox = {},
+        _drawAxis = function (){
+            var height = (Math.abs(_y.end - _y.start) * _y.unit),
+                width  = (Math.abs(_x.end - _x.start) * _x.unit);
+            console.info('[Start] Drawing Axys ------------------');
+            console.info('Drawing X axys');
+            console.debug(_x);
+            if (_x.start < 0 && _x.end <= 0) {
+                console.info('x1 < x2 < 0');
+                paper.path('M' + ((_x.end - _x.start) * _x.unit) + ' 0V' + height).attr({
+                    'stroke' :  _x.color,
+                    'stroke-width': _x.weight,
+                    'arrow-end': 'block-midium-midium'
+                });
+            }else if (_x.start <= 0 && _x.end > 0) {
+                console.info('x1 < 0 < x2');
+                paper.path('M' + (Math.abs(_x.start) * _x.unit) + ' ' + width +'V0').attr({
+                    'stroke' :  _x.color,
+                    'stroke-width': _x.weight,
+                    'arrow-end': 'block-midium-midium'
+                });
+            }else {
+                console.info('0 < x1 < x2');
+                paper.path('M' + height + '0V0').attr('stroke', _x.color).attr({
+                    'stroke' :  _x.color,
+                    'stroke-width': _x.weight,
+                    'arrow-end': 'block-midium-midium'
+                });
+
+            }
+            console.info('Drawing Y axys');
+            console.debug(_y);
+            if (_y.start < 0 && _y.end <= 0) {
+                console.info('y1 < y2 < 0');
+            }else if (_y.start < 0 && _y.end > 0) {
+                console.info('y1 < 0 < y2');
+                paper.path('M0 ' + (Math.abs(_y.start) * _y.unit) + 'H' + width).attr({
+                    'stroke' :  _y.color,
+                    'stroke-width': _y.weight,
+                    'arrow-end': 'block-midium-midium'
+                });
+            }else {
+                console.info('0 < y1 < y2');
+                paper.path('M0 ' + height + 'V' + width).attr('stroke', _y.color).attr({
+                    'stroke' :  _y.color,
+                    'stroke-width': _y.weight,
+                    'arrow-end': 'block-midium-midium'
+                });
+
+            }
+            console.info('[End] Drawing Axys -------------------');
+
+        };
 
         var obj = {
             children : paper.set(),
@@ -83,21 +135,22 @@ define(['OAT/lodash'], function( _){
              * Get the units for x,y axis
              * @return {Object}
              */
-            getUnit : function(){
-                return {x: _x.unit , y: _y.unit}
+            getUnits : function(){
+                return {x: _x.unit , y: _y.unit};
             },
             /**
              * Rendering function
              */
             render : function(){
-                var height = window.screen.height,
-                width  = window.screen.width;
+                var height = (Math.abs(_y.end - _y.start) * _y.unit),
+                width  = (Math.abs(_x.end - _x.start) * _x.unit);
                 for(var y = 0; y <= height; y += _y.step * _y.unit){
                     this.children.push(paper.path('M0 ' + y + 'H' + width).attr('stroke', _color).attr('stroke-width', _weight));
                 }
                 for(var x = 0; x <= width; x += _x.step * _x.unit) {
                     this.children.push(paper.path('M' + x + ' 0V' + height).attr('stroke', _color).attr('stoke-width', _weight));
                 }
+                _drawAxis();
                 _borderBox = this.children.getBBox();
             },
             /**
