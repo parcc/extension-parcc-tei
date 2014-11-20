@@ -296,7 +296,7 @@ define([
                     }
                 };
 
-            plotQuadraticEquation(canvas, equation, curveConfig).attr({stroke:'#8C6700'});
+            plotQuadraticEquation(canvas, equation, curveConfig).attr({'stroke-width':3,stroke:'#8C6700'});
 
             var vertex = {
                 x : -.75,
@@ -320,7 +320,7 @@ define([
             equation = getExponentialEquation(p1, p2);
             console.log(equation);
 
-            plotExponentialEquation(canvas, equation, curveConfig).attr({stroke:'#D14982'});
+            plotExponentialEquation(canvas, equation, curveConfig).attr({'stroke-width':3,stroke:'#D14982'});
 
 
             var pMax = {
@@ -333,7 +333,7 @@ define([
             equation = getCosineEquation(pMax, pZero);
             console.log(equation);
 
-            plotCosineEquation(canvas, equation, curveConfig).attr({stroke:'#28C74D'});
+            plotCosineEquation(canvas, equation, curveConfig).attr({'stroke-width':3,stroke:'#28C74D'});
 
 
             var p1 = {
@@ -347,7 +347,7 @@ define([
             console.log(equation);
 
             curveConfig.precision = .01;
-            plotLogarithmicEquation(canvas, equation, curveConfig).attr({stroke:'#E8DA3A'});
+            plotLogarithmicEquation(canvas, equation, curveConfig).attr({'stroke-width':3,stroke:'#E8DA3A'});
 
             var pZero = {
                 x : 4,
@@ -360,10 +360,10 @@ define([
             console.log(equation);
 
             curveConfig.precision = .01;
-            plotTangentEquation(canvas, equation, curveConfig).attr({stroke:'#1C1FD9'});
+            plotTangentEquation(canvas, equation, curveConfig).attr({'stroke-width':3,stroke:'#1C1FD9'});
 
             
-            plotTangentEquation(canvas, getTangentEquation({x:0,y:0}, {x:.8,y:-1}), curveConfig).attr({stroke:'#FC8B0A'});
+            plotTangentEquation(canvas, getTangentEquation({x:0,y:0}, {x:.8,y:-1}), curveConfig).attr({'stroke-width':3,stroke:'#FC8B0A'});
             
         },
         /**
