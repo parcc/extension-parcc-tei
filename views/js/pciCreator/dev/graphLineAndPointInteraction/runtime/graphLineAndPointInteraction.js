@@ -39,12 +39,16 @@ define([
 
             this.config.grid  = {
                 x: {
-                    start : -21,
-                    end : -1,
+                    start : -10,
+                    end : 10,
+                    color : '#00f',
+                    unit : 20
                 },
                 y: {
                     start : -10,
                     end : 10,
+                    color : '#0f0',
+                    unit : 20
                 },
             };
             ///////////////////

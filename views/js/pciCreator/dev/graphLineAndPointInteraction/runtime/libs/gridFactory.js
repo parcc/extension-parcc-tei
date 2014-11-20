@@ -3,8 +3,7 @@ define(['OAT/lodash'], function( _){
 
     function gridFactory(paper,options){
         if (typeof options.x !== 'object' && typeof options.y !== 'object'){ throw 'I need x and y axis';}
-        if (options.x.start >= options.x.end || options.y.start >= options.y.end) { throw 'Start must be minus than end';}
-
+        if ( (options.x.start >= options.x.end) || (options.y.start >= options.y.end) ) { throw 'Start must be minus than end';}
         options = _.merge({},{
             color : '#222',
             weigth : 1,
@@ -27,7 +26,6 @@ define(['OAT/lodash'], function( _){
                 weight : 2
             }
         },options);
-        console.debug(options);
         /** @type {String} Color of the grid's lines */
         var _color = options.color,
         /** @type {Number} line weight of grid */
@@ -36,56 +34,130 @@ define(['OAT/lodash'], function( _){
         _y = options.y,
         /** @type {Object} [description] */
         _borderBox = {},
+        /**
+         * Draw Axis on the paper according the configuration of the grid
+         */
         _drawAxis = function (){
             var height = (Math.abs(_y.end - _y.start) * _y.unit),
                 width  = (Math.abs(_x.end - _x.start) * _x.unit);
-            console.info('[Start] Drawing Axys ------------------');
-            console.info('Drawing X axys');
-            console.debug(_x);
-            if (_x.start < 0 && _x.end <= 0) {
-                console.info('x1 < x2 < 0');
-                paper.path('M' + width + ' ' + height + 'V0').attr({
+
+            /**
+             * ______
+             * x     |
+             *    o  |   x1 < x2 < 0
+             *      y|   y1 < y2 < 0
+             */
+             if (
+                    (_x.start < 0) && (_x.end <= 0) &&
+                    (_y.start < 0 ) && (_y.end <= 0)
+                ) {
+                /** X */
+                paper.path('M' + width + ' 0H0').attr('stroke', _x.color).attr({
                     'stroke' :  _x.color,
                     'stroke-width': _x.weight,
                     'arrow-end': 'block-midium-midium'
+                   });
+                /** Y */
+                 paper.path('M' + width + ' 0V' + height).attr('stroke', _y.color).attr({
+                    'stroke' :  _y.color,
+                    'stroke-width': _y.weight,
+                    'arrow-end': 'block-midium-midium'
                 });
-            }else if (_x.start < 0 && _x.end > 0) {
-                console.info('x1 < 0 < x2');
-                paper.path('M' + (Math.abs(_x.start) * _x.unit) + ' ' + height +'V0').attr({
+             }
+              /**
+             *  _____
+             * |     x
+             * |   o     0 < x1 < x2
+             * |y         y1 < y2 < 0
+             */
+             else if (
+                    (_x.start >= 0) && (_x.end > 0) &&
+                    (_y.start < 0 ) && (_y.end <= 0)
+                ) {
+                /** X */
+                paper.path('M0 0H'+ width).attr('stroke', _x.color).attr({
                     'stroke' :  _x.color,
                     'stroke-width': _x.weight,
                     'arrow-end': 'block-midium-midium'
+                   });
+                /** Y */
+                 paper.path('M0 0V' + height).attr('stroke', _y.color).attr({
+                    'stroke' :  _y.color,
+                    'stroke-width': _y.weight,
+                    'arrow-end': 'block-midium-midium'
                 });
-            }else {
-                console.info('0 < x1 < x2');
-                paper.path('M0 ' + height + 'V0').attr('stroke', _x.color).attr({
+
+             }
+
+             /**     y
+             *        |
+             *     o  |
+             *        |
+             * x _____|
+             */
+            else if (
+                    (_x.start < 0) && (_x.end <= 0) &&
+                    (_y.start >= 0 ) && (_y.end > 0)
+                ) {
+                /** X */
+                paper.path('M' + width + ' ' + height +'H0').attr('stroke', _x.color).attr({
                     'stroke' :  _x.color,
                     'stroke-width': _x.weight,
+                    'arrow-end': 'block-midium-midium'
+                   });
+                /** Y */
+                 paper.path('M' + width + ' ' + height +'V0').attr('stroke', _y.color).attr({
+                    'stroke' :  _y.color,
+                    'stroke-width': _y.weight,
+                    'arrow-end': 'block-midium-midium'
+                });
+
+             }
+
+            /** y
+             * |
+             * |   o
+             * |
+             * |______ x
+             */
+            else if (
+                    (_x.start >= 0) && (_x.end > 0) &&
+                    (_y.start >= 0 ) && (_y.end > 0)
+                ) {
+                /** X */
+                paper.path('M0 ' + height +'H' + width).attr('stroke', _x.color).attr({
+                    'stroke' :  _x.color,
+                    'stroke-width': _x.weight,
+                    'arrow-end': 'block-midium-midium'
+                   });
+                /** Y */
+                paper.path('M0 ' + height + 'V0').attr('stroke', _y.color).attr({
+                    'stroke' :  _y.color,
+                    'stroke-width': _y.weight,
                     'arrow-end': 'block-midium-midium'
                 });
 
             }
-            console.info('Drawing Y axys');
-            console.debug(_y);
-            if (_y.start < 0 && _y.end <= 0) {
-                console.info('y1 < y2 < 0');
-            }else if (_y.start < 0 && _y.end > 0) {
-                console.info('y1 < 0 < y2');
+            /**  y
+             *    | o
+             * ___|___ x
+             *    |
+             *    |
+             */
+            else {
+                /** X */
                 paper.path('M0 ' + (Math.abs(_y.start) * _y.unit) + 'H' + width).attr({
+                     'stroke' :  _x.color,
+                     'stroke-width': _x.weight,
+                     'arrow-end': 'block-midium-midium'
+                    });
+                /** Y */
+                paper.path('M' + (Math.abs(_x.start) * _x.unit) + ' ' + height +'V0').attr({
                     'stroke' :  _y.color,
                     'stroke-width': _y.weight,
                     'arrow-end': 'block-midium-midium'
                 });
-            }else {
-                console.info('0 < y1 < y2');
-                paper.path('M0 ' + height + 'V' + width).attr('stroke', _y.color).attr({
-                    'stroke' :  _y.color,
-                    'stroke-width': _y.weight,
-                    'arrow-end': 'block-midium-midium'
-                });
-
             }
-            console.info('[End] Drawing Axys -------------------');
 
         };
 
@@ -139,7 +211,6 @@ define(['OAT/lodash'], function( _){
                 width  = (Math.abs(_x.end - _x.start) * _x.unit);
                 for(var y = 0; y <= height; y += _y.step * _y.unit){
                     this.children.push(paper.path('M0 ' + y + 'H' + width).attr({
-                        'path' : 'M0 ' + y + 'H' + width,
                         'stroke': _color,
                         'stroke-width' : _weight
                     }));
@@ -171,7 +242,10 @@ define(['OAT/lodash'], function( _){
             clickable : function(){
                 /** @type {Object} Rectangle Object to cover the all grid area */
                 var clickableArea = paper.rect(_borderBox.x,_borderBox.y, _borderBox.width, _borderBox.height);
-                clickableArea.attr('fill','rgba(0,0,0,0)');
+                clickableArea.attr({
+                    fill : 'rgba(0,0,0,0)',
+                    stroke : 0
+                });
                 this.children.push(clickableArea);
             }
         };
