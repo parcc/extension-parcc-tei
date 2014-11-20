@@ -39,23 +39,13 @@ define([
 
             this.config.grid  = {
                 x: {
-                    start : -10,
-                    end : 10,
-                    label : 'X Axys',
-                    step : 1,
-                    color :'#000',
-                    weight : 2
+                    start : -21,
+                    end : -1,
                 },
                 y: {
                     start : -10,
                     end : 10,
-                    label : 'Y Axys',
-                    step : 1,
-                    color :'#000',
-                    weight : 2
                 },
-                color:'#666',
-                weight: 1
             };
             ///////////////////
             // Create Canvas //

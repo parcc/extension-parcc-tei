@@ -4,43 +4,36 @@ define(['OAT/lodash'], function( _){
     function gridFactory(paper,options){
         if (typeof options.x !== 'object' && typeof options.y !== 'object'){ throw 'I need x and y axis';}
         if (options.x.start >= options.x.end || options.y.start >= options.y.end) { throw 'Start must be minus than end';}
-        /** @type {String} Color of the grid's lines */
-        var _color = options.color || '#000',
-        /** @type {Number} line weight of grid */
-        _weight = options.weight || 1,
 
-        _x = _.defaults(options.x,{
-            /** @type {Number} Starting scale for axys */
-            start : -10,
-            /** @type {Number} Ending scale for axys */
-            end :  10,
-            /** @type {String|null} Label aside of the axys */
-            label : null,
-            /** @type {Number} Graduation step. Purely visual */
-            step : 1,
-            /** @type {Number} How many px is taken by one unit for the grid */
-            unit : 10,
-            /** @type {String} Color of the axys */
-            color : '#00ff00',
-            /** @type {Number} Tichness in px */
-            weight : 2
-        }),
-        _y = _.defaults(options.y,{
-            /** @type {Number} Starting scale for axys */
-            start : -10,
-            /** @type {Number} Ending scale for axys */
-            end :  10,
-            /** @type {String|null} Label aside of the axys */
-            label : null,
-            /** @type {Number} Graduation step. Purely visual */
-            step : 1,
-            /** @type {Number} How many px is taken by one unit for the grid */
-            unit : 10,
-            /** @type {String} Color of the axys */
-            color : '#00ff00',
-            /** @type {Number} Tichness in px */
-            weight : 2
-        }),
+        options = _.merge({},{
+            color : '#222',
+            weigth : 1,
+            x : {
+                start : -10,
+                end :  10,
+                label : null,
+                step : 1,
+                unit : 10,
+                color : '#000',
+                weight : 2
+            },
+            y : {
+                start : -10,
+                end :  10,
+                label : null,
+                step : 1,
+                unit : 10,
+                color : '#000',
+                weight : 2
+            }
+        },options);
+        console.debug(options);
+        /** @type {String} Color of the grid's lines */
+        var _color = options.color,
+        /** @type {Number} line weight of grid */
+        _weight = options.weight,
+        _x = options.x,
+        _y = options.y,
         /** @type {Object} [description] */
         _borderBox = {},
         _drawAxis = function (){
@@ -51,21 +44,21 @@ define(['OAT/lodash'], function( _){
             console.debug(_x);
             if (_x.start < 0 && _x.end <= 0) {
                 console.info('x1 < x2 < 0');
-                paper.path('M' + ((_x.end - _x.start) * _x.unit) + ' 0V' + height).attr({
+                paper.path('M' + width + ' ' + height + 'V0').attr({
                     'stroke' :  _x.color,
                     'stroke-width': _x.weight,
                     'arrow-end': 'block-midium-midium'
                 });
-            }else if (_x.start <= 0 && _x.end > 0) {
+            }else if (_x.start < 0 && _x.end > 0) {
                 console.info('x1 < 0 < x2');
-                paper.path('M' + (Math.abs(_x.start) * _x.unit) + ' ' + width +'V0').attr({
+                paper.path('M' + (Math.abs(_x.start) * _x.unit) + ' ' + height +'V0').attr({
                     'stroke' :  _x.color,
                     'stroke-width': _x.weight,
                     'arrow-end': 'block-midium-midium'
                 });
             }else {
                 console.info('0 < x1 < x2');
-                paper.path('M' + height + '0V0').attr('stroke', _x.color).attr({
+                paper.path('M0 ' + height + 'V0').attr('stroke', _x.color).attr({
                     'stroke' :  _x.color,
                     'stroke-width': _x.weight,
                     'arrow-end': 'block-midium-midium'
