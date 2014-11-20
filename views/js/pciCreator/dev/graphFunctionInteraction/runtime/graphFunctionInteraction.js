@@ -169,6 +169,42 @@ define([
         });
     }
 
+    function getLinearEquation(point1, point2){
+
+        if(isPoint(point1) &&
+            isPoint(point2) &&
+            hasDifferentAbscisse(point1, point2)){
+
+            var a = (point2.y - point1.y) / (point2.x - point1.x);
+            var b = point1.y - a * point1.x;
+            return [a, b];
+        }
+
+    }
+
+    function plotLinearEquation(canvas, equation, config){
+        
+        function calc(equation, x){
+            
+            var a = equation[0],
+                b = equation[1];
+
+            return a * x + b;
+        }
+        
+        var startPosition = {
+            left : _round(config.start * config.unitSize.x + config.origin.x, 3),
+            top : _round(-calc(equation, config.start) * config.unitSize.y + config.origin.y, 3)
+        };
+        var endPosition = {
+            left : _round(config.end * config.unitSize.x + config.origin.x, 3),
+            top : _round(-calc(equation, config.end) * config.unitSize.y + config.origin.y, 3)
+        };
+
+        var path = 'M' + startPosition.left+' '+startPosition.top + 'L'+ endPosition.left+' '+endPosition.top;
+        return canvas.path(path);
+    }
+
     function plotCurvedEquation(canvas, equation, config, calc){
 
         var x = config.start;
@@ -192,7 +228,7 @@ define([
                 if(currentPosition){
                     //need to draw slightly beyond the canvas to prevent from the "cut" effect
                     path += 'M' + currentPosition.left + ' ' + currentPosition.top;
-                    
+
                 }else{
                     //the very first point
                     prefix = 'M';
@@ -220,7 +256,7 @@ define([
                 //need to draw slightly beyond the canvas to prevent from the "cut" effect
                 appendPath(newPosition);
                 currentPosition = false;
-                
+
                 //stop plotting ouside of the canvas
                 jump();
                 continue;
@@ -233,7 +269,7 @@ define([
             //update x for the next step:
             x += config.precision;
         }
-        
+
         //return the raphael "path" object
         return canvas.path(path);
     }
@@ -296,7 +332,7 @@ define([
                     }
                 };
 
-            plotQuadraticEquation(canvas, equation, curveConfig).attr({'stroke-width':3,stroke:'#8C6700'});
+            plotQuadraticEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#8C6700'});
 
             var vertex = {
                 x : -.75,
@@ -320,7 +356,7 @@ define([
             equation = getExponentialEquation(p1, p2);
             console.log(equation);
 
-            plotExponentialEquation(canvas, equation, curveConfig).attr({'stroke-width':3,stroke:'#D14982'});
+            plotExponentialEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#D14982'});
 
 
             var pMax = {
@@ -333,7 +369,7 @@ define([
             equation = getCosineEquation(pMax, pZero);
             console.log(equation);
 
-            plotCosineEquation(canvas, equation, curveConfig).attr({'stroke-width':3,stroke:'#28C74D'});
+            plotCosineEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#28C74D'});
 
 
             var p1 = {
@@ -347,7 +383,7 @@ define([
             console.log(equation);
 
             curveConfig.precision = .01;
-            plotLogarithmicEquation(canvas, equation, curveConfig).attr({'stroke-width':3,stroke:'#E8DA3A'});
+            plotLogarithmicEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#E8DA3A'});
 
             var pZero = {
                 x : 4,
@@ -360,11 +396,14 @@ define([
             console.log(equation);
 
             curveConfig.precision = .01;
-            plotTangentEquation(canvas, equation, curveConfig).attr({'stroke-width':3,stroke:'#1C1FD9'});
+            plotTangentEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#1C1FD9'});
 
+
+            plotTangentEquation(canvas, getTangentEquation({x : 0, y : 0}, {x : .8, y : -1}), curveConfig).attr({'stroke-width' : 3, stroke : '#FC8B0A'});
             
-            plotTangentEquation(canvas, getTangentEquation({x:0,y:0}, {x:.8,y:-1}), curveConfig).attr({'stroke-width':3,stroke:'#FC8B0A'});
             
+            equation = getLinearEquation({x : 4, y : 0}, {x : 0, y : 4});
+            plotLinearEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#36EB45'});
         },
         /**
          * Programmatically set the response following the json schema described in
