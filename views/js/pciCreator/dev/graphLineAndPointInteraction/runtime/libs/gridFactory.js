@@ -145,10 +145,17 @@ define(['OAT/lodash'], function( _){
                 var height = (Math.abs(_y.end - _y.start) * _y.unit),
                 width  = (Math.abs(_x.end - _x.start) * _x.unit);
                 for(var y = 0; y <= height; y += _y.step * _y.unit){
-                    this.children.push(paper.path('M0 ' + y + 'H' + width).attr('stroke', _color).attr('stroke-width', _weight));
+                    this.children.push(paper.path('M0 ' + y + 'H' + width).attr({
+                        'path' : 'M0 ' + y + 'H' + width,
+                        'stroke': _color,
+                        'stroke-width' : _weight
+                    }));
                 }
                 for(var x = 0; x <= width; x += _x.step * _x.unit) {
-                    this.children.push(paper.path('M' + x + ' 0V' + height).attr('stroke', _color).attr('stoke-width', _weight));
+                    this.children.push(paper.path('M' + x + ' 0V' + height).attr({
+                        'stroke' : _color,
+                        'stoke-width': _weight
+                    }));
                 }
                 _drawAxis();
                 _borderBox = this.children.getBBox();
