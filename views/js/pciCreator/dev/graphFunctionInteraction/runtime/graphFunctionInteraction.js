@@ -5,6 +5,7 @@ define([
     'OAT/scale.raphael',
     'graphFunctionInteraction/runtime/libs/gridFactory',
     'graphFunctionInteraction/runtime/libs/pointFactory',
+    'graphFunctionInteraction/runtime/libs/graphFunction',
     'OAT/lodash'
 ], function(
     $,
@@ -13,313 +14,12 @@ define([
     scaleRaphael,
     gridFactory,
     pointFactory,
+    graphFunction,
     _
     ){
 
     'use strict';
-
-    function _round(number, decimal){
-        var m = Math.pow(10, parseInt(decimal));
-        return Math.round(number * m) / m;
-    }
-
-    function isPoint(point){
-        return point.x !== undefined && point.y !== undefined;
-    }
-
-    function hasDifferentAbscisse(point1, point2){
-        return point1.x !== point2.x;
-    }
-
-    function getQuadraticEquationFromPoints(vertex, point){
-        if(isPoint(vertex) && isPoint(point) && hasDifferentAbscisse(vertex, point)){
-            var a = (point.y - vertex.y) / Math.pow(point.x - vertex.x, 2);
-            var b = -2 * a * vertex.x;
-            var c = vertex.y + a * Math.pow(vertex.x, 2);
-            return [a, b, c];
-        }
-    }
-
-    function plotQuadraticEquation(canvas, equation, config){
-
-        return plotCurvedEquation(canvas, equation, config, function(equation, x){
-
-            var a = equation[0],
-                b = equation[1],
-                c = equation[2];
-
-            return a * Math.pow(x, 2) + b * x + c;
-        });
-    }
-
-    function getExponentialEquation(point1, point2){
-
-        if(isPoint(point1) &&
-            isPoint(point2) &&
-            hasDifferentAbscisse(point1, point2) &&
-            point1.y > 0 &&
-            point2.y > 0){
-
-            var b = Math.log(point2.y / point1.y) / (point2.x - point1.x);
-            var a = point1.y / Math.exp(b * point1.x);
-
-            return [a, b];
-        }
-
-    }
-
-    function plotExponentialEquation(canvas, equation, config){
-
-        return plotCurvedEquation(canvas, equation, config, function(equation, x){
-
-            var a = equation[0],
-                b = equation[1];
-
-            return a * Math.exp(b * x);
-        });
-    }
-
-    function getLogarithmicEquation(point1, point2){
-
-        if(isPoint(point1) &&
-            isPoint(point2) &&
-            hasDifferentAbscisse(point1, point2)){
-
-            var b = Math.exp(point2.y / point1.y) / (point2.x - point1.x);
-
-            if(b * point1.x > 0){
-                var a = point1.y / Math.log(b * point1.x);
-                return [a, b];
-            }else{
-                throw 'invalid pair of points';
-            }
-        }
-    }
-
-    function plotLogarithmicEquation(canvas, equation, config){
-
-        return plotCurvedEquation(canvas, equation, config, function(equation, x){
-
-            var a = equation[0],
-                b = equation[1];
-
-            if(b * x > 0){
-                return a * Math.log(b * x);
-            }else{
-                return false;//undefined funciton value for this value of x
-            }
-
-        });
-    }
-
-    function getCosineEquation(point1, point2){
-
-        if(isPoint(point1) &&
-            isPoint(point2) &&
-            hasDifferentAbscisse(point1, point2)){
-
-            var d = point2.y;
-            var a = point1.y - point2.y;
-            var b = Math.PI / (2 * (point2.x - point1.x));
-            var c = -b * point1.x;
-
-            return [a, b, c, d];
-        }
-    }
-
-    function plotCosineEquation(canvas, equation, config){
-
-        return plotCurvedEquation(canvas, equation, config, function(equation, x){
-
-            var a = equation[0],
-                b = equation[1],
-                c = equation[2],
-                d = equation[3];
-
-            return a * Math.cos(b * x + c) + d;
-
-        });
-    }
-
-    function getTangentEquation(point1, point2){
-
-        if(isPoint(point1) &&
-            isPoint(point2) &&
-            hasDifferentAbscisse(point1, point2)){
-
-            var d = point1.y;
-            var b = Math.PI / (4 * (point2.x - point1.x));
-            var c = -b * point1.x;
-            var a = (point2.y - d) / Math.tan(b * point2.x + c);
-
-            return [a, b, c, d];
-        }
-
-    }
-
-    function plotTangentEquation(canvas, equation, config){
-
-        return plotCurvedEquation(canvas, equation, config, function(equation, x){
-
-            var a = equation[0],
-                b = equation[1],
-                c = equation[2],
-                d = equation[3];
-
-            return a * Math.tan(b * x + c) + d;
-
-        });
-    }
-
-    function getLinearEquation(point1, point2){
-
-        if(isPoint(point1) &&
-            isPoint(point2) &&
-            hasDifferentAbscisse(point1, point2)){
-
-            var a = (point2.y - point1.y) / (point2.x - point1.x);
-            var b = point1.y - a * point1.x;
-            return [a, b];
-        }
-
-    }
-
-    function plotLinearEquation(canvas, equation, config){
-
-        function calc(equation, x){
-
-            var a = equation[0],
-                b = equation[1];
-
-            return a * x + b;
-        }
-
-        var startPosition = {
-            left : _round(config.start * config.unitSize.x + config.origin.x, 3),
-            top : _round(-calc(equation, config.start) * config.unitSize.y + config.origin.y, 3)
-        };
-        var endPosition = {
-            left : _round(config.end * config.unitSize.x + config.origin.x, 3),
-            top : _round(-calc(equation, config.end) * config.unitSize.y + config.origin.y, 3)
-        };
-
-        var path = 'M' + startPosition.left + ' ' + startPosition.top + 'L' + endPosition.left + ' ' + endPosition.top;
-        return canvas.path(path);
-    }
-
-    function getAbsoluteEquation(point1, point2){
-
-        if(isPoint(point1) &&
-            isPoint(point2) &&
-            hasDifferentAbscisse(point1, point2)){
-
-            var a = (point2.y - point1.y) / Math.abs(point2.x - point1.x);
-            var b = -point1.x;
-            var c = point1.y;
-            return [a, b, c];
-        }
-    }
-
-    function plotAbsoluteEquation(canvas, equation, config){
-
-        function calc(equation, x){
-
-            var a = equation[0],
-                b = equation[1],
-                c = equation[2];
-
-            return a * Math.abs(x + b) + c;
-        }
-
-        var startPosition = {
-            left : _round(config.start * config.unitSize.x + config.origin.x, 3),
-            top : _round(-calc(equation, config.start) * config.unitSize.y + config.origin.y, 3)
-        };
-        var middlePosition = {
-            left : _round(-equation[1] * config.unitSize.x + config.origin.x, 3),
-            top : _round(-calc(equation, -equation[1]) * config.unitSize.y + config.origin.y, 3)
-        };
-        var endPosition = {
-            left : _round(config.end * config.unitSize.x + config.origin.x, 3),
-            top : _round(-calc(equation, config.end) * config.unitSize.y + config.origin.y, 3)
-        };
-
-        var path = 'M' + startPosition.left + ' ' + startPosition.top
-            + 'L' + middlePosition.left + ' ' + middlePosition.top
-            + 'L' + endPosition.left + ' ' + endPosition.top;
-
-        return canvas.path(path);
-    }
-
-    function plotCurvedEquation(canvas, equation, config, calc){
-
-        var x = config.start;
-        var y;
-        var margin = 100;
-        var currentPosition;
-        var newPosition;
-        var path = '';
-        var pathMove = true;
-        var prefix = '';
-
-        function jump(){
-            x += config.precision;
-            pathMove = true;
-        }
-
-        function appendPath(newPosition){
-            prefix = 'L';
-            if(pathMove){
-                pathMove = false;//after move, we draw a line
-                if(currentPosition){
-                    //need to draw slightly beyond the canvas to prevent from the "cut" effect
-                    path += 'M' + currentPosition.left + ' ' + currentPosition.top;
-
-                }else{
-                    //the very first point
-                    prefix = 'M';
-                }
-            }
-            path += prefix + newPosition.left + ' ' + newPosition.top;
-        }
-
-        while(x < config.end){
-
-            y = calc(equation, x);
-            if(y === false){
-                //undefined function value for this value of x
-                jump();
-                continue;
-            }
-
-            //new position (pixels)
-            newPosition = {
-                left : _round(x * config.unitSize.x + config.origin.x, 3),
-                top : _round(-y * config.unitSize.y + config.origin.y, 3)
-            };
-
-            if(newPosition.top > canvas.height + margin || newPosition.top < -margin){
-                //need to draw slightly beyond the canvas to prevent from the "cut" effect
-                appendPath(newPosition);
-                currentPosition = false;
-
-                //stop plotting ouside of the canvas
-                jump();
-                continue;
-            }
-
-            //translate new point into path segment
-            appendPath(newPosition);
-            currentPosition = newPosition;
-
-            //update x for the next step:
-            x += config.precision;
-        }
-
-        //return the raphael "path" object
-        return canvas.path(path);
-    }
-
+    
     var graphFunctionInteraction = {
         id : -1,
         getTypeIdentifier : function(){
@@ -378,7 +78,7 @@ define([
                     }
                 };
 
-            plotQuadraticEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#8C6700'});
+            graphFunction.quadratic.plot(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#8C6700'});
 
             var vertex = {
                 x : -.75,
@@ -388,9 +88,8 @@ define([
                 x : 1,
                 y : 6
             };
+            equation = graphFunction.quadratic.get(vertex, point2);
 
-            equation = getQuadraticEquationFromPoints(vertex, point2);
-            console.log(equation);
 
             var p1 = {
                 x : 0,
@@ -399,10 +98,8 @@ define([
                 x : 2,
                 y : 2
             };
-            equation = getExponentialEquation(p1, p2);
-            console.log(equation);
-
-            plotExponentialEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#D14982'});
+            equation = graphFunction.exponential.get(p1, p2);
+            graphFunction.exponential.plot(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#D14982'});
 
 
             var pMax = {
@@ -412,10 +109,8 @@ define([
                 x : -3.5,
                 y : 3
             };
-            equation = getCosineEquation(pMax, pZero);
-            console.log(equation);
-
-            plotCosineEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#28C74D'});
+            equation = graphFunction.cosine.get(pMax, pZero);
+            graphFunction.cosine.plot(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#28C74D'});
 
 
             var p1 = {
@@ -425,11 +120,10 @@ define([
                 x : 5,
                 y : 0
             };
-            equation = getLogarithmicEquation(p1, p2);
-            console.log(equation);
-
+            equation = graphFunction.logarithmic.get(p1, p2);
             curveConfig.precision = .01;
-            plotLogarithmicEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#E8DA3A'});
+            graphFunction.logarithmic.plot(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#E8DA3A'});
+
 
             var pZero = {
                 x : 4,
@@ -438,22 +132,18 @@ define([
                 x : 5.5708,
                 y : 2
             };
-            equation = getTangentEquation(pZero, pFlex);
-            console.log(equation);
-
+            equation = graphFunction.tangent.get(pZero, pFlex);
             curveConfig.precision = .01;
-            plotTangentEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#1C1FD9'});
+            graphFunction.tangent.plot(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#1C1FD9'});
+            graphFunction.tangent.plot(canvas, graphFunction.tangent.get({x : 0, y : 0}, {x : .8, y : -1}), curveConfig).attr({'stroke-width' : 3, stroke : '#FC8B0A'});
 
 
-            plotTangentEquation(canvas, getTangentEquation({x : 0, y : 0}, {x : .8, y : -1}), curveConfig).attr({'stroke-width' : 3, stroke : '#FC8B0A'});
+            equation = graphFunction.linear.get({x : 4, y : 0}, {x : 0, y : 4});
+            graphFunction.linear.plot(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#36EB45'});
 
 
-            equation = getLinearEquation({x : 4, y : 0}, {x : 0, y : 4});
-            plotLinearEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#36EB45'});
-
-
-            equation = getAbsoluteEquation({x : -2, y : 6}, {x : 1, y : 0});
-            plotAbsoluteEquation(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#FC2D8B'});
+            equation = graphFunction.absolute.get({x : -2, y : 6}, {x : 1, y : 0});
+            graphFunction.absolute.plot(canvas, equation, curveConfig).attr({'stroke-width' : 3, stroke : '#FC2D8B'});
         },
         /**
          * Programmatically set the response following the json schema described in
