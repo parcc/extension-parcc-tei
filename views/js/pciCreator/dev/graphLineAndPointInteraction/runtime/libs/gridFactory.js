@@ -85,6 +85,13 @@ define(['OAT/lodash'], function( _){
                 return _borderBox.height;
             },
             /**
+             * Get the units for x,y axis
+             * @return {Object}
+             */
+            getUnit : function(){
+                return {x: _x.unit , y: _y.unit}
+            },
+            /**
              * Rendering function
              */
             render : function(){
