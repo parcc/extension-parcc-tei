@@ -28,7 +28,7 @@ define([], function(){
         /** @type {Number} y coordinate (in px) */
         _y = parseInt(options.y),
         /** @type {Number} radius for the glowing effect */
-        _rGlow = parseInt(options.glowRadius) || _r * 2;
+        _rGlow = parseInt(options.glowRadius) || _r * 3;
 
         var obj = {
             /** @type {Object} Paper.set of elements */
@@ -84,13 +84,15 @@ define([], function(){
             render : function(){
                 /** @type {Object} Raphaël element object with type “circle” */
                 var coord = grid.snap(_x,_y);
-                var circle = paper.circle(coord[0],coord[1],_r);
-                circle.attr('fill', _color);
-                circle.attr('stroke', _color);
+                var circle = paper.circle(coord[0],coord[1],_r).attr({
+                    fill : _color,
+                    stroke : '#000'
+                });
                 /** @type {Object} Paper.set of elements that represents glow */
-                var glow = circle.glow({
-                    color : _color,
-                    width: _rGlow
+                var rgb = paper.raphael.color(_color);
+                var glow = paper.circle(coord[0],coord[1], _rGlow).attr({
+                    fill : 'rgba(' + rgb.r + ',' + rgb.g +',' + rgb.b + ',0.3 )',
+                    stroke : 'none'
                 });
                 if (this.children.length > 0) { this.children.remove().clear();}
                 this.children.push(circle,glow);
