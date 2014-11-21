@@ -3,6 +3,7 @@ define([], function(){
     /**
      * Point Factory
      * @param  {Object} paper                               Raphael paper / canvas object
+     * @param  {Object} grid                                Grid
      * @param  {Object} options                             Point options
      * @param  {String} [options.color="#fff"]              color of the point
      * @param  {Number} [options.radius=20]                 radius in px for your point
@@ -13,7 +14,7 @@ define([], function(){
      *
      * @return {Object}                                     point Object
      */
-    function pointFactory(paper,options) {
+    function pointFactory(paper,grid,options) {
         /**
          * Test if requirement are met or not
          */
@@ -23,12 +24,11 @@ define([], function(){
         /** @type {Number} radius of the point representation */
         _r = parseInt(options.radius) || 10,
         /** @type {Number} x coordinate (in px) */
-        _x = parseInt(options.x),
+        _x = 0,
         /** @type {Number} y coordinate (in px) */
-        _y = parseInt(options.y),
+        _y = 1,
         /** @type {Number} radius for the glowing effect */
-        _rGlow = parseInt(options.glowRadius) || _r * 2;
-
+        _rGlow = parseInt(options.glowRadius) || _r * 3;
         var obj = {
             /** @type {Object} Paper.set of elements */
             children : paper.set(),
@@ -47,11 +47,35 @@ define([], function(){
                 _x = parseInt(val);
             },
             /**
+             * Get _x value
+             * @return {Number} x position
+             */
+            getX : function(){
+                return _x;
+            },
+            /**
+             * Get _y value
+             * @return {Number} y position
+             */
+            getY : function(){
+                return _y;
+            },
+            /**
              * Set _y value
              * @param {Number} val in px
              */
             setY : function(val){
                 _y = parseInt(val);
+            },
+            /**
+             * Set new coordinates for the point
+             * @param {Number} x
+             * @param {Number} y
+             */
+            setCoord : function(x,y){
+                var coord = grid.snap(parseInt(x),parseInt(y));
+                _x = coord[0];
+                _y = coord[1];
             },
             /**
              * Set _r value
@@ -72,40 +96,56 @@ define([], function(){
              */
             render : function(){
                 /** @type {Object} Raphaël element object with type “circle” */
-                var circle = paper.circle(_x,_y,_r);
-                circle.attr('fill', _color);
-                circle.attr('stroke', _color);
-                /** @type {Object} Paper.set of elements that represents glow */
-                var glow = circle.glow({
-                    color : _color,
-                    width: _rGlow
+                var circle = paper.circle(_x,_y,_r).attr({
+                    fill : _color,
+                    stroke : '#000'
                 });
-                this.children.push(circle,glow);
+                /** @type {Object} Raphael color object */
+                var rgb = paper.raphael.color(_color);
+                /** @type {Object} Paper.circle of elements that represents glow */
+                var glow = paper.circle(_x,_y, _rGlow).attr({
+                    fill : 'rgba(' + rgb.r + ',' + rgb.g +',' + rgb.b + ',0.3 )',
+                    stroke : 'none'
+                });
+                if (this.children.length > 0) { this.children.remove().clear();}
+                this.children.push(circle,glow).attr({
+                    cursor : 'move'
+                });
             },
             /**
              * Activate the dran'n'drop capability provide by RaphaelJS
              */
             drag : function(){
-                var self = this;
+                var self = this,
+                bb;
                 this.children.drag(function (dx, dy) {
                     /** @type {Object} The current bounding box */
-                    var bb = self.children.getBBox(),
-                    newX = (self.oBB.x - bb.x + dx),
+                    bb = self.children.getBBox();
+                    var newX = (self.oBB.x - bb.x + dx),
                     newY = (self.oBB.y - bb.y + dy);
-                    // Apply the translation
-                    if (options){
-                        newX = options.snap(newX);
-                        newY = options.snap(newY);
-                    }
                     self.children.translate(newX,newY);
                 },function () {
                     /** @type {Object} Store the original bounding box
                                        Since it's not just circle, it's impossible to use cx & cy
                                        instead, we'll use a bounding box representation and use their values*/
-                    self.oBB = this.children.getBBox();
+                    self.oBB = self.children.getBBox();
+                },function(){
+                    var newX = (bb.x + (bb.width/2)),
+                    newY = (bb.y + (bb.width/2));
+                    /** Set Coordinate with center of the bounding box */
+                    self.setCoord(newX,newY);
+                    /** Call for a render again */
+                    self.children.translate(self.getX() - newX,self.getY() - newY);
                 });
+            },
+            /**
+             * De-Activate the drag'n'drop capavility provided by RapahelJS
+             */
+            unDrag : function(){
+                this.children.undrag();
             }
         };
+        obj.setCoord(options.x, options.y);
         return obj;
     }
     return pointFactory;

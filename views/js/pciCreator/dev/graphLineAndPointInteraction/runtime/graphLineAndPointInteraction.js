@@ -2,6 +2,7 @@ define([
     'IMSGlobal/jquery_2_1_1',
     'qtiCustomInteractionContext',
     'OAT/util/event',
+    'OAT/lodash',
     'OAT/scale.raphael',
     'graphLineAndPointInteraction/runtime/libs/gridFactory',
     'graphLineAndPointInteraction/runtime/libs/pointFactory'
@@ -9,6 +10,7 @@ define([
         $,
         qtiCustomInteractionContext,
         event,
+        _,
         scaleRaphael,
         gridFactory,
         pointFactory
@@ -36,15 +38,22 @@ define([
             var $container = $(dom);
 
             this.config.grid  = {
-                unit : 20,
-                spacingX: 2,
-                spacingY : 2,
-                snapping : true
+                x: {
+                    start : -10,
+                    end : 10,
+                    unit : 20
+                },
+                y: {
+                    start : -10,
+                    end : 10,
+                    unit : 20
+                },
             };
             ///////////////////
             // Create Canvas //
             ///////////////////
             var canvas = scaleRaphael($('.shape-container',$container)[0],500,400);
+
             //////////////////////////////
             // Instanciate a basic grid //
             //////////////////////////////
@@ -53,18 +62,52 @@ define([
             // Make it clickable //
             ///////////////////////
             grid.clickable();
+            ///////////////////////////
+            // Catch the Click Event //
+            ///////////////////////////
+            var points = [];
+
             grid.children.click(function(event){
+                ////////////////////////////////////
+                // Get the coordinate for a click //
+                ////////////////////////////////////
                 var bnds = event.target.getBoundingClientRect(),
                 wfactor = canvas.w / canvas.width,
                 fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
                 fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
-                var point = pointFactory(canvas,{
-                    x : grid.snap(fx),
-                    y : grid.snap(fy)
-                });
-                point.render();
-            });
+                ////////////////////////////////////////////////////////////////
+                // Create the first point or the second or replace the second //
+                // According the rules defined by the client                  //
+                ////////////////////////////////////////////////////////////////
+                if (points.length < 2) {
+                    var newPoint = pointFactory(canvas, grid, {
+                        x : fx,
+                        y : fy
+                    });
+                    // Draw the point
+                    newPoint.render();
+                    // Enable drag'n'drop hability
+                    newPoint.drag();
+                    // Add it to the list of points
+                    points.push(newPoint);
+                    // Raise event ready for line plot
+                    if (points.length === 2) {$(dom).trigger('pairPointReady');}
+                }else{
+                    // Get the last point placed
+                    var oldPoint = points.pop();
+                    // Change their coordinates for new ones
+                    oldPoint.setCoord(fx, fy);
+                    // Re-draw the point
+                    oldPoint.render();
+                    // re-enable the drag'n'drop
+                    oldPoint.drag();
+                    // Add it back to the list
+                    points.push(oldPoint);
+                    // Raise event ready for a line plot
+                    $(dom).trigger('pairPointReady');
+                }
 
+            });
 
 
         },

@@ -1,62 +1,186 @@
-define([], function(){
+define(['OAT/lodash'], function( _){
     'use strict';
 
-    /**
-     * Grid Factory
-     * @param  {Object}    paper               Raphael paper / canvas object
-     * @param  {Object}    options             Grid options
-     * @param  {Object}    options.color       color used for the grid's lines
-     * @param  {Number}    options.unit        in px, it's the base unit used for your grid
-     * @param  {Number}    options.spacingX    On how each units in the x axis you want to repeat your grid
-     * @param  {Number}    options.spacingY    On how each units in the y axis you want to repeat your grid
-     * @param  {Boolean}   options.snapping    Is elements should be snapped on this grid
-     * @throws {unit must be > 0}              If you specified and options.unit <= 0
-     * @return {Object}                        Grid object
-     */
     function gridFactory(paper,options){
-        if (options.unit === 0){ throw 'unit must be > 0';}
-
+        if (typeof options.x !== 'object' && typeof options.y !== 'object'){ throw 'I need x and y axis';}
+        if ( (options.x.start >= options.x.end) || (options.y.start >= options.y.end) ) { throw 'Start must be minus than end';}
+        options = _.merge({},{
+            color : '#222',
+            weigth : 1,
+            x : {
+                start : -10,
+                end :  10,
+                label : null,
+                step : 1,
+                unit : 10,
+                color : '#000',
+                weight : 2
+            },
+            y : {
+                start : -10,
+                end :  10,
+                label : null,
+                step : 1,
+                unit : 10,
+                color : '#000',
+                weight : 2
+            }
+        },options);
         /** @type {String} Color of the grid's lines */
-        var _color = options.color || '#000',
-        /** @type {Number} Every how many unit you put a new line in X axis */
-        _spacingX = options.spacingX || 1,
-        /** @type {Number} Every how many unit you put a new line in Y axis */
-        _spacingY = options.spacingY || 1,
-        /** @type {Number} Unit in px */
-        _unit = options.unit || 20,
+        var _color = options.color,
+        /** @type {Number} line weight of grid */
+        _weight = options.weight,
+        _x = options.x,
+        _y = options.y,
         /** @type {Object} [description] */
-        _borderBox = {};
+        _borderBox = {},
+        /**
+         * Draw Axis on the paper according the configuration of the grid
+         */
+        _drawAxis = function (){
+            var height = (Math.abs(_y.end - _y.start) * _y.unit),
+                width  = (Math.abs(_x.end - _x.start) * _x.unit);
+
+            /**
+             * ______
+             * x     |
+             *    o  |   x1 < x2 < 0
+             *      y|   y1 < y2 < 0
+             */
+             if (
+                    (_x.start < 0) && (_x.end <= 0) &&
+                    (_y.start < 0 ) && (_y.end <= 0)
+                ) {
+                /** X */
+                paper.path('M' + width + ' 0H0').attr({
+                    'stroke' :  _x.color,
+                    'stroke-width': _x.weight,
+                    'arrow-end': 'block-midium-midium'
+                   });
+                /** Y */
+                 paper.path('M' + width + ' 0V' + height).attr({
+                    'stroke' :  _y.color,
+                    'stroke-width': _y.weight,
+                    'arrow-end': 'block-midium-midium'
+                });
+             }
+              /**
+             *  _____
+             * |     x
+             * |   o     0 < x1 < x2
+             * |y         y1 < y2 < 0
+             */
+             else if (
+                    (_x.start >= 0) && (_x.end > 0) &&
+                    (_y.start < 0 ) && (_y.end <= 0)
+                ) {
+                /** X */
+                paper.path('M0 0H'+ width).attr('stroke', _x.color).attr({
+                    'stroke' :  _x.color,
+                    'stroke-width': _x.weight,
+                    'arrow-end': 'block-midium-midium'
+                   });
+                /** Y */
+                 paper.path('M0 0V' + height).attr('stroke', _y.color).attr({
+                    'stroke' :  _y.color,
+                    'stroke-width': _y.weight,
+                    'arrow-end': 'block-midium-midium'
+                });
+
+             }
+
+             /**     y
+             *        |
+             *     o  |
+             *        |
+             * x _____|
+             */
+            else if (
+                    (_x.start < 0) && (_x.end <= 0) &&
+                    (_y.start >= 0 ) && (_y.end > 0)
+                ) {
+                /** X */
+                paper.path('M' + width + ' ' + height +'H0').attr({
+                    'stroke' :  _x.color,
+                    'stroke-width': _x.weight,
+                    'arrow-end': 'block-midium-midium'
+                   });
+                /** Y */
+                 paper.path('M' + width + ' ' + height +'V0').attr({
+                    'stroke' :  _y.color,
+                    'stroke-width': _y.weight,
+                    'arrow-end': 'block-midium-midium'
+                });
+
+             }
+
+            /** y
+             * |
+             * |   o
+             * |
+             * |______ x
+             */
+            else if (
+                    (_x.start >= 0) && (_x.end > 0) &&
+                    (_y.start >= 0 ) && (_y.end > 0)
+                ) {
+                /** X */
+                paper.path('M0 ' + height +'H' + width).attr({
+                    'stroke' :  _x.color,
+                    'stroke-width': _x.weight,
+                    'arrow-end': 'block-midium-midium'
+                   });
+                /** Y */
+                paper.path('M0 ' + height + 'V0').attr({
+                    'stroke' :  _y.color,
+                    'stroke-width': _y.weight,
+                    'arrow-end': 'block-midium-midium'
+                });
+
+            }
+            /**  y
+             *    | o
+             * ___|___ x
+             *    |
+             *    |
+             */
+            else {
+                /** X */
+                paper.path('M0 ' + (Math.abs(_y.start) * _y.unit) + 'H' + width).attr({
+                     'stroke' :  _x.color,
+                     'stroke-width': _x.weight,
+                     'arrow-end': 'block-midium-midium'
+                    });
+                /** Y */
+                paper.path('M' + (Math.abs(_x.start) * _x.unit) + ' ' + height +'V0').attr({
+                    'stroke' :  _y.color,
+                    'stroke-width': _y.weight,
+                    'arrow-end': 'block-midium-midium'
+                });
+            }
+
+        };
 
         var obj = {
             children : paper.set(),
             snapping : options.snapping || false,
-            /**
-             * Set _spacingX value
-             * @param  {Number} val
-             */
-            setSpacingX : function(val){
-                _spacingX = parseInt(val);
-            },
-            /**
-             * Set _spacingY value
-             * @param  {Number} val
-             */
-            setSpacingY : function(val){
-                _spacingY = parseInt(val);
-            },
-            /**
-             * Set _unit value
-             * @param  {Number} val
-             */
-            setUnit : function(val){
-                _unit = parseInt(val);
-            },
             /**
              * Set _color value
              * @param {String} color
              */
             setColor : function(color){
                 _color = String(color);
+                this.children.remove().clear();
+                this.render();
+            },
+            /**
+             * Set _weight of the grid elements
+             * @param {Number} value weight in px
+             */
+            setWeight : function(value){
+                _weight = parseInt(value);
+                this.children.remove().clear();
+                this.render();
             },
             /**
              * Get width of the _borderBox
@@ -73,27 +197,43 @@ define([], function(){
                 return _borderBox.height;
             },
             /**
+             * Get the units for x,y axis
+             * @return {Object}
+             */
+            getUnits : function(){
+                return {x: _x.unit , y: _y.unit};
+            },
+            /**
              * Rendering function
              */
             render : function(){
-                var height = window.screen.height,
-                width  = window.screen.width;
-                for(var y = 1; y <= height; y += _spacingY * _unit){
-                    this.children.push(paper.path('M0 ' + y + 'H' + width).attr('stroke', _color).attr('stroke-width', 1));
+                var height = (Math.abs(_y.end - _y.start) * _y.unit),
+                width  = (Math.abs(_x.end - _x.start) * _x.unit);
+                for(var y = 0; y <= height; y += _y.step * _y.unit){
+                    this.children.push(paper.path('M0 ' + y + 'H' + width).attr({
+                        'stroke': _color,
+                        'stroke-width' : _weight
+                    }));
                 }
-                for(var x = 1; x <= width; x += _spacingX * _unit) {
-                    this.children.push(paper.path('M' + x + ' 0V' + height).attr('stroke', _color));
+                for(var x = 0; x <= width; x += _x.step * _x.unit) {
+                    this.children.push(paper.path('M' + x + ' 0V' + height).attr({
+                        'stroke' : _color,
+                        'stoke-width': _weight
+                    }));
                 }
+                _drawAxis();
                 _borderBox = this.children.getBBox();
             },
             /**
              * Return a callback function to determine for a value the corrected value according grid snapping
-             * @return {Number} snapped to grid value
+             * @param {Number} x coordinate x to convert to snapped value
+             * @parem {Number} y  coordinate y to convert to snapped value
+             * @return {Array} snapped values x,y
              */
-            snap : function(val){
-                var self = this;
-                if (self.snapping) {return paper.raphael.snapTo(_unit,val,_unit / 2);}
-                else {return val;}
+            snap : function(x,y){
+                x = paper.raphael.snapTo(_x.unit, x, _x.unit / 2);
+                y = paper.raphael.snapTo(_y.unit, y, _y.unit / 2);
+                return [x,y];
             },
             /**
              * Create a transparent rectangle object in front of every element
@@ -102,9 +242,11 @@ define([], function(){
             clickable : function(){
                 /** @type {Object} Rectangle Object to cover the all grid area */
                 var clickableArea = paper.rect(_borderBox.x,_borderBox.y, _borderBox.width, _borderBox.height);
-                clickableArea.attr('fill','rgba(0,0,0,0)');
+                clickableArea.attr({
+                    fill : 'rgba(0,0,0,0)',
+                    stroke : 0
+                });
                 this.children.push(clickableArea);
-                console.log('grid now clickable');
             }
         };
         obj.render();
