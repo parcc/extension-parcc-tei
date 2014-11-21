@@ -1,13 +1,13 @@
 define(['OAT/lodash', 'graphFunctionInteraction/runtime/libs/graphFunction'], function(_, graphFunction){
-    
+
     'use strict';
-    
+
     var _defaults = {
-        start : -10,        //the starting abcisse in cartesian coordinate system
-        end : 10,           //the end abcisse in cartesian coordinate system
-        precision : 0.1,    //the precision of the plot (in cartesian coordinate)
-        color : '#111',     //the color of the plot
-        thickness : 3       //the thickness of the plot
+        start : -10, //the starting abcisse in cartesian coordinate system
+        end : 10, //the end abcisse in cartesian coordinate system
+        precision : .01, //the precision of the plot (in cartesian coordinate)
+        color : '#bb1a2a', //the color of the plot
+        thickness : 2      //the thickness of the plot
     };
 
     /**
@@ -42,22 +42,45 @@ define(['OAT/lodash', 'graphFunctionInteraction/runtime/libs/graphFunction'], fu
      */
     function PlotFactory(grid, config0){
 
+        var _this = this;
         var canvas = grid.getCanvas();
-        var config = _.clone(config0);
-        var _this;
+        var config = _.clone(config0 || {});
+        config = _.defaults(config, _defaults);
+        var bounds = grid.getGridBounds();
 
-        config.unitSize = grid.getUnitSize();
+        config.unitSize = grid.getUnitSizes();
         config.origin = grid.getOriginPosition();
 
-        function _plot(fnName, point1, point2, conf){
+        config.start = bounds.x.start;
+        config.end = bounds.x.end;
+
+        function _translateCoordinate(point){
+
+            return {
+                x : (point.getX() - config.origin.left) / config.unitSize.x,
+                y : -(point.getY() - config.origin.top) / config.unitSize.y
+            };
+        }
+
+        function _plot(fnName, p1, p2, conf){
+
             var equation, plot;
+            var point1 = _translateCoordinate(p1);
+            var point2 = _translateCoordinate(p2);
+
             conf = _.defaults(conf || {}, config);
-
-            equation = graphFunction[fnName].get(point1, point2);
-            plot = graphFunction[fnName].plot(canvas, equation, conf);
-            _applyStyle(plot, conf);
-
-            return plot;
+            try{
+                equation = graphFunction[fnName].get(point1, point2);
+                if(equation){
+                    plot = graphFunction[fnName].plot(canvas, equation, conf);
+                    _applyStyle(plot, conf);
+                    return plot;
+                }
+            }catch(e){
+                console.log(e);
+            }
+            
+            return false;
         }
 
         var availableFunctions = [
@@ -67,12 +90,12 @@ define(['OAT/lodash', 'graphFunctionInteraction/runtime/libs/graphFunction'], fu
             'tangent',
             'exponential',
             'logarithmic',
-            'quadartic'
+            'quadratic'
         ];
 
         //add functions
         _.each(availableFunctions, function(fnName){
-            _this['plot' + fnName.charAt(0) + fnName.substr(1)] = function(point1, point2, conf){
+            _this['plot' + fnName.charAt(0).toUpperCase() + fnName.substr(1)] = function(point1, point2, conf){
                 return _plot(fnName, point1, point2, conf);
             };
         });
