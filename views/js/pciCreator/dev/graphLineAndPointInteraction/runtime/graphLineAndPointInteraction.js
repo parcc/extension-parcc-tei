@@ -5,7 +5,8 @@ define([
     'OAT/lodash',
     'OAT/scale.raphael',
     'graphLineAndPointInteraction/runtime/libs/gridFactory',
-    'graphLineAndPointInteraction/runtime/libs/pointFactory'
+    'graphLineAndPointInteraction/runtime/libs/pointFactory',
+    'graphLineAndPointInteraction/runtime/libs/plotFactory'
     ], function(
         $,
         qtiCustomInteractionContext,
@@ -13,7 +14,8 @@ define([
         _,
         scaleRaphael,
         gridFactory,
-        pointFactory
+        pointFactory,
+        PlotFactory
     ){
 
     'use strict';
@@ -61,6 +63,7 @@ define([
             // Make it clickable //
             ///////////////////////
             grid.clickable();
+            var plotFactory = new PlotFactory(grid);
             //////////////////////////////////////
             // How many lines set did we have ? //
             //////////////////////////////////////
@@ -136,6 +139,17 @@ define([
 
             });
 
+            //////////////////////////////////////////////////////
+            // Listen for readyness of drawing line and draw it //
+            //////////////////////////////////////////////////////
+            $(dom).on('pairPointReady',function(){
+                // Get the Active Set
+                var activeSet = _.find(sets,{active : true});
+                // If there's a line, remove it
+                if(activeSet.line){activeSet.line.remove();}
+                // Create and store the new line
+                activeSet.line = plotFactory.plotLinear(activeSet.points[0],activeSet.points[1],{color:activeSet.color});
+            });
 
         },
         /**
