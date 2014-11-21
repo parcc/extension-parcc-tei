@@ -85,7 +85,11 @@ define([
                 if(points.length < 2){
                     var newPoint = pointFactory(canvas, grid, {
                         x : fx,
-                        y : fy
+                        y : fy,
+                        on : {
+                            dragStart : clear,
+                            dragStop : plot
+                        }
                     });
                     // Draw the point
                     newPoint.render();
@@ -119,16 +123,22 @@ define([
             $container.on('pairPointReady', plot);
 
             function activateButton($button){
-                
+
                 if(typeof $button === 'string'){
-                    $button = $container.find('.shape-controls [name='+$button+']');
+                    $button = $container.find('.shape-controls [name=' + $button + ']');
                 }
-                
+
                 var fnName = $button.val();
                 mathFunction = PlotFactory.getPlotName(fnName);
                 $button.removeClass('btn-info').addClass('btn-success');
                 $button.siblings('button').removeClass('btn-success').addClass('btn-info');
                 plot();
+            }
+
+            function clear(){
+                if(path){
+                    path.remove();
+                }
             }
 
             function plot(){
@@ -137,10 +147,8 @@ define([
                     point2 = points[1];
 
                 if(point1 && point2){
-                    if(path){
-                        path.remove();
-                    }
 
+                    clear();
                     path = plotFactory[mathFunction](point1, point2);
                 }
 
