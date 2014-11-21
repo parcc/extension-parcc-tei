@@ -124,7 +124,14 @@ define([
                 if(path){
                     path.remove();
                 }
+                
                 path = plotFactory.plotLinear(point1, point2);
+                path = plotFactory.plotExponential(point1, point2);
+                path = plotFactory.plotLogarithmic(point1, point2);
+                path = plotFactory.plotCosine(point1, point2);
+                path = plotFactory.plotTangent(point1, point2);
+                path = plotFactory.plotQuadratic(point1, point2);
+                path = plotFactory.plotAbsolute(point1, point2);
             });
             
         },

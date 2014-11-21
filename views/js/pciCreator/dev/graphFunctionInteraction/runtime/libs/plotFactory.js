@@ -5,9 +5,9 @@ define(['OAT/lodash', 'graphFunctionInteraction/runtime/libs/graphFunction'], fu
     var _defaults = {
         start : -10, //the starting abcisse in cartesian coordinate system
         end : 10, //the end abcisse in cartesian coordinate system
-        precision : 0.1, //the precision of the plot (in cartesian coordinate)
-        color : '#111', //the color of the plot
-        thickness : 3       //the thickness of the plot
+        precision : .01, //the precision of the plot (in cartesian coordinate)
+        color : '#bb1a2a', //the color of the plot
+        thickness : 2      //the thickness of the plot
     };
 
     /**
@@ -53,28 +53,34 @@ define(['OAT/lodash', 'graphFunctionInteraction/runtime/libs/graphFunction'], fu
 
         config.start = bounds.x.start;
         config.end = bounds.x.end;
-        
+
         function _translateCoordinate(point){
-            
+
             return {
-                x : (point.getX() - config.origin.left)/config.unitSize.x,
-                y : -(point.getY() - config.origin.top)/config.unitSize.y
+                x : (point.getX() - config.origin.left) / config.unitSize.x,
+                y : -(point.getY() - config.origin.top) / config.unitSize.y
             };
         }
-        
+
         function _plot(fnName, p1, p2, conf){
-            
+
             var equation, plot;
             var point1 = _translateCoordinate(p1);
             var point2 = _translateCoordinate(p2);
-            
+
             conf = _.defaults(conf || {}, config);
-
-            equation = graphFunction[fnName].get(point1, point2);
-            plot = graphFunction[fnName].plot(canvas, equation, conf);
-            _applyStyle(plot, conf);
-
-            return plot;
+            try{
+                equation = graphFunction[fnName].get(point1, point2);
+                if(equation){
+                    plot = graphFunction[fnName].plot(canvas, equation, conf);
+                    _applyStyle(plot, conf);
+                    return plot;
+                }
+            }catch(e){
+                console.log(e);
+            }
+            
+            return false;
         }
 
         var availableFunctions = [
@@ -84,7 +90,7 @@ define(['OAT/lodash', 'graphFunctionInteraction/runtime/libs/graphFunction'], fu
             'tangent',
             'exponential',
             'logarithmic',
-            'quadartic'
+            'quadratic'
         ];
 
         //add functions
