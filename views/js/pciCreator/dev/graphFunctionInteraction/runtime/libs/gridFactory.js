@@ -204,6 +204,49 @@ define(['OAT/lodash'], function( _){
                 return {x: _x.unit , y: _y.unit};
             },
             /**
+             * Get the units size for x,y axis
+             * @return {Object}
+             */
+            getUnitSizes : function(){
+                return {x: _borderBox.width/_x.unit , y: _borderBox.height/_y.unit};
+            },
+            /**
+             * Get the Raphaeljs paper object used for this grid
+             * 
+             * @returns {Object} Raphaeljs paper object
+             */
+            getCanvas : function(){
+                return paper;  
+            },
+            /**
+             * Get the position (top/left) of the origin of the cartesian axis relative to the paper
+             * 
+             * @returns {Object}
+             */
+            getOriginPosition : function(){
+                return {
+                    left : -1 * _x.start * _x.unit,
+                    top : -1 * _y.start * _y.unit
+                };
+            },
+            /**
+             * The the upper and lower bounds fof the grid on both axis
+             * 
+             * @returns {Object}
+             */
+            getGridBounds : function(){
+                return {
+                    x : {
+                        start : _x.start,
+                        end : _x.end
+                    },
+                    y : {
+                        start : _y.start,
+                        end : _y.end
+                    }
+                }
+            },
+            /**
              * Rendering function
              */
             render : function(){
@@ -252,6 +295,6 @@ define(['OAT/lodash'], function( _){
         obj.render();
         return obj;
     }
-    console.log('grid factory loaded');
+    
     return gridFactory;
 });

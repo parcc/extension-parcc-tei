@@ -5,8 +5,7 @@ define([
     'OAT/scale.raphael',
     'graphFunctionInteraction/runtime/libs/gridFactory',
     'graphFunctionInteraction/runtime/libs/pointFactory',
-    'graphFunctionInteraction/runtime/libs/graphFunction',
-    'OAT/lodash'
+    'graphFunctionInteraction/runtime/libs/plotFactory'
 ], function(
     $,
     qtiCustomInteractionContext,
@@ -14,8 +13,7 @@ define([
     scaleRaphael,
     gridFactory,
     pointFactory,
-    graphFunction,
-    _
+    PlotFactory
     ){
 
     'use strict';
@@ -52,7 +50,7 @@ define([
                     start : -10,
                     end : 10,
                     unit : 20
-                },
+                }
             };
             ///////////////////
             // Create Canvas //
@@ -97,7 +95,7 @@ define([
                     points.push(newPoint);
                     // Raise event ready for line plot
                     if(points.length === 2){
-                        $(dom).trigger('pairPointReady');
+                        $container.trigger('pairPointReady');
                     }
                 }else{
                     // Get the last point placed
@@ -111,11 +109,24 @@ define([
                     // Add it back to the list
                     points.push(oldPoint);
                     // Raise event ready for a line plot
-                    $(dom).trigger('pairPointReady');
+                    $container.trigger('pairPointReady');
                 }
 
             });
-
+            
+            var plotFactory = new PlotFactory(grid);
+            var path;
+            $container.on('pairPointReady', function(){
+                
+                var point1 = points[0],
+                    point2 = points[1];
+                
+                if(path){
+                    path.remove();
+                }
+                path = plotFactory.plotLinear(point1, point2);
+            });
+            
         },
         /**
          * Programmatically set the response following the json schema described in
