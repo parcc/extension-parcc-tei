@@ -2,6 +2,7 @@ define([
     'IMSGlobal/jquery_2_1_1',
     'qtiCustomInteractionContext',
     'OAT/util/event',
+    'OAT/lodash',
     'OAT/scale.raphael',
     'graphLineAndPointInteraction/runtime/libs/gridFactory',
     'graphLineAndPointInteraction/runtime/libs/pointFactory'
@@ -9,6 +10,7 @@ define([
         $,
         qtiCustomInteractionContext,
         event,
+        _,
         scaleRaphael,
         gridFactory,
         pointFactory
@@ -77,7 +79,6 @@ define([
                 // Create the first point or the second or replace the second //
                 // According the rules defined by the client                  //
                 ////////////////////////////////////////////////////////////////
-
                 if (points.length < 2) {
                     var newPoint = pointFactory(canvas, grid, {
                         x : fx,
@@ -89,6 +90,8 @@ define([
                     newPoint.drag();
                     // Add it to the list of points
                     points.push(newPoint);
+                    // Raise event ready for line plot
+                    if (points.length === 2) {$(dom).trigger('pairPointReady');}
                 }else{
                     // Get the last point placed
                     var oldPoint = points.pop();
@@ -100,6 +103,8 @@ define([
                     oldPoint.drag();
                     // Add it back to the list
                     points.push(oldPoint);
+                    // Raise event ready for a line plot
+                    $(dom).trigger('pairPointReady');
                 }
 
             });

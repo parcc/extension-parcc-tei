@@ -47,6 +47,20 @@ define([], function(){
                 _x = parseInt(val);
             },
             /**
+             * Get _x value
+             * @return {Number} x position
+             */
+            getX : function(){
+                return _x;
+            },
+            /**
+             * Get _y value
+             * @return {Number} y position
+             */
+            getY : function(){
+                return _y;
+            },
+            /**
              * Set _y value
              * @param {Number} val in px
              */
@@ -116,10 +130,12 @@ define([], function(){
                                        instead, we'll use a bounding box representation and use their values*/
                     self.oBB = self.children.getBBox();
                 },function(){
+                    var newX = (bb.x + (bb.width/2)),
+                    newY = (bb.y + (bb.width/2));
                     /** Set Coordinate with center of the bounding box */
-                    self.setCoord(bb.x + (bb.width/2), bb.y + (bb.width/2));
+                    self.setCoord(newX,newY);
                     /** Call for a render again */
-                    self.render();
+                    self.children.translate(self.getX() - newX,self.getY() - newY);
                 });
             },
             /**
