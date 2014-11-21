@@ -81,6 +81,7 @@ define([], function(){
              * Draw the point with his glow around him
              */
             render : function(){
+                console.log(_x,_y);
                 /** @type {Object} Raphaël element object with type “circle” */
                 var circle = paper.circle(_x,_y,_r).attr({
                     fill : _color,
@@ -102,11 +103,12 @@ define([], function(){
              * Activate the dran'n'drop capability provide by RaphaelJS
              */
             drag : function(){
-                var self = this;
+                var self = this,
+                bb;
                 this.children.drag(function (dx, dy) {
                     /** @type {Object} The current bounding box */
-                    var bb = self.children.getBBox(),
-                    newX = (self.oBB.x - bb.x + dx),
+                    bb = self.children.getBBox();
+                    var newX = (self.oBB.x - bb.x + dx),
                     newY = (self.oBB.y - bb.y + dy);
                     self.children.translate(newX,newY);
                 },function () {
@@ -114,8 +116,12 @@ define([], function(){
                                        Since it's not just circle, it's impossible to use cx & cy
                                        instead, we'll use a bounding box representation and use their values*/
                     self.oBB = self.children.getBBox();
-                },function(dx,dy){
-                    this.setCoord(dx, dy)
+                },function(){
+                    /** Set Coordinate with center of the bounding box */
+                    self.setCoord(bb.x + (bb.width/2), bb.y + (bb.width/2));
+                    console.log(bb.x + (bb.width/2), bb.y + (bb.width/2));
+                    /** Call for a render again */
+                    self.render();
                 });
             },
             /**
