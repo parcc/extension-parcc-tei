@@ -38,6 +38,10 @@
                                 <html5:button value="linear" class="btn btn-info" type="button">Linear</html5:button>
                                 <html5:button value="absolute" class="btn btn-info" type="button">Absolute Value</html5:button>
                                 <html5:button value="quadratic" class="btn btn-info" type="button">Quadratic</html5:button>
+                                <html5:button value="exponential" class="btn btn-info" type="button">Exponential</html5:button>
+                                <html5:button value="logarithmic" class="btn btn-info" type="button">Logarithmic</html5:button>
+                                <html5:button value="cosine" class="btn btn-info" type="button">Sin/Cos</html5:button>
+                                <html5:button value="tan" class="btn btn-info" type="button">Tan/Cotan</html5:button>
                             </html5:div>
                         </html5:div>
                     </html5:div>
