@@ -1,5 +1,25 @@
-define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qtiCustomInteractionContext){
+define([
+    'IMSGlobal/jquery_2_1_1',
+    'qtiCustomInteractionContext',
+    'OAT/util/event',
+    'OAT/scale.raphael',
+    'graphFunctionInteraction/runtime/libs/gridFactory',
+    'graphFunctionInteraction/runtime/libs/pointFactory',
+    'graphFunctionInteraction/runtime/libs/graphFunction',
+    'OAT/lodash'
+], function(
+    $,
+    qtiCustomInteractionContext,
+    event,
+    scaleRaphael,
+    gridFactory,
+    pointFactory,
+    graphFunction,
+    _
+    ){
 
+    'use strict';
+    
     var graphFunctionInteraction = {
         id : -1,
         getTypeIdentifier : function(){
@@ -13,12 +33,32 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qt
          */
         initialize : function(id, dom, config){
 
+            //add method on(), off() and trigger() to the current object
+            event.addEventMgr(this);
+
             this.id = id;
             this.dom = dom;
             this.config = config || {};
 
             var $container = $(dom);
-            
+
+            this.config.grid = {
+                unit : 20,
+                spacingX : 2,
+                spacingY : 2,
+                snapping : true
+            };
+            ///////////////////
+            // Create Canvas //
+            ///////////////////
+            var canvasHeight = 600,
+                canvasWidth = 600;
+            var canvas = scaleRaphael($('.shape-container', $container)[0], canvasHeight, canvasWidth);
+            //////////////////////////////
+            // Instanciate a basic grid //
+            //////////////////////////////
+            var grid = gridFactory(canvas, this.config.grid);
+
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -28,7 +68,7 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qt
          * @param {Object} response
          */
         setResponse : function(response){
-            
+
         },
         /**
          * Get the response in the json format described in
