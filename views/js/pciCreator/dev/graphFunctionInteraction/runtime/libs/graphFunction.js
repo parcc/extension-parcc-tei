@@ -266,17 +266,16 @@ define(['OAT/lodash'], function(_){
          */
         get : function(point1, point2){
 
-            if(checkPairOfPoints(point1, point2)){
+            if(checkPairOfPoints(point1, point2)
+                && point1.y !== point2.y
+                && point2.x*point1.x > 0){
 
-                var b = Math.exp(point2.y / point1.y) / (point2.x - point1.x);
-
-                if(b * point1.x > 0){
-                    var a = point1.y / Math.log(b * point1.x);
-                    return [a, b];
-                }else{
-                    throw 'invalid pair of points';
-                }
+                var a = (point2.y - point1.y) / Math.log(point2.x/point1.x);
+                var b = Math.exp(point1.y / a) / point1.x;
+                return [a, b];
             }
+            
+            return false;
         },
         /**
          * Plot a logarithmic function from its equation

@@ -7,7 +7,7 @@ define(['OAT/lodash', 'graphFunctionInteraction/runtime/libs/graphFunction'], fu
         end : 10, //the end abcisse in cartesian coordinate system
         precision : .01, //the precision of the plot (in cartesian coordinate)
         color : '#bb1a2a', //the color of the plot
-        thickness : 2      //the thickness of the plot
+        thickness : 3     //the thickness of the plot
     };
 
     /**
