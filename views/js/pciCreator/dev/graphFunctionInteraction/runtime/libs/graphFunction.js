@@ -1,7 +1,7 @@
 define(['OAT/lodash'], function(_){
 
     'use strict';
-    
+
     /**
      * Round the given number to a specific decimal
      * 
@@ -34,7 +34,7 @@ define(['OAT/lodash'], function(_){
     function checkPairOfPoints(point1, point2){
         return _isPoint(point1) && _isPoint(point2) && point1.x !== point2.x
     }
-    
+
     /**
      * Plot a curved function based on its equation and plotting algorithm
      * 
@@ -54,7 +54,7 @@ define(['OAT/lodash'], function(_){
         var path = '';
         var pathMove = true;
         var prefix = '';
-        
+
         /**
          * Stop drawing and continue later
          * 
@@ -64,7 +64,7 @@ define(['OAT/lodash'], function(_){
             x += config.precision;
             pathMove = true;
         }
-        
+
         /**
          * Add the new position to the path
          * e.g. {left:250, top:150}
@@ -125,9 +125,18 @@ define(['OAT/lodash'], function(_){
         //return the raphael "path" object
         return canvas.path(path);
     }
-    
-    
+
+
     var quadratic = {
+        /**
+         * Get quadratic function from the vertex and another point
+         * The returned equation is under the format [a, b, c]
+         * which represents f(x) = ax² + bx + c;
+         * 
+         * @param {Object} vertex
+         * @param {Object} point
+         * @returns {Array}
+         */
         get : function(vertex, point){
 
             if(checkPairOfPoints(vertex, point)){
@@ -137,6 +146,14 @@ define(['OAT/lodash'], function(_){
                 return [a, b, c];
             }
         },
+        /**
+         * Plot a quadratic function from its equation
+         * 
+         * @param {Object} canvas - RaphaelJs paper
+         * @param {Array} equation
+         * @param {Object} config
+         * @returns {Object} RaphaelJs path
+         */
         plot : function(canvas, equation, config){
 
             return plotCurvedEquation(canvas, equation, config, function(equation, x){
@@ -151,6 +168,15 @@ define(['OAT/lodash'], function(_){
     };
 
     var exponential = {
+        /**
+         * Get exponential function from any two points with positive ordinates
+         * The returned equation is under the format [a, b]
+         * which represents f(x) = a * e^( bx );
+         * 
+         * @param {Object} point1
+         * @param {Object} point2
+         * @returns {Array}
+         */
         get : function(point1, point2){
 
             if(checkPairOfPoints(point1, point2) &&
@@ -163,6 +189,14 @@ define(['OAT/lodash'], function(_){
                 return [a, b];
             }
         },
+        /**
+         * Plot an exponential function from its equation
+         * 
+         * @param {Object} canvas - RaphaelJs paper
+         * @param {Array} equation
+         * @param {Object} config
+         * @returns {Object} RaphaelJs path
+         */
         plot : function(canvas, equation, config){
 
             return plotCurvedEquation(canvas, equation, config, function(equation, x){
@@ -176,6 +210,15 @@ define(['OAT/lodash'], function(_){
     };
 
     var cosine = {
+        /**
+         * Get a cosine function from the starting point and the first inflection point
+         * The returned equation is under the format [a, b, c, d]
+         * which represents f(x) = a * cos( bx + c ) + d;
+         * 
+         * @param {Object} start
+         * @param {Object} inflection
+         * @returns {Array}
+         */
         get : function(start, inflection){
 
             if(checkPairOfPoints(start, inflection)){
@@ -188,6 +231,14 @@ define(['OAT/lodash'], function(_){
                 return [a, b, c, d];
             }
         },
+        /**
+         * Plot a cosine function from its equation
+         * 
+         * @param {Object} canvas - RaphaelJs paper
+         * @param {Array} equation
+         * @param {Object} config
+         * @returns {Object} RaphaelJs path
+         */
         plot : function(canvas, equation, config){
 
             return plotCurvedEquation(canvas, equation, config, function(equation, x){
@@ -204,6 +255,15 @@ define(['OAT/lodash'], function(_){
     }
 
     var logarithmic = {
+        /**
+         * Get logarithmic function from any two points
+         * The returned equation is under the format [a, b]
+         * which represents f(x) = a * ln( bx );
+         * 
+         * @param {Object} point1
+         * @param {Object} point2
+         * @returns {Array}
+         */
         get : function(point1, point2){
 
             if(checkPairOfPoints(point1, point2)){
@@ -218,6 +278,14 @@ define(['OAT/lodash'], function(_){
                 }
             }
         },
+        /**
+         * Plot a logarithmic function from its equation
+         * 
+         * @param {Object} canvas - RaphaelJs paper
+         * @param {Array} equation
+         * @param {Object} config
+         * @returns {Object} RaphaelJs path
+         */
         plot : function(canvas, equation, config){
 
             return plotCurvedEquation(canvas, equation, config, function(equation, x){
@@ -236,6 +304,15 @@ define(['OAT/lodash'], function(_){
     };
 
     var tangent = {
+        /**
+         * Get a tangent function from the starting point and the first inflection point
+         * The returned equation is under the format [a, b, c, d]
+         * which represents f(x) = a * tan( bx + c ) + d;
+         * 
+         * @param {Object} start
+         * @param {Object} inflection
+         * @returns {Array}
+         */
         get : function(start, inflection){
 
             if(checkPairOfPoints(start, inflection)){
@@ -249,6 +326,14 @@ define(['OAT/lodash'], function(_){
             }
 
         },
+        /**
+         * Plot a tangent function from its equation
+         * 
+         * @param {Object} canvas - RaphaelJs paper
+         * @param {Array} equation
+         * @param {Object} config
+         * @returns {Object} RaphaelJs path
+         */
         plot : function(canvas, equation, config){
 
             return plotCurvedEquation(canvas, equation, config, function(equation, x){
@@ -265,6 +350,15 @@ define(['OAT/lodash'], function(_){
     };
 
     var linear = {
+        /**
+         * Get linear function from any two points
+         * The returned equation is under the format [a, b]
+         * which represents f(x) = ax+b;
+         * 
+         * @param {Object} point1
+         * @param {Object} point2
+         * @returns {Array}
+         */
         get : function(point1, point2){
 
             if(checkPairOfPoints(point1, point2)){
@@ -275,6 +369,14 @@ define(['OAT/lodash'], function(_){
             }
 
         },
+        /**
+         * Plot a linear function from its equation
+         * 
+         * @param {Object} canvas - RaphaelJs paper
+         * @param {Array} equation
+         * @param {Object} config
+         * @returns {Object} RaphaelJs path
+         */
         plot : function(canvas, equation, config){
 
             function calc(equation, x){
@@ -300,16 +402,34 @@ define(['OAT/lodash'], function(_){
     };
 
     var absolute = {
-        get : function(point1, point2){
+        /**
+         * Get absolute function from the start point and another point
+         * The returned equation is under the format [a, b, c]
+         * which represents f(x) = a|x+b|+c;
+         * 
+         * @param {Object} start
+         * @param {Object} point2
+         * @returns {Array}
+         */
+        get : function(start, point2){
 
-            if(checkPairOfPoints(point1, point2)){
+            if(checkPairOfPoints(start, point2)){
 
-                var a = (point2.y - point1.y) / Math.abs(point2.x - point1.x);
-                var b = -point1.x;
-                var c = point1.y;
+                var a = (point2.y - start.y) / Math.abs(point2.x - start.x);
+                var b = -start.x;
+                var c = start.y;
                 return [a, b, c];
             }
-        }, plot : function(canvas, equation, config){
+        },
+        /**
+         * Plot an absolute function from its equation
+         * 
+         * @param {Object} canvas - RaphaelJs paper
+         * @param {Array} equation
+         * @param {Object} config
+         * @returns {Object} RaphaelJs path
+         */
+        plot : function(canvas, equation, config){
 
             function calc(equation, x){
 
