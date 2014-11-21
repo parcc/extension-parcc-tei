@@ -24,12 +24,11 @@ define([], function(){
         /** @type {Number} radius of the point representation */
         _r = parseInt(options.radius) || 10,
         /** @type {Number} x coordinate (in px) */
-        _x = parseInt(options.x),
+        _x = 0,
         /** @type {Number} y coordinate (in px) */
-        _y = parseInt(options.y),
+        _y = 1,
         /** @type {Number} radius for the glowing effect */
         _rGlow = parseInt(options.glowRadius) || _r * 3;
-
         var obj = {
             /** @type {Object} Paper.set of elements */
             children : paper.set(),
@@ -83,15 +82,14 @@ define([], function(){
              */
             render : function(){
                 /** @type {Object} Raphaël element object with type “circle” */
-                var coord = grid.snap(_x,_y);
-                var circle = paper.circle(coord[0],coord[1],_r).attr({
+                var circle = paper.circle(_x,_y,_r).attr({
                     fill : _color,
                     stroke : '#000'
                 });
                 /** @type {Object} Raphael color object */
                 var rgb = paper.raphael.color(_color);
                 /** @type {Object} Paper.circle of elements that represents glow */
-                var glow = paper.circle(coord[0],coord[1], _rGlow).attr({
+                var glow = paper.circle(_x,_y, _rGlow).attr({
                     fill : 'rgba(' + rgb.r + ',' + rgb.g +',' + rgb.b + ',0.3 )',
                     stroke : 'none'
                 });
@@ -117,9 +115,7 @@ define([], function(){
                                        instead, we'll use a bounding box representation and use their values*/
                     self.oBB = self.children.getBBox();
                 },function(dx,dy){
-                    var coord = grid.snap(dx,dy);
-                    self._x = coord[0];
-                    self._y = coord[1];
+                    this.setCoord(dx, dy)
                 });
             },
             /**
@@ -129,6 +125,7 @@ define([], function(){
                 this.children.undrag();
             }
         };
+        obj.setCoord(options.x, options.y);
         return obj;
     }
     return pointFactory;
