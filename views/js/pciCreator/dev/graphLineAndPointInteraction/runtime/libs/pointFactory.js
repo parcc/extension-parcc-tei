@@ -88,14 +88,17 @@ define([], function(){
                     fill : _color,
                     stroke : '#000'
                 });
-                /** @type {Object} Paper.set of elements that represents glow */
+                /** @type {Object} Raphael color object */
                 var rgb = paper.raphael.color(_color);
+                /** @type {Object} Paper.circle of elements that represents glow */
                 var glow = paper.circle(coord[0],coord[1], _rGlow).attr({
                     fill : 'rgba(' + rgb.r + ',' + rgb.g +',' + rgb.b + ',0.3 )',
                     stroke : 'none'
                 });
                 if (this.children.length > 0) { this.children.remove().clear();}
-                this.children.push(circle,glow);
+                this.children.push(circle,glow).attr({
+                    cursor : 'move'
+                });
             },
             /**
              * Activate the dran'n'drop capability provide by RaphaelJS
