@@ -33,9 +33,7 @@ define([
             this.dom = dom;
             this.config = config || {};
 
-            var $container = $(dom),
-            pointA,
-            pointB;
+            var $container = $(dom);
 
             this.config.grid  = {
                 x: {
@@ -65,6 +63,8 @@ define([
             ///////////////////////////
             // Catch the Click Event //
             ///////////////////////////
+            var points = [];
+
             grid.children.click(function(event){
                 ////////////////////////////////////
                 // Get the coordinate for a click //
@@ -77,28 +77,21 @@ define([
                 // Create the first point or the second or replace the second //
                 // According the rules defined by the client                  //
                 ////////////////////////////////////////////////////////////////
-                if (typeof pointA === 'undefined') {
-                    pointA = pointFactory(canvas,grid,{
+
+                if (points.length < 2) {
+                    var newPoint = pointFactory(canvas, grid, {
                         x : fx,
                         y : fy
                     });
-                    pointA.render();
-                    pointA.drag();
-                    pointA.click();
-                }else if (typeof pointB === 'undefined'){
-                    pointB = pointFactory(canvas, grid, {
-                        x: fx,
-                        y: fy
-                    });
-                    pointB.render();
-                    pointA.unDrag();
-                    pointB.drag();
-                    pointB.click();
+                    newPoint.render();
+                    newPoint.drag();
+                    points.push(newPoint);
                 }else{
-                    pointB.setCoord(fx, fy);
-                    pointB.render();
-                    pointB.drag();
-                    pointB.click();
+                    var oldPoint = points.pop();
+                    oldPoint.setCoord(fx, fy);
+                    oldPoint.render();
+                    oldPoint.drag();
+                    points.push(oldPoint);
                 }
 
             });
