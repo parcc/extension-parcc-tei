@@ -81,7 +81,6 @@ define([], function(){
              * Draw the point with his glow around him
              */
             render : function(){
-                console.log(_x,_y);
                 /** @type {Object} Raphaël element object with type “circle” */
                 var circle = paper.circle(_x,_y,_r).attr({
                     fill : _color,
@@ -119,7 +118,6 @@ define([], function(){
                 },function(){
                     /** Set Coordinate with center of the bounding box */
                     self.setCoord(bb.x + (bb.width/2), bb.y + (bb.width/2));
-                    console.log(bb.x + (bb.width/2), bb.y + (bb.width/2));
                     /** Call for a render again */
                     self.render();
                 });
