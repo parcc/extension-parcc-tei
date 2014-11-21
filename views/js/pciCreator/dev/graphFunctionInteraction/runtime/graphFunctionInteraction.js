@@ -113,27 +113,44 @@ define([
                 }
 
             });
-            
+
             var plotFactory = new PlotFactory(grid);
-            var path;
-            $container.on('pairPointReady', function(){
+            var path, mathFunction;
+            $container.on('pairPointReady', plot);
+
+            function activateButton($button){
                 
-                var point1 = points[0],
-                    point2 = points[1];
-                
-                if(path){
-                    path.remove();
+                if(typeof $button === 'string'){
+                    $button = $container.find('.shape-controls [name='+$button+']');
                 }
                 
-                path = plotFactory.plotLinear(point1, point2);
-                path = plotFactory.plotExponential(point1, point2);
-                path = plotFactory.plotLogarithmic(point1, point2);
-                path = plotFactory.plotCosine(point1, point2);
-                path = plotFactory.plotTangent(point1, point2);
-                path = plotFactory.plotQuadratic(point1, point2);
-                path = plotFactory.plotAbsolute(point1, point2);
+                var fnName = $button.val();
+                mathFunction = PlotFactory.getPlotName(fnName);
+                $button.removeClass('btn-info').addClass('btn-success');
+                $button.siblings('button').removeClass('btn-success').addClass('btn-info');
+                plot();
+            }
+
+            function plot(){
+
+                var point1 = points[0],
+                    point2 = points[1];
+
+                if(point1 && point2){
+                    if(path){
+                        path.remove();
+                    }
+
+                    path = plotFactory[mathFunction](point1, point2);
+                }
+
+            }
+
+            activateButton('linear');
+
+            $container.find('.shape-controls').on('click', 'button', function(){
+                activateButton($(this));
             });
-            
         },
         /**
          * Programmatically set the response following the json schema described in

@@ -79,7 +79,7 @@ define(['OAT/lodash', 'graphFunctionInteraction/runtime/libs/graphFunction'], fu
             }catch(e){
                 console.log(e);
             }
-            
+
             return false;
         }
 
@@ -95,12 +95,16 @@ define(['OAT/lodash', 'graphFunctionInteraction/runtime/libs/graphFunction'], fu
 
         //add functions
         _.each(availableFunctions, function(fnName){
-            _this['plot' + fnName.charAt(0).toUpperCase() + fnName.substr(1)] = function(point1, point2, conf){
+            _this[PlotFactory.getPlotName(fnName)] = function(point1, point2, conf){
                 return _plot(fnName, point1, point2, conf);
             };
         });
 
     }
 
+    PlotFactory.getPlotName = function(mathFunctionName){
+        return 'plot' + mathFunctionName.charAt(0).toUpperCase() + mathFunctionName.substr(1);
+    };
+    
     return PlotFactory;
 });
