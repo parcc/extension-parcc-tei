@@ -3,7 +3,9 @@ define([
     'lodash',
     'scale.raphael'
 ], function(PortableElement, _, scaleRaphael){
-
+    
+    'use strict';
+    
     var canvasHeight = 600,
         canvasWidth = 600,
         canvas = scaleRaphael($('#paper')[0], canvasHeight, canvasWidth);
@@ -13,15 +15,15 @@ define([
         start : -10,
         end : 10,
         precision : 0.1,
-        //unit size in px (relative to canvas)
+        //unit size in px
         unitSize : {
             x : 30,
             y : 30
         },
         //origine of the axis in px (relative to canvas)
         origin : {
-            x : canvasWidth / 2,
-            y : canvasHeight / 2
+            left : canvasWidth / 2,
+            top : canvasHeight / 2
         }
     };
 

@@ -100,8 +100,8 @@ define(['OAT/lodash'], function(_){
 
             //new position (pixels)
             newPosition = {
-                left : _round(x * config.unitSize.x + config.origin.x, 3),
-                top : _round(-y * config.unitSize.y + config.origin.y, 3)
+                left : _round(x * config.unitSize.x + config.origin.left, 3),
+                top : _round(-y * config.unitSize.y + config.origin.top, 3)
             };
 
             if(newPosition.top > canvas.height + margin || newPosition.top < -margin){
@@ -388,12 +388,12 @@ define(['OAT/lodash'], function(_){
             }
 
             var startPosition = {
-                left : _round(config.start * config.unitSize.x + config.origin.x, 3),
-                top : _round(-calc(equation, config.start) * config.unitSize.y + config.origin.y, 3)
+                left : _round(config.start * config.unitSize.x + config.origin.left, 3),
+                top : _round(-calc(equation, config.start) * config.unitSize.y + config.origin.top, 3)
             };
             var endPosition = {
-                left : _round(config.end * config.unitSize.x + config.origin.x, 3),
-                top : _round(-calc(equation, config.end) * config.unitSize.y + config.origin.y, 3)
+                left : _round(config.end * config.unitSize.x + config.origin.left, 3),
+                top : _round(-calc(equation, config.end) * config.unitSize.y + config.origin.top, 3)
             };
 
             var path = 'M' + startPosition.left + ' ' + startPosition.top + 'L' + endPosition.left + ' ' + endPosition.top;
@@ -441,16 +441,16 @@ define(['OAT/lodash'], function(_){
             }
 
             var startPosition = {
-                left : _round(config.start * config.unitSize.x + config.origin.x, 3),
-                top : _round(-calc(equation, config.start) * config.unitSize.y + config.origin.y, 3)
+                left : _round(config.start * config.unitSize.x + config.origin.left, 3),
+                top : _round(-calc(equation, config.start) * config.unitSize.y + config.origin.top, 3)
             };
             var middlePosition = {
-                left : _round(-equation[1] * config.unitSize.x + config.origin.x, 3),
-                top : _round(-calc(equation, -equation[1]) * config.unitSize.y + config.origin.y, 3)
+                left : _round(-equation[1] * config.unitSize.x + config.origin.left, 3),
+                top : _round(-calc(equation, -equation[1]) * config.unitSize.y + config.origin.top, 3)
             };
             var endPosition = {
-                left : _round(config.end * config.unitSize.x + config.origin.x, 3),
-                top : _round(-calc(equation, config.end) * config.unitSize.y + config.origin.y, 3)
+                left : _round(config.end * config.unitSize.x + config.origin.left, 3),
+                top : _round(-calc(equation, config.end) * config.unitSize.y + config.origin.top, 3)
             };
 
             var path = 'M' + startPosition.left + ' ' + startPosition.top
