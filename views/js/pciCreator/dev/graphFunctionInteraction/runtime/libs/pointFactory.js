@@ -28,7 +28,10 @@ define([], function(){
         /** @type {Number} y coordinate (in px) */
         _y = 1,
         /** @type {Number} radius for the glowing effect */
-        _rGlow = parseInt(options.glowRadius) || _r * 3;
+        _rGlow = parseInt(options.glowRadius) || _r * 3,
+        /** @type {Object} events callback */
+        _events =   options.on || {};
+      
         var obj = {
             /** @type {Object} Paper.set of elements */
             children : paper.set(),
@@ -125,6 +128,12 @@ define([], function(){
                     newY = (self.oBB.y - bb.y + dy);
                     self.children.translate(newX,newY);
                 },function () {
+                    
+                    //trigger event
+                    if(typeof _events.dragStart === 'function'){
+                        _events.dragStart.call(self);
+                    }
+                    
                     /** @type {Object} Store the original bounding box
                                        Since it's not just circle, it's impossible to use cx & cy
                                        instead, we'll use a bounding box representation and use their values*/
@@ -136,6 +145,11 @@ define([], function(){
                     self.setCoord(newX,newY);
                     /** Call for a render again */
                     self.children.translate(self.getX() - newX,self.getY() - newY);
+                    
+                    //trigger event
+                    if(typeof _events.dragStop === 'function'){
+                        _events.dragStop.call(self);
+                    }
                 });
             },
             /**
@@ -143,6 +157,27 @@ define([], function(){
              */
             unDrag : function(){
                 this.children.undrag();
+            },
+            /**
+             * Add glowing on point
+             */
+            showGlow : function(){
+                /** @type {Object} Raphael color object */
+                var rgb = paper.raphael.color(_color);
+                /** @type {Object} Paper.circle of elements that represents glow */
+                var glow = paper.circle(_x,_y, _rGlow).attr({
+                    fill : 'rgba(' + rgb.r + ',' + rgb.g +',' + rgb.b + ',0.3 )',
+                    stroke : 'none',
+                    cursor : 'move'
+                });
+                if (this.children.length > 1) { this.children.pop().remove();}
+                this.children.push(glow);
+            },
+            /**
+             * Remove Glowing on points
+             */
+            hideGlow : function(){
+                if (this.children.length > 1) { this.children.pop().remove();}
             }
         };
         obj.setCoord(options.x, options.y);
