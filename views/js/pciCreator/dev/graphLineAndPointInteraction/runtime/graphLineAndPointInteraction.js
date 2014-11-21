@@ -83,14 +83,22 @@ define([
                         x : fx,
                         y : fy
                     });
+                    // Draw the point
                     newPoint.render();
+                    // Enable drag'n'drop hability
                     newPoint.drag();
+                    // Add it to the list of points
                     points.push(newPoint);
                 }else{
+                    // Get the last point placed
                     var oldPoint = points.pop();
+                    // Change their coordinates for new ones
                     oldPoint.setCoord(fx, fy);
+                    // Re-draw the point
                     oldPoint.render();
+                    // re-enable the drag'n'drop
                     oldPoint.drag();
+                    // Add it back to the list
                     points.push(oldPoint);
                 }
 
