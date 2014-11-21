@@ -53,7 +53,6 @@ define([
             // Create Canvas //
             ///////////////////
             var canvas = scaleRaphael($('.shape-container',$container)[0],500,400);
-
             //////////////////////////////
             // Instanciate a basic grid //
             //////////////////////////////
@@ -62,11 +61,35 @@ define([
             // Make it clickable //
             ///////////////////////
             grid.clickable();
+            //////////////////////////////////////
+            // How many lines set did we have ? //
+            //////////////////////////////////////
+            var sets = [];
+            $('[data-set-color]').each(function(){
+                sets.push({
+                    color : $(this).data('set-color'),
+                    points : [],
+                    active : false
+                });
+            }).click(function() {
+                // Get the currently active set and inactivate it
+                var previouslyActiveSet = _.find(sets,{active : true});
+                previouslyActiveSet.active = false;
+                // Iterate on every other items and remove the flow on points
+                _.forEach(previouslyActiveSet.points,function(value){
+                    value.hideGlow();
+                });
+                // Activate the right set
+                var newActiveSet = _.find(sets,{color : $(this).data('set-color')});
+                newActiveSet.active = true;
+                _.forEach(newActiveSet.points, function(value){
+                    value.showGlow();
+                });
+            });
+            sets[0].active = true;
             ///////////////////////////
             // Catch the Click Event //
             ///////////////////////////
-            var points = [];
-
             grid.children.click(function(event){
                 ////////////////////////////////////
                 // Get the coordinate for a click //
@@ -75,26 +98,30 @@ define([
                 wfactor = canvas.w / canvas.width,
                 fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
                 fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
-                ////////////////////////////////////////////////////////////////
-                // Create the first point or the second or replace the second //
-                // According the rules defined by the client                  //
-                ////////////////////////////////////////////////////////////////
-                if (points.length < 2) {
+                /////////////////////////
+                // Get the current set //
+                /////////////////////////
+                var activeSet = _.find(sets,{active : true});
+                ///////////////////////////////////////////////////////////
+                // Create points or change their position inside the set //
+                ///////////////////////////////////////////////////////////
+                if (activeSet.points.length < 2) {
                     var newPoint = pointFactory(canvas, grid, {
                         x : fx,
-                        y : fy
+                        y : fy,
+                        color : activeSet.color
                     });
                     // Draw the point
                     newPoint.render();
                     // Enable drag'n'drop hability
                     newPoint.drag();
                     // Add it to the list of points
-                    points.push(newPoint);
+                    activeSet.points.push(newPoint);
                     // Raise event ready for line plot
-                    if (points.length === 2) {$(dom).trigger('pairPointReady');}
+                    if (activeSet.points.length === 2) {$(dom).trigger('pairPointReady');}
                 }else{
                     // Get the last point placed
-                    var oldPoint = points.pop();
+                    var oldPoint = activeSet.points.pop();
                     // Change their coordinates for new ones
                     oldPoint.setCoord(fx, fy);
                     // Re-draw the point
@@ -102,7 +129,7 @@ define([
                     // re-enable the drag'n'drop
                     oldPoint.drag();
                     // Add it back to the list
-                    points.push(oldPoint);
+                    activeSet.points.push(oldPoint);
                     // Raise event ready for a line plot
                     $(dom).trigger('pairPointReady');
                 }
