@@ -53,7 +53,6 @@ define([
             // Create Canvas //
             ///////////////////
             var canvas = scaleRaphael($('.shape-container',$container)[0],500,400);
-
             //////////////////////////////
             // Instanciate a basic grid //
             //////////////////////////////
@@ -72,11 +71,20 @@ define([
                     points : [],
                     active : false
                 });
-            }).click(function(event) {
+            }).click(function() {
                 // Get the currently active set and inactivate it
-                _.find(sets,{active : true}).active = false;
+                var previouslyActiveSet = _.find(sets,{active : true});
+                previouslyActiveSet.active = false;
+                // Iterate on every other items and remove the flow on points
+                _.forEach(previouslyActiveSet.points,function(value){
+                    value.hideGlow();
+                });
                 // Activate the right set
-                _.find(sets,{color : $(this).data('set-color')}).active = true;
+                var newActiveSet = _.find(sets,{color : $(this).data('set-color')});
+                newActiveSet.active = true;
+                _.forEach(newActiveSet.points, function(value){
+                    value.showGlow();
+                });
             });
             sets[0].active = true;
             ///////////////////////////
