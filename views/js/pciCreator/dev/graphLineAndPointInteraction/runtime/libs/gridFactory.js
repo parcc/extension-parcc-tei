@@ -52,13 +52,13 @@ define(['OAT/lodash'], function( _){
                     (_y.start < 0 ) && (_y.end <= 0)
                 ) {
                 /** X */
-                paper.path('M' + width + ' 0H0').attr('stroke', _x.color).attr({
+                paper.path('M' + width + ' 0H0').attr({
                     'stroke' :  _x.color,
                     'stroke-width': _x.weight,
                     'arrow-end': 'block-midium-midium'
                    });
                 /** Y */
-                 paper.path('M' + width + ' 0V' + height).attr('stroke', _y.color).attr({
+                 paper.path('M' + width + ' 0V' + height).attr({
                     'stroke' :  _y.color,
                     'stroke-width': _y.weight,
                     'arrow-end': 'block-midium-midium'
@@ -100,13 +100,13 @@ define(['OAT/lodash'], function( _){
                     (_y.start >= 0 ) && (_y.end > 0)
                 ) {
                 /** X */
-                paper.path('M' + width + ' ' + height +'H0').attr('stroke', _x.color).attr({
+                paper.path('M' + width + ' ' + height +'H0').attr({
                     'stroke' :  _x.color,
                     'stroke-width': _x.weight,
                     'arrow-end': 'block-midium-midium'
                    });
                 /** Y */
-                 paper.path('M' + width + ' ' + height +'V0').attr('stroke', _y.color).attr({
+                 paper.path('M' + width + ' ' + height +'V0').attr({
                     'stroke' :  _y.color,
                     'stroke-width': _y.weight,
                     'arrow-end': 'block-midium-midium'
@@ -125,13 +125,13 @@ define(['OAT/lodash'], function( _){
                     (_y.start >= 0 ) && (_y.end > 0)
                 ) {
                 /** X */
-                paper.path('M0 ' + height +'H' + width).attr('stroke', _x.color).attr({
+                paper.path('M0 ' + height +'H' + width).attr({
                     'stroke' :  _x.color,
                     'stroke-width': _x.weight,
                     'arrow-end': 'block-midium-midium'
                    });
                 /** Y */
-                paper.path('M0 ' + height + 'V0').attr('stroke', _y.color).attr({
+                paper.path('M0 ' + height + 'V0').attr({
                     'stroke' :  _y.color,
                     'stroke-width': _y.weight,
                     'arrow-end': 'block-midium-midium'
