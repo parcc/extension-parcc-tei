@@ -10,8 +10,7 @@
         "IMSGlobal/jquery_2_1_1",
         "./runtime/libs/gridFactory",
         "./runtime/libs/pointFactory",
-        "./runtime/libs/plotFactory",
-        "./runtime/libs/graphFunction"
+        "./runtime/libs/plotFactory"
     ],
     "css": [
         "runtime/css/graphFunctionInteraction.css"

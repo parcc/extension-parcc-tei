@@ -43,7 +43,7 @@ define([
         return Math.round(number * m) / m;
     }
 
-    localRequire(['graphFunctionInteraction/runtime/libs/graphFunction', 'OAT/raphael'], function(graphFunction, Raphael){
+    localRequire(['PARCC/graphFunction'], function(graphFunction){
 
         test('quadratic', function(){
 
@@ -96,8 +96,8 @@ define([
             var equation = graphFunction.logarithmic.get(p1, p2);
 
             equal(equation.length, 2, 'equation length ok');
-            equal(_round3(equation[0]), -2.160, 'equation ok');
-            equal(_round3(equation[1]), .232, 'equation ok');
+            equal(_round3(equation[0]), -2, 'equation ok');
+            equal(equation[1], .2, 'equation ok');
 
             var curveConf = _.clone(curveConfig);
             curveConf.precision = .01;
