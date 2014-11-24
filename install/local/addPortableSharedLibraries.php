@@ -27,3 +27,6 @@ $installBasePath = ROOT_PATH . 'parccTei/install/local/portableSharedLibraries';
 
 $registry = new SharedLibrariesRegistry($libBasePath, $libRootUrl);
 $registry->registerFromFile('PARCC/graphFunction', $installBasePath . '/PARCC/graphFunction.js');
+$registry->registerFromFile('PARCC/gridFactory', $installBasePath . '/PARCC/gridFactory.js');
+$registry->registerFromFile('PARCC/plotFactory', $installBasePath . '/PARCC/plotFactory.js');
+$registry->registerFromFile('PARCC/pointFactory', $installBasePath . '/PARCC/pointFactory.js');
