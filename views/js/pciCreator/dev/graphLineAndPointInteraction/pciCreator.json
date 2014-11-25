@@ -8,9 +8,10 @@
     "email": "thibault.milan@vesperiagroup.com",
     "libraries": [
         "IMSGlobal/jquery_2_1_1",
-        "./runtime/libs/gridFactory",
-        "./runtime/libs/pointFactory",
-        "./runtime/libs/plotFactory"
+        "PARCC/graphFunction",
+        "PARCC/gridFactory",
+        "PARCC/pointFactory",
+        "PARCC/plotFactory"
     ],
     "css": [
         "runtime/css/graphLineAndPointInteraction.css"

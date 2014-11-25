@@ -3,9 +3,9 @@ define([
     'qtiCustomInteractionContext',
     'OAT/util/event',
     'OAT/scale.raphael',
-    'graphFunctionInteraction/runtime/libs/gridFactory',
-    'graphFunctionInteraction/runtime/libs/pointFactory',
-    'graphFunctionInteraction/runtime/libs/plotFactory'
+    'PARCC/gridFactory',
+    'PARCC/pointFactory',
+    'PARCC/plotFactory'
 ], function(
     $,
     qtiCustomInteractionContext,

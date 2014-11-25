@@ -1,4 +1,4 @@
-define(['OAT/lodash', 'graphFunctionInteraction/runtime/libs/graphFunction'], function(_, graphFunction){
+define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
 
     'use strict';
 

@@ -4,9 +4,9 @@ define([
     'OAT/util/event',
     'OAT/lodash',
     'OAT/scale.raphael',
-    'graphLineAndPointInteraction/runtime/libs/gridFactory',
-    'graphLineAndPointInteraction/runtime/libs/pointFactory',
-    'graphLineAndPointInteraction/runtime/libs/plotFactory'
+    'PARCC/gridFactory',
+    'PARCC/pointFactory',
+    'PARCC/plotFactory'
     ], function(
         $,
         qtiCustomInteractionContext,
