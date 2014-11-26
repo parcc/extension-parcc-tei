@@ -98,7 +98,7 @@ define([
             return function(interaction, value, name){
                 interaction.prop(name, value);
                 if(refresh){
-                    widget.refresh();
+                    interaction.triggerPci('configchange', [_.clone(interaction.properties)]);
                 }
             };
         }

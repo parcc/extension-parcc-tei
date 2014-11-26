@@ -1,15 +1,16 @@
 define([
-    'IMSGlobal/jquery_2_1_1',
     'OAT/raphael',
     'OAT/lodash'
-], function($, Raphael, _){
+], function(Raphael, _){
+    
     'use strict';
-    Raphael.fn.pieChart = function(values, config, dom){
+    
+    Raphael.fn.pieChart = function(values, config, $container){
 
         var paper = this,
             chart = this.set(),
             padding = config.padding || 2,
-            r = config.radius,
+            r = parseInt(config.radius),
             // read some stuff from config & reformat datas
             cx = r + padding,
             cy = r + padding,
@@ -63,8 +64,7 @@ define([
             return paper.path(['M', cx, cy, 'L', x1, y1, 'A', r, r, 0, +(endAngle - startAngle > 180), 0, x2, y2, 'z']).attr(params);
         }
 
-        var $container = $(dom),
-            angle = 0,
+        var angle = 0,
             total = 0,
             //internal state for every sector
             selectedPartitions = {},

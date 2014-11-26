@@ -2,12 +2,37 @@ define([
     'IMSGlobal/jquery_2_1_1',
     'qtiCustomInteractionContext',
     'OAT/util/event',
+    'OAT/lodash',
     'OAT/scale.raphael',
     'fractionModelInteraction/runtime/libs/pieChart'
-    ], function($, qtiCustomInteractionContext, event, scaleRaphael){
+], function($, qtiCustomInteractionContext, event, _, scaleRaphael){
 
     'use strict';
-    
+
+    var _defaults = {
+        radius : 100,
+        padding : 10,
+        outlineThickness : 1
+    };
+
+    function createCanvas($container, config){
+
+        config = _.defaults(config, _defaults);
+
+        var canvasSize = 2 * (parseInt(config.radius) + parseInt(config.padding) + parseInt(config.outlineThickness));
+        var canvas = scaleRaphael($('.shape-container', $container)[0], canvasSize, canvasSize);
+
+        //make it resizeable:
+//            var containerWidth  = $container.innerWidth();
+//            var height = canvasSize;
+//            var factor =  1;
+//            
+//            canvas.changeSize(containerWidth, height * factor, false, false);
+//            canvas.scaleAll( factor );
+
+        return canvas;
+    }
+
     var fractionModelInteraction = {
         id : -1,
         getTypeIdentifier : function(){
@@ -20,74 +45,96 @@ define([
          * @param {Object} config - json
          */
         initialize : function(id, dom, config){
-            
+
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
-                        
+            
             this.id = id;
             this.dom = dom;
             this.config = config || {};
-            // Make sure everything has the correct type
-            this.numerator = parseInt(this.config.selectedPartitionsInit);
-            this.denominator = parseInt(this.config.partitionInit);
-            this.partitionMax = parseInt(this.partitionMax);
-            this.partitionMin = parseInt(this.partitionMin);
-            config.radius = parseInt(config.radius);
             
+            var _this = this,
+                $container = $(dom),
+                numerator,
+                denominator;
+
             /**
              * Return an array well formated to initialise the pieChart with equal
              * sections / slices
              * @return {array} the array to use as values for pieChart()
              */
-            this.values = function(){
+            function getValues(){
                 var tmp = [];
-                for (var i = this.denominator - 1; i >= 0; i--) {
+                for(var i = denominator - 1; i >= 0; i--){
                     tmp.push(1);
                 }
                 return tmp;
+            }
+
+            this.setFractionModel = function setFractionModel(num, den){
+                numerator = parseInt(num);
+                denominator = parseInt(den);
             };
 
-            var $container = $(dom);
+            this.getFractionModel = function getFractionModel(){
+                return {
+                    numerator : numerator,
+                    denominator : denominator
+                };
+            };
+
+            //set fraction model
+            this.setFractionModel(this.config.selectedPartitionsInit, this.config.partitionInit);
 
             // Create the canvas
-            config.padding = 10;
-            var canvasSize = 2 * (parseInt(config.radius) + parseInt(config.padding) + parseInt(config.outlineThickness));
-            var canvas = scaleRaphael($('.shape-container',$container)[0],canvasSize,canvasSize);
-            
-//            var containerWidth  = $container.innerWidth();
-//            var height = canvasSize;
-//            var factor =  1;
-//            
-//            canvas.changeSize(containerWidth, height * factor, false, false);
-//            canvas.scaleAll( factor );
-            
+            var canvas = createCanvas($container, config);
+
             // Init the pieChart
-            var chart = canvas.pieChart(this.values(), this.config, dom);
+            canvas.pieChart(getValues(), this.config, $container);
+
             // Catch click on more or less
-            var _this = this;
-            $container.on('click','button.more',this,function(event){
-                if (event.data.denominator < event.data.config.partitionMax){
-                    event.data.denominator += 1;
-                    $(event.data.dom).trigger('changeResponse.fraction');
+            $container.on('click', 'button.more', function(){
+                
+                if(denominator < config.partitionMax){
+                    denominator += 1;
+                    $container.trigger('changeResponse.fraction');
                 }
-            }).on('click','button.fewer',this,function(event){
-                if(event.data.denominator > event.data.config.partitionMin){
-                    event.data.denominator -= 1;
-                    $(event.data.dom).trigger('changeResponse.fraction');
+                
+            }).on('click', 'button.fewer', function(){
+                
+                if(denominator > config.partitionMin){
+                    denominator -= 1;
+                    $container.trigger('changeResponse.fraction');
                 }
-            }).on('click','button.reset',this,function(event){
-                event.data.numerator = event.data.config.selectedPartitionsInit;
-                event.data.denominator = event.data.config.partitionInit;
-                $(event.data.dom).trigger('reset.fraction');
-            }).on('changeResponse.fraction reset.fraction',this,function(event){
+                
+            }).on('click', 'button.reset', function(){
+                
+                _this.setFractionModel(_this.config.selectedPartitionsInit, _this.config.partitionInit);
+                $container.trigger('reset.fraction');
+                
+            }).on('changeResponse.fraction reset.fraction', function(event){
+                
+                console.log('change', arguments);
+                
                 // Redraw the pieChart
                 canvas.clear();
-                chart =  canvas.pieChart(event.data.values(), event.data.config, dom);
+                canvas.pieChart(getValues(), _this.config, $container);
                 //communicate the response change to the interaction
                 _this.trigger('responsechange', [_this.getResponse()]);
+                
             }).on('select_slice.pieChart unselect_slice.pieChart', function(e, selectedPartitions){
+                console.log('selected', selectedPartitions );
                 //communicate the state change to the interaction
                 _this.trigger('selectedparition', [selectedPartitions]);
+            });
+
+            //listening to dynamic configuration change
+            this.on('configchange', function(config){
+                _this.config = config;
+                _this.setFractionModel(_this.config.selectedPartitionsInit, _this.config.partitionInit);
+                canvas.clear();
+                canvas = createCanvas($container, _this.config);
+                canvas.pieChart(getValues(), _this.config, $container);
             });
         },
         /**
@@ -99,8 +146,7 @@ define([
          */
         setResponse : function(response){
             if(response && response.directedPair){
-                this.numerator = response.pair[0];
-                this.denominator = response.pair[1];
+                this.setFractionModel(response.pair[0], response.pair[1]);
                 $(this.dom).trigger('changeResponse.fraction');
             }
         },
@@ -113,7 +159,8 @@ define([
          */
         getResponse : function(){
             //@todo to be correct to the correct baseType once the response processing story has been clarified
-            return {base : {directedPair : [this.numerator.toString(), this.denominator.toString()]}};
+            var fractionModel = this.getFractionModel();
+            return {base : {directedPair : [fractionModel.numerator.toString(), fractionModel.denominator.toString()]}};
         },
         /**
          * Remove the current response set in the interaction
@@ -122,8 +169,7 @@ define([
          * @param {Object} interaction
          */
         resetResponse : function(){
-            this.numerator = this.config.selectedPartitionsInit;
-            this.demoninator = this.config.partitionInit;
+            this.setFractionModel(this.config.selectedPartitionsInit, this.config.partitionInit);
             $(this.dom).trigger('changeResponse.fraction');
         },
         /**
@@ -155,7 +201,6 @@ define([
          * @returns {Object} json format
          */
         getSerializedState : function(){
-
             return {};
         }
     };
