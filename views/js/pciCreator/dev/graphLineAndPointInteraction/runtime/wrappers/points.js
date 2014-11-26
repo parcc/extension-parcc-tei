@@ -70,24 +70,22 @@ define([
             });
         },
 
-        getResponse : function(point){
-            return {'base' : {'point' : [point.getX(),point.getY()]}};
+        getResponse : function(){
+            return {'base' : {'point' : [this.point.getX(),this.point.getY()]}};
         },
 
-        setResponse : function(point,response){
+        setResponse : function(response){
             // 1. Get the current coordinates
-            var currentX = point.getX(),
-                currentY = point.getY();
+            var currentX = this.point.getX(),
+                currentY = this.point.getY();
             // 2. Get the new coordinates from response
             var x = response.base.point[0],
                 y = response.base.point[1];
             // 3. Assign it
-            point.setCoord(x, y);
+            this.point.setCoord(x, y);
             // 4. Translate the point, preventing a redraw that'll break
             //    events attached on the childrens
-            point.children.translate(currentX - x,currentY - y);
-
-            return point;
+            this.point.children.translate(currentX - x,currentY - y);
         }
     };
     return pointWrapper;
