@@ -24,7 +24,8 @@
                 </pci:resources>
 
                 <pci:properties>
-                    <pci:entry key="level">5</pci:entry>
+                    <!--all graphs : linear,absolute,quadratic,exponential,logarithmic,cosine,tangent-->
+                    <pci:entry key="graphs">linear,absolute,quadratic,exponential,logarithmic,cosine,tangent</pci:entry>
                 </pci:properties>
 
                 <pci:markup>
