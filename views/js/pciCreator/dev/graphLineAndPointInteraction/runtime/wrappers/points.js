@@ -21,6 +21,7 @@ define([
      */
     var pointWrapper = {
 
+        point : null,
         /**
          * Initialize function
          *
@@ -38,24 +39,35 @@ define([
          * @param  {Object} [config.color]  color for the point
          * @return {[type]}        [description]
          */
-        initialize : function(paper,grid,coord,config){
+        initialize : function(paper,grid,config){
             config = _.defaults(config,{
-                color : "#bb1a2a",
+                color : '#bb1a2a',
                 radius : 7
             });
-
-
-            var newPoint = pointFactory(paper, grid, {
-                x : coord.x,
-                y : coord.y,
-                color : config.color
+            var self = this;
+            $(paper.canvas).on('grid_click',function(event,coord){
+                if(self.point !== null){
+                    var oldPoint = self.point;
+                    // Change their coordinates for new ones
+                    oldPoint.setCoord(coord.x, coord.y);
+                    // Re-draw the point
+                    oldPoint.render();
+                    // re-enable the drag'n'drop
+                    oldPoint.drag();
+                }else{
+                    var newPoint = pointFactory(paper, grid, {
+                        x : coord.x,
+                        y : coord.y,
+                        color : config.color
+                    });
+                    // Draw the point
+                    newPoint.render();
+                    // Enable drag'n'drop hability
+                    newPoint.drag();
+                    // Store for convinience the point element
+                    self.point = newPoint ;
+                }
             });
-            // Draw the point
-            newPoint.render();
-            // Enable drag'n'drop hability
-            newPoint.drag();
-
-            return newPoint;
         },
 
         getResponse : function(point){
