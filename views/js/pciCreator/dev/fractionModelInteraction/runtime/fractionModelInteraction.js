@@ -100,9 +100,11 @@ define([
                         });
                     }else{
                         selectedPartitions = JSON.parse(stateData);
+                        denominator = selectedPartitions.length;//@todo fix this redundant information
                     }
                 }else if(_.isArray(stateData)){
                     selectedPartitions = stateData;
+                    denominator = selectedPartitions.length;//@todo fix this redundant information
                 }else{
                     throw 'invalid format for selectedPartitions';
                 }

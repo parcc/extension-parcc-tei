@@ -13,6 +13,12 @@ define([
      * 
      * @param {Array} selectedPartitions - e.g. [true, false, false, true, false, false]
      * @param {Object} config
+     * @param {Object} [config.padding] - the padding of the pie chart
+     * @param {Object} [config.radius] - the radius of the pie chart
+     * @param {Object} [config.partitionColor] - the color of unseelcted slices
+     * @param {Object} [config.selectedPartitionsColor] - the color of selected slices
+     * @param {Object} [config.outlineColor]
+     * @param {Object} [config.outlineThickness]
      * @param {Object} $container - jQuery object
      * @returns {undefined}
      */
