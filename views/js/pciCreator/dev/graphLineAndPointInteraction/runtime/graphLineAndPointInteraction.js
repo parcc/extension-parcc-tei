@@ -110,44 +110,13 @@ define([
 
                 $(canvas.canvas).trigger('grid_click',{x: fx, y: fy});
 
-                var wrapper = pointWrapper;
-                var myElement = wrapper.initialize(canvas,grid,{x: fx, y: fy},{color: '#0f904a'});
+                var element = pointWrapper;
+                element.initialize(canvas,grid,{color: '#0f904a'});
 
                 // /////////////////////////
                 // // Get the current set //
                 // /////////////////////////
                 // var activeSet = _.find(sets,{active : true});
-                // ///////////////////////////////////////////////////////////
-                // // Create points or change their position inside the set //
-                // ///////////////////////////////////////////////////////////
-                // if (activeSet.points.length < 2) {
-                //     var newPoint = pointFactory(canvas, grid, {
-                //         x : fx,
-                //         y : fy,
-                //         color : activeSet.color
-                //     });
-                //     // Draw the point
-                //     newPoint.render();
-                //     // Enable drag'n'drop hability
-                //     newPoint.drag();
-                //     // Add it to the list of points
-                //     activeSet.points.push(newPoint);
-                //     // Raise event ready for line plot
-                //     if (activeSet.points.length === 2) {$(dom).trigger('pairPointReady');}
-                // }else{
-                //     // Get the last point placed
-                //     var oldPoint = activeSet.points.pop();
-                //     // Change their coordinates for new ones
-                //     oldPoint.setCoord(fx, fy);
-                //     // Re-draw the point
-                //     oldPoint.render();
-                //     // re-enable the drag'n'drop
-                //     oldPoint.drag();
-                //     // Add it back to the list
-                //     activeSet.points.push(oldPoint);
-                //     // Raise event ready for a line plot
-                //     $(dom).trigger('pairPointReady');
-                // }
 
             });
 
