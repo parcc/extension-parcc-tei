@@ -24,7 +24,7 @@ return array(
 	'label' => 'PARCC Portable Custom Interaction',
 	'description' => '',
     'license' => 'PARCC',
-    'version' => '0.1',
+    'version' => '0.1.1',
 	'author' => 'Open Assessment Technologies',
 	'requires' => array('qtiItemPci' => '>=0.1'),
     'acl' => array(
@@ -39,6 +39,7 @@ return array(
 			dirname(__FILE__).'/install/local/addPortableSharedLibraries.php'
 		)
     ),
+    'update' => 'oat\\parccTei\\scripts\\update\\Updater',
     'uninstall' => array(
     ),
     'autoload' => array (
