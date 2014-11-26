@@ -55,7 +55,7 @@ define([
             ///////////////////
             // Create Canvas //
             ///////////////////
-            var canvas = scaleRaphael($('.shape-container', $container)[0], 500, 400);
+            var canvas = scaleRaphael($('.shape-container', $container)[0], 400, 400);
 
             //////////////////////////////
             // Instanciate a basic grid //
