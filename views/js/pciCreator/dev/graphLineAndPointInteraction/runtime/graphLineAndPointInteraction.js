@@ -7,7 +7,8 @@ define([
     'PARCC/gridFactory',
     'PARCC/pointFactory',
     'PARCC/plotFactory',
-    './wrappers/points.js'
+    './wrappers/points.js',
+    './wrappers/lines.js'
     ], function(
         $,
         qtiCustomInteractionContext,
@@ -17,7 +18,8 @@ define([
         gridFactory,
         pointFactory,
         PlotFactory,
-        pointWrapper
+        pointWrapper,
+        lineWrapper
     ){
 
     'use strict';
@@ -110,7 +112,7 @@ define([
 
                 $(canvas.canvas).trigger('grid_click',{x: fx, y: fy});
 
-                var element = pointWrapper;
+                var element = lineWrapper;
                 element.initialize(canvas,grid,{color: '#0f904a'});
 
                 // /////////////////////////
@@ -120,17 +122,6 @@ define([
 
             });
 
-            //////////////////////////////////////////////////////
-            // Listen for readyness of drawing line and draw it //
-            //////////////////////////////////////////////////////
-            $(dom).on('pairPointReady',function(){
-                // Get the Active Set
-                var activeSet = _.find(sets,{active : true});
-                // If there's a line, remove it
-                if(activeSet.line){activeSet.line.remove();}
-                // Create and store the new line
-                activeSet.line = plotFactory.plotLinear(activeSet.points[0],activeSet.points[1],{color:activeSet.color});
-            });
 
         },
         /**

@@ -25,27 +25,36 @@ define([
         points : [],
         active : true,
         color : _defaults.color,
+        line : null,
         initialize : function(paper,grid,config){
             config = _.defaults(config,_defaults);
+            var self = this,
+                plotFactory = new PlotFactory(grid);
 
-            $(paper.canvas).on('grid_click',function(coord){
-                if (this.points.length < 2) {
+
+            $(paper.canvas).on('grid_click',function(event,coord){
+                if (self.points.length < 2) {
                     var newPoint = pointFactory(paper, grid, {
                         x : coord.x,
                         y : coord.y,
-                        color : this.color
+                        color : self.color
                     });
                     // Draw the point
                     newPoint.render();
                     // Enable drag'n'drop hability
                     newPoint.drag();
                     // Add it to the list of points
-                    this.points.push(newPoint);
+                    self.points.push(newPoint);
                     // Raise event ready for line plot
-                    if (this.points.length === 2) {$(paper.canvas).trigger('line.pairPointReady');}
+                    if (self.points.length === 2) {
+                        $(paper.canvas).trigger('line.pairPointReady');
+                        $(paper.canvas).on('point.moved',function(){
+                            $(paper.canvas).trigger('line.pairPointReady');
+                        });
+                    }
                 }else{
                     // Get the last point placed
-                    var oldPoint = this.points.pop();
+                    var oldPoint = self.points.pop();
                     // Change their coordinates for new ones
                     oldPoint.setCoord(coord.x, coord.y);
                     // Re-draw the point
@@ -53,10 +62,18 @@ define([
                     // re-enable the drag'n'drop
                     oldPoint.drag();
                     // Add it back to the list
-                    this.points.push(oldPoint);
+                    self.points.push(oldPoint);
                     // Raise event ready for a line plot
                     $(paper.canvas).trigger('line.pairPointReady');
                 }
+            });
+            $(paper.canvas).on('line.pairPointReady',function(){
+                // Get the Active Set
+                // var activeSet = _.find(sets,{active : true});
+                // If there's a line, remove it
+                if(self.line){self.line.remove();}
+                // Create and store the new line
+                self.line = plotFactory.plotLinear(self.points[0],self.points[1],{color:self.color});
             });
 
 
@@ -73,7 +90,7 @@ define([
             _.forEach(this.points, function(point){
                 point.hideGlow();
             });
-        }
+        },
     };
     return linesWrapper;
 
