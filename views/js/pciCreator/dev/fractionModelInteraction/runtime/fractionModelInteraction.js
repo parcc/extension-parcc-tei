@@ -14,20 +14,15 @@ define([
         padding : 10,
         outlineThickness : 1
     };
-
+    
+    var _ns = '.fraction';
+    
     function createCanvas($container, config){
 
         config = _.defaults(config, _defaults);
 
         var canvasSize = 2 * (parseInt(config.radius) + parseInt(config.padding) + parseInt(config.outlineThickness));
         var canvas = scaleRaphael($('.shape-container', $container)[0], canvasSize, canvasSize);
-
-        //make it resizeable:
-//        var containerWidth = $container.innerWidth();
-//        var height = canvasSize;
-//        var factor = 1;
-//        canvas.changeSize(containerWidth, height * factor, false, false);
-//        canvas.scaleAll(factor);
 
         return canvas;
     }
@@ -131,7 +126,7 @@ define([
             canvas.pieChart(this.getState(), this.config, $container);
 
             // Catch click on more or less
-            $container.on('click', 'button.more', function(){
+            $container.on('click.fraction', 'button.more', function(){
 
                 if(denominator < config.partitionMax){
                     denominator += 1;
@@ -141,7 +136,7 @@ define([
                     $container.trigger('changeResponse.fraction');
                 }
 
-            }).on('click', 'button.fewer', function(){
+            }).on('click.fraction', 'button.fewer', function(){
 
                 if(denominator > config.partitionMin){
                     denominator -= 1;
@@ -151,7 +146,7 @@ define([
                     $container.trigger('changeResponse.fraction');
                 }
 
-            }).on('click', 'button.reset', function(){
+            }).on('click.fraction', 'button.reset', function(){
 
                 _this.setFractionModel(_this.config.selectedPartitionsInit, _this.config.partitionInit);
                 _this.setState(_this.config.selectedPartitions);
