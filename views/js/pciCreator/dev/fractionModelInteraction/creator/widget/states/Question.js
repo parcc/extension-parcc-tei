@@ -43,7 +43,7 @@ define([
                 interaction.prop('selectedPartitionsInit', response.base.directedPair[0]);
                 interaction.prop('partitionInit', response.base.directedPair[1]);
             }
-        }).onPci('selectedparition', function(selectedPartitions){
+        }).onPci('selectedpartition', function(selectedPartitions){
             interaction.prop('selectedPartitions', JSON.stringify(_.values(selectedPartitions)));
         });
 
@@ -98,7 +98,7 @@ define([
             return function(interaction, value, name){
                 interaction.prop(name, value);
                 if(refresh){
-                    widget.refresh();
+                    interaction.triggerPci('configchange', [_.clone(interaction.properties)]);
                 }
             };
         }
