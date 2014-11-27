@@ -33,8 +33,6 @@ define([
 
     StateQuestion.prototype.initForm = function(){
 
-        //code to init your interaction property form (on the right side bar)
-
         var widget = this.widget,
             interaction = widget.element,
             $form = widget.$form,

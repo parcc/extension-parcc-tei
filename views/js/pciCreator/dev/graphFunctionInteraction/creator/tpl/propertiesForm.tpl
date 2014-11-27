@@ -10,6 +10,41 @@
            data-validate="$notEmpty; $qtiIdentifier; $availableIdentifier(serial={{serial}});">
 </div>
 
+
+<h3>{{__ "X  Axis"}}
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ 'Configure the x axis.'}}
+    </span>
+</h3>
+
+<div>
+    <label for="xMin" class="spinner">From</label>
+    <input name="xMin" value="{{xMin}}" data-increment="1" type="text" />
+</div>
+<div>
+    <label for="xMax" class="spinner">To</label>
+    <input name="xMax" value="{{xMax}}" data-increment="1" type="text" />
+</div>
+
+
+<h3>{{__ "Y Axis"}}
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ 'COnfigure the y axis.'}}
+    </span>
+</h3>
+
+<div>
+    <label for="yMin" class="spinner">From</label>
+    <input name="yMin" value="{{yMin}}" data-increment="1" type="text" />
+</div>
+<div>
+    <label for="yMax" class="spinner">To</label>
+    <input name="yMax" value="{{yMax}}" data-increment="1" type="text" />
+</div>
+
+
 <div class="panel">
     
     <label for="" class="has-icon">{{__ "Available Graphs"}}</label>

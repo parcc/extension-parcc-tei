@@ -81,7 +81,7 @@ define([
 
                 //clear existing drawn elements (if any)
                 clearPlot();
-                clearPoint()
+                clearPoint();
 
                 //create canvas
                 canvas = createCanvas($container, {});
@@ -208,22 +208,11 @@ define([
                 mathFunctions = graphs;
                 showControl(mathFunctions);
             });
+            
             _this.on('gridchange', function(config){
                 //the configuration of the gird, point or line have changed:
                 initGrid($container, _this.config.grid);
             });
-
-            _.delay(function(){
-                return;
-                _this.trigger('functionschange', [['exponential', 'quadratic']]);
-                console.log('2000');
-            }, 2000);
-
-            _.delay(function(){
-                return;
-                _this.trigger('gridchange', [{}]);
-                console.log('6000');
-            }, 6000);
 
         },
         /**
