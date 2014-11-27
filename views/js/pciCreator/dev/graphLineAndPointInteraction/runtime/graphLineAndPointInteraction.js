@@ -6,7 +6,9 @@ define([
     'OAT/scale.raphael',
     'PARCC/gridFactory',
     'PARCC/pointFactory',
-    'PARCC/plotFactory'
+    'PARCC/plotFactory',
+    './wrappers/points.js',
+    './wrappers/lines.js'
     ], function(
         $,
         qtiCustomInteractionContext,
@@ -15,7 +17,9 @@ define([
         scaleRaphael,
         gridFactory,
         pointFactory,
-        PlotFactory
+        PlotFactory,
+        pointWrapper,
+        lineWrapper
     ){
 
     'use strict';
@@ -63,37 +67,40 @@ define([
             // Make it clickable //
             ///////////////////////
             grid.clickable();
-            var plotFactory = new PlotFactory(grid);
-            //////////////////////////////////////
-            // How many lines set did we have ? //
-            //////////////////////////////////////
-            var sets = [];
-            $('[data-set-color]').each(function(){
-                sets.push({
-                    color : $(this).data('set-color'),
-                    points : [],
-                    active : false
-                });
-            }).click(function() {
-                // Get the currently active set and inactivate it
-                var previouslyActiveSet = _.find(sets,{active : true});
-                previouslyActiveSet.active = false;
-                // Iterate on every other items and remove the flow on points
-                _.forEach(previouslyActiveSet.points,function(value){
-                    value.hideGlow();
-                });
-                // Activate the right set
-                var newActiveSet = _.find(sets,{color : $(this).data('set-color')});
-                newActiveSet.active = true;
-                _.forEach(newActiveSet.points, function(value){
-                    value.showGlow();
-                });
-            });
-            sets[0].active = true;
-            ///////////////////////////
-            // Catch the Click Event //
-            ///////////////////////////
+
+            // var plotFactory = new PlotFactory(grid);
+            //
+            // //////////////////////////////////////
+            // // How many lines set did we have ? //
+            // //////////////////////////////////////
+            // var sets = [];
+            // $('[data-set-color]').each(function(){
+            //     sets.push({
+            //         color : $(this).data('set-color'),
+            //         points : [],
+            //         active : false
+            //     });
+            // }).click(function() {
+            //     // Get the currently active set and inactivate it
+            //     var previouslyActiveSet = _.find(sets,{active : true});
+            //     previouslyActiveSet.active = false;
+            //     // Iterate on every other items and remove the flow on points
+            //     _.forEach(previouslyActiveSet.points,function(value){
+            //         value.hideGlow();
+            //     });
+            //     // Activate the right set
+            //     var newActiveSet = _.find(sets,{color : $(this).data('set-color')});
+            //     newActiveSet.active = true;
+            //     _.forEach(newActiveSet.points, function(value){
+            //         value.showGlow();
+            //     });
+            // });
+            // sets[0].active = true;
+            // ///////////////////////////
+            // // Catch the Click Event //
+            // ///////////////////////////
             grid.children.click(function(event){
+
                 ////////////////////////////////////
                 // Get the coordinate for a click //
                 ////////////////////////////////////
@@ -101,55 +108,20 @@ define([
                 wfactor = canvas.w / canvas.width,
                 fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
                 fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
-                /////////////////////////
-                // Get the current set //
-                /////////////////////////
-                var activeSet = _.find(sets,{active : true});
-                ///////////////////////////////////////////////////////////
-                // Create points or change their position inside the set //
-                ///////////////////////////////////////////////////////////
-                if (activeSet.points.length < 2) {
-                    var newPoint = pointFactory(canvas, grid, {
-                        x : fx,
-                        y : fy,
-                        color : activeSet.color
-                    });
-                    // Draw the point
-                    newPoint.render();
-                    // Enable drag'n'drop hability
-                    newPoint.drag();
-                    // Add it to the list of points
-                    activeSet.points.push(newPoint);
-                    // Raise event ready for line plot
-                    if (activeSet.points.length === 2) {$(dom).trigger('pairPointReady');}
-                }else{
-                    // Get the last point placed
-                    var oldPoint = activeSet.points.pop();
-                    // Change their coordinates for new ones
-                    oldPoint.setCoord(fx, fy);
-                    // Re-draw the point
-                    oldPoint.render();
-                    // re-enable the drag'n'drop
-                    oldPoint.drag();
-                    // Add it back to the list
-                    activeSet.points.push(oldPoint);
-                    // Raise event ready for a line plot
-                    $(dom).trigger('pairPointReady');
-                }
+
+
+                $(canvas.canvas).trigger('click.grid',{x: fx, y: fy});
+
+                var element = lineWrapper;
+                element.initialize(canvas,grid,{color: '#0f904a'});
+
+                // /////////////////////////
+                // // Get the current set //
+                // /////////////////////////
+                // var activeSet = _.find(sets,{active : true});
 
             });
 
-            //////////////////////////////////////////////////////
-            // Listen for readyness of drawing line and draw it //
-            //////////////////////////////////////////////////////
-            $(dom).on('pairPointReady',function(){
-                // Get the Active Set
-                var activeSet = _.find(sets,{active : true});
-                // If there's a line, remove it
-                if(activeSet.line){activeSet.line.remove();}
-                // Create and store the new line
-                activeSet.line = plotFactory.plotLinear(activeSet.points[0],activeSet.points[1],{color:activeSet.color});
-            });
 
         },
         /**

@@ -11,7 +11,9 @@
         "PARCC/graphFunction",
         "PARCC/gridFactory",
         "PARCC/pointFactory",
-        "PARCC/plotFactory"
+        "PARCC/plotFactory",
+        "./runtime/wrappers/points",
+        "./runtime/wrappers/lines"
     ],
     "css": [
         "runtime/css/graphLineAndPointInteraction.css"
