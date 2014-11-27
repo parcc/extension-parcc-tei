@@ -1,4 +1,4 @@
-define(['IMSGlobal/jquery_2_1_1'], function($){
+define(['IMSGlobal/jquery_2_1_1','OAT/lodash'], function($, _){
     'use strict';
     /**
      * Point Factory
@@ -35,6 +35,8 @@ define(['IMSGlobal/jquery_2_1_1'], function($){
         var obj = {
             /** @type {Object} Paper.set of elements */
             children : paper.set(),
+            /** @type {string} Unique ID */
+            uid :  _.uniqueId(),
             /**
              * Set _color value
              * @param {String} color
@@ -120,15 +122,17 @@ define(['IMSGlobal/jquery_2_1_1'], function($){
              */
             drag : function(){
                 var self = this,
-                bb;
+                bb,
+                moved = false;
                 this.children.drag(function (dx, dy) {
+                    moved = true;
                     /** @type {Object} The current bounding box */
                     bb = self.children.getBBox();
                     var newX = (self.oBB.x - bb.x + dx),
                     newY = (self.oBB.y - bb.y + dy);
                     self.children.translate(newX,newY);
                 },function () {
-
+                    moved = false;
                     //trigger event
                     if(typeof _events.dragStart === 'function'){
                         _events.dragStart.call(self);
@@ -139,18 +143,23 @@ define(['IMSGlobal/jquery_2_1_1'], function($){
                                        instead, we'll use a bounding box representation and use their values*/
                     self.oBB = self.children.getBBox();
                 },function(){
-                    var newX = (bb.x + (bb.width/2)),
-                    newY = (bb.y + (bb.width/2));
-                    /** Set Coordinate with center of the bounding box */
-                    self.setCoord(newX,newY);
-                    /** Call for a render again */
-                    self.children.translate(self.getX() - newX,self.getY() - newY);
+                    if (moved) {
+                        var newX = (bb.x + (bb.width/2)),
+                        newY = (bb.y + (bb.width/2));
+                        /** Set Coordinate with center of the bounding box */
+                        self.setCoord(newX,newY);
+                        /** Call for a render again */
+                        self.children.translate(self.getX() - newX,self.getY() - newY);
 
-                    //trigger event
-                    if(typeof _events.dragStop === 'function'){
-                        _events.dragStop.call(self);
+                        //trigger event
+                        if(typeof _events.dragStop === 'function'){
+                            _events.dragStop.call(self);
+                        }
+                        $(paper.canvas).trigger('point.moved',self);
+                    }else{
+                        self.children.remove().clear();
+                        $(paper.canvas).trigger('point.removed',self);
                     }
-                    $(paper.canvas).trigger('point.moved');
                 });
             },
             /**

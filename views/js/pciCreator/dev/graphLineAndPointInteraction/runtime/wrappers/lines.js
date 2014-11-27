@@ -32,7 +32,8 @@ define([
                 plotFactory = new PlotFactory(grid);
 
 
-            $(paper.canvas).on('grid_click',function(event,coord){
+            $(paper.canvas).off('grid_click').on('grid_click',function(event,coord){
+                console.log('grid click');
                 if (self.points.length < 2) {
                     var newPoint = pointFactory(paper, grid, {
                         x : coord.x,
@@ -65,6 +66,23 @@ define([
                     self.points.push(oldPoint);
                     // Raise event ready for a line plot
                     $(paper.canvas).trigger('line.pairPointReady');
+                }
+            });
+
+            $(paper.canvas).off('point.removed').on('point.removed',function(event,removedPoint){
+                if (self.points) {
+                    // get the point to remove from the "registry"
+                    var pointToDelete = _.findIndex(self.points,{uid : removedPoint.uid});
+                    if (pointToDelete > -1) {
+                        console.log('point removed from canvas, let s delete it from array');
+                        self.points.splice(pointToDelete,1);
+                        // Remove line
+                        if(self.line){
+                            console.log('there s a line : removing it');
+                            self.line.remove();
+                            self.line = null;
+                        }
+                    }
                 }
             });
             $(paper.canvas).on('line.pairPointReady',function(){
