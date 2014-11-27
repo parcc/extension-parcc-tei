@@ -45,7 +45,7 @@ define([
                 radius : 7
             });
             var self = this;
-            $(paper.canvas).on('grid_click',function(event,coord){
+            $(paper.canvas).on('click.grid',function(event,coord){
                 if(self.point !== null){
                     var oldPoint = self.point;
                     // Change their coordinates for new ones

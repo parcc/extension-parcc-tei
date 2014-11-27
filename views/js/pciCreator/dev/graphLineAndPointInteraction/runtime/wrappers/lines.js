@@ -32,8 +32,7 @@ define([
                 plotFactory = new PlotFactory(grid);
 
 
-            $(paper.canvas).off('grid_click').on('grid_click',function(event,coord){
-                console.log('grid click');
+            $(paper.canvas).off('click.grid').on('click.grid',function(event,coord){
                 if (self.points.length < 2) {
                     var newPoint = pointFactory(paper, grid, {
                         x : coord.x,
@@ -48,9 +47,9 @@ define([
                     self.points.push(newPoint);
                     // Raise event ready for line plot
                     if (self.points.length === 2) {
-                        $(paper.canvas).trigger('line.pairPointReady');
-                        $(paper.canvas).on('point.moved',function(){
-                            $(paper.canvas).trigger('line.pairPointReady');
+                        $(paper.canvas).trigger('pairPointReady.line');
+                        $(paper.canvas).on('moved.point',function(){
+                            $(paper.canvas).trigger('pairPointReady.line');
                         });
                     }
                 }else{
@@ -65,11 +64,11 @@ define([
                     // Add it back to the list
                     self.points.push(oldPoint);
                     // Raise event ready for a line plot
-                    $(paper.canvas).trigger('line.pairPointReady');
+                    $(paper.canvas).trigger('pairPointReady.line');
                 }
             });
 
-            $(paper.canvas).off('point.removed').on('point.removed',function(event,removedPoint){
+            $(paper.canvas).off('removed.point').on('removed.point',function(event,removedPoint){
                 if (self.points) {
                     // get the point to remove from the "registry"
                     var pointToDelete = _.findIndex(self.points,{uid : removedPoint.uid});
@@ -85,7 +84,7 @@ define([
                     }
                 }
             });
-            $(paper.canvas).on('line.pairPointReady',function(){
+            $(paper.canvas).on('pairPointReady.line',function(){
                 // Get the Active Set
                 // var activeSet = _.find(sets,{active : true});
                 // If there's a line, remove it

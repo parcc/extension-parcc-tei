@@ -155,10 +155,10 @@ define(['IMSGlobal/jquery_2_1_1','OAT/lodash'], function($, _){
                         if(typeof _events.dragStop === 'function'){
                             _events.dragStop.call(self);
                         }
-                        $(paper.canvas).trigger('point.moved',self);
+                        $(paper.canvas).trigger('moved.point',self);
                     }else{
                         self.children.remove().clear();
-                        $(paper.canvas).trigger('point.removed',self);
+                        $(paper.canvas).trigger('removed.point',self);
                     }
                 });
             },
