@@ -33,7 +33,11 @@ define([
          */
         getDefaultProperties : function(pci){
             return {
-                graphs : 'linear,absolute,quadratic,exponential,logarithmic,cosine,tangent'
+                graphs : 'linear,absolute,quadratic,exponential,logarithmic,cosine,tangent',
+                xMin : -10,
+                xMax : 10,
+                yMin : -10,
+                yMax : 10
             };
         },
         /**

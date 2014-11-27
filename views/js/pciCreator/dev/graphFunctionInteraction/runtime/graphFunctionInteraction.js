@@ -20,14 +20,32 @@ define([
 
     'use strict';
 
-    var _defaults = {};
-
+    function buildGridConfig(rawConfig){
+        
+        return {
+            x : {
+                start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
+                end : rawConfig.xMax === undefined ? 10 : parseInt(rawConfig.xMax),
+                unit : 20
+            },
+            y : {
+                //the y-axis is reversed 
+                start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
+                end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
+                unit : 20
+            }
+        };
+    }
+    
     function createCanvas($container, config){
-
-        config = _.defaults(config || {}, _defaults);
-
-        var canvas = scaleRaphael($('.shape-container', $container)[0], 400, 400);
-
+        
+        var padding = 2;
+        var canvas = scaleRaphael(
+                $('.shape-container', $container)[0],
+                (config.x.end - config.x.start) * config.x.unit + padding,
+                (config.y.end - config.y.start) * config.y.unit + padding
+            );
+        
         //@todo make it responsive
 
         return canvas;
@@ -64,19 +82,6 @@ define([
                 path,
                 mathFunction;
 
-            this.config.grid = {
-                x : {
-                    start : -10,
-                    end : 10,
-                    unit : 20
-                },
-                y : {
-                    start : -10,
-                    end : 10,
-                    unit : 20
-                }
-            };
-
             function initGrid($container, gridConfig){
 
                 //clear existing drawn elements (if any)
@@ -84,7 +89,7 @@ define([
                 clearPoint();
 
                 //create canvas
-                canvas = createCanvas($container, {});
+                canvas = createCanvas($container, gridConfig);
                 grid = gridFactory(canvas, gridConfig);
                 grid.clickable();
 
@@ -190,7 +195,7 @@ define([
 
             }
 
-            initGrid($container, this.config.grid);
+            initGrid($container, buildGridConfig(this.config));
 
             showControl(mathFunctions);
 
@@ -208,10 +213,11 @@ define([
                 mathFunctions = graphs;
                 showControl(mathFunctions);
             });
-            
+
             _this.on('gridchange', function(config){
                 //the configuration of the gird, point or line have changed:
-                initGrid($container, _this.config.grid);
+                _this.config = config;
+                initGrid($container, buildGridConfig(config));
             });
 
         },

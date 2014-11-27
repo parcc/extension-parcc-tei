@@ -9,10 +9,10 @@ define([
 ], function(stateFactory, Question, formElement, containerEditor, formTpl, _, $){
 
     var StateQuestion = stateFactory.extend(Question, function(){
-        
-        var interaction = this.widget.element, 
+
+        var interaction = this.widget.element,
             $container = this.widget.$container;
-            
+
         //init prompt editor
         containerEditor.create($container.find('.prompt'), {
             change : function(text){
@@ -44,7 +44,7 @@ define([
                 exponential : {label : 'Exponential'},
                 logarithmic : {label : 'Logarithmic'},
                 cosine : {label : 'Sin/Cos'},
-                tangent : {label : 'Tan/Cotan'},
+                tangent : {label : 'Tan/Cotan'}
             };
 
         var graphSet = interaction.prop('graphs');
@@ -57,19 +57,36 @@ define([
         $form.html(formTpl({
             serial : response.serial,
             identifier : interaction.attr('responseIdentifier'),
-            graphs : graphs
+            graphs : graphs,
+            xMin : interaction.prop('xMin'),
+            xMax : interaction.prop('xMax'),
+            yMin : interaction.prop('yMin'),
+            yMax : interaction.prop('yMax')
         }));
 
         //init form javascript
         formElement.initWidget($form);
-
-        //init data change callbacks
-        formElement.setChangeCallbacks($form, interaction, {
+        
+        //set change callbacks:
+        var options = {
+            updateCardinality: false,
+            attrMethodNames : {set : 'prop', remove : 'removeProp'},
+            callback : function(){
+                interaction.triggerPci('gridchange', [interaction.getProperties()]);
+            }
+        };
+        var xAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'xMin', 'xMax', options);
+        var yAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'yMin', 'yMax', options);
+        var changeCallbacks = {
             identifier : function(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             }
-        });
+        };
+        changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks)
+
+        //init data change callbacks
+        formElement.setChangeCallbacks($form, interaction, changeCallbacks);
 
         var $graphs = $form.find('[name=graphs]');
         $graphs.on('change', function(){
