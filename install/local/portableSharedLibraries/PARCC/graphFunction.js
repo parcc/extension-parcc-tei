@@ -180,8 +180,7 @@ define(['OAT/lodash'], function(_){
         get : function(point1, point2){
 
             if(checkPairOfPoints(point1, point2) &&
-                point1.y > 0 &&
-                point2.y > 0){
+                point1.y * point2.y > 0){
 
                 var b = Math.log(point2.y / point1.y) / (point2.x - point1.x);
                 var a = point1.y / Math.exp(b * point1.x);

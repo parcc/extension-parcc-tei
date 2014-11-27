@@ -2,56 +2,100 @@ define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
-    'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
+    'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!graphFunctionInteraction/creator/tpl/propertiesForm',
-    'lodash'
-], function(stateFactory, Question, formElement, editor, formTpl, _){
+    'lodash',
+    'jquery'
+], function(stateFactory, Question, formElement, containerEditor, formTpl, _, $){
 
     var StateQuestion = stateFactory.extend(Question, function(){
-        
-        //code to execute when entering this state
+
+        var interaction = this.widget.element,
+            $container = this.widget.$container;
+
+        //init prompt editor
+        containerEditor.create($container.find('.prompt'), {
+            change : function(text){
+                interaction.data('prompt', text);
+                interaction.updateMarkup();
+            },
+            markup : interaction.markup,
+            markupSelector : '.prompt',
+            related : interaction
+        });
 
     }, function(){
-        
-        //code to execute when leaving this state
+
+        //destroy editors
+        containerEditor.destroy(this.widget.$container.find('.prompt'));
 
     });
 
     StateQuestion.prototype.initForm = function(){
 
-        //code to init your interaction property form (on the right side bar)
-        
-        var widget = this.widget, 
+        var widget = this.widget,
             interaction = widget.element,
             $form = widget.$form,
             response = interaction.getResponseDeclaration(),
-            somePropValue = 'some prop value';
-        
+            graphs = {
+                linear : {label : 'Linear'},
+                absolute : {label : 'Absolute Value'},
+                quadratic : {label : 'Quadratic'},
+                exponential : {label : 'Exponential'},
+                logarithmic : {label : 'Logarithmic'},
+                cosine : {label : 'Sin/Cos'},
+                tangent : {label : 'Tan/Cotan'}
+            };
+
+        var graphSet = interaction.prop('graphs');
+        graphSet = graphSet ? graphSet.split(',') : [];
+        _.each(graphSet, function(graph){
+            graphs[graph].checked = true;
+        });
+
         //render the form using the form template
         $form.html(formTpl({
             serial : response.serial,
-            someProp : somePropValue,
-            identifier : interaction.attr('responseIdentifier')
+            identifier : interaction.attr('responseIdentifier'),
+            graphs : graphs,
+            xMin : interaction.prop('xMin'),
+            xMax : interaction.prop('xMax'),
+            yMin : interaction.prop('yMin'),
+            yMax : interaction.prop('yMax')
         }));
-        
+
         //init form javascript
         formElement.initWidget($form);
-
-        //init data change callbacks
-        formElement.setChangeCallbacks($form, interaction, {
-            someProp : function(interaction, value){
-
-                //update the pci property value:
-                interaction.prop('someProp', value);
-
-                //update rendering (if required to update the visual)
-                //warning heavy operation : might be a good idea to use lodash.throttle()
-                widget.refresh();
-            },
+        
+        //set change callbacks:
+        var options = {
+            updateCardinality: false,
+            attrMethodNames : {set : 'prop', remove : 'removeProp'},
+            callback : function(){
+                interaction.triggerPci('gridchange', [interaction.getProperties()]);
+            }
+        };
+        var xAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'xMin', 'xMax', options);
+        var yAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'yMin', 'yMax', options);
+        var changeCallbacks = {
             identifier : function(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             }
+        };
+        changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks)
+
+        //init data change callbacks
+        formElement.setChangeCallbacks($form, interaction, changeCallbacks);
+
+        var $graphs = $form.find('[name=graphs]');
+        $graphs.on('change', function(){
+            var checked = [];
+            $graphs.filter(':checked').each(function(){
+                checked.push($(this).val());
+            });
+            interaction.prop('graphs', checked.join(','));
+            interaction.triggerPci('functionschange', [checked]);
         });
     };
 

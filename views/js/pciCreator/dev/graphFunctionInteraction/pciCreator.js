@@ -33,16 +33,11 @@ define([
          */
         getDefaultProperties : function(pci){
             return {
-                'radius' : 100,
-                'selectedPartitionsColor' : '#ff0000',
-                'partitionColor' : '#ffffff',
-                'outlineColor' : '#000000',
-                'outlineThickness' : 1,
-                'partitionMax' : 12,
-                'partitionMin' : 1,
-                'partitionInit' : 2,
-                'selectedPartitionsInit' : 0,
-                'selectedPartitions' : '[]'
+                graphs : 'linear,absolute,quadratic,exponential,logarithmic,cosine,tangent',
+                xMin : -10,
+                xMax : 10,
+                yMin : -10,
+                yMax : 10
             };
         },
         /**
@@ -68,11 +63,11 @@ define([
          * @returns {function} handlebar template
          */
         getMarkupData : function(pci, defaultData){
-            
-            return _.defaults(defaultData , {
+
+            return _.defaults(defaultData, {
                 prompt : pci.data('prompt')
             });
-            
+
             return defaultData;
         }
     };

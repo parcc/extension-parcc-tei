@@ -1,6 +1,7 @@
 define([
     'IMSGlobal/jquery_2_1_1',
     'qtiCustomInteractionContext',
+    'OAT/lodash',
     'OAT/util/event',
     'OAT/scale.raphael',
     'PARCC/gridFactory',
@@ -9,6 +10,7 @@ define([
 ], function(
     $,
     qtiCustomInteractionContext,
+    _,
     event,
     scaleRaphael,
     gridFactory,
@@ -17,6 +19,37 @@ define([
     ){
 
     'use strict';
+
+    function buildGridConfig(rawConfig){
+        
+        return {
+            x : {
+                start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
+                end : rawConfig.xMax === undefined ? 10 : parseInt(rawConfig.xMax),
+                unit : 20
+            },
+            y : {
+                //the y-axis is reversed 
+                start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
+                end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
+                unit : 20
+            }
+        };
+    }
+    
+    function createCanvas($container, config){
+        
+        var padding = 2;
+        var canvas = scaleRaphael(
+                $('.shape-container', $container)[0],
+                (config.x.end - config.x.start) * config.x.unit + padding,
+                (config.y.end - config.y.start) * config.y.unit + padding
+            );
+        
+        //@todo make it responsive
+
+        return canvas;
+    }
 
     var graphFunctionInteraction = {
         id : -1,
@@ -39,93 +72,96 @@ define([
             this.config = config || {};
 
             var $container = $(dom);
+            var mathFunctions = config.graphs.split(',');
+            var $shapeControls = $container.find('.shape-controls');
+            var _this = this,
+                canvas,
+                grid,
+                points = [],
+                plotFactory,
+                path,
+                mathFunction;
 
-            this.config.grid = {
-                x : {
-                    start : -10,
-                    end : 10,
-                    unit : 20
-                },
-                y : {
-                    start : -10,
-                    end : 10,
-                    unit : 20
-                }
-            };
-            ///////////////////
-            // Create Canvas //
-            ///////////////////
-            var canvas = scaleRaphael($('.shape-container', $container)[0], 500, 400);
+            function initGrid($container, gridConfig){
 
-            //////////////////////////////
-            // Instanciate a basic grid //
-            //////////////////////////////
-            var grid = gridFactory(canvas, this.config.grid);
-            ///////////////////////
-            // Make it clickable //
-            ///////////////////////
-            grid.clickable();
-            ///////////////////////////
-            // Catch the Click Event //
-            ///////////////////////////
-            var points = [];
+                //clear existing drawn elements (if any)
+                clearPlot();
+                clearPoint();
 
-            grid.children.click(function(event){
-                ////////////////////////////////////
-                // Get the coordinate for a click //
-                ////////////////////////////////////
-                var bnds = event.target.getBoundingClientRect(),
-                    wfactor = canvas.w / canvas.width,
-                    fx = Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
-                    fy = Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
-                ////////////////////////////////////////////////////////////////
-                // Create the first point or the second or replace the second //
-                // According the rules defined by the client                  //
-                ////////////////////////////////////////////////////////////////
-                if(points.length < 2){
-                    var newPoint = pointFactory(canvas, grid, {
-                        x : fx,
-                        y : fy,
-                        on : {
-                            dragStart : clear,
-                            dragStop : plot
+                //create canvas
+                canvas = createCanvas($container, gridConfig);
+                grid = gridFactory(canvas, gridConfig);
+                grid.clickable();
+
+                //bind click event:
+                grid.children.click(function(event){
+
+                    // Get the coordinate for a click
+                    var bnds = event.target.getBoundingClientRect(),
+                        wfactor = canvas.w / canvas.width,
+                        fx = Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
+                        fy = Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
+
+                    // Create the first point or the second or replace the second according the rules defined by the client                  
+                    if(points.length < 2){
+                        var newPoint = pointFactory(canvas, grid, {
+                            x : fx,
+                            y : fy,
+                            on : {
+                                dragStart : clearPlot,
+                                dragStop : plot
+                            }
+                        });
+                        // Draw the point
+                        newPoint.render();
+                        // Enable drag'n'drop hability
+                        newPoint.drag();
+                        // Add it to the list of points
+                        points.push(newPoint);
+
+                        // pair ready : plot the graph
+                        if(points.length === 2){
+                            plot();
                         }
-                    });
-                    // Draw the point
-                    newPoint.render();
-                    // Enable drag'n'drop hability
-                    newPoint.drag();
-                    // Add it to the list of points
-                    points.push(newPoint);
-                    // Raise event ready for line plot
-                    if(points.length === 2){
-                        $container.trigger('pairPointReady');
+                    }else{
+                        // Get the last point placed
+                        var oldPoint = points.pop();
+                        // Change their coordinates for new ones
+                        oldPoint.setCoord(fx, fy);
+                        // Re-draw the point
+                        oldPoint.render();
+                        // re-enable the drag'n'drop
+                        oldPoint.drag();
+                        // Add it back to the list
+                        points.push(oldPoint);
+                        // pair ready : plot the graph
+                        plot();
                     }
-                }else{
-                    // Get the last point placed
-                    var oldPoint = points.pop();
-                    // Change their coordinates for new ones
-                    oldPoint.setCoord(fx, fy);
-                    // Re-draw the point
-                    oldPoint.render();
-                    // re-enable the drag'n'drop
-                    oldPoint.drag();
-                    // Add it back to the list
-                    points.push(oldPoint);
-                    // Raise event ready for a line plot
-                    $container.trigger('pairPointReady');
-                }
 
-            });
+                });
 
-            var plotFactory = new PlotFactory(grid);
-            var path, mathFunction;
-            $container.on('pairPointReady', plot);
+                //init related plot factory
+                plotFactory = new PlotFactory(grid);
+
+                return grid;
+            }
+
+            function showControl(graphs){
+
+                //change conrtol buttons' classes
+                $shapeControls.children('button').removeClass('available');
+                _.each(graphs, function(graph){
+                    $shapeControls.find('[name=' + graph + ']').addClass('available');
+                });
+
+                //activate the first one
+                activateButton($shapeControls.children('.available:first'));
+            }
 
             function activateButton($button){
 
                 if(typeof $button === 'string'){
-                    $button = $container.find('.shape-controls [name=' + $button + ']');
+                    $button = $shapeControls.find('[name=' + $button + ']');
                 }
 
                 var fnName = $button.val();
@@ -135,10 +171,15 @@ define([
                 plot();
             }
 
-            function clear(){
+            function clearPlot(){
                 if(path){
                     path.remove();
                 }
+            }
+
+            function clearPoint(){
+                points = [];
+                //@todo remove the points from the graph
             }
 
             function plot(){
@@ -148,17 +189,37 @@ define([
 
                 if(point1 && point2){
 
-                    clear();
+                    clearPlot();
                     path = plotFactory[mathFunction](point1, point2);
                 }
 
             }
 
-            activateButton('linear');
+            initGrid($container, buildGridConfig(this.config));
 
-            $container.find('.shape-controls').on('click', 'button', function(){
+            showControl(mathFunctions);
+
+            $shapeControls.on('click', 'button', function(){
                 activateButton($(this));
             });
+
+            _this.on('functionschange', function(graphs){
+
+                //clear drawn elements:
+                clearPlot();
+                clearPoint()
+
+                //update list of available graph types
+                mathFunctions = graphs;
+                showControl(mathFunctions);
+            });
+
+            _this.on('gridchange', function(config){
+                //the configuration of the gird, point or line have changed:
+                _this.config = config;
+                initGrid($container, buildGridConfig(config));
+            });
+
         },
         /**
          * Programmatically set the response following the json schema described in
