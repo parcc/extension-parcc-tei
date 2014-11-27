@@ -2,19 +2,32 @@ define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
-    'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
+    'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!graphFunctionInteraction/creator/tpl/propertiesForm',
     'lodash',
     'jquery'
-], function(stateFactory, Question, formElement, editor, formTpl, _, $){
+], function(stateFactory, Question, formElement, containerEditor, formTpl, _, $){
 
     var StateQuestion = stateFactory.extend(Question, function(){
-
-        //code to execute when entering this state
+        
+        var interaction = this.widget.element, 
+            $container = this.widget.$container;
+            
+        //init prompt editor
+        containerEditor.create($container.find('.prompt'), {
+            change : function(text){
+                interaction.data('prompt', text);
+                interaction.updateMarkup();
+            },
+            markup : interaction.markup,
+            markupSelector : '.prompt',
+            related : interaction
+        });
 
     }, function(){
 
-        //code to execute when leaving this state
+        //destroy editors
+        containerEditor.destroy(this.widget.$container.find('.prompt'));
 
     });
 
@@ -59,8 +72,8 @@ define([
                 interaction.attr('responseIdentifier', value);
             }
         });
-        
-        var $graphs= $form.find('[name=graphs]');
+
+        var $graphs = $form.find('[name=graphs]');
         $graphs.on('change', function(){
             var checked = [];
             $graphs.filter(':checked').each(function(){
