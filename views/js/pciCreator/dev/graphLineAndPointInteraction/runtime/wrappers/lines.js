@@ -32,7 +32,7 @@ define([
                 plotFactory = new PlotFactory(grid);
 
 
-            $(paper.canvas).off('click.grid').on('click.grid',function(event,coord){
+            $(paper.canvas).off('click_grid').on('click_grid',function(event,coord){
                 if (self.points.length < 2) {
                     var newPoint = pointFactory(paper, grid, {
                         x : coord.x,

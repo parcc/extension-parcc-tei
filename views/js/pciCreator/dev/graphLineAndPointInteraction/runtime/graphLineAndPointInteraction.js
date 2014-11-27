@@ -110,7 +110,7 @@ define([
                 fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
 
 
-                $(canvas.canvas).trigger('click.grid',{x: fx, y: fy});
+                $(canvas.canvas).trigger('click_grid',{x: fx, y: fy});
 
                 var element = lineWrapper;
                 element.initialize(canvas,grid,{color: '#0f904a'});
