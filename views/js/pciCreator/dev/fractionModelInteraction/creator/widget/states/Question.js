@@ -2,7 +2,7 @@ define([
     'lodash',
     'jquery',
     'taoQtiItem/qtiCreator/widgets/states/factory',
-    'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
+    'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
@@ -55,35 +55,8 @@ define([
         //destroy editors
         simpleEditor.destroy(this.widget.$container);
         containerEditor.destroy(this.widget.$container.find('.prompt'));
+        this.destroyColorPickers();
     });
-    
-    StateQuestion.prototype.initColorPickers = function(){
-        
-        $('.color-trigger', this.widget.$form).each(function(){
-            var $context = $(this).closest('.panel'),
-                color = $('input', $context).val();
-            $(this).css('background-color', color);
-        });
-
-        $('.color-trigger').on('click', function(){
-            var $context = $(this).closest('.item-editor-color-picker'),
-                $this = $(this),
-                input = $this.siblings('input[type="hidden"]')[0],
-                $container = $($('.color-picker-container', $context)).show(),
-                color = $('input', $(this).closest('.panel')).val();
-
-            // Init the color picker
-            $('.color-picker', $context).farbtastic('.color-picker-input', $context);
-            // Set the color to the currently set on the form init
-            $('.color-picker-input', $context).val(color).trigger('keyup');
-            // Populate the input with the color on quitting the modal
-            $('[data-close]', $container).off('click').on('click', function(){
-                var color = $('.color-picker-input', $context).val();
-                $container.hide();
-                $(input, $context).val(color).trigger('change');
-            });
-        });
-    };
     
     StateQuestion.prototype.initForm = function(){
 
