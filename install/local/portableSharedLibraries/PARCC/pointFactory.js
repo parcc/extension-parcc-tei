@@ -1,4 +1,4 @@
-define(['IMSGlobal/jquery_2_1_1','OAT/lodash'], function($, _){
+define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
     'use strict';
     /**
      * Point Factory
@@ -21,17 +21,17 @@ define(['IMSGlobal/jquery_2_1_1','OAT/lodash'], function($, _){
         if(!options.x || !options.y){throw 'Missing Parameters. Need to specify x,y';}
         /** @type {String} color */
         var _color = options.color || '#f00',
-        /** @type {Number} radius of the point representation */
-        _r = parseInt(options.radius) || 10,
-        /** @type {Number} x coordinate (in px) */
-        _x = 0,
-        /** @type {Number} y coordinate (in px) */
-        _y = 1,
-        /** @type {Number} radius for the glowing effect */
-        _rGlow = parseInt(options.glowRadius) || _r * 3,
-        /** @type {Object} events callback */
+            /** @type {Number} radius of the point representation */
+            _r = parseInt(options.radius) || 10,
+            /** @type {Number} x coordinate (in px) */
+            _x = 0,
+            /** @type {Number} y coordinate (in px) */
+            _y = 1,
+            /** @type {Number} radius for the glowing effect */
+            _rGlow = parseInt(options.glowRadius) || _r * 3,
+            /** @type {Object} events callback */
         _events =   options.on || {};
-
+        
         var obj = {
             /** @type {Object} Paper.set of elements */
             children : paper.set(),
@@ -73,6 +73,17 @@ define(['IMSGlobal/jquery_2_1_1','OAT/lodash'], function($, _){
                 _y = parseInt(val);
             },
             /**
+             * Set coordinate in the cartesian coordinate system
+             * 
+             * @param {Number} x
+             * @param {Number} y
+             * @returns {undefined}
+             */
+            setCartesianCoord : function(x, y){
+                _x = grid.getOriginPosition().left + grid.getUnitSizes().x * x;
+                _y = grid.getOriginPosition().top - grid.getUnitSizes().y * y;
+            },
+            /**
              * Set new coordinates for the point
              * @param {Number} x
              * @param {Number} y
@@ -112,24 +123,33 @@ define(['IMSGlobal/jquery_2_1_1','OAT/lodash'], function($, _){
                     fill : 'rgba(' + rgb.r + ',' + rgb.g +',' + rgb.b + ',0.3 )',
                     stroke : 'none'
                 });
-                if (this.children.length > 0) { this.children.remove().clear();}
-                this.children.push(circle,glow).attr({
+                this.remove();
+                this.children.push(circle, glow).attr({
                     cursor : 'move'
                 });
+            },
+            /**
+             * Remove the point from the canvas
+             * @returns {undefined}
+             */
+            remove : function(){
+                if(this.children.length > 0){
+                    this.children.remove().clear();
+                }
             },
             /**
              * Activate the dran'n'drop capability provide by RaphaelJS
              */
             drag : function(){
                 var self = this,
-                bb,
-                moved = false;
+                    bb,
+                    moved = false;
                 this.children.drag(function (dx, dy) {
                     moved = true;
                     /** @type {Object} The current bounding box */
                     bb = self.children.getBBox();
                     var newX = (self.oBB.x - bb.x + dx),
-                    newY = (self.oBB.y - bb.y + dy);
+                        newY = (self.oBB.y - bb.y + dy);
                     self.children.translate(newX,newY);
                 },function () {
                     moved = false;
@@ -139,8 +159,8 @@ define(['IMSGlobal/jquery_2_1_1','OAT/lodash'], function($, _){
                     }
 
                     /** @type {Object} Store the original bounding box
-                                       Since it's not just circle, it's impossible to use cx & cy
-                                       instead, we'll use a bounding box representation and use their values*/
+                     Since it's not just circle, it's impossible to use cx & cy
+                     instead, we'll use a bounding box representation and use their values*/
                     self.oBB = self.children.getBBox();
                 },function(){
                     if (moved) {
@@ -157,8 +177,8 @@ define(['IMSGlobal/jquery_2_1_1','OAT/lodash'], function($, _){
                         }
                         $(paper.canvas).trigger('moved.point',self);
                     }else{
-                        self.children.remove().clear();
-                        $(paper.canvas).trigger('removed.point',self);
+                        self.remove();
+                        $(paper.canvas).trigger('removed.point', self);
                     }
                 });
             },
@@ -188,7 +208,7 @@ define(['IMSGlobal/jquery_2_1_1','OAT/lodash'], function($, _){
              */
             hideGlow : function(){
                 if (this.children.length > 1) { this.children.pop().remove();}
-            }
+                }
         };
         obj.setCoord(options.x, options.y);
         return obj;

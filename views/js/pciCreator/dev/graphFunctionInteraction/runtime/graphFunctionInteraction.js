@@ -142,7 +142,7 @@ define([
 
                 //init related plot factory
                 plotFactory = new PlotFactory(grid);
-                
+
                 //add listener to removed.point
                 $(paper.canvas).off('removed.point').on('removed.point', function(event, removedPoint){
                     // get the point to remove from the "registry"
@@ -189,8 +189,10 @@ define([
             }
 
             function clearPoint(){
+                _.each(points, function(point){
+                    point.remove();
+                });
                 points = [];
-                //@todo remove the points from the graph
             }
 
             function plot(){
@@ -204,6 +206,39 @@ define([
                     path = plotFactory[mathFunction](point1, point2);
                 }
 
+            }
+
+            function addPoint(fx, fy){
+
+                var newPoint = pointFactory(paper, grid, {
+                    x : -100,
+                    y : -100,
+                    on : {
+                        dragStart : clearPlot,
+                        dragStop : plot
+                    }
+                });
+                
+                newPoint.setCartesianCoord(fx, fy);
+                
+                // Draw the point
+                newPoint.render();
+                // Enable drag'n'drop hability
+                newPoint.drag();
+                // Add it to the list of points
+                points.push(newPoint);
+
+                return newPoint;
+            }
+
+            function plotDefault(){
+                
+                clearPoint();
+                clearPlot();
+                
+                addPoint(1, 1);
+                addPoint(2, 2);
+                plot();
             }
 
             initGrid($container, buildGridConfig(this.config));
@@ -230,7 +265,8 @@ define([
                 _this.config = config;
                 initGrid($container, buildGridConfig(config));
             });
-
+            
+            plotDefault();
         },
         /**
          * Programmatically set the response following the json schema described in
