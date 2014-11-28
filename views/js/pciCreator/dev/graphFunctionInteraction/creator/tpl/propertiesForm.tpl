@@ -10,6 +10,8 @@
            data-validate="$notEmpty; $qtiIdentifier; $availableIdentifier(serial={{serial}});">
 </div>
 
+<hr/>
+
 <div class="panel creator-graphFunctionInteraction-range">
     <h3>{{__ "X axis"}}</h3>
     <label for="xMin" class="spinner">from</label>

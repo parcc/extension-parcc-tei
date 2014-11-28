@@ -236,6 +236,7 @@ define([
                 clearPlot();
                 
                 if(mathFunction === 'plotExponential' || mathFunction === 'plotLogarithmic'){
+                    //point at (0, 0) is undefined for exponential and logarithmic functions
                     addPoint(1, 1, true);
                     addPoint(2, 2, true);
                 }else{

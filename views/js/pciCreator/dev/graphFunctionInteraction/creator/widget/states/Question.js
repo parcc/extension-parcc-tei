@@ -1,6 +1,6 @@
 define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
-    'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
+    'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!graphFunctionInteraction/creator/tpl/propertiesForm',
@@ -23,14 +23,15 @@ define([
             markupSelector : '.prompt',
             related : interaction
         });
-
+        
+        //custom interaction state extends
         this.initColorPickers();
 
     }, function(){
 
         //destroy editors
         containerEditor.destroy(this.widget.$container.find('.prompt'));
-
+        this.destroyColorPickers();
     });
 
     function graphPropChangeCallback(interaction, value, name){
@@ -109,49 +110,6 @@ define([
             });
             interaction.prop('graphs', checked.join(','));
             interaction.triggerPci('functionschange', [checked]);
-        });
-    };
-
-    StateQuestion.prototype.initColorPickers = function(){
-
-        var $colorTriggers = this.widget.$form.find('.color-trigger');
-        
-        $colorTriggers.each(function(){
-
-            var $colorTrigger = $(this),
-                $input = $colorTrigger.siblings('input'),
-                color = $input.val();
-
-            //set color recorded in the hidden input to the color trigger
-            $colorTrigger.css('background-color', color);
-        });
-
-        $colorTriggers.on('click.color-picker', function(){
-
-            var $colorTrigger = $(this),
-                $context = $colorTrigger.closest('.item-editor-color-picker'),
-                $container = $context.find('.color-picker-container').show(),
-                $colorPicker = $container.find('.color-picker'),
-                $colorPickerInput = $container.find('.color-picker-input'),
-                $input = $colorTrigger.siblings('input[type="hidden"]'),
-                color = $input.val();
-
-            // Init the color picker
-            $colorPicker.farbtastic('.color-picker-input', $context);
-
-            // Set the color to the currently set on the form init
-            $colorPickerInput.val(color).trigger('keyup');
-
-            // Populate the input with the color on quitting the modal
-            $container.find('.closer').off('click').on('click', function(){
-                $container.hide();
-            });
-            
-            //listen to color change
-            $colorPicker.off('.farbtastic').on('colorchange.farbtastic', function(e, color){
-                $input.val(color).trigger('change');
-            });
-            
         });
     };
 
