@@ -21,7 +21,7 @@ define([
     'use strict';
 
     function buildGridConfig(rawConfig){
-        
+
         return {
             x : {
                 start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
@@ -36,19 +36,19 @@ define([
             }
         };
     }
-    
+
     function createCanvas($container, config){
-        
+
         var padding = 2;
-        var canvas = scaleRaphael(
-                $('.shape-container', $container)[0],
-                (config.x.end - config.x.start) * config.x.unit + padding,
-                (config.y.end - config.y.start) * config.y.unit + padding
+        var paper = scaleRaphael(
+            $('.shape-container', $container)[0],
+            (config.x.end - config.x.start) * config.x.unit + padding,
+            (config.y.end - config.y.start) * config.y.unit + padding
             );
-        
+
         //@todo make it responsive
 
-        return canvas;
+        return paper;
     }
 
     var graphFunctionInteraction = {
@@ -75,7 +75,7 @@ define([
             var mathFunctions = config.graphs.split(',');
             var $shapeControls = $container.find('.shape-controls');
             var _this = this,
-                canvas,
+                paper,
                 grid,
                 points = [],
                 plotFactory,
@@ -88,9 +88,9 @@ define([
                 clearPlot();
                 clearPoint();
 
-                //create canvas
-                canvas = createCanvas($container, gridConfig);
-                grid = gridFactory(canvas, gridConfig);
+                //create paper
+                paper = createCanvas($container, gridConfig);
+                grid = gridFactory(paper, gridConfig);
                 grid.clickable();
 
                 //bind click event:
@@ -98,13 +98,13 @@ define([
 
                     // Get the coordinate for a click
                     var bnds = event.target.getBoundingClientRect(),
-                        wfactor = canvas.w / canvas.width,
+                        wfactor = paper.w / paper.width,
                         fx = Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
                         fy = Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
                     // Create the first point or the second or replace the second according the rules defined by the client                  
                     if(points.length < 2){
-                        var newPoint = pointFactory(canvas, grid, {
+                        var newPoint = pointFactory(paper, grid, {
                             x : fx,
                             y : fy,
                             on : {
@@ -142,6 +142,17 @@ define([
 
                 //init related plot factory
                 plotFactory = new PlotFactory(grid);
+                
+                //add listener to removed.point
+                $(paper.canvas).off('removed.point').on('removed.point', function(event, removedPoint){
+                    // get the point to remove from the "registry"
+                    var pointToDelete = _.findIndex(points, {uid : removedPoint.uid});
+                    if(pointToDelete > -1){
+                        //remove it from the model
+                        points.splice(pointToDelete, 1);
+                        clearPlot();
+                    }
+                });
 
                 return grid;
             }
