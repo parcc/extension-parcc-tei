@@ -1,13 +1,28 @@
-<div class="graphLineAndPointInteraction">
+<div class="pointAndLineFunctionInteraction">
     <div class="prompt">
         {{{prompt}}}
     </div>
     <div class="shape-panel">
-        <h3 class="shape-title">{{{title}}}</h3>
-        <div class="shape-container"></div>
         <div class="shape-controls">
-            <button value="lineA" class="btn btn-error" type="button" data-set-color="#bb1a2a">Set A</button>
-            <button value="lineB" class="btn btn-info" type="button" data-set-color="#0c5d91">Set B</button>
+            <div class="templates">
+                <div class="template-lines">
+                    <button class="btn btn-info" name="lines" value=""></button>
+                </div>
+                <div class="template-points">
+                    <button class="btn btn-info" name="points" value=""></button>
+                </div>
+                <div class="template-segment">
+                    <button class="btn btn-info" name="segment" value=""></button>
+                </div>
+                <div class="template-solutionSet">
+                    <button class="btn btn-info" name="solutionSet" value=""></button>
+                </div>
+                <div class="template-setPoints">
+                    <button class="btn btn-info" name="setPoints" value=""></button>
+                </div>
+            </div>
+            <!-- Controll will be inserted here -->
         </div>
+        <div class="shape-container"></div>
     </div>
 </div>

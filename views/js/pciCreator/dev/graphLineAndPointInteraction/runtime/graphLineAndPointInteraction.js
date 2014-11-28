@@ -18,11 +18,69 @@ define([
         gridFactory,
         pointFactory,
         PlotFactory,
-        pointWrapper,
-        lineWrapper
+        pointsWrapper,
+        linesWrapper
     ){
 
     'use strict';
+
+    /**
+     * Sanitize configuration
+     * @param  {Object} rawConfig Raw Config from Authoring
+     * @return {Object}           Cleaned config ready to use
+     */
+    function buildGridConfig(rawConfig){
+        return {
+            x : {
+                start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
+                end : rawConfig.xMax === undefined ? 10 : parseInt(rawConfig.xMax),
+                unit : 20
+            },
+            y : {
+                //the y-axis is reversed
+                start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
+                end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
+                unit : 20
+            },
+            element : rawConfig.elements,
+            type : rawConfig.graphs === undefined ? 'points' : rawConfig.graphs
+        };
+    }
+    /**
+     * Create the minimum canvas and desplay it
+     * @param  {Object} $container jQuery node
+     * @param  {Object} config     configuration ( cleaned )
+     * @return {Object}            Paper ( RaphaelJS )
+     */
+    function createCanvas($container, config){
+
+        var padding = 2;
+        var paper = scaleRaphael(
+            $('.shape-container', $container)[0],
+            (config.x.end - config.x.start) * config.x.unit + padding,
+            (config.y.end - config.y.start) * config.y.unit + padding
+            );
+
+        //@todo make it responsive
+
+        return paper;
+    }
+
+    /**
+     * Dirty functiion to return the right wrapper for a given config element
+     * @param  {String} element Name of the element you want
+     * @return {Object}         Wrapper corresponding to this element
+     */
+    function getWrapper(element){
+        switch (element){
+            case 'points' :
+                return pointsWrapper;
+            case 'lines' :
+                return linesWrapper;
+            default :
+                return pointsWrapper;
+        }
+    }
 
     var graphLineAndPointInteraction = {
         id : -1,
@@ -41,32 +99,62 @@ define([
             this.dom = dom;
             this.config = config || {};
 
-            var $container = $(dom);
+            //add method on(), off() and trigger() to the current object
+            event.addEventMgr(this);
 
-            this.config.grid  = {
-                x: {
-                    start : -10,
-                    end : 10,
-                    unit : 20
-                },
-                y: {
-                    start : -10,
-                    end : 10,
-                    unit : 20
-                },
-            };
-            ///////////////////
-            // Create Canvas //
-            ///////////////////
-            var canvas = scaleRaphael($('.shape-container',$container)[0],500,400);
-            //////////////////////////////
-            // Instanciate a basic grid //
-            //////////////////////////////
-            var grid = gridFactory(canvas,this.config.grid);
-            ///////////////////////
-            // Make it clickable //
-            ///////////////////////
-            grid.clickable();
+            var $container = $(dom),
+                self = this;
+
+            /**
+             * Initialize a new graphic element called grid with all needed
+             * @param  {Object} $container jQuery node
+             * @param  {Object} gridConfig Config (cleaned)
+             */
+            function initGrid($container, gridConfig){
+                // @todo : Clear Everything
+
+                var paper = createCanvas($container, gridConfig);
+                var grid = gridFactory(paper,gridConfig);
+                grid.clickable();
+
+
+                grid.children.click(function(event){
+
+                    // Get the coordinate for a click
+                    var bnds = event.target.getBoundingClientRect(),
+                    wfactor = paper.w / paper.width,
+                    fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
+                    fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
+
+
+                    $(paper.canvas).trigger('click_grid',{x: fx, y: fy});
+
+
+                    var element = getWrapper(gridConfig.type);
+                    element.initialize(paper,grid,{color: '#0f904a'});
+
+                    self.on('configchange', function(){
+                        element.destroy();
+                    });
+
+                    // @todo : Get the current set
+                    // var activeSet = _.find(sets,{active : true});
+
+                });
+            }
+
+            initGrid($container, buildGridConfig(this.config));
+
+            this.on('configchange',function(options){
+                self.config = buildGridConfig(options);
+                initGrid($container, self.config);
+            });
+
+
+            this.on('gridchange', function(config){
+                self.config = config;
+                initGrid($container, buildGridConfig(config));
+            });
 
             // var plotFactory = new PlotFactory(grid);
             //
@@ -99,28 +187,7 @@ define([
             // ///////////////////////////
             // // Catch the Click Event //
             // ///////////////////////////
-            grid.children.click(function(event){
 
-                ////////////////////////////////////
-                // Get the coordinate for a click //
-                ////////////////////////////////////
-                var bnds = event.target.getBoundingClientRect(),
-                wfactor = canvas.w / canvas.width,
-                fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
-                fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
-
-
-                $(canvas.canvas).trigger('click_grid',{x: fx, y: fy});
-
-                var element = lineWrapper;
-                element.initialize(canvas,grid,{color: '#0f904a'});
-
-                // /////////////////////////
-                // // Get the current set //
-                // /////////////////////////
-                // var activeSet = _.find(sets,{active : true});
-
-            });
 
 
         },

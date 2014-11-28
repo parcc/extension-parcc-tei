@@ -108,6 +108,19 @@ define([
                 point.hideGlow();
             });
         },
+        destroy : function(){
+            console.log(this);
+            if(this.line !== undefined && this.line !== null){
+                this.line.remove();
+                this.line = null;
+            }
+            if(this.points !== undefined && this.points !== []){
+                _.forEach(this.points, function(point){
+                    point.children.remove().clear();
+                });
+                this.points = [];
+            }
+        }
     };
     return linesWrapper;
 

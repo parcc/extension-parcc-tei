@@ -4,13 +4,13 @@ define([
     'graphLineAndPointInteraction/creator/widget/Widget',
     'tpl!graphLineAndPointInteraction/creator/tpl/markup'
 ], function(_, ciRegistry, Widget, markupTpl){
-
+    'use strict';
     var _typeIdentifier = 'graphLineAndPointInteraction';
 
     var likertScaleInteractionCreator = {
         /**
          * (required) Get the typeIdentifier of the custom interaction
-         * 
+         *
          * @returns {String}
          */
         getTypeIdentifier : function(){
@@ -19,7 +19,7 @@ define([
         /**
          * (required) Get the widget prototype
          * Used in the renderer
-         * 
+         *
          * @returns {Object} Widget
          */
         getWidget : function(){
@@ -28,28 +28,31 @@ define([
         /**
          * (optional) Get the default properties values of the pci.
          * Used on new pci instance creation
-         * 
+         *
          * @returns {Object}
          */
         getDefaultProperties : function(pci){
             return {
-                level : 5,
-                'label-min' : 'min',
-                'label-max' : 'max'
+                graphs : 'lines',
+                xMin : -10,
+                xMax : 10,
+                yMin : -10,
+                yMax : 10,
+                elements : []
             };
         },
         /**
-         * (optional) Callback to execute on the 
+         * (optional) Callback to execute on the
          * Used on new pci instance creation
-         * 
+         *
          * @returns {Object}
          */
         afterCreate : function(pci){
             //do some stuff
         },
         /**
-         * (required) Gives the qti pci xml template 
-         * 
+         * (required) Gives the qti pci xml template
+         *
          * @returns {function} handlebar template
          */
         getMarkupTemplate : function(){
@@ -57,21 +60,20 @@ define([
         },
         /**
          * (optional) Allows passing additional data to xml template
-         * 
+         *
          * @returns {function} handlebar template
          */
         getMarkupData : function(pci, defaultData){
-            
+
             var hook = ciRegistry.get(_typeIdentifier),
                 manifest = hook.manifest;
-            
+
             defaultData = _.defaults(defaultData , {
-                someData : pci.data('someData'),
                 typeIdentifier : _typeIdentifier,
                 label : manifest.label,
                 description : manifest.description
             });
-            
+
             return defaultData;
         }
     };

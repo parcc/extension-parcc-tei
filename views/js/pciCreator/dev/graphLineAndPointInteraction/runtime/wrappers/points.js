@@ -86,6 +86,13 @@ define([
             // 4. Translate the point, preventing a redraw that'll break
             //    events attached on the childrens
             this.point.children.translate(currentX - x,currentY - y);
+        },
+        destroy : function(){
+            console.log(this);
+            if (this.point !== undefined && this.point !== null) {
+                this.point.children.remove().clear();
+                this.point = null;
+            }
         }
     };
     return pointWrapper;
