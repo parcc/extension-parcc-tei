@@ -24,6 +24,38 @@ define([
 
     'use strict';
 
+    function buildGridConfig(rawConfig){
+
+        return {
+            x : {
+                start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
+                end : rawConfig.xMax === undefined ? 10 : parseInt(rawConfig.xMax),
+                unit : 20
+            },
+            y : {
+                //the y-axis is reversed
+                start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
+                end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
+                unit : 20
+            },
+            element : rawConfig.elements
+        };
+    }
+
+    function createCanvas($container, config){
+
+        var padding = 2;
+        var paper = scaleRaphael(
+            $('.shape-container', $container)[0],
+            (config.x.end - config.x.start) * config.x.unit + padding,
+            (config.y.end - config.y.start) * config.y.unit + padding
+            );
+
+        //@todo make it responsive
+
+        return paper;
+    }
+
     var graphLineAndPointInteraction = {
         id : -1,
         getTypeIdentifier : function(){
@@ -49,40 +81,53 @@ define([
 
 
 
-            function buildGridConfig(rawConfig){
-
-                return {
-                    x : {
-                        start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
-                        end : rawConfig.xMax === undefined ? 10 : parseInt(rawConfig.xMax),
-                        unit : 20
-                    },
-                    y : {
-                        //the y-axis is reversed
-                        start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
-                        end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
-                        unit : 20
-                    },
-                    element : rawConfig.elements
-                };
-            }
 
             this.on('configchange',function(options){
                 self.config = _.merge(self.config,buildGridConfig(options));
             });
 
-            ///////////////////
-            // Create Canvas //
-            ///////////////////
-            var canvas = scaleRaphael($('.shape-container',$container)[0],500,400);
-            //////////////////////////////
-            // Instanciate a basic grid //
-            //////////////////////////////
-            var grid = gridFactory(canvas,this.config.grid);
-            ///////////////////////
-            // Make it clickable //
-            ///////////////////////
-            grid.clickable();
+
+            function initGrid($container, gridConfig){
+                // Clear Everything
+
+                var paper = createCanvas($container, gridConfig);
+                var grid = gridFactory(paper,gridConfig);
+                grid.clickable();
+
+
+                grid.children.click(function(event){
+
+                    ////////////////////////////////////
+                    // Get the coordinate for a click //
+                    ////////////////////////////////////
+                    var bnds = event.target.getBoundingClientRect(),
+                    wfactor = paper.w / paper.width,
+                    fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
+                    fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
+
+
+                    $(paper.canvas).trigger('click_grid',{x: fx, y: fy});
+
+                    var element = lineWrapper;
+                    element.initialize(paper,grid,{color: '#0f904a'});
+
+
+
+                    // /////////////////////////
+                    // // Get the current set //
+                    // /////////////////////////
+                    // var activeSet = _.find(sets,{active : true});
+
+                });
+            }
+
+            initGrid($container, buildGridConfig(this.config));
+
+            this.on('gridchange', function(config){
+                //the configuration of the gird, point or line have changed:
+                self.config = config;
+                initGrid($container, buildGridConfig(config));
+            });
 
             // var plotFactory = new PlotFactory(grid);
             //
@@ -115,35 +160,7 @@ define([
             // ///////////////////////////
             // // Catch the Click Event //
             // ///////////////////////////
-            grid.children.click(function(event){
 
-                ////////////////////////////////////
-                // Get the coordinate for a click //
-                ////////////////////////////////////
-                var bnds = event.target.getBoundingClientRect(),
-                wfactor = canvas.w / canvas.width,
-                fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
-                fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
-
-
-                $(canvas.canvas).trigger('click_grid',{x: fx, y: fy});
-
-                var element = lineWrapper;
-                element.initialize(canvas,grid,{color: '#0f904a'});
-
-                // /////////////////////////
-                // // Get the current set //
-                // /////////////////////////
-                // var activeSet = _.find(sets,{active : true});
-
-            });
-
-
-            this.on('gridchange', function(config){
-                //the configuration of the gird, point or line have changed:
-                self.config = config;
-                initGrid($container, buildGridConfig(config));
-            });
 
 
         },
