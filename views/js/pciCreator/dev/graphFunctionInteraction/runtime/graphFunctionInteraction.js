@@ -21,7 +21,9 @@ define([
     'use strict';
 
     function buildGridConfig(rawConfig){
-
+        
+        var _color = rawConfig.graphColor || '#bb1a2a';
+        
         return {
             x : {
                 start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
@@ -33,6 +35,14 @@ define([
                 start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
                 end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
                 unit : 20
+            },
+            plot : {
+                color : _color,
+                thickness : rawConfig.graphWidth || 3
+            },
+            point : {
+                color : _color,
+                radius : 10
             }
         };
     }
@@ -104,23 +114,9 @@ define([
 
                     // Create the first point or the second or replace the second according the rules defined by the client                  
                     if(points.length < 2){
-                        var newPoint = pointFactory(paper, grid, {
-                            x : fx,
-                            y : fy,
-                            on : {
-                                dragStart : clearPlot,
-                                dragStop : plot
-                            }
-                        });
-                        // Draw the point
-                        newPoint.render();
-                        // Enable drag'n'drop hability
-                        newPoint.drag();
-                        // Add it to the list of points
-                        points.push(newPoint);
-
-                        // pair ready : plot the graph
+                        addPoint(fx, fy);
                         if(points.length === 2){
+                            // pair ready : plot the graph
                             plot();
                         }
                     }else{
@@ -141,7 +137,7 @@ define([
                 });
 
                 //init related plot factory
-                plotFactory = new PlotFactory(grid);
+                plotFactory = new PlotFactory(grid, gridConfig.plot);
 
                 //add listener to removed.point
                 $(paper.canvas).off('removed.point').on('removed.point', function(event, removedPoint){
@@ -208,24 +204,24 @@ define([
 
             }
 
-            function addPoint(fx, fy){
-
-                var newPoint = pointFactory(paper, grid, {
-                    x : -100,
-                    y : -100,
+            function addPoint(fx, fy, cartesian){
+                
+                var pointConfig = {
+                    x : fx,
+                    y : fy,
                     on : {
                         dragStart : clearPlot,
                         dragStop : plot
                     }
-                });
+                };
+                pointConfig = _.defaults(pointConfig, _this.gridConfig.point);
                 
-                newPoint.setCartesianCoord(fx, fy);
-                
-                // Draw the point
+                var newPoint = pointFactory(paper, grid, pointConfig);
+                if(cartesian){
+                    newPoint.setCartesianCoord(fx, fy, pointConfig);
+                }
                 newPoint.render();
-                // Enable drag'n'drop hability
                 newPoint.drag();
-                // Add it to the list of points
                 points.push(newPoint);
 
                 return newPoint;
@@ -233,40 +229,49 @@ define([
 
             function plotDefault(){
                 
+                //clear drawn elements:
                 clearPoint();
                 clearPlot();
                 
-                addPoint(1, 1);
-                addPoint(2, 2);
+                addPoint(1, 1, true);
+                addPoint(2, 2, true);
                 plot();
             }
-
-            initGrid($container, buildGridConfig(this.config));
+            
+            /**
+             * init rendering:
+             */
+            this.gridConfig = buildGridConfig(this.config);
+            
+            initGrid($container, this.gridConfig);
 
             showControl(mathFunctions);
 
+            plotDefault();
+            
             $shapeControls.on('click', 'button', function(){
                 activateButton($(this));
             });
-
+            
+            /**
+             * Add event listening fo rdynamic configuration change
+             */
+            
+            
             _this.on('functionschange', function(graphs){
-
-                //clear drawn elements:
-                clearPlot();
-                clearPoint()
-
                 //update list of available graph types
                 mathFunctions = graphs;
                 showControl(mathFunctions);
+                plotDefault();
             });
 
             _this.on('gridchange', function(config){
                 //the configuration of the gird, point or line have changed:
                 _this.config = config;
-                initGrid($container, buildGridConfig(config));
+                _this.gridConfig = buildGridConfig(config);
+                initGrid($container, _this.gridConfig);
+                plotDefault();
             });
-            
-            plotDefault();
         },
         /**
          * Programmatically set the response following the json schema described in
