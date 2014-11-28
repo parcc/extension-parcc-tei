@@ -47,6 +47,9 @@ define([
             };
 
 
+        var default_type = interaction.prop('graphs');
+        graphs[default_type].selected = true;
+
         //render the form using the form template
         $form.html(formTpl({
             serial : response.serial,
@@ -55,8 +58,11 @@ define([
             xMax : interaction.prop('xMax'),
             yMin : interaction.prop('yMin'),
             yMax : interaction.prop('yMax'),
-            graphs : graphs
+            graphs : graphs,
+            nbElement : interaction.prop('nbElement')
         }));
+
+
 
         //init form javascript
         formElement.initWidget($form);
