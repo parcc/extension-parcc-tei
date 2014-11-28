@@ -18,7 +18,10 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
         /**
          * Test if requirement are met or not
          */
-        if(!options.x || !options.y){throw 'Missing Parameters. Need to specify x,y';}
+        if(options.x === undefined || options.y === undefined){
+            throw 'Missing Parameters. Need to specify x,y';
+        }
+        
         /** @type {String} color */
         var _color = options.color || '#f00',
             /** @type {Number} radius of the point representation */
