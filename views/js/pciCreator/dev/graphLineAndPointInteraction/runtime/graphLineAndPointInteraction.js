@@ -24,8 +24,12 @@ define([
 
     'use strict';
 
+    /**
+     * Sanitize configuration
+     * @param  {Object} rawConfig Raw Config from Authoring
+     * @return {Object}           Cleaned config ready to use
+     */
     function buildGridConfig(rawConfig){
-        console.log(rawConfig);
         return {
             x : {
                 start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
@@ -42,7 +46,12 @@ define([
             type : rawConfig.graphs === undefined ? 'points' : rawConfig.graphs
         };
     }
-
+    /**
+     * Create the minimum canvas and desplay it
+     * @param  {Object} $container jQuery node
+     * @param  {Object} config     configuration ( cleaned )
+     * @return {Object}            Paper ( RaphaelJS )
+     */
     function createCanvas($container, config){
 
         var padding = 2;
@@ -57,8 +66,12 @@ define([
         return paper;
     }
 
+    /**
+     * Dirty functiion to return the right wrapper for a given config element
+     * @param  {String} element Name of the element you want
+     * @return {Object}         Wrapper corresponding to this element
+     */
     function getWrapper(element){
-        console.log(element);
         switch (element){
             case 'points' :
                 return pointsWrapper;
@@ -92,8 +105,13 @@ define([
             var $container = $(dom),
                 self = this;
 
+            /**
+             * Initialize a new graphic element called grid with all needed
+             * @param  {Object} $container jQuery node
+             * @param  {Object} gridConfig Config (cleaned)
+             */
             function initGrid($container, gridConfig){
-                // Clear Everything
+                // @todo : Clear Everything
 
                 var paper = createCanvas($container, gridConfig);
                 var grid = gridFactory(paper,gridConfig);
@@ -102,9 +120,7 @@ define([
 
                 grid.children.click(function(event){
 
-                    ////////////////////////////////////
-                    // Get the coordinate for a click //
-                    ////////////////////////////////////
+                    // Get the coordinate for a click
                     var bnds = event.target.getBoundingClientRect(),
                     wfactor = paper.w / paper.width,
                     fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
@@ -117,9 +133,7 @@ define([
                     var element = getWrapper(gridConfig.type);
                     element.initialize(paper,grid,{color: '#0f904a'});
 
-                    // /////////////////////////
-                    // // Get the current set //
-                    // /////////////////////////
+                    // @todo : Get the current set
                     // var activeSet = _.find(sets,{active : true});
 
                 });
@@ -128,12 +142,12 @@ define([
             initGrid($container, buildGridConfig(this.config));
 
             this.on('configchange',function(options){
-                self.config = _.merge(self.config,buildGridConfig(options));
+                self.config = buildGridConfig(options);
+                initGrid($container, self.config);
             });
 
 
             this.on('gridchange', function(config){
-                //the configuration of the gird, point or line have changed:
                 self.config = config;
                 initGrid($container, buildGridConfig(config));
             });
