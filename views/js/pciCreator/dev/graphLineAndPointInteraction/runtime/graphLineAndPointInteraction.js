@@ -133,6 +133,10 @@ define([
                     var element = getWrapper(gridConfig.type);
                     element.initialize(paper,grid,{color: '#0f904a'});
 
+                    self.on('configchange', function(){
+                        element.destroy();
+                    });
+
                     // @todo : Get the current set
                     // var activeSet = _.find(sets,{active : true});
 
