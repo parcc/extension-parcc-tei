@@ -4,7 +4,7 @@ define([
     'graphLineAndPointInteraction/creator/widget/Widget',
     'tpl!graphLineAndPointInteraction/creator/tpl/markup'
 ], function(_, ciRegistry, Widget, markupTpl){
-
+    'use strict';
     var _typeIdentifier = 'graphLineAndPointInteraction';
 
     var likertScaleInteractionCreator = {
@@ -69,7 +69,6 @@ define([
                 manifest = hook.manifest;
 
             defaultData = _.defaults(defaultData , {
-                someData : pci.data('someData'),
                 typeIdentifier : _typeIdentifier,
                 label : manifest.label,
                 description : manifest.description

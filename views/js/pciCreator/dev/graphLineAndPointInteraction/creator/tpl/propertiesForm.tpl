@@ -38,5 +38,5 @@
 </div>
 <div class="panel pointAndLineFunctionInteraction">
     <label for="nbElement">{{__ "Number of Elements"}}</label>
-    <input name="nbElement" value="{{nbElement}}" data-increment="1" type="text">
+    <input name="nbElement" value="{{nbElement}}" data-increment="1" data-min="1" type="text">
 </div>
