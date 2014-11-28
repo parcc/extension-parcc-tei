@@ -1,13 +1,17 @@
-<div class="graphLineAndPointInteraction">
+<div class="pointAndLineFunctionInteraction">
     <div class="prompt">
         {{{prompt}}}
     </div>
     <div class="shape-panel">
-        <h3 class="shape-title">{{{title}}}</h3>
-        <div class="shape-container"></div>
         <div class="shape-controls">
-            <button value="lineA" class="btn btn-error" type="button" data-set-color="#bb1a2a">Set A</button>
-            <button value="lineB" class="btn btn-info" type="button" data-set-color="#0c5d91">Set B</button>
+            <button name="Line_A" value="line_A" class="btn btn-info" type="button">Line A</button>
+            <button name="absolute" value="absolute" class="btn btn-info" type="button">Absolute Value</button>
+            <button name="quadratic" value="quadratic" class="btn btn-info" type="button">Quadratic</button>
+            <button name="exponential" value="exponential" class="btn btn-info" type="button">Exponential</button>
+            <button name="logarithmic" value="logarithmic" class="btn btn-info" type="button">Logarithmic</button>
+            <button name="cosine" value="cosine" class="btn btn-info" type="button">Sin/Cos</button>
+            <button name="tangent" value="tangent" class="btn btn-info" type="button">Tan/Cotan</button>
         </div>
+        <div class="shape-container"></div>
     </div>
 </div>
