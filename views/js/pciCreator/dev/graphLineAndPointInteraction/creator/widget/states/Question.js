@@ -81,6 +81,15 @@ define([
             identifier : function(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
+            },
+            nbElement : function(interaction,value){
+                var elements = [];
+                var _color = ['#bb1a2a','#0f904a','#d9af5b','#0c5d91'];
+                for (var i = 0; i < value.length; i++) {
+                    elements.push({color : _color[i%4],label: 'line_' + i});
+                }
+                interaction.prop('elements',elements);
+                interaction.triggerPci('configchange',[interaction.getProperties()]);
             }
         };
         changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks);

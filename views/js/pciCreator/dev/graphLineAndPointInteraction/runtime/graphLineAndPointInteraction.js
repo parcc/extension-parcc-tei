@@ -41,20 +41,36 @@ define([
             this.dom = dom;
             this.config = config || {};
 
-            var $container = $(dom);
+            //add method on(), off() and trigger() to the current object
+            event.addEventMgr(this);
 
-            this.config.grid  = {
-                x: {
-                    start : -10,
-                    end : 10,
-                    unit : 20
-                },
-                y: {
-                    start : -10,
-                    end : 10,
-                    unit : 20
-                },
-            };
+            var $container = $(dom),
+                self = this;
+
+
+
+            function buildGridConfig(rawConfig){
+
+                return {
+                    x : {
+                        start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
+                        end : rawConfig.xMax === undefined ? 10 : parseInt(rawConfig.xMax),
+                        unit : 20
+                    },
+                    y : {
+                        //the y-axis is reversed
+                        start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
+                        end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
+                        unit : 20
+                    },
+                    element : rawConfig.elements
+                };
+            }
+
+            this.on('configchange',function(options){
+                self.config = _.merge(self.config,buildGridConfig(options));
+            });
+
             ///////////////////
             // Create Canvas //
             ///////////////////
@@ -120,6 +136,13 @@ define([
                 // /////////////////////////
                 // var activeSet = _.find(sets,{active : true});
 
+            });
+
+
+            this.on('gridchange', function(config){
+                //the configuration of the gird, point or line have changed:
+                self.config = config;
+                initGrid($container, buildGridConfig(config));
             });
 
 
