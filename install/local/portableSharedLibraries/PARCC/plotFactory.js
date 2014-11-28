@@ -6,6 +6,7 @@ define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
         start : -10, //the starting abcisse in cartesian coordinate system
         end : 10, //the end abcisse in cartesian coordinate system
         precision : .01, //the precision of the plot (in cartesian coordinate)
+        opacity : .8, //the opacity of the plot
         color : '#bb1a2a', //the color of the plot
         thickness : 3     //the thickness of the plot
     };
@@ -20,7 +21,8 @@ define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
     function _applyStyle(path, config){
         path.attr({
             stroke : config.color ? config.color : _defaults.color,
-            'stroke-width' : config.thickness ? config.thickness : _defaults.thickness
+            'stroke-width' : config.thickness ? config.thickness : _defaults.thickness,
+            opacity : config.opacity ? config.opacity : _defaults.opacity
         });
     }
 

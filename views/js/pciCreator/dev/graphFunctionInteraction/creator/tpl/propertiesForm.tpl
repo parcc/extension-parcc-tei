@@ -10,7 +10,9 @@
            data-validate="$notEmpty; $qtiIdentifier; $availableIdentifier(serial={{serial}});">
 </div>
 
-<div class="panel creator-graphFunctionInteraction">
+<hr/>
+
+<div class="panel creator-graphFunctionInteraction-range">
     <h3>{{__ "X axis"}}</h3>
     <label for="xMin" class="spinner">from</label>
     <input name="xMin" value="{{xMin}}" data-increment="1" type="text" />
@@ -18,13 +20,35 @@
     <input name="xMax" value="{{xMax}}" data-increment="1" type="text" />
 </div>
 
-<div class="panel creator-graphFunctionInteraction">
+<div class="panel creator-graphFunctionInteraction-range">
     <h3>{{__ "Y axis"}}</h3>
     <label for="yMin" class="spinner">from</label>
     <input name="yMin" value="{{yMin}}" data-increment="1" type="text" />
     <label for="yMax" class="spinner">to</label>
     <input name="yMax" value="{{yMax}}" data-increment="1" type="text" />
 </div>
+
+<hr/>
+
+<div class="item-editor-color-picker">
+    <h3>{{__ "Graph Appearance"}}</h3>
+    <div class="color-picker-container sidebar-popup">
+        <div class="color-picker"></div>
+        <input class="color-picker-input" type="text" value="#000000">
+        <a class="closer" href="#" data-close="#color-picker-container"></a>
+    </div>
+    <div class="panel">
+        <label for="graphColor">{{__ "Color"}}</label>
+        <span class="color-trigger" id="graphColor"></span>
+        <input type="hidden" name="graphColor" value="{{graphColor}}"/>
+    </div>
+    <div class="panel creator-graphFunctionInteraction-spinner">
+        <label for="graphWidth" class="spinner">{{__ "Thickness"}}</label>
+        <input name="graphWidth" value="{{graphWidth}}" data-increment="1" data-min="1" type="text" class="incrementer">
+    </div>
+</div>
+
+<hr/>
 
 <div class="panel" id="creator-graphFunctionInteraction-available-graphs">
     <label for="" class="has-icon">{{__ "Available Graphs"}}</label>

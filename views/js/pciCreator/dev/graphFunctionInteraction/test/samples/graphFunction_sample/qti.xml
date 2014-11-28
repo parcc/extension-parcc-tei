@@ -26,6 +26,10 @@
                 <pci:properties>
                     <!--all graphs : linear,absolute,quadratic,exponential,logarithmic,cosine,tangent-->
                     <pci:entry key="graphs">linear,absolute,quadratic,exponential,logarithmic,cosine,tangent</pci:entry>
+                    <pci:entry key="xMin">-8</pci:entry>
+                    <pci:entry key="xMax">12</pci:entry>
+                    <pci:entry key="yMin">-4</pci:entry>
+                    <pci:entry key="yMax">16</pci:entry>
                 </pci:properties>
 
                 <pci:markup>

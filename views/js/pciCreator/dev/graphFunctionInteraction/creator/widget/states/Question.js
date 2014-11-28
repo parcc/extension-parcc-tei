@@ -1,6 +1,6 @@
 define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
-    'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
+    'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!graphFunctionInteraction/creator/tpl/propertiesForm',
@@ -23,13 +23,21 @@ define([
             markupSelector : '.prompt',
             related : interaction
         });
+        
+        //custom interaction state extends
+        this.initColorPickers();
 
     }, function(){
 
         //destroy editors
         containerEditor.destroy(this.widget.$container.find('.prompt'));
-
+        this.destroyColorPickers();
     });
+
+    function graphPropChangeCallback(interaction, value, name){
+        interaction.prop(name, value);
+        interaction.triggerPci('gridchange', [interaction.getProperties()]);
+    }
 
     StateQuestion.prototype.initForm = function(){
 
@@ -61,27 +69,33 @@ define([
             xMin : interaction.prop('xMin'),
             xMax : interaction.prop('xMax'),
             yMin : interaction.prop('yMin'),
-            yMax : interaction.prop('yMax')
+            yMax : interaction.prop('yMax'),
+            graphColor : interaction.prop('graphColor'),
+            graphWidth : interaction.prop('graphWidth')
         }));
 
         //init form javascript
         formElement.initWidget($form);
-        
+
         //set change callbacks:
         var options = {
-            updateCardinality: false,
+            updateCardinality : false,
             attrMethodNames : {set : 'prop', remove : 'removeProp'},
             callback : function(){
                 interaction.triggerPci('gridchange', [interaction.getProperties()]);
             }
         };
+
+
         var xAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'xMin', 'xMax', options);
         var yAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'yMin', 'yMax', options);
         var changeCallbacks = {
             identifier : function(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
-            }
+            },
+            graphColor : graphPropChangeCallback,
+            graphWidth : graphPropChangeCallback
         };
         changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks)
 
