@@ -23,14 +23,21 @@ define([
             markupSelector : '.prompt',
             related : interaction
         });
-
+        
+        this.initColorPickers();
+        
     }, function(){
 
         //destroy editors
         containerEditor.destroy(this.widget.$container.find('.prompt'));
 
     });
-
+    
+    function graphPropChangeCallback(interaction, value, name){
+        interaction.prop(name, value);
+        interaction.triggerPci('gridchange', [interaction.getProperties()]);
+    };
+        
     StateQuestion.prototype.initForm = function(){
 
         var widget = this.widget,
@@ -61,7 +68,9 @@ define([
             xMin : interaction.prop('xMin'),
             xMax : interaction.prop('xMax'),
             yMin : interaction.prop('yMin'),
-            yMax : interaction.prop('yMax')
+            yMax : interaction.prop('yMax'),
+            graphColor : interaction.prop('graphColor'),
+            graphWidth : interaction.prop('graphWidth')
         }));
 
         //init form javascript
@@ -75,13 +84,17 @@ define([
                 interaction.triggerPci('gridchange', [interaction.getProperties()]);
             }
         };
+        
+        
         var xAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'xMin', 'xMax', options);
         var yAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'yMin', 'yMax', options);
         var changeCallbacks = {
             identifier : function(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
-            }
+            },
+            graphColor : graphPropChangeCallback,
+            graphWidth : graphPropChangeCallback
         };
         changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks)
 
@@ -98,6 +111,34 @@ define([
             interaction.triggerPci('functionschange', [checked]);
         });
     };
+    
+    StateQuestion.prototype.initColorPickers = function(){
+        
+        $('.color-trigger', this.widget.$form).each(function(){
+            var $context = $(this).closest('.panel'),
+                color = $('input', $context).val();
+            $(this).css('background-color', color);
+        });
 
+        $('.color-trigger').on('click', function(){
+            var $context = $(this).closest('.item-editor-color-picker'),
+                $this = $(this),
+                input = $this.siblings('input[type="hidden"]')[0],
+                $container = $($('.color-picker-container', $context)).show(),
+                color = $('input', $(this).closest('.panel')).val();
+
+            // Init the color picker
+            $('.color-picker', $context).farbtastic('.color-picker-input', $context);
+            // Set the color to the currently set on the form init
+            $('.color-picker-input', $context).val(color).trigger('keyup');
+            // Populate the input with the color on quitting the modal
+            $('[data-close]', $container).off('click').on('click', function(){
+                var color = $('.color-picker-input', $context).val();
+                $container.hide();
+                $(input, $context).val(color).trigger('change');
+            });
+        });
+    };
+    
     return StateQuestion;
 });
