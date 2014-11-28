@@ -18,8 +18,8 @@ define([
         gridFactory,
         pointFactory,
         PlotFactory,
-        pointWrapper,
-        lineWrapper
+        pointsWrapper,
+        linesWrapper
     ){
 
     'use strict';
@@ -38,7 +38,8 @@ define([
                 end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
                 unit : 20
             },
-            element : rawConfig.elements
+            element : rawConfig.elements,
+            type : rawConfig.graphs === undefined ? 'points' : rawConfig.graphs
         };
     }
 
@@ -54,6 +55,18 @@ define([
         //@todo make it responsive
 
         return paper;
+    }
+
+    function getWrapper(element){
+        console.log(element);
+        switch (element){
+            case 'points' :
+                return pointsWrapper;
+            case 'lines' :
+                return linesWrapper;
+            default :
+                return pointsWrapper;
+        }
     }
 
     var graphLineAndPointInteraction = {
@@ -79,14 +92,6 @@ define([
             var $container = $(dom),
                 self = this;
 
-
-
-
-            this.on('configchange',function(options){
-                self.config = _.merge(self.config,buildGridConfig(options));
-            });
-
-
             function initGrid($container, gridConfig){
                 // Clear Everything
 
@@ -109,7 +114,7 @@ define([
                     $(paper.canvas).trigger('click_grid',{x: fx, y: fy});
 
 
-                    var element = lineWrapper;
+                    var element = getWrapper(gridConfig.type);
                     element.initialize(paper,grid,{color: '#0f904a'});
 
                     // /////////////////////////
@@ -121,6 +126,11 @@ define([
             }
 
             initGrid($container, buildGridConfig(this.config));
+
+            this.on('configchange',function(options){
+                self.config = _.merge(self.config,buildGridConfig(options));
+            });
+
 
             this.on('gridchange', function(config){
                 //the configuration of the gird, point or line have changed:
