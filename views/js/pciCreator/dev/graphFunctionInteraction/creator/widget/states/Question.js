@@ -23,21 +23,21 @@ define([
             markupSelector : '.prompt',
             related : interaction
         });
-        
+
         this.initColorPickers();
-        
+
     }, function(){
 
         //destroy editors
         containerEditor.destroy(this.widget.$container.find('.prompt'));
 
     });
-    
+
     function graphPropChangeCallback(interaction, value, name){
         interaction.prop(name, value);
         interaction.triggerPci('gridchange', [interaction.getProperties()]);
-    };
-        
+    }
+
     StateQuestion.prototype.initForm = function(){
 
         var widget = this.widget,
@@ -75,17 +75,17 @@ define([
 
         //init form javascript
         formElement.initWidget($form);
-        
+
         //set change callbacks:
         var options = {
-            updateCardinality: false,
+            updateCardinality : false,
             attrMethodNames : {set : 'prop', remove : 'removeProp'},
             callback : function(){
                 interaction.triggerPci('gridchange', [interaction.getProperties()]);
             }
         };
-        
-        
+
+
         var xAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'xMin', 'xMax', options);
         var yAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'yMin', 'yMax', options);
         var changeCallbacks = {
@@ -111,34 +111,49 @@ define([
             interaction.triggerPci('functionschange', [checked]);
         });
     };
-    
+
     StateQuestion.prototype.initColorPickers = function(){
+
+        var $colorTriggers = this.widget.$form.find('.color-trigger');
         
-        $('.color-trigger', this.widget.$form).each(function(){
-            var $context = $(this).closest('.panel'),
-                color = $('input', $context).val();
-            $(this).css('background-color', color);
+        $colorTriggers.each(function(){
+
+            var $colorTrigger = $(this),
+                $input = $colorTrigger.siblings('input'),
+                color = $input.val();
+
+            //set color recorded in the hidden input to the color trigger
+            $colorTrigger.css('background-color', color);
         });
 
-        $('.color-trigger').on('click', function(){
-            var $context = $(this).closest('.item-editor-color-picker'),
-                $this = $(this),
-                input = $this.siblings('input[type="hidden"]')[0],
-                $container = $($('.color-picker-container', $context)).show(),
-                color = $('input', $(this).closest('.panel')).val();
+        $colorTriggers.on('click.color-picker', function(){
+
+            var $colorTrigger = $(this),
+                $context = $colorTrigger.closest('.item-editor-color-picker'),
+                $container = $context.find('.color-picker-container').show(),
+                $colorPicker = $container.find('.color-picker'),
+                $colorPickerInput = $container.find('.color-picker-input'),
+                $input = $colorTrigger.siblings('input[type="hidden"]'),
+                color = $input.val();
 
             // Init the color picker
-            $('.color-picker', $context).farbtastic('.color-picker-input', $context);
+            $colorPicker.farbtastic('.color-picker-input', $context);
+
             // Set the color to the currently set on the form init
-            $('.color-picker-input', $context).val(color).trigger('keyup');
+            $colorPickerInput.val(color).trigger('keyup');
+
             // Populate the input with the color on quitting the modal
-            $('[data-close]', $container).off('click').on('click', function(){
-                var color = $('.color-picker-input', $context).val();
+            $container.find('.closer').off('click').on('click', function(){
                 $container.hide();
-                $(input, $context).val(color).trigger('change');
             });
+            
+            //listen to color change
+            $colorPicker.off('.farbtastic').on('colorchange.farbtastic', function(e, color){
+                $input.val(color).trigger('change');
+            });
+            
         });
     };
-    
+
     return StateQuestion;
 });
