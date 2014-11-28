@@ -30,9 +30,9 @@
     <label for="" class="has-icon">{{__ "Type of Elements"}}</label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
     <div class="tooltip-content">{{__ 'Define which type of elements for the test taker to use.'}}</div>
-    <select data-role="graphs">
+    <select name="graphs">
         {{#each graphs}}
-        <option name="graphs" value="{{@key}}" {{#if selected}}selected="selected"{{/if}}>{{label}}</option>
+        <option value="{{@key}}" {{#if selected}}selected="selected"{{/if}}>{{label}}</option>
         {{/each}}
     </select>
 </div>
