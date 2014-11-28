@@ -21,9 +21,9 @@ define([
     'use strict';
 
     function buildGridConfig(rawConfig){
-        
+
         var _color = rawConfig.graphColor || '#bb1a2a';
-        
+
         return {
             x : {
                 start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
@@ -175,7 +175,9 @@ define([
                 mathFunction = PlotFactory.getPlotName(fnName);
                 $button.removeClass('btn-info').addClass('btn-success');
                 $button.siblings('button').removeClass('btn-success').addClass('btn-info');
-                plot();
+
+                //always replot the default
+                plotDefault();
             }
 
             function clearPlot(){
@@ -205,7 +207,7 @@ define([
             }
 
             function addPoint(fx, fy, cartesian){
-                
+
                 var pointConfig = {
                     x : fx,
                     y : fy,
@@ -215,7 +217,7 @@ define([
                     }
                 };
                 pointConfig = _.defaults(pointConfig, _this.gridConfig.point);
-                
+
                 var newPoint = pointFactory(paper, grid, pointConfig);
                 if(cartesian){
                     newPoint.setCartesianCoord(fx, fy, pointConfig);
@@ -228,36 +230,42 @@ define([
             }
 
             function plotDefault(){
-                
+
                 //clear drawn elements:
                 clearPoint();
                 clearPlot();
                 
-                addPoint(1, 1, true);
-                addPoint(2, 2, true);
+                if(mathFunction === 'plotExponential' || mathFunction === 'plotLogarithmic'){
+                    addPoint(1, 1, true);
+                    addPoint(2, 2, true);
+                }else{
+                    addPoint(0, 0, true);
+                    addPoint(1, 1, true);
+                }
+
                 plot();
             }
-            
+
             /**
              * init rendering:
              */
             this.gridConfig = buildGridConfig(this.config);
-            
+
             initGrid($container, this.gridConfig);
 
             showControl(mathFunctions);
 
             plotDefault();
-            
+
             $shapeControls.on('click', 'button', function(){
                 activateButton($(this));
             });
-            
+
             /**
              * Add event listening fo rdynamic configuration change
              */
-            
-            
+
+
             _this.on('functionschange', function(graphs){
                 //update list of available graph types
                 mathFunctions = graphs;
