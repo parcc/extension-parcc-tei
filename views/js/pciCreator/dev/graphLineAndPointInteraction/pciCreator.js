@@ -38,7 +38,7 @@ define([
                 xMax : 10,
                 yMin : -10,
                 yMax : 10,
-                nbElement : 1
+                elements : []
             };
         },
         /**

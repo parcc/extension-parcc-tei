@@ -59,7 +59,7 @@ define([
             yMin : interaction.prop('yMin'),
             yMax : interaction.prop('yMax'),
             graphs : graphs,
-            nbElement : interaction.prop('nbElement')
+            nbElement : interaction.prop('elements').length
         }));
 
 
@@ -85,10 +85,14 @@ define([
             nbElement : function(interaction,value){
                 var elements = [];
                 var _color = ['#bb1a2a','#0f904a','#d9af5b','#0c5d91'];
-                for (var i = 0; i < value.length; i++) {
+                for (var i = 0; i < value; i++) {
                     elements.push({color : _color[i%4],label: 'line_' + i});
                 }
                 interaction.prop('elements',elements);
+                interaction.triggerPci('configchange',[interaction.getProperties()]);
+            },
+            graphs : function(interaction, value){
+                interaction.prop('graphs',value);
                 interaction.triggerPci('configchange',[interaction.getProperties()]);
             }
         };

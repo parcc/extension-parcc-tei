@@ -25,7 +25,7 @@ define([
     'use strict';
 
     function buildGridConfig(rawConfig){
-
+        console.log(rawConfig);
         return {
             x : {
                 start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
@@ -108,10 +108,9 @@ define([
 
                     $(paper.canvas).trigger('click_grid',{x: fx, y: fy});
 
+
                     var element = lineWrapper;
                     element.initialize(paper,grid,{color: '#0f904a'});
-
-
 
                     // /////////////////////////
                     // // Get the current set //
