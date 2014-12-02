@@ -13,7 +13,7 @@ define(['OAT/lodash'], function(_){
         subDivisionWidth : 8,
         unitSubDivision : 2,
         unitSize : 50,
-        fontSize: 18,
+        fontSize : 18,
         arrows : false,
         opacity : 1
     };
@@ -110,7 +110,7 @@ define(['OAT/lodash'], function(_){
                     path += 'M' + position + ',' + (config.top - config.divisionWidth);
                     path += 'L' + position + ',' + (config.top + config.divisionWidth);
 
-                    var label = paper.text(position, config.top - config.divisionWidth - config.fontSize/2 - 5, i);
+                    var label = paper.text(position, config.top - config.divisionWidth - config.fontSize / 2 - 5, i);
                     label.attr({
                         'font-size' : config.fontSize
                     });
@@ -141,6 +141,9 @@ define(['OAT/lodash'], function(_){
                 _applyStyle(pathObj, config);
                 set.push(pathObj);
             },
+            getSet : function(){
+                return set;
+            },
             isRendered : function(){
                 return set.length;
             },
@@ -157,6 +160,41 @@ define(['OAT/lodash'], function(_){
                     //delete elements
                     set.remove().clear();
                 }
+            },
+            /**
+             * Create a transparent rectangle object in front of every element
+             * inside the set to gain clickability
+             */
+            clickable : function(){
+                /** @type {Object} Rectangle Object to cover the all grid area */
+                var borderBox = set.getBBox();
+                var clickableArea = paper.rect(borderBox.x, borderBox.y, borderBox.width, borderBox.height);
+                clickableArea.attr({
+                    fill : 'rgba(0,0,0,0)',
+                    stroke : 0
+                });
+                set.push(clickableArea);
+            },
+            /**
+             * Get width of the _borderBox
+             * @return {Number} width of the set of all elements
+             */
+            getWidth : function(){
+                return set.getBBox().width;
+            },
+            /**
+             * Get height of the _borderBox
+             * @return {Number} height of the set of all elements
+             */
+            getHeight : function(){
+                return set.getBBox().height;
+            },
+            /**
+             * Get the units size for x,y axis
+             * @return {Object}
+             */
+            getUnitSizes : function(){
+                return {x : config.unitSize, y : 0};
             }
         };
 
