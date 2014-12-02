@@ -13,7 +13,9 @@ define(['OAT/lodash'], function(_){
         subDivisionWidth : 8,
         unitSubDivision : 2,
         unitSize : 50,
-        arrows : false
+        fontSize: 18,
+        arrows : false,
+        opacity : 1
     };
 
     function getArrowsPath(config){
@@ -50,12 +52,27 @@ define(['OAT/lodash'], function(_){
         return path;
     }
 
+    /**
+     * Apply relevant stroke attribute from config on a Raphaeljs path
+     * 
+     * @param {Object} path - Raphaeljs Path
+     * @param {Object} config
+     * @returns {undefined}
+     */
+    function _applyStyle(path, config){
+        path.attr({
+            stroke : config.color ? config.color : _defaults.color,
+            'stroke-width' : config.thickness ? config.thickness : _defaults.thickness,
+            opacity : config.opacity ? config.opacity : _defaults.opacity
+        });
+    }
+
     function axisFactory(paper, config){
 
         config = _.defaults(config || {}, _defaults);
-        
+
         var set = paper.set();
-        
+
         //record the snapping steps
         var steps = [];
 
@@ -76,9 +93,9 @@ define(['OAT/lodash'], function(_){
                 return [x, y];
             },
             render : function(){
-                
+
                 steps = [];//reset the snapping step array
-                
+
                 var path = 'M' + config.left + ',' + config.top;
                 var axisSizePx = (config.max - config.min) * config.unitSize;
                 var subDivisionSize = config.unitSize / config.unitSubDivision;
@@ -93,6 +110,12 @@ define(['OAT/lodash'], function(_){
                     path += 'M' + position + ',' + (config.top - config.divisionWidth);
                     path += 'L' + position + ',' + (config.top + config.divisionWidth);
 
+                    var label = paper.text(position, config.top - config.divisionWidth - config.fontSize/2 - 5, i);
+                    label.attr({
+                        'font-size' : config.fontSize
+                    });
+                    set.push(label);
+
                     if(i < config.max){
                         //draw sub divs if applicable
                         var subPosition = position + subDivisionSize;
@@ -100,7 +123,7 @@ define(['OAT/lodash'], function(_){
                             path += 'M' + subPosition + ',' + (config.top - config.subDivisionWidth);
                             path += 'L' + subPosition + ',' + (config.top + config.subDivisionWidth);
                             subPosition += subDivisionSize;
-                            
+
                             steps.push(subPosition);
                         }
                     }
@@ -115,11 +138,7 @@ define(['OAT/lodash'], function(_){
                 }
 
                 var pathObj = paper.path(path);
-                pathObj.attr({
-                    stroke : config.color,
-                    'stroke-width' : config.thickness
-                });
-                
+                _applyStyle(pathObj, config);
                 set.push(pathObj);
             },
             isRendered : function(){
@@ -131,10 +150,10 @@ define(['OAT/lodash'], function(_){
              */
             clear : function(){
                 if(set.length > 0){
-                    
+
                     //reset the snapping step array
                     steps = [];
-                    
+
                     //delete elements
                     set.remove().clear();
                 }
