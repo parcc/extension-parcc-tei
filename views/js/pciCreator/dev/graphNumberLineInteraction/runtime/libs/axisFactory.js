@@ -53,7 +53,10 @@ define(['OAT/lodash'], function(_){
     function axisFactory(paper, config){
 
         config = _.defaults(config || {}, _defaults);
-
+        
+        var set = paper.set();
+        
+        //record the snapping steps
         var steps = [];
 
         var obj = {
@@ -74,7 +77,8 @@ define(['OAT/lodash'], function(_){
             },
             render : function(){
                 
-                steps = [];//reinit the step array
+                steps = [];//reset the snapping step array
+                
                 var path = 'M' + config.left + ',' + config.top;
                 var axisSizePx = (config.max - config.min) * config.unitSize;
                 var subDivisionSize = config.unitSize / config.unitSubDivision;
@@ -115,7 +119,25 @@ define(['OAT/lodash'], function(_){
                     stroke : config.color,
                     'stroke-width' : config.thickness
                 });
-
+                
+                set.push(pathObj);
+            },
+            isRendered : function(){
+                return set.length;
+            },
+            /**
+             * Remove the axis from the paper
+             * @returns {undefined}
+             */
+            clear : function(){
+                if(set.length > 0){
+                    
+                    //reset the snapping step array
+                    steps = [];
+                    
+                    //delete elements
+                    set.remove().clear();
+                }
             }
         };
 

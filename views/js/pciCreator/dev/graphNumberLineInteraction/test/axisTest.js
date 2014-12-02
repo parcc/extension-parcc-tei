@@ -28,7 +28,7 @@ define([
 
     localRequire(['graphNumberLineInteraction/runtime/libs/axisFactory'], function(axisFactory){
 
-        test('draw simple', function(){
+        test('create axis', function(){
 
             var _top = 80,
                 _left = 80;
@@ -39,6 +39,8 @@ define([
                 unitSubDivision : 2,
                 arrows : true
             });
+            
+            ok(axis.isRendered(), 'rendered');
             
             //positioning test:
             var origin = axis.getOriginPosition();
@@ -58,7 +60,15 @@ define([
             notEqual(snap[0], 330, 'snap position correct');
             
         });
-
+        
+        test('clear axis', function(){
+            
+            var axis = new axisFactory(paper);
+            ok(axis.isRendered(), 'rendered');
+            
+            axis.clear();
+            ok(!axis.isRendered(), 'cleared');
+        });
     });
 
 });
