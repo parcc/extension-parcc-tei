@@ -1,5 +1,15 @@
 define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
     'use strict';
+    
+    var _defaults = {
+        x : 0,
+        y : 0,
+        color : '#f00',
+        radius : 10,
+        glow : true,
+        glowRadius : 0
+    };
+    
     /**
      * Point Factory
      * @param  {Object} paper                               Raphael paper / canvas object
@@ -10,22 +20,19 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
      * @param  {Number} options.x                           position on the x axis
      * @param  {Number} options.y                           position on the y axis
      * @param  {Number} [options.glowRadius=30]             size of the radius around the point
+     * @param  {Number} [options.glow=true]                 remove glow if not needed
      * @throws {Missing Parameters. Need to specify x,y}    If there's missing x / y
      *
      * @return {Object}                                     point Object
      */
     function pointFactory(paper,grid,options) {
-        /**
-         * Test if requirement are met or not
-         */
-        if(options.x === undefined || options.y === undefined){
-            throw 'Missing Parameters. Need to specify x,y';
-        }
+        
+        options = _.defaults(options || {}, _defaults);
         
         /** @type {String} color */
-        var _color = options.color || '#f00',
+        var _color = options.color,
             /** @type {Number} radius of the point representation */
-            _r = parseInt(options.radius) || 10,
+            _r = parseInt(options.radius),
             /** @type {Number} x coordinate (in px) */
             _x = 0,
             /** @type {Number} y coordinate (in px) */
@@ -33,7 +40,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
             /** @type {Number} radius for the glowing effect */
             _rGlow = parseInt(options.glowRadius) || _r * 3,
             /** @type {Object} events callback */
-        _events =   options.on || {};
+            _events =   options.on || {};
         
         var obj = {
             /** @type {Object} Paper.set of elements */
@@ -111,25 +118,33 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 _rGlow = parseInt(val);
             },
             /**
-             * Draw the point with his glow around him
+             * Draw the point with his glow around it if applicable
              */
             render : function(){
+                
+                //clear all first:
+                this.remove();
+                
                 /** @type {Object} Raphaël element object with type “circle” */
                 var circle = paper.circle(_x,_y,_r).attr({
                     fill : _color,
-                    stroke : '#000'
-                });
-                /** @type {Object} Raphael color object */
-                var rgb = paper.raphael.color(_color);
-                /** @type {Object} Paper.circle of elements that represents glow */
-                var glow = paper.circle(_x,_y, _rGlow).attr({
-                    fill : 'rgba(' + rgb.r + ',' + rgb.g +',' + rgb.b + ',0.3 )',
-                    stroke : 'none'
-                });
-                this.remove();
-                this.children.push(circle, glow).attr({
+                    stroke : '#000',
                     cursor : 'move'
                 });
+                this.children.push(circle);
+                
+                if(options.glow){
+                    /** @type {Object} Raphael color object */
+                    var rgb = paper.raphael.color(_color);
+                    /** @type {Object} Paper.circle of elements that represents glow */
+                    var glow = paper.circle(_x,_y, _rGlow).attr({
+                        fill : 'rgba(' + rgb.r + ',' + rgb.g +',' + rgb.b + ',0.3 )',
+                        stroke : 'none',
+                        cursor : 'move'
+                    });
+                    this.children.push(glow);
+                }
+                
             },
             /**
              * Remove the point from the canvas
@@ -153,6 +168,13 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                     bb = self.children.getBBox();
                     var newX = (self.oBB.x - bb.x + dx),
                         newY = (self.oBB.y - bb.y + dy);
+                    
+                    if(options.axis === 'x'){
+                        newY = self.getY() - (bb.y + (bb.width/2));
+                    }else if(options.axis === 'y'){
+                        newX = self.getX() - (bb.x + (bb.width/2));
+                    }
+                        
                     self.children.translate(newX,newY);
                 },function () {
                     moved = false;
