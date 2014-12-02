@@ -99,6 +99,7 @@ define([
                     y : fy,
                     axis : 'x',
                     glow : true,
+                    fill : false,
                     on : {
                         dragStart : clearPlot,
                         dragStop : plot
