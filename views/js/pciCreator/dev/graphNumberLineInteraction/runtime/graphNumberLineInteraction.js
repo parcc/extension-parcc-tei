@@ -100,6 +100,8 @@ define([
                     axis : 'x',
                     glow : true,
                     fill : false,
+                    color : '#266d9c',
+                    glowOpacity : .1,
                     on : {
                         dragStart : clearPlot,
                         dragStop : plot

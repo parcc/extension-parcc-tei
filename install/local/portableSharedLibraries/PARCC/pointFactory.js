@@ -8,6 +8,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
         radius : 10,
         glow : true,
         glowRadius : 0,
+        glowOpacity : .3,
         fill : true
     };
 
@@ -225,7 +226,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 var rgb = paper.raphael.color(_color);
                 /** @type {Object} Paper.circle of elements that represents glow */
                 var glow = paper.circle(_x, _y, _rGlow).attr({
-                    fill : 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.3 )',
+                    fill : 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ', '+options.glowOpacity+' )',
                     stroke : 'none',
                     cursor : 'move'
                 });
