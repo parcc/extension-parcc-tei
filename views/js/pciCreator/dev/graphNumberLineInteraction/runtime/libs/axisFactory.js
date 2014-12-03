@@ -86,6 +86,12 @@ define(['OAT/lodash'], function(_){
             steps = [];//record the snapping steps
 
         var obj = {
+            getMin : function(){
+                return config.min;
+            },
+            getMax : function(){
+                return config.max;
+            },
             getCanvas : function(){
                 return paper;
             },

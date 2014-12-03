@@ -130,7 +130,8 @@ define([
             }
 
             function plot(){
-                intervalFactory.plot('closed-closed', -3, 4);
+//                intervalFactory.plot('closed-closed', -3, 4);
+                intervalFactory.plot('closed-arrow', -3, 4);
             }
 
             /**

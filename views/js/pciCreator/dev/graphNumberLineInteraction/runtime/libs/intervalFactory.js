@@ -19,19 +19,34 @@ define(['OAT/lodash'], function(_){
             });
         }
 
+        function drawLine(from, to){
+
+            var minPosition = axis.coordinateToPosition(from);
+            var maxPosition = axis.coordinateToPosition(to);
+            var pathStr = 'M' + (minPosition.left + config.offset) + ',' + minPosition.top;
+            pathStr += 'L' + (maxPosition.left - config.offset) + ',' + maxPosition.top;
+
+            var path = paper.path(pathStr);
+            _applyStyle(path);
+            set.push(path);
+
+            return path;
+
+        }
+
+        function drawArrow(orientation){
+
+            var arrow = axis.buildArrow(orientation);
+            set.push(arrow);
+            _applyStyle(arrow);
+
+            return arrow;
+        }
+
         var plots = {
             'closed-closed' : function(min, max){
-
-                var minPosition = axis.coordinateToPosition(min);
-                var maxPosition = axis.coordinateToPosition(max);
-                var pathStr = 'M' + (minPosition.left + config.offset) + ',' + minPosition.top;
-                pathStr += 'L' + (maxPosition.left - config.offset) + ',' + maxPosition.top;
-
-                var path = paper.path(pathStr);
-                _applyStyle(path)
-                set.push(path);
-
-                return path;
+                var line = drawLine(min, max);
+                return line;
             },
             'closed-open' : function(min, max){
 
@@ -40,12 +55,23 @@ define(['OAT/lodash'], function(_){
 
             },
             'closed-arrow' : function(min){
-
+                var arrowSet = paper.set();
+                var line = drawLine(min, axis.getMax() + .5);//extent toward the arrow to compensate for the offset
+                var arrow = drawArrow('right');
+                arrowSet.push(line);
+                arrowSet.push(arrow);
+                return arrowSet;
             }
         };
 
         this.plot = function(intervalType, min, max){
             return plots[intervalType](min, max);
+        };
+
+        this.clear = function(){
+            if(set.length > 0){
+                set.remove().clear();
+            }
         };
     }
 
