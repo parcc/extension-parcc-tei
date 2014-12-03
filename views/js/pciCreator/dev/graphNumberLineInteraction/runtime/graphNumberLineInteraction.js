@@ -5,8 +5,9 @@ define([
     'OAT/util/event',
     'OAT/scale.raphael',
     'PARCC/pointFactory',
-    'graphNumberLineInteraction/runtime/libs/axisFactory'
-], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory){
+    'graphNumberLineInteraction/runtime/libs/axisFactory',
+    'graphNumberLineInteraction/runtime/libs/intervalFactory'
+], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, IntervalFactory){
 
     function createCanvas($container, config){
 
@@ -24,7 +25,7 @@ define([
 
     function buildAxisConfig(rawConfig){
 
-        var _color = rawConfig.graphColor || '#bb1a2a';
+        var _color = rawConfig.graphColor || '#266d9c';
 
         return {
             top : 80,
@@ -33,7 +34,7 @@ define([
             arrows : true,
             plot : {
                 color : _color,
-                thickness : rawConfig.graphWidth || 3
+                thickness : rawConfig.graphWidth || 5
             },
             point : {
                 color : _color,
@@ -41,6 +42,8 @@ define([
             }
         };
     }
+
+
 
     var graphNumberLineInteraction = {
         id : -1,
@@ -64,35 +67,37 @@ define([
 
             var $container = $(dom);
 
-            var paper, 
+            var paper,
                 axis,
+                intervalFactory,
                 points = [],
                 _this = this;
-            
+
             function initAxis($container, axisConfig){
 
                 //create paper
                 paper = createCanvas($container, axisConfig);
                 axis = new axisFactory(paper, axisConfig);
-                
+                intervalFactory = new IntervalFactory(axis, axisConfig.plot);
+
                 return;
-                
+
                 //for zoom number line interaction
                 axis.clickable();
 
                 //bind click event:
                 axis.getSet().click(function(event){
-                    
+
                     // Get the coordinate of the click
                     var fx = event.layerX;
-                        
+
                     addPoint(fx);
                 });
 
             }
 
             function addPoint(fx, cartesian){
-                
+
                 var fy = _this.axisConfig.top;
                 var pointConfig = {
                     x : fx,
@@ -107,7 +112,7 @@ define([
                         dragStop : plot
                     }
                 };
-                pointConfig = _.defaults(pointConfig,{});
+                pointConfig = _.defaults(pointConfig, {});
 
                 var newPoint = pointFactory(paper, axis, pointConfig);
                 if(cartesian){
@@ -125,7 +130,7 @@ define([
             }
 
             function plot(){
-
+                intervalFactory.plot('closed-closed', -3, 4);
             }
 
             /**
@@ -136,6 +141,8 @@ define([
 
             addPoint(-3, true);
             addPoint(4, true);
+
+            plot();
 
         },
         /**

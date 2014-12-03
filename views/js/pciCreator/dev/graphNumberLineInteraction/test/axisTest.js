@@ -15,17 +15,6 @@ define([
         useExtensionAlias : true
     });
 
-    /**
-     * Round float number to third decimal
-     * 
-     * @param {Float} number
-     * @returns {Number}
-     */
-    function _round3(number){
-        var m = Math.pow(10, parseInt(3));
-        return Math.round(number * m) / m;
-    }
-
     localRequire(['graphNumberLineInteraction/runtime/libs/axisFactory'], function(axisFactory){
 
         test('create axis', function(){

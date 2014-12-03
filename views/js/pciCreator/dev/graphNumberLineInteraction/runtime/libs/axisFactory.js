@@ -194,7 +194,16 @@ define(['OAT/lodash'], function(_){
              * @return {Object}
              */
             getUnitSizes : function(){
-                return {x : config.unitSize, y : 0};
+                return {
+                    x : config.unitSize, 
+                    y : 0
+                };
+            },
+            coordinateToPosition : function(x){
+                return {
+                    left : this.getOriginPosition().left + this.getUnitSizes().x * x,
+                    top : this.getOriginPosition().top
+                };
             }
         };
 
