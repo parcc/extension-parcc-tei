@@ -1,9 +1,9 @@
-define(['OAT/lodash'], function(_){
+define(['OAT/lodash', 'PARCC/pointFactory',], function(_, pointFactory){
 
     var _defaults = {
         color : '#00f',
         thickness : 5,
-        offset : 7, //offset in pixel:
+        offset : 7 //offset in pixel:
     };
 
     function IntervalFactory(axis, config){
@@ -43,10 +43,47 @@ define(['OAT/lodash'], function(_){
             return arrow;
         }
 
+        function drawPoint(position){
+
+            var top = axis.getOriginPosition().top;
+            var pointConfig = {
+                axis : 'x',
+                glow : true,
+                fill : false,
+                color : '#266d9c',
+                glowOpacity : .1,
+                on : {
+                    dragStart : dragStart,
+                    dragStop : dragStop
+                }
+            };
+            pointConfig = _.defaults(pointConfig, {});
+
+            var point = pointFactory(paper, axis, pointConfig);
+            point.setCartesianCoord(position, top, pointConfig);
+
+            point.render();
+            point.drag();
+            
+            //register and return the set:
+            set.push(point.children);
+            return point.children;
+        }
+        
+        function dragStart(){
+            //need to redraw itself plus bound line + arrow
+        }
+        
+        function dragStop(){
+            
+        }
+
         var plots = {
             'closed-closed' : function(min, max){
+                var pointMin = drawPoint(min);
+                var pointMax = drawPoint(max);
                 var line = drawLine(min, max);
-                return line;
+                return paper.set().push(pointMin, line, pointMax);
             },
             'closed-open' : function(min, max){
 
@@ -55,12 +92,10 @@ define(['OAT/lodash'], function(_){
 
             },
             'closed-arrow' : function(min){
-                var arrowSet = paper.set();
+                var point = drawPoint(min);
                 var line = drawLine(min, axis.getMax() + .5);//extent toward the arrow to compensate for the offset
                 var arrow = drawArrow('right');
-                arrowSet.push(line);
-                arrowSet.push(arrow);
-                return arrowSet;
+                return paper.set().push(point, line, arrow);
             }
         };
 

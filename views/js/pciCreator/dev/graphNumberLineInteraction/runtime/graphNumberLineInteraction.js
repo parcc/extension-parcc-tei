@@ -70,7 +70,6 @@ define([
             var paper,
                 axis,
                 intervalFactory,
-                points = [],
                 _this = this;
 
             function initAxis($container, axisConfig){
@@ -90,39 +89,11 @@ define([
 
                     // Get the coordinate of the click
                     var fx = event.layerX;
-
+                    
+                    //set point position
                     addPoint(fx);
                 });
 
-            }
-
-            function addPoint(fx, cartesian){
-
-                var fy = _this.axisConfig.top;
-                var pointConfig = {
-                    x : fx,
-                    y : fy,
-                    axis : 'x',
-                    glow : true,
-                    fill : false,
-                    color : '#266d9c',
-                    glowOpacity : .1,
-                    on : {
-                        dragStart : clearPlot,
-                        dragStop : plot
-                    }
-                };
-                pointConfig = _.defaults(pointConfig, {});
-
-                var newPoint = pointFactory(paper, axis, pointConfig);
-                if(cartesian){
-                    newPoint.setCartesianCoord(fx, fy, pointConfig);
-                }
-                newPoint.render();
-                newPoint.drag();
-                points.push(newPoint);
-
-                return newPoint;
             }
 
             function clearPlot(){
@@ -130,8 +101,8 @@ define([
             }
 
             function plot(){
-//                intervalFactory.plot('closed-closed', -3, 4);
-                intervalFactory.plot('closed-arrow', -3, 4);
+//                var interval = intervalFactory.plot('closed-closed', -3, 4);
+                var interval = intervalFactory.plot('closed-arrow', -3, 4);
             }
 
             /**
@@ -139,9 +110,6 @@ define([
              */
             this.axisConfig = buildAxisConfig(this.config);
             initAxis($container, this.axisConfig);
-
-            addPoint(-3, true);
-            addPoint(4, true);
 
             plot();
 
