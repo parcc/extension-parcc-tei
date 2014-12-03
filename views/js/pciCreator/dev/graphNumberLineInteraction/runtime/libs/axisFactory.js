@@ -18,36 +18,45 @@ define(['OAT/lodash'], function(_){
         opacity : 1
     };
 
-    function getArrowsPath(config){
+    function getArrowsPath(orientation, config){
 
         var arrowConfig = {
             length : config.unitSize * 0.7,
-            tip : config.unitSize * 0.3
+            tip : config.unitSize * 0.3,
+            orientation : orientation
         };
 
         var axisSizePx = (config.max - config.min) * config.unitSize;
-        var tipPosition = (config.left + axisSizePx + arrowConfig.length);
-        var path = '';
+        var tipPosition, path = '';
 
-        path += 'M' + (config.left + axisSizePx) + ',' + config.top;
-        path += 'L' + tipPosition + ',' + config.top;
+        if(arrowConfig.orientation === 'right'){
 
-        path += 'M' + (tipPosition - arrowConfig.tip) + ',' + (config.top + config.divisionWidth);
-        path += 'L' + tipPosition + ',' + config.top;
+            tipPosition = (config.left + axisSizePx + arrowConfig.length);
+            path += 'M' + (config.left + axisSizePx) + ',' + config.top;
+            path += 'L' + tipPosition + ',' + config.top;
 
-        path += 'M' + (tipPosition - arrowConfig.tip) + ',' + (config.top - config.divisionWidth);
-        path += 'L' + tipPosition + ',' + config.top;
+            path += 'M' + (tipPosition - arrowConfig.tip) + ',' + (config.top + config.divisionWidth);
+            path += 'L' + tipPosition + ',' + config.top;
 
-        tipPosition = config.left - arrowConfig.length;
+            path += 'M' + (tipPosition - arrowConfig.tip) + ',' + (config.top - config.divisionWidth);
+            path += 'L' + tipPosition + ',' + config.top;
 
-        path += 'M' + (config.left) + ',' + config.top;
-        path += 'L' + tipPosition + ',' + config.top;
+        }else if(arrowConfig.orientation === 'left'){
 
-        path += 'M' + (tipPosition + arrowConfig.tip) + ',' + (config.top + config.divisionWidth);
-        path += 'L' + tipPosition + ',' + config.top;
+            tipPosition = config.left - arrowConfig.length;
 
-        path += 'M' + (tipPosition + arrowConfig.tip) + ',' + (config.top - config.divisionWidth);
-        path += 'L' + tipPosition + ',' + config.top;
+            path += 'M' + (config.left) + ',' + config.top;
+            path += 'L' + tipPosition + ',' + config.top;
+
+            path += 'M' + (tipPosition + arrowConfig.tip) + ',' + (config.top + config.divisionWidth);
+            path += 'L' + tipPosition + ',' + config.top;
+
+            path += 'M' + (tipPosition + arrowConfig.tip) + ',' + (config.top - config.divisionWidth);
+            path += 'L' + tipPosition + ',' + config.top;
+
+        }else{
+            throw 'unknown orientation type to the arrow';
+        }
 
         return path;
     }
@@ -71,10 +80,10 @@ define(['OAT/lodash'], function(_){
 
         config = _.defaults(config || {}, _defaults);
 
-        var set = paper.set();
-
-        //record the snapping steps
-        var steps = [];
+        var set = paper.set(),
+            arrowRight,
+            arrowLeft,
+            steps = [];//record the snapping steps
 
         var obj = {
             getCanvas : function(){
@@ -134,7 +143,8 @@ define(['OAT/lodash'], function(_){
                 }
 
                 if(config.arrows){
-                    path += getArrowsPath(config);
+                    arrowRight = this.buildArrow('right');
+                    arrowLeft = this.buildArrow('left');
                 }
 
                 var pathObj = paper.path(path);
@@ -195,7 +205,7 @@ define(['OAT/lodash'], function(_){
              */
             getUnitSizes : function(){
                 return {
-                    x : config.unitSize, 
+                    x : config.unitSize,
                     y : 0
                 };
             },
@@ -204,6 +214,13 @@ define(['OAT/lodash'], function(_){
                     left : this.getOriginPosition().left + this.getUnitSizes().x * x,
                     top : this.getOriginPosition().top
                 };
+            },
+            buildArrow : function(orientation){
+                var pathStr = getArrowsPath(orientation, config);
+                var arrow = paper.path(pathStr);
+                _applyStyle(arrow, config);
+                set.push(arrow);
+                return arrow;
             }
         };
 
