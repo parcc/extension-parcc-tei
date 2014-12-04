@@ -82,8 +82,9 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
 
             var start = getPosition(min.coord, true);
             var end = getPosition(max.coord, true);
-            var set = paper.set();
-            var line;
+            var set = paper.set(),
+                active = false,
+                line;
 
             function _drawLine(){
                 if(line){
@@ -97,6 +98,8 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
                 start.left += dx;
                 _drawLine();
             }, function(x){
+                start.left = x;
+                _drawLine();
                 pointMax.setOption('xMin', x + .5 * axis.getUnitSizes().x);
             });
             pointMin.setOption('xMin', getPosition(axis.getMin(), true).left);
@@ -107,6 +110,8 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
                 end.left += dx;
                 _drawLine();
             }, function(x){
+                end.left = x;
+                _drawLine();
                 pointMin.setOption('xMax', x - .5 * axis.getUnitSizes().x);
             });
             pointMax.setOption('xMin', getPosition(min.coord + .5, true).left);
@@ -114,28 +119,36 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
             set.push(pointMax.children);
 
             _drawLine();
-            activate();
+            enable();
 
-            function activate(){
+            function enable(){
+                if(!active){
+                    //set active style
+                    pointMin.showGlow();
+                    pointMax.showGlow();
 
-                //set active style
-                pointMin.showGlow();
-                pointMax.showGlow();
+                    //bind draggable
+                    pointMin.drag();
+                    pointMax.drag();
 
-                //bind draggable
-                pointMin.drag();
-                pointMax.drag();
+                    //change status
+                    active = true;
+                }
             }
 
-            function deactivate(){
+            function disable(){
+                if(active){
+                    //set unactive style
+                    pointMin.hideGlow();
+                    pointMax.hideGlow();
 
-                //set unactive style
-                pointMin.hideGlow();
-                pointMax.hideGlow();
+                    //bind draggable
+                    pointMin.unDrag();
+                    pointMax.unDrag();
 
-                //bind draggable
-                pointMin.undrag();
-                pointMax.undrag();
+                    //change status
+                    active = false;
+                }
             }
 
             function destroy(){
@@ -143,7 +156,8 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
             }
 
             return {
-                deactivate : deactivate,
+                enable : enable,
+                disable : disable,
                 destroy : destroy
             };
 
@@ -158,7 +172,7 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
                 return buildFiniteInterval({
                     coord : min,
                     open : false
-                },{
+                }, {
                     coord : max,
                     open : false
                 });
@@ -167,7 +181,7 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
                 return buildFiniteInterval({
                     coord : min,
                     open : false
-                },{
+                }, {
                     coord : max,
                     open : true
                 });

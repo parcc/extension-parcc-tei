@@ -221,13 +221,14 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                     if(moved){
                         
                         var newX = (bb.x + (bb.width / 2)),
-                            newY = (bb.y + (bb.width / 2));
+                            newY = (bb.y + (bb.height / 2));
+                        
                         /** Set Coordinate with center of the bounding box */
                         self.setCoord(newX, newY);
                         /** Call for a render again */
-
+                        
                         //@todo this method is not correct sometimes
-                        self.children.translate(self.getX() - newX, self.getY() - newY);
+                        self.children.translate(parseInt(self.getX() - newX), parseInt(self.getY() - newY));
 
                         //trigger event
                         if(typeof _events.dragStop === 'function'){
@@ -265,6 +266,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                     this.children.pop().remove();
                 }
                 this.children.push(glow);
+                this.children.attr('cursor', 'move');
             },
             /**
              * Remove Glowing on points
@@ -273,6 +275,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 if(this.children.length > 1){
                     this.children.pop().remove();
                 }
+                this.children.attr('cursor', 'default');
             },
             setOption : function(key, value){
                 options[key] = value;
