@@ -103,7 +103,7 @@ define(['OAT/lodash'], function(_){
             },
             snap : function(x0){
                 var step = config.unitSize / config.unitSubDivision;
-                var x = paper.raphael.snapTo(steps, x0, step / 2);
+                var x = paper.raphael.snapTo(steps, x0, step/2);
                 var y = config.top;
                 return [x, y];
             },
@@ -134,18 +134,22 @@ define(['OAT/lodash'], function(_){
                     if(i < config.max){
                         //draw sub divs if applicable
                         var subPosition = position + subDivisionSize;
+                        steps.push(subPosition);
+                        
                         for(var j = config.unitSubDivision; j > 1; j--){
                             path += 'M' + subPosition + ',' + (config.top - config.subDivisionWidth);
                             path += 'L' + subPosition + ',' + (config.top + config.subDivisionWidth);
                             subPosition += subDivisionSize;
-
-                            steps.push(subPosition);
+                            
+                            if(j !== config.unitSubDivision){
+                                steps.push(subPosition);
+                            }
                         }
                     }
 
                     //update path position
                     position += config.unitSize;
-                    steps.push(subPosition);
+                    steps.push(position);
                 }
 
                 if(config.arrows){
