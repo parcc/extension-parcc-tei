@@ -52,13 +52,13 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
             return arrow;
         }
 
-        function buildPoint(position, drag, dragStop){
+        function buildPoint(position, fill, drag, dragStop){
 
             var top = axis.getOriginPosition().top;
             var pointConfig = {
                 axis : 'x',
                 glow : true,
-                fill : false,
+                fill : !!fill,
                 color : '#266d9c',
                 glowOpacity : .1,
                 removable : false,
@@ -78,68 +78,105 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
             return point;
         }
 
+        function buildFiniteInterval(min, max){
+
+            var start = getPosition(min.coord, true);
+            var end = getPosition(max.coord, true);
+            var set = paper.set();
+            var line;
+
+            function _drawLine(){
+                if(line){
+                    line.remove();
+                }
+                line = drawLine(start, end);
+                set.push(line);
+            }
+
+            var pointMin = buildPoint(min.coord, !min.open, function(dx){
+                start.left += dx;
+                _drawLine();
+            }, function(x){
+                pointMax.setOption('xMin', x + .5 * axis.getUnitSizes().x);
+            });
+            pointMin.setOption('xMin', getPosition(axis.getMin(), true).left);
+            pointMin.setOption('xMax', getPosition(max.coord - .5, true).left);
+            set.push(pointMin.children);
+
+            var pointMax = buildPoint(max.coord, !max.open, function(dx){
+                end.left += dx;
+                _drawLine();
+            }, function(x){
+                pointMin.setOption('xMax', x - .5 * axis.getUnitSizes().x);
+            });
+            pointMax.setOption('xMin', getPosition(min.coord + .5, true).left);
+            pointMax.setOption('xMax', getPosition(axis.getMax(), true).left);
+            set.push(pointMax.children);
+
+            _drawLine();
+            activate();
+
+            function activate(){
+
+                //set active style
+                pointMin.showGlow();
+                pointMax.showGlow();
+
+                //bind draggable
+                pointMin.drag();
+                pointMax.drag();
+            }
+
+            function deactivate(){
+
+                //set unactive style
+                pointMin.hideGlow();
+                pointMax.hideGlow();
+
+                //bind draggable
+                pointMin.undrag();
+                pointMax.undrag();
+            }
+
+            function destroy(){
+                set.remove().clear();
+            }
+
+            return {
+                deactivate : deactivate,
+                destroy : destroy
+            };
+
+        }
+
+        function buildInfiniteInterval(end, orientation){
+
+        }
+
         var plots = {
             'closed-closed' : function(min, max){
-
-                var start = getPosition(min, true);
-                var end = getPosition(max, true);
-                var line;
-
-                function _drawLine(){
-                    if(line){
-                        line.remove();
-                    }
-                    line = drawLine(start, end);
-                }
-
-                var pointMin = buildPoint(min, function(dx){
-                    start.left += dx;
-                    _drawLine();
-                },function(x){
-                    pointMax.setOption('xMin', x + .5 * axis.getUnitSizes().x);
+                return buildFiniteInterval({
+                    coord : min,
+                    open : false
+                },{
+                    coord : max,
+                    open : false
                 });
-                pointMin.setOption('xMin', getPosition(axis.getMin(), true).left);
-                pointMin.setOption('xMax', getPosition(max - .5, true).left);
-
-                var pointMax = buildPoint(max, function(dx){
-                    end.left += dx;
-                    _drawLine();
-                }, function(x){
-                    pointMin.setOption('xMax', x - .5 * axis.getUnitSizes().x);
-                });
-                pointMax.setOption('xMin', getPosition(min + .5, true).left);
-                pointMax.setOption('xMax', getPosition(axis.getMax(), true).left);
-                
-                _drawLine();
-                activate();
-
-                function activate(){
-
-                    //set active style
-                    pointMin.showGlow();
-                    pointMax.showGlow();
-
-                    //bind draggable
-                    pointMin.drag();
-                    pointMax.drag();
-                }
-
-                function deactivate(){
-
-                    //set unactive style
-                    pointMin.hideGlow();
-                    pointMax.hideGlow();
-
-                    //bind draggable
-                    pointMin.undrag();
-                    pointMax.undrag();
-                }
             },
             'closed-open' : function(min, max){
-
+                return buildFiniteInterval({
+                    coord : min,
+                    open : false
+                },{
+                    coord : max,
+                    open : true
+                });
             },
             'arrow-open' : function(max){
-
+                return buildInfiniteInterval({
+                    coord : max,
+                    open : true
+                }, 'left');
             },
             'closed-arrow' : function(min){
                 var point = buildPoint(min);
