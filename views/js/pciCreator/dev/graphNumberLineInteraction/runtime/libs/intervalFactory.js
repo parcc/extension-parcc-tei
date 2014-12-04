@@ -1,4 +1,4 @@
-define(['OAT/lodash', 'PARCC/pointFactory',], function(_, pointFactory){
+define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
 
     var _defaults = {
         color : '#00f',
@@ -19,12 +19,21 @@ define(['OAT/lodash', 'PARCC/pointFactory',], function(_, pointFactory){
             });
         }
 
-        function drawLine(from, to){
+        function getPosition(x, cartesian){
+            if(cartesian){
+                return axis.coordinateToPosition(x);
+            }else{
+                return {
+                    top : axis.getOriginPosition().top,
+                    left : x
+                };
+            }
+        }
 
-            var minPosition = axis.coordinateToPosition(from);
-            var maxPosition = axis.coordinateToPosition(to);
-            var pathStr = 'M' + (minPosition.left + config.offset) + ',' + minPosition.top;
-            pathStr += 'L' + (maxPosition.left - config.offset) + ',' + maxPosition.top;
+        function drawLine(startPosition, endPosition){
+
+            var pathStr = 'M' + (startPosition.left + config.offset) + ',' + startPosition.top;
+            pathStr += 'L' + (endPosition.left - config.offset) + ',' + endPosition.top;
 
             var path = paper.path(pathStr);
             _applyStyle(path);
@@ -43,7 +52,7 @@ define(['OAT/lodash', 'PARCC/pointFactory',], function(_, pointFactory){
             return arrow;
         }
 
-        function drawPoint(position){
+        function buildPoint(position, drag, dragStop){
 
             var top = axis.getOriginPosition().top;
             var pointConfig = {
@@ -52,38 +61,79 @@ define(['OAT/lodash', 'PARCC/pointFactory',], function(_, pointFactory){
                 fill : false,
                 color : '#266d9c',
                 glowOpacity : .1,
+                removable : false,
                 on : {
-                    dragStart : dragStart,
-                    dragStop : dragStop
+                    drag : drag || _.noop,
+                    dragStop : dragStop || _.noop
                 }
             };
             pointConfig = _.defaults(pointConfig, {});
 
             var point = pointFactory(paper, axis, pointConfig);
             point.setCartesianCoord(position, top, pointConfig);
-
             point.render();
-            point.drag();
-            
+
             //register and return the set:
             set.push(point.children);
-            return point.children;
-        }
-        
-        function dragStart(){
-            //need to redraw itself plus bound line + arrow
-        }
-        
-        function dragStop(){
-            
+            return point;
         }
 
         var plots = {
             'closed-closed' : function(min, max){
-                var pointMin = drawPoint(min);
-                var pointMax = drawPoint(max);
-                var line = drawLine(min, max);
-                return paper.set().push(pointMin, line, pointMax);
+
+                var start = getPosition(min, true);
+                var end = getPosition(max, true);
+                var line;
+
+                function _drawLine(){
+                    if(line){
+                        line.remove();
+                    }
+                    line = drawLine(start, end);
+                }
+
+                var pointMin = buildPoint(min, function(dx){
+                    start.left += dx;
+                    _drawLine();
+                },function(x){
+                    pointMax.setOption('xMin', x + .5 * axis.getUnitSizes().x);
+                });
+                pointMin.setOption('xMin', getPosition(axis.getMin(), true).left);
+                pointMin.setOption('xMax', getPosition(max - .5, true).left);
+
+                var pointMax = buildPoint(max, function(dx){
+                    end.left += dx;
+                    _drawLine();
+                }, function(x){
+                    pointMin.setOption('xMax', x - .5 * axis.getUnitSizes().x);
+                });
+                pointMax.setOption('xMin', getPosition(min + .5, true).left);
+                pointMax.setOption('xMax', getPosition(axis.getMax(), true).left);
+                
+                _drawLine();
+                activate();
+
+                function activate(){
+
+                    //set active style
+                    pointMin.showGlow();
+                    pointMax.showGlow();
+
+                    //bind draggable
+                    pointMin.drag();
+                    pointMax.drag();
+                }
+
+                function deactivate(){
+
+                    //set unactive style
+                    pointMin.hideGlow();
+                    pointMax.hideGlow();
+
+                    //bind draggable
+                    pointMin.undrag();
+                    pointMax.undrag();
+                }
             },
             'closed-open' : function(min, max){
 
@@ -92,8 +142,8 @@ define(['OAT/lodash', 'PARCC/pointFactory',], function(_, pointFactory){
 
             },
             'closed-arrow' : function(min){
-                var point = drawPoint(min);
-                var line = drawLine(min, axis.getMax() + .5);//extent toward the arrow to compensate for the offset
+                var point = buildPoint(min);
+                var line = drawLine(min, axis.getMax() + .5, true);//extent toward the arrow to compensate for the offset
                 var arrow = drawArrow('right');
                 return paper.set().push(point, line, arrow);
             }

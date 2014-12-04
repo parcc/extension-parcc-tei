@@ -84,7 +84,7 @@ define(['OAT/lodash'], function(_){
             arrowRight,
             arrowLeft,
             steps = [];//record the snapping steps
-
+        
         var obj = {
             getMin : function(){
                 return config.min;
@@ -101,10 +101,10 @@ define(['OAT/lodash'], function(_){
                     top : config.top
                 };
             },
-            snap : function(x, y){
+            snap : function(x0){
                 var step = config.unitSize / config.unitSubDivision;
-                x = paper.raphael.snapTo(steps, x, step / 2);
-                y = config.top;
+                var x = paper.raphael.snapTo(steps, x0, step / 2);
+                var y = config.top;
                 return [x, y];
             },
             render : function(){
