@@ -9,7 +9,8 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
         glow : true,
         glowRadius : 0,
         glowOpacity : .3,
-        fill : true
+        fill : true,
+        removable : true
     };
 
     /**
@@ -24,8 +25,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
      * @param  {Number} [options.glowRadius=30]             size of the radius around the point
      * @param  {Number} [options.glow=true]                 remove glow if not needed
      * @param  {Number} [options.fill=true]                 fill the point with given color, the border is colored otherwise
-     * @throws {Missing Parameters. Need to specify x,y}    If there's missing x / y
-     *
+     * @param  {Number} [options.removable=true]            define if the point should be remove on simple click
      * @return {Object}                                     point Object
      */
     function pointFactory(paper, grid, options){
@@ -164,10 +164,13 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
              * Activate the dran'n'drop capability provide by RaphaelJS
              */
             drag : function(){
+                
                 var self = this,
                     bb,
                     moved = false;
+                
                 this.children.drag(function(dx, dy){
+                    
                     moved = true;
                     /** @type {Object} The current bounding box */
                     bb = self.children.getBBox();
@@ -179,9 +182,29 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                     }else if(options.axis === 'y'){
                         newX = self.getX() - (bb.x + (bb.width / 2));
                     }
+                    
+                    var absoluteX = (bb.x + bb.width / 2);
+                    var absoluteY = (bb.y + bb.height / 2);
+                    if(options.xMin && absoluteX + newX < options.xMin){
+                        newX = options.xMin - absoluteX;
+                    }else if(options.xMax && absoluteX + newX > options.xMax){
+                        newX = options.xMax - absoluteX;
+                    }
+                    if(options.yMin && absoluteY < options.yMin){
+                        newY = options.yMin - absoluteY;
+                    }else if(options.yMax && absoluteY > options.yMax){
+                        newY = options.yMax - absoluteY;
+                    }
+
+                    //trigger event
+                    if(typeof _events.drag === 'function'){
+                        _events.drag.call(self, newX, newY);
+                    }
 
                     self.children.translate(newX, newY);
+                    
                 }, function(){
+                    
                     moved = false;
                     //trigger event
                     if(typeof _events.dragStart === 'function'){
@@ -192,24 +215,32 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                      Since it's not just circle, it's impossible to use cx & cy
                      instead, we'll use a bounding box representation and use their values*/
                     self.oBB = self.children.getBBox();
+                    
                 }, function(){
+                    
                     if(moved){
+                        
                         var newX = (bb.x + (bb.width / 2)),
                             newY = (bb.y + (bb.width / 2));
                         /** Set Coordinate with center of the bounding box */
                         self.setCoord(newX, newY);
                         /** Call for a render again */
+
+                        //@todo this method is not correct sometimes
                         self.children.translate(self.getX() - newX, self.getY() - newY);
 
                         //trigger event
                         if(typeof _events.dragStop === 'function'){
-                            _events.dragStop.call(self);
+                            _events.dragStop.call(self, self.getX(), self.getY());
                         }
                         $(paper.canvas).trigger('moved.point', self);
-                    }else{
+                        
+                    }else if(options.removable){
+                        
                         self.remove();
                         $(paper.canvas).trigger('removed.point', self);
                     }
+                    
                 });
             },
             /**
@@ -226,7 +257,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 var rgb = paper.raphael.color(_color);
                 /** @type {Object} Paper.circle of elements that represents glow */
                 var glow = paper.circle(_x, _y, _rGlow).attr({
-                    fill : 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ', '+options.glowOpacity+' )',
+                    fill : 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ', ' + options.glowOpacity + ' )',
                     stroke : 'none',
                     cursor : 'move'
                 });
@@ -242,6 +273,9 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 if(this.children.length > 1){
                     this.children.pop().remove();
                 }
+            },
+            setOption : function(key, value){
+                options[key] = value;
             }
         };
         obj.setCoord(options.x, options.y);
