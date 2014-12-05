@@ -15,7 +15,7 @@ define([
         var paper = scaleRaphael(
             $('.shape-container', $container)[0],
             620,
-            400
+            120
             );
 
         //@todo make it responsive
@@ -28,8 +28,8 @@ define([
         var _color = rawConfig.graphColor || '#266d9c';
 
         return {
-            top : 80,
-            left : 80,
+            top : 60,
+            left : 50,
             unitSubDivision : 2,
             arrows : true,
             plot : {
@@ -89,20 +89,25 @@ define([
 
                     // Get the coordinate of the click
                     var fx = event.layerX;
-                    
+
                     //set point position
                     addPoint(fx);
                 });
 
             }
 
-            function clearPlot(){
+            function activate(uid){
 
-            }
+                _.forIn(intervals, function(interval, id){
+                    if(id === uid){
+                        interval.$control.find('.btn').removeClass('btn-info').addClass('btn-success');
+                        interval.obj.enable();
+                    }else{
+                        interval.$control.find('.btn').removeClass('btn-success').addClass('btn-info');
+                        interval.obj.disable();
+                    }
+                });
 
-            function plot(){
-                var interval1 = intervalFactory.plot('closed-arrow', 3);
-                var interval2 = intervalFactory.plot('closed-open', -4, 1);
             }
 
             /**
@@ -111,7 +116,63 @@ define([
             this.axisConfig = buildAxisConfig(this.config);
             initAxis($container, this.axisConfig);
 
-            plot();
+
+            var $intervalsSelected = $container.find('.intervals-selected');
+            var $intervalTemplate = $container.find('.intervals-template .interval');
+            var selectionMax = 3;
+            var intervals = {};
+
+            $container.on('click', '.intervals-available .btn-info', function(){
+
+                if(_.size(intervals) < selectionMax){
+
+                    var $button = $(this),
+                        intervalType = $button.val(),
+                        uid = _.uniqueId('interval_'),
+                        $img = $button.find('img').clone();
+
+                    //append button
+                    var $tpl = $intervalTemplate.clone();
+                    $tpl.find('.btn').append($img);
+                    $tpl.attr('data-uid', uid);
+                    $intervalsSelected.append($tpl);
+
+                    //draw initial interval
+                    var interval = intervalFactory.plot(intervalType, 0, 1);
+
+                    intervals[uid] = {
+                        type : intervalType,
+                        obj : interval,
+                        $control : $tpl
+                    };
+                    
+                    //active the button & interval editing
+                    activate(uid);
+                    
+                    if(false){
+                        //deactivate the whole panel
+                    }
+                }
+
+            }).on('click', '.intervals-selected .btn-info', function(){
+
+                var $parent = $(this).parent('.interval'),
+                    uid = $parent.data('uid');
+
+                //active the button & interval editing
+                activate(uid);
+
+            }).on('click', '.intervals-selected .deleter', function(){
+
+                var $deleter = $(this),
+                    $parent = $deleter.parent('.interval'),
+                    uid = $parent.data('uid'),
+                    interval = intervals[uid];
+
+                interval.obj.destroy();
+                $parent.remove();
+                intervals = _.omit(intervals, uid);
+            });
 
         },
         /**

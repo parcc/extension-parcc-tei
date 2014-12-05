@@ -38,16 +38,46 @@
                             Plot the solution set on the number line below.
                         </html5:div>
                         <html5:div class="shape-panel">
-                            <html5:div class="shape-controls">
-                                <html5:button name="linear" value="linear" class="btn btn-info" type="button">Linear</html5:button>
-                                <html5:button name="absolute" value="absolute" class="btn btn-info" type="button">Absolute Value</html5:button>
-                                <html5:button name="quadratic" value="quadratic" class="btn btn-info" type="button">Quadratic</html5:button>
-                                <html5:button name="exponential" value="exponential" class="btn btn-info" type="button">Exponential</html5:button>
-                                <html5:button name="logarithmic" value="logarithmic" class="btn btn-info" type="button">Logarithmic</html5:button>
-                                <html5:button name="cosine" value="cosine" class="btn btn-info" type="button">Sin/Cos</html5:button>
-                                <html5:button name="tangent" value="tangent" class="btn btn-info" type="button">Tan/Cotan</html5:button>
-                            </html5:div>
                             <html5:div class="shape-container"></html5:div>
+                            <html5:div class="shape-controls clearfix">
+                                <html5:div class="intervals-available">
+                                    <html5:div class="intervals-row">
+                                        <html5:button name="closed-closed" value="closed-closed" class="btn btn-info" type="button">
+                                            <html5:img src="assets/close-close.svg"/>
+                                        </html5:button>
+                                        <html5:button name="closed-open" value="closed-open" class="btn btn-info" type="button">
+                                            <html5:img src="assets/close-open.svg"/>
+                                        </html5:button>
+                                        <html5:button name="open-closed" value="open-closed" class="btn btn-info" type="button">
+                                            <html5:img src="assets/open-close.svg"/>
+                                        </html5:button>
+                                        <html5:button name="open-open" value="open-open" class="btn btn-info" type="button">
+                                            <html5:img src="assets/open-open.svg"/>
+                                        </html5:button>
+                                    </html5:div>
+                                    <html5:div class="intervals-row">
+                                        <html5:button name="arrow-open" value="arrow-open" class="btn btn-info" type="button">
+                                            <html5:img src="assets/arrow-open.svg"/>
+                                        </html5:button>
+                                        <html5:button name="arrow-closed" value="arrow-closed" class="btn btn-info" type="button">
+                                            <html5:img src="assets/arrow-close.svg"/>
+                                        </html5:button>
+                                        <html5:button name="open-arrow" value="open-arrow" class="btn btn-info" type="button">
+                                            <html5:img src="assets/open-arrow.svg"/>
+                                        </html5:button>
+                                        <html5:button name="closed-arrow" value="closed-arrow" class="btn btn-info" type="button">
+                                            <html5:img src="assets/close-arrow.svg"/>
+                                        </html5:button>
+                                    </html5:div>
+                                </html5:div>
+                                <html5:div class="intervals-selected clearfix"></html5:div>
+                                <html5:div class="intervals-template">
+                                    <html5:div class="interval" data-uid="">
+                                        <html5:button class="btn btn-info" type="button"></html5:button>
+                                        <html5:a class="deleter" title="delete the interval" href="#">delete</html5:a>
+                                    </html5:div>
+                                </html5:div>
+                            </html5:div>
                         </html5:div>
                     </html5:div>
                 </pci:markup>

@@ -287,7 +287,7 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
                     open : true
                 }, 'left');
             },
-            'arrow-close' : function(max){
+            'arrow-closed' : function(max){
                 return buildInfiniteInterval({
                     coord : max,
                     open : false

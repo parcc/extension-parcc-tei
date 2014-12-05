@@ -1,28 +1,30 @@
 /*add some style, need to scope (using the typeIdentifier as class prefix) every style declaration to prevent collision */
 
-.graphNumberLineInteraction{
+.graphNumberLineInteraction {
     width:100%;
     padding:30px 30px 50px;
-    background-color:#f5f3f2;
     margin:20px 0;
+    padding:20px;
+    border : 6px solid #f5f3f2;
 }
 
-.graphNumberLineInteraction ul.likert{
-    list-style-type: none;
-    margin-top: 10px;
-    padding: 0;
+.clearfix {
+  overflow: auto;
 }
 
-.graphNumberLineInteraction ul.likert li{
-    float: left;
-    text-align: left;
-    list-style-type: none;
-}
+.graphNumberLineInteraction .prompt {margin-bottom:20px;}
 
-.graphNumberLineInteraction ul.likert li input{margin: 0 3px;}
+/*.graphNumberLineInteraction .shape-controls {position:relative; display: inline-block; width: 100%;}*/
+.graphNumberLineInteraction .shape-controls .intervals-available {float:left; border : 6px solid #f5f3f2; padding:4px;}
+.graphNumberLineInteraction .shape-controls .intervals-selected {float:left;}
+.graphNumberLineInteraction .shape-controls .intervals-selected .interval {float:left; width:92px; border : 6px solid #f5f3f2; padding:4px; margin-left:10px;}
+.graphNumberLineInteraction .shape-controls .intervals-selected .interval .deleter {cursor: pointer; }
+.graphNumberLineInteraction .shape-controls .intervals-selected .interval .btn {margin-bottom:10px;}
 
-.graphNumberLineInteraction .prompt {position:relative;}
+.graphNumberLineInteraction .shape-controls button {padding: 0 6px 8px; height:36px; width:72px; margin-right:2px;}
+.graphNumberLineInteraction .shape-controls button img {height:20px;width:50px;}
 
-.graphNumberLineInteraction .likert-label {min-width:90px; color: #444;}
-.graphNumberLineInteraction .likert-label-min {text-align: right;}
-.graphNumberLineInteraction .likert-label-max {text-align: left;}
+.graphNumberLineInteraction .shape-controls .intervals-template {display:none;}
+
+.graphNumberLineInteraction .shape-controls .intervals-row {margin-bottom: 2px;}
+
