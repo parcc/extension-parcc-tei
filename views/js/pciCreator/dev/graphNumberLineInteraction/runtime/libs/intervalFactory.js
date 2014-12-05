@@ -263,16 +263,46 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
                     open : true
                 });
             },
+            'open-closed' : function(min, max){
+                return buildFiniteInterval({
+                    coord : min,
+                    open : true
+                }, {
+                    coord : max,
+                    open : false
+                });
+            },
+            'open-open' : function(min, max){
+                return buildFiniteInterval({
+                    coord : min,
+                    open : true
+                }, {
+                    coord : max,
+                    open : true
+                });
+            },
             'arrow-open' : function(max){
                 return buildInfiniteInterval({
                     coord : max,
                     open : true
                 }, 'left');
             },
+            'arrow-close' : function(max){
+                return buildInfiniteInterval({
+                    coord : max,
+                    open : false
+                }, 'left');
+            },
             'closed-arrow' : function(min){
                  return buildInfiniteInterval({
                     coord : min,
                     open : false
+                }, 'right');
+            },
+            'open-arrow' : function(min){
+                 return buildInfiniteInterval({
+                    coord : min,
+                    open : true
                 }, 'right');
             }
         };

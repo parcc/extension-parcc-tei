@@ -101,9 +101,8 @@ define([
             }
 
             function plot(){
-//                var interval = intervalFactory.plot('closed-open', -3, 4);
-//                var interval = intervalFactory.plot('arrow-open', -3, 4);
-                var interval = intervalFactory.plot('closed-arrow', -3, 4);
+                var interval1 = intervalFactory.plot('closed-arrow', 3);
+                var interval2 = intervalFactory.plot('closed-open', -4, 1);
             }
 
             /**
