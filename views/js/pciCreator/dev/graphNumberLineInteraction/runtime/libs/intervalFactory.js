@@ -30,7 +30,17 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
             }
         }
 
-        function drawLine(startPosition, endPosition){
+        function drawLine(position1, position2){
+
+            var startPosition, endPosition;
+
+            if(position1.left < position2.left){
+                startPosition = position1;
+                endPosition = position2;
+            }else{
+                startPosition = position2;
+                endPosition = position1;
+            }
 
             var pathStr = 'M' + (startPosition.left + config.offset) + ',' + startPosition.top;
             pathStr += 'L' + (endPosition.left - config.offset) + ',' + endPosition.top;
@@ -163,7 +173,74 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
 
         }
 
-        function buildInfiniteInterval(end, orientation){
+        function buildInfiniteInterval(pt, orientation){
+
+            var pos = getPosition(pt.coord, true);
+            var right = (orientation === 'right');
+            var tip = getPosition(right ? axis.getMax() + .5 : axis.getMin() - .5, true);
+
+            var set = paper.set(),
+                active = false,
+                line;
+
+            var arrow = drawArrow(right ? 'right' : 'left');
+            set.push(arrow);
+
+            var point = buildPoint(pt.coord, !pt.open, function(dx){
+                pos.left += dx;
+                _drawLine();
+            }, function(x){
+                pos.left = x;
+                _drawLine();
+            });
+            set.push(point.children);
+
+            function _drawLine(){
+                if(line){
+                    line.remove();
+                }
+                line = drawLine(pos, tip);
+                set.push(line);
+            }
+
+            _drawLine();
+            enable();
+
+            function enable(){
+                if(!active){
+                    //set active style
+                    point.showGlow();
+
+                    //bind draggable
+                    point.drag();
+
+                    //change status
+                    active = true;
+                }
+            }
+
+            function disable(){
+                if(active){
+                    //set unactive style
+                    point.hideGlow();
+
+                    //bind draggable
+                    point.unDrag();
+
+                    //change status
+                    active = false;
+                }
+            }
+
+            function destroy(){
+                set.remove().clear();
+            }
+
+            return {
+                enable : enable,
+                disable : disable,
+                destroy : destroy
+            };
 
         }
 
@@ -193,10 +270,10 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
                 }, 'left');
             },
             'closed-arrow' : function(min){
-                var point = buildPoint(min);
-                var line = drawLine(min, axis.getMax() + .5, true);//extent toward the arrow to compensate for the offset
-                var arrow = drawArrow('right');
-                return paper.set().push(point, line, arrow);
+                 return buildInfiniteInterval({
+                    coord : min,
+                    open : false
+                }, 'right');
             }
         };
 
