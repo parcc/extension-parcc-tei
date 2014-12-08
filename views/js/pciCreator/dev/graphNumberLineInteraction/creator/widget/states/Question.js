@@ -2,21 +2,31 @@ define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
-    'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
+    'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!graphNumberLineInteraction/creator/tpl/propertiesForm',
     'lodash'
-], function(stateFactory, Question, formElement, editor, formTpl, _){
+], function(stateFactory, Question, formElement, containerEditor, formTpl, _){
 
     var StateQuestion = stateFactory.extend(Question, function(){
         
-        //code to execute when entering this state
+        var interaction = this.widget.element,
+            $container = this.widget.$container;
+
+        //init prompt editor
+        containerEditor.create($container.find('.prompt'), {
+            change : function(text){
+                interaction.data('prompt', text);
+                interaction.updateMarkup();
+            },
+            markup : interaction.markup,
+            markupSelector : '.prompt',
+            related : interaction
+        });
 
     }, function(){
         
-        var interaction = this.widget.element;
-        
-        //code to execute when leaving this state
-        interaction.data('pci').reset();
+        containerEditor.destroy(this.widget.$container.find('.prompt'));
+        this.widget.element.data('pci').reset();
     });
 
     StateQuestion.prototype.initForm = function(){
