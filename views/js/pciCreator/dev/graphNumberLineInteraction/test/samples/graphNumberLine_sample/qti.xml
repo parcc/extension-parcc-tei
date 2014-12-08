@@ -74,6 +74,7 @@
                                 <html5:div class="intervals-selected clearfix"></html5:div>
                                 <html5:div class="intervals-template">
                                     <html5:div class="interval" data-uid="">
+                                        <!--<html5:div class="interval-delete icon icon-bin"></html5:div>-->
                                         <html5:button class="btn btn-info" type="button"></html5:button>
                                         <html5:a class="deleter" title="delete the interval" href="#">delete</html5:a>
                                     </html5:div>
