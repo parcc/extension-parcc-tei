@@ -1,9 +1,8 @@
 define([
     'lodash',
-    'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'graphNumberLineInteraction/creator/widget/Widget',
     'tpl!graphNumberLineInteraction/creator/tpl/markup'
-], function(_, ciRegistry, Widget, markupTpl){
+], function(_, Widget, markupTpl){
 
     var _typeIdentifier = 'graphNumberLineInteraction';
 
@@ -33,9 +32,9 @@ define([
          */
         getDefaultProperties : function(pci){
             return {
-                level : 5,
-                'label-min' : 'min',
-                'label-max' : 'max'
+                color : '#266d9c',
+                min : -5,
+                max : 5
             };
         },
         /**
@@ -62,16 +61,10 @@ define([
          */
         getMarkupData : function(pci, defaultData){
             
-            var hook = ciRegistry.get(_typeIdentifier),
-                manifest = hook.manifest;
-            
-            defaultData = _.defaults(defaultData , {
-                someData : pci.data('someData'),
-                typeIdentifier : _typeIdentifier,
-                label : manifest.label,
-                description : manifest.description
+            return _.defaults(defaultData, {
+                prompt : pci.data('prompt')
             });
-            
+
             return defaultData;
         }
     };
