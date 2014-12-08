@@ -13,8 +13,10 @@ define([
 
     }, function(){
         
+        var interaction = this.widget.element;
+        
         //code to execute when leaving this state
-
+        interaction.data('pci').reset();
     });
 
     StateQuestion.prototype.initForm = function(){

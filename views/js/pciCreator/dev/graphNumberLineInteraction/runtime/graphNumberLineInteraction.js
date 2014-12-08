@@ -110,6 +110,20 @@ define([
 
             }
 
+            function reset(){
+                _.each(intervals, function(interval){
+                    interval.obj.destroy();
+                    interval.$control.remove();
+                    $intervalsOverlay.hide();
+                });
+                intervals = {};
+            }
+            
+            //expose the reset() method
+            this.reset = function(){
+                reset();
+            };
+
             /**
              * init rendering:
              */
@@ -212,7 +226,7 @@ define([
          * @param {Object} interaction
          */
         resetResponse : function(){
-
+            this.reset();
         },
         /**
          * Reverse operation performed by render()
