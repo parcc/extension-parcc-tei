@@ -116,7 +116,7 @@ define([
             this.axisConfig = buildAxisConfig(this.config);
             initAxis($container, this.axisConfig);
 
-
+            var $intervalsOverlay = $container.find('.intervals-overlay');
             var $intervalsSelected = $container.find('.intervals-selected');
             var $intervalTemplate = $container.find('.intervals-template .interval');
             var selectionMax = 3;
@@ -145,12 +145,13 @@ define([
                         obj : interval,
                         $control : $tpl
                     };
-                    
+
                     //active the button & interval editing
                     activate(uid);
-                    
-                    if(false){
+
+                    if(_.size(intervals) === selectionMax){
                         //deactivate the whole panel
+                        $intervalsOverlay.show();
                     }
                 }
 
@@ -172,6 +173,12 @@ define([
                 interval.obj.destroy();
                 $parent.remove();
                 intervals = _.omit(intervals, uid);
+
+                if(_.size(intervals) <= selectionMax){
+                    //re-enable buttons
+                    $intervalsOverlay.hide();
+                }
+
             });
 
         },

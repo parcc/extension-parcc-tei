@@ -9,13 +9,15 @@
 }
 
 .clearfix {
-  overflow: auto;
+    overflow: auto;
 }
 
 .graphNumberLineInteraction .prompt {margin-bottom:20px;}
 
 /*.graphNumberLineInteraction .shape-controls {position:relative; display: inline-block; width: 100%;}*/
-.graphNumberLineInteraction .shape-controls .intervals-available {float:left; border : 6px solid #f5f3f2; padding:4px;}
+.graphNumberLineInteraction .shape-controls .intervals-available {float:left; position : relative; border : 6px solid #f5f3f2; padding:4px;}
+.graphNumberLineInteraction .shape-controls .intervals-available .intervals-overlay {position:absolute; width:100%; height : 100%; top:0; left:0; background: #ddd; opacity : 0.6; display:none;}
+
 .graphNumberLineInteraction .shape-controls .intervals-selected {float:left;}
 .graphNumberLineInteraction .shape-controls .intervals-selected .interval {float:left; width:92px; border : 6px solid #f5f3f2; padding:4px; margin-left:10px;}
 .graphNumberLineInteraction .shape-controls .intervals-selected .interval .deleter {cursor: pointer; }
@@ -27,4 +29,3 @@
 .graphNumberLineInteraction .shape-controls .intervals-template {display:none;}
 
 .graphNumberLineInteraction .shape-controls .intervals-row {margin-bottom: 2px;}
-

@@ -69,6 +69,7 @@
                                             <html5:img src="assets/close-arrow.svg"/>
                                         </html5:button>
                                     </html5:div>
+                                    <html5:div class="intervals-overlay"></html5:div>
                                 </html5:div>
                                 <html5:div class="intervals-selected clearfix"></html5:div>
                                 <html5:div class="intervals-template">
