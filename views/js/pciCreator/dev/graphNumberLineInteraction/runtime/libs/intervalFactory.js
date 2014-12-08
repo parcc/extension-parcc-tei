@@ -69,7 +69,7 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
                 axis : 'x',
                 glow : true,
                 fill : !!fill,
-                color : '#266d9c',
+                color : config.color,
                 glowOpacity : .1,
                 removable : false,
                 on : {
