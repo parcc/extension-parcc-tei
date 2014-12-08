@@ -27,16 +27,9 @@
 </div>
 
 <div class="panel" id="creator-pointAndLineFunctionInteraction-available-graphs">
-    <label for="" class="has-icon">{{__ "Type of Elements"}}</label>
-    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
-    <div class="tooltip-content">{{__ 'Define which type of elements for the test taker to use.'}}</div>
-    <select name="graphs">
-        {{#each graphs}}
-        <option value="{{@key}}" {{#if selected}}selected="selected"{{/if}}>{{label}}</option>
-        {{/each}}
-    </select>
-</div>
-<div class="panel pointAndLineFunctionInteraction">
-    <label for="nbElement">{{__ "Number of Elements"}}</label>
-    <input name="nbElement" value="{{nbElement}}" data-increment="1" data-min="1" type="text">
+    <h3>{{__ "Type of Elements"}}</h3>
+    {{#each graphs}}
+    <label for="{{@key}}" class="spinner">{{label}}</label>
+    <input name="{{@key}}" value="{{@value}}" data-increment="1" type="text">
+    {{/each}}
 </div>

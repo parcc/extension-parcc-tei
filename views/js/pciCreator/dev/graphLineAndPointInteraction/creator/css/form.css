@@ -1,3 +1,5 @@
 .item-editor-sidebar .tool-group .panel.creator-pointAndLineFunctionInteraction h3 {display:block; padding-bottom: 8px;}
 .item-editor-sidebar .tool-group .panel.creator-pointAndLineFunctionInteraction label {display:inline;}
 .item-editor-sidebar .tool-group .panel.creator-pointAndLineFunctionInteraction .incrementer-ctrl-wrapper {margin:0 5px;}
+
+#creator-pointAndLineFunctionInteraction-available-graphs h3{display:block;};
