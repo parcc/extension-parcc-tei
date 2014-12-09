@@ -30,6 +30,13 @@ define([
 
     });
 
+    var updateGraphValue = function(interaction, value, name){
+        var temp = interaction.prop('graphs');
+        temp[name].count = value;
+        interaction.prop('graphs', temp);
+        interaction.triggerPci('configchange',[interaction.getProperties()]);
+    };
+
     StateQuestion.prototype.initForm = function(){
 
         //code to init your interaction property form (on the right side bar)
@@ -51,7 +58,6 @@ define([
             yMin : interaction.prop('yMin'),
             yMax : interaction.prop('yMax'),
             graphs : graphs,
-            nbElement : interaction.prop('elements').length
         }));
 
 
@@ -83,8 +89,15 @@ define([
                 interaction.prop('elements',elements);
                 interaction.triggerPci('configchange',[interaction.getProperties()]);
             },
-            graphs : function(interaction, value){
-                interaction.prop('graphs',value);
+            lines : updateGraphValue,
+            point : updateGraphValue,
+            segment : updateGraphValue,
+            solutionSet : function(interaction, value, name){
+                var temp = interaction.prop('graphs');
+                temp[name].count = value;
+                if (temp.lines.count < 2) { temp.lines.count = 2;}
+                console.log(temp);
+                interaction.prop('graphs', temp);
                 interaction.triggerPci('configchange',[interaction.getProperties()]);
             }
         };
