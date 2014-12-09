@@ -38,17 +38,9 @@ define([
             interaction = widget.element,
             $form = widget.$form,
             response = interaction.getResponseDeclaration(),
-            graphs = {
-                points : {label : 'Point'},
-                lines : {label : 'Line'},
-                segments : {label : 'Segment'},
-                solutionSet : {label : 'Solution Set'},
-                setPoints : {label : 'Set of Points'}
-            };
+            graphs = interaction.prop('graphs');
 
 
-        var default_type = interaction.prop('graphs');
-        graphs[default_type].selected = true;
 
         //render the form using the form template
         $form.html(formTpl({
