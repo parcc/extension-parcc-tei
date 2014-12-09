@@ -101,7 +101,8 @@ define([
 
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, changeCallbacks);
-
+        
+        //manually get array of checked graphs
         var $graphs = $form.find('[name=graphs]');
         $graphs.on('change', function(){
             var checked = [];
