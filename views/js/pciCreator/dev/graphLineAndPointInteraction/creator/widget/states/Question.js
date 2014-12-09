@@ -90,8 +90,9 @@ define([
                 interaction.triggerPci('configchange',[interaction.getProperties()]);
             },
             lines : updateGraphValue,
-            point : updateGraphValue,
-            segment : updateGraphValue,
+            points : updateGraphValue,
+            segments : updateGraphValue,
+            setPoints: updateGraphValue,
             solutionSet : function(interaction, value, name){
                 var temp = interaction.prop('graphs');
                 temp[name].count = value;
