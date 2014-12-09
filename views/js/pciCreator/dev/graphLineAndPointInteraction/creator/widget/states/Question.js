@@ -30,12 +30,12 @@ define([
 
     });
 
-    var updateGraphValue = function(interaction, value, name){
+    function updateGraphValue(interaction, value, name){
         var temp = interaction.prop('graphs');
         temp[name].count = value;
         interaction.prop('graphs', temp);
         interaction.triggerPci('configchange',[interaction.getProperties()]);
-    };
+    }
 
     StateQuestion.prototype.initForm = function(){
 
