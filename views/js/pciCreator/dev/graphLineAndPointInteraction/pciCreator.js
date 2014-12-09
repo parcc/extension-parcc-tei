@@ -36,9 +36,9 @@ define([
                 graphs : {
                     points : {label : 'Point', count : 0, elements : []},
                     lines : {label : 'Line', count : 0, elements : []},
-                    segments : {label : 'Segment', count : 0, element:[]},
-                    solutionSet : {label : 'Solution Set', count : 0, element:[]},
-                    setPoints : {label : 'Set of Points', count : 0, element: []}
+                    segments : {label : 'Segment', count : 0, elements:[]},
+                    solutionSet : {label : 'Solution Set', count : 0, elements:[]},
+                    setPoints : {label : 'Set of Points', count : 0, elements: []}
                 },
                 xMin : -10,
                 xMax : 10,

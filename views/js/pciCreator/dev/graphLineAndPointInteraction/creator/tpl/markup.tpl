@@ -11,7 +11,7 @@
                 <div class="template-points">
                     <button class="btn btn-info" name="points" value=""></button>
                 </div>
-                <div class="template-segment">
+                <div class="template-segments">
                     <button class="btn btn-info" name="segment" value=""></button>
                 </div>
                 <div class="template-solutionSet">
