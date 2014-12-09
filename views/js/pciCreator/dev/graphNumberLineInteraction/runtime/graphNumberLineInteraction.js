@@ -43,7 +43,18 @@ define([
         };
     }
 
-
+    function getAuthorizedIntervals(){
+        return [
+            'closed-closed',
+            'closed-open',
+            'open-closed',
+            'open-open',
+            'arrow-open',
+            'arrow-closed',
+            'open-arrow',
+            'closed-arrow'
+        ];
+    }
 
     var graphNumberLineInteraction = {
         id : -1,
@@ -118,7 +129,7 @@ define([
                 });
                 intervals = {};
             }
-            
+
             //expose the reset() method
             this.reset = function(){
                 reset();
@@ -130,11 +141,28 @@ define([
             this.axisConfig = buildAxisConfig(this.config);
             initAxis($container, this.axisConfig);
 
+            var $intervalsAvailable = $container.find('.intervals-available');
             var $intervalsOverlay = $container.find('.intervals-overlay');
             var $intervalsSelected = $container.find('.intervals-selected');
             var $intervalTemplate = $container.find('.intervals-template .interval');
-            var selectionMax = 3;
+            var selectionMax = 2;
             var intervals = {};
+
+            function setAvailableIntervals(availableIntervals){
+                $intervalsAvailable.find('.interval-available').each(function(){
+                    var $this = $(this);
+                    if(_.indexOf(availableIntervals, $this.attr('value')) >= 0){
+                        $this.addClass('activated');
+                    }else{
+                        $this.removeClass('activated');
+                    }
+                });
+                //need to reset all
+                reset();
+            }
+
+            var availableIntervals = this.config.intervals ? this.config.intervals.split(',') : getAuthorizedIntervals();
+            setAvailableIntervals(availableIntervals);
 
             $container.on('click', '.intervals-available .btn-info', function(){
 
@@ -195,6 +223,7 @@ define([
 
             });
 
+            this.on('intervalschange', setAvailableIntervals);
         },
         /**
          * Programmatically set the response following the json schema described in

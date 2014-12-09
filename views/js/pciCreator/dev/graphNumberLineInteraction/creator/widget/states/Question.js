@@ -4,11 +4,12 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!graphNumberLineInteraction/creator/tpl/propertiesForm',
-    'lodash'
-], function(stateFactory, Question, formElement, containerEditor, formTpl, _){
+    'lodash',
+    'jquery'
+], function(stateFactory, Question, formElement, containerEditor, formTpl, _, $){
 
     var StateQuestion = stateFactory.extend(Question, function(){
-        
+
         var interaction = this.widget.element,
             $container = this.widget.$container;
 
@@ -24,7 +25,7 @@ define([
         });
 
     }, function(){
-        
+
         containerEditor.destroy(this.widget.$container.find('.prompt'));
         this.widget.element.data('pci').reset();
     });
@@ -32,38 +33,55 @@ define([
     StateQuestion.prototype.initForm = function(){
 
         //code to init your interaction property form (on the right side bar)
-        
-        var widget = this.widget, 
+
+        var widget = this.widget,
             interaction = widget.element,
             $form = widget.$form,
             response = interaction.getResponseDeclaration(),
-            somePropValue = 'some prop value';
-        
+            intervals = {
+                'closed-closed' : {label : 'closed-closed'},
+                'closed-open' : {label : 'closed-open'},
+                'open-closed' : {label : 'open-closed'},
+                'open-open' : {label : 'open-open'},
+                'arrow-open' : {label : 'arrow-open'},
+                'arrow-closed' : {label : 'arrow-closed'},
+                'open-arrow' : {label : 'open-arrow'},
+                'closed-arrow' : {label : 'closed-arrow'}
+            };
+
+        var intervalSet = interaction.prop('intervals');
+        intervalSet = intervalSet ? intervalSet.split(',') : [];
+        _.each(intervalSet, function(type){
+            intervals[type].checked = true;
+        });
+
         //render the form using the form template
         $form.html(formTpl({
             serial : response.serial,
-            someProp : somePropValue,
+            intervals : intervals,
             identifier : interaction.attr('responseIdentifier')
         }));
-        
+
         //init form javascript
         formElement.initWidget($form);
 
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, {
-            someProp : function(interaction, value){
-
-                //update the pci property value:
-                interaction.prop('someProp', value);
-
-                //update rendering (if required to update the visual)
-                //warning heavy operation : might be a good idea to use lodash.throttle()
-                widget.refresh();
-            },
             identifier : function(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             }
+        });
+        
+        //manually get array of checked intervals
+        var $intervals = $form.find('[name=intervals]');
+        $intervals.on('change', function(){
+            var checked = [];
+            $intervals.filter(':checked').each(function(){
+                checked.push($(this).val());
+            });
+            interaction.prop('intervals', checked.join(','));
+            interaction.triggerPci('intervalschange', [checked]);
         });
     };
 

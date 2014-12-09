@@ -32,6 +32,7 @@ define([
          */
         getDefaultProperties : function(pci){
             return {
+                intervals : 'closed-closed,closed-open,open-closed,open-open,arrow-open,arrow-closed,open-arrow,closed-arrow',
                 color : '#266d9c',
                 min : -5,
                 max : 5
