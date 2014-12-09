@@ -95,8 +95,7 @@ define([
             solutionSet : function(interaction, value, name){
                 var temp = interaction.prop('graphs');
                 temp[name].count = value;
-                if (temp.lines.count < 2) { temp.lines.count = 2;}
-                console.log(temp);
+                if (temp.lines.count < 1) { temp.lines.count = 1;}
                 interaction.prop('graphs', temp);
                 interaction.triggerPci('configchange',[interaction.getProperties()]);
             }
