@@ -1,0 +1,38 @@
+/*add some style, need to scope (using the typeIdentifier as class prefix) every style declaration to prevent collision */
+
+.graphZoomNumberLineInteraction {
+    width:100%;
+    padding:30px 30px 50px;
+    margin:20px 0;
+    padding:20px;
+    border : 6px solid #f5f3f2;
+}
+
+.graphZoomNumberLineInteraction .shape-controls .clearfix {
+    overflow: auto;
+}
+
+.graphZoomNumberLineInteraction .prompt {margin-bottom:20px;}
+
+.graphZoomNumberLineInteraction .shape-controls .intervals-available {float:left; position : relative; border : 6px solid #f5f3f2; padding:4px; margin-right : 10px; margin-bottom:10px;}
+.graphZoomNumberLineInteraction .shape-controls .intervals-available .intervals-overlay {position:absolute; width:100%; height : 100%; top:0; left:0; background: #ddd; opacity : 0.6; display:none;}
+.graphZoomNumberLineInteraction .shape-controls .intervals-available .interval-available {display:none;}
+.graphZoomNumberLineInteraction .shape-controls .intervals-available .interval-available.activated {display:inline-block;}
+
+.graphZoomNumberLineInteraction .shape-controls .intervals-selected {float:left;}
+.graphZoomNumberLineInteraction .shape-controls .intervals-selected .interval {float:left; position : relative; width:92px; border : 6px solid #f5f3f2; padding:4px; margin-right:10px;}
+.graphZoomNumberLineInteraction .shape-controls .intervals-selected .interval .deleter {cursor: pointer; }
+.graphZoomNumberLineInteraction .shape-controls .intervals-selected .interval .deleter:before {font-size:1.25rem; margin-right: 3px;}
+
+.graphZoomNumberLineInteraction .shape-controls .intervals-selected .interval .btn {margin-bottom:10px;}
+
+.graphZoomNumberLineInteraction .shape-controls button {padding: 0 6px 8px; height:36px; width:72px; margin-right:2px;}
+.graphZoomNumberLineInteraction .shape-controls button img {height:20px;width:50px;}
+
+.graphZoomNumberLineInteraction .shape-controls .intervals-template {display:none;}
+
+.graphZoomNumberLineInteraction .shape-controls .intervals-row {margin-bottom: 2px;}
+
+/*alternative deleter*/
+/*.graphZoomNumberLineInteraction .shape-controls .intervals-selected .interval .interval-delete {cursor: pointer; position:absolute; top:0; right:0; font-size:2rem;}
+.graphZoomNumberLineInteraction .shape-controls .intervals-selected .interval .deleter {display:none;}*/
