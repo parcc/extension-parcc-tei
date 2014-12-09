@@ -33,12 +33,17 @@ define([
          */
         getDefaultProperties : function(pci){
             return {
-                graphs : 'lines',
+                graphs : {
+                    points : {label : 'Point', count : 0, elements : []},
+                    lines : {label : 'Line', count : 0, elements : []},
+                    segments : {label : 'Segment', count : 0, element:[]},
+                    solutionSet : {label : 'Solution Set', count : 0, element:[]},
+                    setPoints : {label : 'Set of Points', count : 0, element: []}
+                },
                 xMin : -10,
                 xMax : 10,
                 yMin : -10,
-                yMax : 10,
-                elements : []
+                yMax : 10
             };
         },
         /**

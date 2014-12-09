@@ -30,6 +30,13 @@ define([
 
     });
 
+    function updateGraphValue(interaction, value, name){
+        var temp = interaction.prop('graphs');
+        temp[name].count = value;
+        interaction.prop('graphs', temp);
+        interaction.triggerPci('configchange',[interaction.getProperties()]);
+    }
+
     StateQuestion.prototype.initForm = function(){
 
         //code to init your interaction property form (on the right side bar)
@@ -38,17 +45,9 @@ define([
             interaction = widget.element,
             $form = widget.$form,
             response = interaction.getResponseDeclaration(),
-            graphs = {
-                points : {label : 'Point'},
-                lines : {label : 'Line'},
-                segments : {label : 'Segment'},
-                solutionSet : {label : 'Solution Set'},
-                setPoints : {label : 'Set of Points'}
-            };
+            graphs = interaction.prop('graphs');
 
 
-        var default_type = interaction.prop('graphs');
-        graphs[default_type].selected = true;
 
         //render the form using the form template
         $form.html(formTpl({
@@ -59,7 +58,6 @@ define([
             yMin : interaction.prop('yMin'),
             yMax : interaction.prop('yMax'),
             graphs : graphs,
-            nbElement : interaction.prop('elements').length
         }));
 
 
@@ -91,8 +89,15 @@ define([
                 interaction.prop('elements',elements);
                 interaction.triggerPci('configchange',[interaction.getProperties()]);
             },
-            graphs : function(interaction, value){
-                interaction.prop('graphs',value);
+            lines : updateGraphValue,
+            points : updateGraphValue,
+            segments : updateGraphValue,
+            setPoints: updateGraphValue,
+            solutionSet : function(interaction, value, name){
+                var temp = interaction.prop('graphs');
+                temp[name].count = value;
+                if (temp.lines.count < 1) { temp.lines.count = 1;}
+                interaction.prop('graphs', temp);
                 interaction.triggerPci('configchange',[interaction.getProperties()]);
             }
         };
