@@ -128,10 +128,18 @@ define([
             points : updateGraphValue,
             segments : updateGraphValue,
             setPoints: updateGraphValue,
-            solutionSet : function(interaction, value, name){
+            solutionSet : function(interaction, value){
                 var temp = interaction.prop('graphs');
-                temp[name].count = value;
-                if (temp.lines.count < 1) { temp.lines.count = 1;}
+                temp.solutionSet.count = value;
+                if (temp.lines.count < 1) {
+                    temp.lines.count = 1;
+                    temp.lines.elements = defaultConfig('line', 1);
+                }
+                if (value > temp.solutionSet.elements.length) {
+                    temp.solutionSet.elements = temp.solutionSet.elements.concat(defaultConfig('solutionSet',value - temp.solutionSet.elements.length));
+                }else if (value < temp.solutionSet.elements.length) {
+                    temp.solutionSet.elements = _.first(temp.solutionSet.elements, value);
+                }
                 interaction.prop('graphs', temp);
                 interaction.triggerPci('configchange',[interaction.getProperties()]);
             }

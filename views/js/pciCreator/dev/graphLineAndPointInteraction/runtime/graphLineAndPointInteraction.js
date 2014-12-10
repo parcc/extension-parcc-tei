@@ -152,6 +152,7 @@ define([
                 var $controlArea = $('.shape-controls');
                 $controlArea.children('button').remove();
                 // Loop over all elements we have
+
                 _.each(options.graphs, function(graphType, typeName){
                     _.each(graphType.elements, function(element){
                         var $template = $('.template-' + typeName, '.pointAndLineFunctionInteraction'),
