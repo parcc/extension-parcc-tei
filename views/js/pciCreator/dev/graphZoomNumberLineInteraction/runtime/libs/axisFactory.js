@@ -7,6 +7,7 @@ define(['OAT/lodash'], function(_){
         left : 40,
         min : -5,
         max : 5,
+        labels : false,
         thickness : 2,
         color : '#000',
         divisionWidth : 16,
@@ -76,6 +77,13 @@ define(['OAT/lodash'], function(_){
         });
     }
 
+    function getLabel(i, config){
+        if(config && _.isArray(config.labels) && config.labels[i] !== undefined && config.labels[i] !== false){
+            return config.labels[i];
+        }
+        return i;
+    }
+
     function axisFactory(paper, config){
 
         config = _.defaults(config || {}, _defaults);
@@ -84,7 +92,7 @@ define(['OAT/lodash'], function(_){
             arrowRight,
             arrowLeft,
             steps = [];//record the snapping steps
-        
+
         var obj = {
             getMin : function(){
                 return config.min;
@@ -103,7 +111,7 @@ define(['OAT/lodash'], function(_){
             },
             snap : function(x0){
                 var step = config.unitSize / config.unitSubDivision;
-                var x = paper.raphael.snapTo(steps, x0, step/2);
+                var x = paper.raphael.snapTo(steps, x0, step / 2);
                 var y = config.top;
                 return [x, y];
             },
@@ -125,7 +133,7 @@ define(['OAT/lodash'], function(_){
                     path += 'M' + position + ',' + (config.top - config.divisionWidth);
                     path += 'L' + position + ',' + (config.top + config.divisionWidth);
 
-                    var label = paper.text(position, config.top - config.divisionWidth - config.fontSize / 2 - 5, i);
+                    var label = paper.text(position, config.top - config.divisionWidth - config.fontSize / 2 - 5, getLabel(i, config));
                     label.attr({
                         'font-size' : config.fontSize
                     });
@@ -135,12 +143,12 @@ define(['OAT/lodash'], function(_){
                         //draw sub divs if applicable
                         var subPosition = position + subDivisionSize;
                         steps.push(subPosition);
-                        
+
                         for(var j = config.unitSubDivision; j > 1; j--){
                             path += 'M' + subPosition + ',' + (config.top - config.subDivisionWidth);
                             path += 'L' + subPosition + ',' + (config.top + config.subDivisionWidth);
                             subPosition += subDivisionSize;
-                            
+
                             if(j !== config.unitSubDivision){
                                 steps.push(subPosition);
                             }
@@ -231,6 +239,12 @@ define(['OAT/lodash'], function(_){
                 _applyStyle(arrow, config);
                 set.push(arrow);
                 return arrow;
+            },
+            getConfig : function(){
+                return _.clone(config);
+            },
+            setConfig : function(key, value){
+                config[key] = value;
             }
         };
 

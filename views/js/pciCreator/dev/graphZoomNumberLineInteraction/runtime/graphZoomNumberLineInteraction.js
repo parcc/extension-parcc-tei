@@ -5,8 +5,9 @@ define([
     'OAT/util/event',
     'OAT/scale.raphael',
     'PARCC/pointFactory',
-    'graphZoomNumberLineInteraction/runtime/libs/axisFactory'
-], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory){
+    'graphZoomNumberLineInteraction/runtime/libs/axisFactory',
+    'graphZoomNumberLineInteraction/runtime/libs/axisZoom'
+], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, axisZoom){
 
     function createCanvas($container, config){
 
@@ -14,7 +15,7 @@ define([
         var paper = scaleRaphael(
             $('.shape-container', $container)[0],
             620,
-            120
+            300
             );
 
         //@todo make it responsive
@@ -27,8 +28,11 @@ define([
         var _color = rawConfig.graphColor || '#266d9c';
 
         return {
+            min : 0,
+            max : 10,
             top : 60,
             left : 50,
+            unitSize : 50,
             unitSubDivision : 2,
             arrows : true,
             plot : {
@@ -66,15 +70,47 @@ define([
 
             var paper,
                 axis,
+                zoomAxis,
                 _this = this;
+
+            function findRect(rects, position){
+
+                var ret;
+                var positions = _.keys(rects);
+                var stepWidth = positions[1] - positions[0];
+
+                _.forIn(rects, function(rect, pos){
+                    pos = parseInt(pos);
+                    if(pos < position && position < pos + stepWidth){
+                        ret = rect;
+                        return false;
+                    }
+                });
+
+                return ret;
+            }
 
             function initAxis($container, axisConfig){
 
                 //create paper
                 paper = createCanvas($container, axisConfig);
                 axis = new axisFactory(paper, axisConfig);
-
-                return;
+                
+                //build zoom axis config from the parent one
+                var axisSizePx = (axisConfig.max - axisConfig.min) * axisConfig.unitSize;
+                var zoomAxisConfig = _.defaults({
+                    min : 0,
+                    max : 1,
+                    top : axisConfig.top + 150,
+                    unitSize : axisSizePx,
+                    unitSubDivision : 10,
+                    arrows : false,
+                    labels : ['A', 'B']
+                }, axisConfig);
+                zoomAxis = new axisFactory(paper, zoomAxisConfig);
+                console.log(zoomAxisConfig);
+                
+                var rects = axisZoom.createZoomable(axis);
 
                 //for zoom number line interaction
                 axis.clickable();
@@ -85,6 +121,10 @@ define([
                     // Get the coordinate of the click
                     var fx = event.layerX;
 
+                    var rect = findRect(rects, fx);
+                    console.log(fx, rect);
+
+                    return;
                     //set point position
                     addPoint(fx);
                 });
@@ -92,7 +132,7 @@ define([
             }
 
             function reset(){
-                
+
             }
 
             //expose the reset() method
@@ -110,7 +150,9 @@ define([
             var $intervalsOverlay = $container.find('.intervals-overlay');
             var $intervalsSelected = $container.find('.intervals-selected');
             var $intervalTemplate = $container.find('.intervals-template .interval');
-            
+
+            //@todo to be implemented
+
         },
         /**
          * Programmatically set the response following the json schema described in

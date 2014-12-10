@@ -23,59 +23,15 @@
                 </pci:resources>
 
                 <pci:properties>
-                    <!--all interval types : closed-closed,closed-open,open-closed,open-open,arrow-open,arrow-closed,open-arrow,closed-arrow -->
-                    <pci:entry key="intervals">closed-closed,closed-open,open-closed,open-open,arrow-open,arrow-closed,open-arrow,closed-arrow</pci:entry>
                 </pci:properties>
 
                 <pci:markup>
                     <html5:div class="graphZoomNumberLineInteraction">
                         <html5:div class="prompt">
-                            What is the solution of the inequality 5x + 2 > 12?
-                            Plot the solution set on the number line below.
+                            Use the number line to plot the <html5:em>approximate</html5:em> area of a circle with a diamter of 2 units.
                         </html5:div>
                         <html5:div class="shape-panel">
                             <html5:div class="shape-container"></html5:div>
-                            <html5:div class="shape-controls clearfix">
-                                <html5:div class="intervals-available">
-                                    <html5:div class="intervals-row">
-                                        <html5:button name="closed-closed" value="closed-closed" class="interval-available btn btn-info" type="button">
-                                            <html5:img src="assets/close-close.svg"/>
-                                        </html5:button>
-                                        <html5:button name="closed-open" value="closed-open" class="interval-available btn btn-info" type="button">
-                                            <html5:img src="assets/close-open.svg"/>
-                                        </html5:button>
-                                        <html5:button name="open-closed" value="open-closed" class="interval-available btn btn-info" type="button">
-                                            <html5:img src="assets/open-close.svg"/>
-                                        </html5:button>
-                                        <html5:button name="open-open" value="open-open" class="interval-available btn btn-info" type="button">
-                                            <html5:img src="assets/open-open.svg"/>
-                                        </html5:button>
-                                    </html5:div>
-                                    <html5:div class="intervals-row">
-                                        <html5:button name="arrow-open" value="arrow-open" class="interval-available btn btn-info" type="button">
-                                            <html5:img src="assets/arrow-open.svg"/>
-                                        </html5:button>
-                                        <html5:button name="arrow-closed" value="arrow-closed" class="interval-available btn btn-info" type="button">
-                                            <html5:img src="assets/arrow-close.svg"/>
-                                        </html5:button>
-                                        <html5:button name="open-arrow" value="open-arrow" class="interval-available btn btn-info" type="button">
-                                            <html5:img src="assets/open-arrow.svg"/>
-                                        </html5:button>
-                                        <html5:button name="closed-arrow" value="closed-arrow" class="interval-available btn btn-info" type="button">
-                                            <html5:img src="assets/close-arrow.svg"/>
-                                        </html5:button>
-                                    </html5:div>
-                                    <html5:div class="intervals-overlay"></html5:div>
-                                </html5:div>
-                                <html5:div class="intervals-selected clearfix"></html5:div>
-                                <html5:div class="intervals-template">
-                                    <html5:div class="interval" data-uid="">
-                                        <!--<html5:div class="interval-delete icon icon-bin"></html5:div>-->
-                                        <html5:button class="btn btn-info" type="button"></html5:button>
-                                        <html5:a class="deleter" title="delete the interval" href="#">delete</html5:a>
-                                    </html5:div>
-                                </html5:div>
-                            </html5:div>
                         </html5:div>
                     </html5:div>
                 </pci:markup>
