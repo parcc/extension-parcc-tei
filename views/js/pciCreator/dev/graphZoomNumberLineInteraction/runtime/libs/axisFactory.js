@@ -117,7 +117,7 @@ define(['OAT/lodash'], function(_){
             },
             render : function(){
 
-                steps = [];//reset the snapping step array
+                this.clear();
 
                 var path = 'M' + config.left + ',' + config.top;
                 var axisSizePx = (config.max - config.min) * config.unitSize;
@@ -245,6 +245,22 @@ define(['OAT/lodash'], function(_){
             },
             setConfig : function(key, value){
                 config[key] = value;
+            },
+            buildContainerBox : function(){
+
+                var padding = 20,
+                    absolute = true,
+                    bb = set.getBBox(),
+                    box;
+
+                if(absolute){
+                    box = paper.rect(bb.x - padding, bb.y - padding, bb.width + 2 * padding, bb.height + 2 * padding);
+                }else{
+                    var axisSizePx = (config.max - config.min) * config.unitSize;
+                    box = paper.rect(config.left - padding, config.top - padding, axisSizePx + 2 * padding, config.divisionWidth + 2 * padding);
+                }
+                
+                return box;
             }
         };
 
