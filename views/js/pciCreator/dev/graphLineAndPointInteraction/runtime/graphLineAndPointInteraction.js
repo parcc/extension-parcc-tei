@@ -158,7 +158,7 @@ define([
                         var $template = $('.template-' + typeName, '.pointAndLineFunctionInteraction'),
                         $button = $template.children().first().clone();
                         // Change attributes
-                        $button.attr('value',element.label).text(element.label).addClass('available');
+                        $button.data('uid',element.uid).text(element.label).addClass('available');
                         $controlArea.append($button);
                     });
                 });
@@ -168,6 +168,10 @@ define([
             this.on('gridchange', function(config){
                 self.config = config;
                 initGrid($container, buildGridConfig(config));
+            });
+
+            $('.pointAndLineFunctionInteraction').on('click', 'button', function(event) {
+                $container.trigger('elementchange',$(this).data('config'));
             });
 
             // var plotFactory = new PlotFactory(grid);

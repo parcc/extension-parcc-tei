@@ -40,7 +40,11 @@ define([
         var _color = ['#bb1a2a','#0f904a','#d9af5b','#0c5d91'],
         elements = [];
         for (var i = 0; i < nbElements; i++) {
-            elements.push({color : _color[i%4],label: labelSlug + '_' + String(i + existingElements)});
+            elements.push({
+                color : _color[i%4],
+                label: labelSlug + '_' + String(i + existingElements),
+                uid : _.uniqueId()
+            });
         }
         return elements;
     }
