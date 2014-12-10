@@ -71,6 +71,7 @@ define([
             var paper,
                 axis,
                 zoomAxis,
+                zoomEffect,
                 selectedRect,
                 _this = this;
 
@@ -109,15 +110,13 @@ define([
                     labels : ['A', 'B']
                 }, axisConfig);
                 zoomAxis = new axisFactory(paper, zoomAxisConfig);
+                zoomAxis.getSet().hide();
                 
-                var zoomBox = zoomAxis.buildContainerBox();
+                //create the zoomable rectangles
                 var rects = axisZoom.createZoomable(axis);
 
-                //for zoom number line interaction
-                axis.clickable();
-
-                //bind click event:
-                axis.getSet().click(function(event){
+                //bind click event
+                axis.clickable().click(function(event){
 
                     // Get the coordinate of the click
                     var fx = event.layerX;
@@ -125,16 +124,24 @@ define([
                     
                     if(rect){
                         
-                        //updated selected rectangle
+                        //clear previous drawn elements
                         if(selectedRect){
                             selectedRect.rect.hide();
                         }
+                        if(zoomEffect){
+                            zoomEffect.remove();
+                        }
+                        
+                        //updated selected rectangle and show it
                         selectedRect = rect;
                         selectedRect.rect.show();
                         
-                        axisZoom.drawZoomEffect(paper, selectedRect.rect, zoomBox);
+                        //update the zoom axis label
                         zoomAxis.setConfig('labels', [selectedRect.coord, selectedRect.coord + .5]);
                         zoomAxis.render();
+                        
+                        //add zoom effect
+                        zoomEffect = axisZoom.drawZoomEffect(paper, selectedRect.rect, zoomAxis.buildContainerBox({shadow:true}));
                     }
 
                     return;

@@ -101,6 +101,7 @@ define(['OAT/lodash'], function(_){
                 to.zoomEffect.remove();
             }
             to.zoomEffect = zoomEffect;
+            zoomEffect.insertBefore(to);
         }
 
         return zoomEffect;

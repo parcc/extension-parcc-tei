@@ -202,6 +202,7 @@ define(['OAT/lodash'], function(_){
                     stroke : 0
                 });
                 set.push(clickableArea);
+                return clickableArea;
             },
             /**
              * Get width of the _borderBox
@@ -246,25 +247,48 @@ define(['OAT/lodash'], function(_){
             setConfig : function(key, value){
                 config[key] = value;
             },
-            buildContainerBox : function(){
-
-                var padding = 20,
-                    absolute = true,
+            buildContainerBox : function(options){
+                
+                var _defaults = {
+                    padding : 20,
+                    absolute : true,
+                    shadow : false
+                };
+                
+                options = _.defaults(options || {}, _defaults);
+                
+                var padding = options.padding,
                     bb = set.getBBox(),
                     box;
 
-                if(absolute){
+                if(options.absolute){
                     box = paper.rect(bb.x - padding, bb.y - padding, bb.width + 2 * padding, bb.height + 2 * padding);
                 }else{
                     var axisSizePx = (config.max - config.min) * config.unitSize;
                     box = paper.rect(config.left - padding, config.top - padding, axisSizePx + 2 * padding, config.divisionWidth + 2 * padding);
                 }
+                box.attr({
+                    fill : '#fff'
+                });
+                set.push(box);
+                box.insertBefore(set);
                 
+                if(options && options.shadow){
+                    set.push(box.glow({
+                        width : 5,
+                        fill : true,
+                        offsetx : 3,
+                        offsety : 3,
+                        color : '#999'
+                    }));
+                }
+
                 return box;
             }
         };
 
         obj.render();
+        
         return obj;
     }
 
