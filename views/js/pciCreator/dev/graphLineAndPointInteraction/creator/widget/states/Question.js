@@ -35,11 +35,11 @@ define([
      * @param  {Number} nbElements How many elements you want to generate
      * @return {Array}            Element Collection
      */
-    function defaultConfig(label_slug, nbElements){
+    function defaultConfig(labelSlug, nbElements){
         var _color = ['#bb1a2a','#0f904a','#d9af5b','#0c5d91'],
         elements = [];
         for (var i = 0; i < nbElements; i++) {
-            elements.push({color : _color[i%4],label: label_slug + '_' + i});
+            elements.push({color : _color[i%4],label: labelSlug + '_' + i});
         }
         return elements;
     }
@@ -55,7 +55,6 @@ define([
         var temp = interaction.prop('graphs');
         value = parseInt(value);
         temp[name].count = value;
-        console.log(value,name,temp[name].elements.length);
 
         if (value > temp[name].elements.length) {
             /**
@@ -70,7 +69,6 @@ define([
             temp[name].elements = _.first(temp[name].elements, value);
         }
         interaction.prop('graphs', temp);
-        console.log(temp);
         interaction.triggerPci('configchange',[interaction.getProperties()]);
     }
 

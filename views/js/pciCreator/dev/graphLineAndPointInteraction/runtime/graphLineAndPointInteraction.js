@@ -148,6 +148,19 @@ define([
             this.on('configchange',function(options){
                 self.config = buildGridConfig(options);
                 initGrid($container, self.config);
+                // Remove all existing button
+                var $controlArea = $('.shape-controls');
+                $controlArea.children('button').remove();
+                // Loop over all elements we have
+                _.each(options.graphs, function(graphType, typeName){
+                    _.each(graphType.elements, function(element){
+                        var $template = $('.template-' + typeName, '.pointAndLineFunctionInteraction'),
+                        $button = $template.children().first().clone();
+                        // Change attributes
+                        $button.attr('value',element.label).text(element.label).addClass('available');
+                        $controlArea.append($button);
+                    });
+                });
             });
 
 
