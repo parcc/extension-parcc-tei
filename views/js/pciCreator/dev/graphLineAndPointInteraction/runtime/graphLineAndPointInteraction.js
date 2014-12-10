@@ -149,7 +149,7 @@ define([
                 self.config = buildGridConfig(options);
                 initGrid($container, self.config);
                 // Remove all existing button
-                var $controlArea = $('.shape-controls');
+                var $controlArea = $('.shape-controls','.pointAndLineFunctionInteraction');
                 $controlArea.children('button').remove();
                 // Loop over all elements we have
 
