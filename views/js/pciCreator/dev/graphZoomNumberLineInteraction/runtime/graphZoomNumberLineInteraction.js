@@ -71,6 +71,7 @@ define([
             var paper,
                 axis,
                 zoomAxis,
+                selectedRect,
                 _this = this;
 
             function findRect(rects, position){
@@ -95,7 +96,7 @@ define([
                 //create paper
                 paper = createCanvas($container, axisConfig);
                 axis = new axisFactory(paper, axisConfig);
-                
+
                 //build zoom axis config from the parent one
                 var axisSizePx = (axisConfig.max - axisConfig.min) * axisConfig.unitSize;
                 var zoomAxisConfig = _.defaults({
@@ -108,8 +109,8 @@ define([
                     labels : ['A', 'B']
                 }, axisConfig);
                 zoomAxis = new axisFactory(paper, zoomAxisConfig);
-                console.log(zoomAxisConfig);
                 
+                var zoomBox = zoomAxis.buildContainerBox();
                 var rects = axisZoom.createZoomable(axis);
 
                 //for zoom number line interaction
@@ -120,9 +121,21 @@ define([
 
                     // Get the coordinate of the click
                     var fx = event.layerX;
-
                     var rect = findRect(rects, fx);
-                    console.log(fx, rect);
+                    
+                    if(rect){
+                        
+                        //updated selected rectangle
+                        if(selectedRect){
+                            selectedRect.rect.hide();
+                        }
+                        selectedRect = rect;
+                        selectedRect.rect.show();
+                        
+                        axisZoom.drawZoomEffect(paper, selectedRect.rect, zoomBox);
+                        zoomAxis.setConfig('labels', [selectedRect.coord, selectedRect.coord + .5]);
+                        zoomAxis.render();
+                    }
 
                     return;
                     //set point position
