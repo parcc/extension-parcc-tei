@@ -29,10 +29,49 @@ define([
         //code to execute when leaving this state
 
     });
+    /**
+     * Create a default config width a label and a color
+     * @param  {String} label_slug slug used in combination with a count
+     * @param  {Number} nbElements How many elements you want to generate
+     * @params {Number} existingElements How many elements already exists
+     * @return {Array}            Element Collection
+     */
+    function defaultConfig(labelSlug, nbElements, existingElements){
+        var _color = ['#bb1a2a','#0f904a','#d9af5b','#0c5d91'],
+        elements = [];
+        for (var i = 0; i < nbElements; i++) {
+            elements.push({
+                color : _color[i%4],
+                label: labelSlug + '_' + String(i + existingElements),
+                uid : _.uniqueId()
+            });
+        }
+        return elements;
+    }
 
+    /**
+     * Update values for the graphs properties
+     * @param  {Object} interaction
+     * @param  {String} value       value of the changed element
+     * @param  {String} name        name of the changed element
+     */
     function updateGraphValue(interaction, value, name){
+        /** @type {Object} the old graphs object */
         var temp = interaction.prop('graphs');
+        value = parseInt(value);
         temp[name].count = value;
+        if (value > temp[name].elements.length) {
+            /**
+             * If value are greater than what we have, add the diff w/ default values
+             */
+            temp[name].elements = temp[name].elements.concat(defaultConfig(name,value - temp[name].elements.length,temp[name].elements.length));
+        }else if (value < temp[name].elements.length) {
+            /**
+             * If value are smaller than what we have, just take the firsts n elements
+             * where n is the value.
+             */
+            temp[name].elements = _.first(temp[name].elements, value);
+        }
         interaction.prop('graphs', temp);
         interaction.triggerPci('configchange',[interaction.getProperties()]);
     }
@@ -93,10 +132,18 @@ define([
             points : updateGraphValue,
             segments : updateGraphValue,
             setPoints: updateGraphValue,
-            solutionSet : function(interaction, value, name){
+            solutionSet : function(interaction, value){
                 var temp = interaction.prop('graphs');
-                temp[name].count = value;
-                if (temp.lines.count < 1) { temp.lines.count = 1;}
+                temp.solutionSet.count = value;
+                if (temp.lines.count < 1) {
+                    temp.lines.count = 1;
+                    temp.lines.elements = defaultConfig('line', 1);
+                }
+                if (value > temp.solutionSet.elements.length) {
+                    temp.solutionSet.elements = temp.solutionSet.elements.concat(defaultConfig('solutionSet',value - temp.solutionSet.elements.length));
+                }else if (value < temp.solutionSet.elements.length) {
+                    temp.solutionSet.elements = _.first(temp.solutionSet.elements, value);
+                }
                 interaction.prop('graphs', temp);
                 interaction.triggerPci('configchange',[interaction.getProperties()]);
             }

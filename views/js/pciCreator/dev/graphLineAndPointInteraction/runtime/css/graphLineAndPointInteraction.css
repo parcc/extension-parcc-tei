@@ -1,10 +1,9 @@
 /*add some style, need to scope (using the typeIdentifier as class prefix) every style declaration to prevent collision */
 
 .pointAndLineFunctionInteraction {
-    width:100%;
-    padding:30px 30px 50px;
-    margin:20px 0;
-    padding:20px;
+    width: 100%;
+    margin: 20px 0;
+    padding: 20px;
     border : 6px solid #f5f3f2;
 }
 
