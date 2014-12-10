@@ -30,6 +30,6 @@
     <h3>{{__ "Type of Elements"}}</h3>
     {{#each graphs}}
     <label for="{{@key}}" class="spinner">{{label}}</label>
-    <input name="{{@key}}" value="{{count}}" data-increment="1" type="text">
+    <input name="{{@key}}" value="{{count}}" data-increment="1" data-min="0" type="text">
     {{/each}}
 </div>
