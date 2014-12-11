@@ -111,22 +111,31 @@ define([
              * @param  {Object} gridConfig Config (cleaned)
              */
             function initGrid($container, gridConfig){
-                // @todo : Clear Everything
+                // [TODO] - Clear Everything
 
-                var paper = createCanvas($container, gridConfig);
-                var grid = gridFactory(paper,gridConfig);
+                /** @type {Object} Canvas */
+                var paper = createCanvas($container, gridConfig),
+                /** @type {Object} Grid */
+                grid = gridFactory(paper,gridConfig),
+                /** @type {Array} Collection of all Elements in the canvas */
+                elementsInCanvas = [];
+
                 grid.clickable();
-
 
                 grid.children.click(function(event){
 
-                    // Get the coordinate for a click
+                        ////////////////////////////////////
+                        // Get the coordinate for a click //
+                        ////////////////////////////////////
                     var bnds = event.target.getBoundingClientRect(),
+                        /** @type {Number} Scalling factor */
                     wfactor = paper.w / paper.width,
+                        /** @type {Number} x coordinate from the origin of the canvas in px */
                     fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
+                        /** @type {Number} y coordinate from the origin of the canvas in px */
                     fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
 
-
+                        // trigger event that we click somewhere
                     $(paper.canvas).trigger('click_grid',{x: fx, y: fy});
 
 
@@ -136,8 +145,7 @@ define([
                     self.on('configchange', function(){
                         element.destroy();
                     });
-
-                    // @todo : Get the current set
+                        // [TODO] - Get the current set
                     // var activeSet = _.find(sets,{active : true});
 
                 });
