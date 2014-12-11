@@ -8,7 +8,8 @@
     "email": "sam@taotesting.com",
     "libraries": [
         "IMSGlobal/jquery_2_1_1",
-        "./runtime/libs/axisFactory"
+        "./runtime/libs/axisFactory",
+        "./runtime/libs/axisZoom"
     ],
     "css": [
         "./runtime/css/graphZoomNumberLineInteraction.css"
