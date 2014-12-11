@@ -122,31 +122,45 @@ define([
 
                 grid.clickable();
 
-                grid.children.click(function(event){
+                /**
+                 * listen for activation of an element ( via its button )
+                 */
+                $(dom).off('elementchange')
+                      .on('elementchange', function(event,elementConfig) {
+                    console.log('catched click on button',elementConfig);
+
+                    /** @type {Object} element to place on the canvas */
+                    var element = elementsInCanvas[elementConfig.uid] || getWrapper(elementConfig.type);
+                    element.initialize(paper,grid,elementConfig);
+                    // Store the element into the collection of inCanvas elements
+                    elementsInCanvas[elementConfig.uid]= element;
+                    // Remove the element from inCanvas collection if configchange & from the canvas (visualy)
+                    self.on('configchange', function(){
+                        elementsInCanvas = _.pull(elementsInCanvas,elementConfig.uid);
+                        element.destroy();
+                    });
+                    grid.children.click(function(event){
 
                         ////////////////////////////////////
                         // Get the coordinate for a click //
                         ////////////////////////////////////
-                    var bnds = event.target.getBoundingClientRect(),
+                        var bnds = event.target.getBoundingClientRect(),
                         /** @type {Number} Scalling factor */
-                    wfactor = paper.w / paper.width,
+                        wfactor = paper.w / paper.width,
                         /** @type {Number} x coordinate from the origin of the canvas in px */
-                    fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
+                        fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
                         /** @type {Number} y coordinate from the origin of the canvas in px */
-                    fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
+                        fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
 
                         // trigger event that we click somewhere
-                    $(paper.canvas).trigger('click_grid',{x: fx, y: fy});
+                        $(paper.canvas).trigger('click_grid',{x: fx, y: fy});
 
 
-                    var element = getWrapper(gridConfig.type);
-                    element.initialize(paper,grid,{color: '#0f904a'});
 
-                    self.on('configchange', function(){
-                        element.destroy();
-                    });
                         // [TODO] - Get the current set
-                    // var activeSet = _.find(sets,{active : true});
+                        // var activeSet = _.find(sets,{active : true});
+
+                    });
 
                 });
             }
@@ -200,8 +214,10 @@ define([
              * On click on a controll button, trigger event with data associate to
              * the element represented by the button
              */
-            $(dom).on('click', 'button.available', function() {
+            $(dom).off('click','button.available')
+                  .on('click', 'button.available', function() {
                 $container.trigger('elementchange',$(this).data('config'));
+                console.log('clicked on ',$(this).data('config'));
             });
 
             // var plotFactory = new PlotFactory(grid);
