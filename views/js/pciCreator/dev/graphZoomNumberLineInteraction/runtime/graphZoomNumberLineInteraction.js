@@ -73,6 +73,8 @@ define([
                 zoomAxis,
                 zoomEffect,
                 selectedRect,
+                axisPoint,
+                zoomPoint,
                 _this = this;
 
             function findRect(rects, position){
@@ -90,6 +92,58 @@ define([
                 });
 
                 return ret;
+            }
+
+            function addAxisPoint(coord){
+
+                if(axisPoint){
+                    axisPoint.remove();
+                }
+
+                var top = axis.getOriginPosition().top;
+                var pointConfig = {
+                    radius : 6,
+                    removable : false,
+                    glow : false
+                };
+                pointConfig = _.defaults(pointConfig, {});
+
+                axisPoint = pointFactory(paper, axis, pointConfig);
+                axisPoint.setCartesianCoord(coord, top, pointConfig);
+                axisPoint.render();
+
+                //add the point to the axis set
+                axis.getSet().push(axisPoint.children);
+
+                return axisPoint;
+            }
+
+            function addZoomAxisPoint(left){
+
+                if(zoomPoint){
+                    zoomPoint.remove();
+                }
+
+                var pointConfig = {
+                    x : left,
+                    axis : 'x',
+                    removable : false,
+                    on : {
+                        drag : function(){
+
+                        }
+                    }
+                };
+                pointConfig = _.defaults(pointConfig, {});
+
+                zoomPoint = pointFactory(paper, zoomAxis, pointConfig);
+                zoomPoint.render();
+                zoomPoint.drag();
+
+                //add the point to the axis set
+                zoomAxis.getSet().push(zoomPoint.children);
+
+                return zoomPoint;
             }
 
             function initAxis($container, axisConfig){
@@ -111,7 +165,7 @@ define([
                 }, axisConfig);
                 zoomAxis = new axisFactory(paper, zoomAxisConfig);
                 zoomAxis.getSet().hide();
-                
+
                 //create the zoomable rectangles
                 var rects = axisZoom.createZoomable(axis);
 
@@ -121,9 +175,9 @@ define([
                     // Get the coordinate of the click
                     var fx = event.layerX;
                     var rect = findRect(rects, fx);
-                    
+
                     if(rect){
-                        
+
                         //clear previous drawn elements
                         if(selectedRect){
                             selectedRect.rect.hide();
@@ -131,22 +185,27 @@ define([
                         if(zoomEffect){
                             zoomEffect.remove();
                         }
-                        
+
                         //updated selected rectangle and show it
                         selectedRect = rect;
                         selectedRect.rect.show();
-                        
+
                         //update the zoom axis label
                         zoomAxis.setConfig('labels', [selectedRect.coord, selectedRect.coord + .5]);
                         zoomAxis.render();
-                        
+                        zoomAxis.clickable().click(function(e){
+
+                            point = addZoomAxisPoint(e.layerX);
+
+                            var coord = selectedRect.coord + point.getCartesianCoord().x / 2;
+
+                            addAxisPoint(coord);
+                        });
+
                         //add zoom effect
-                        zoomEffect = axisZoom.drawZoomEffect(paper, selectedRect.rect, zoomAxis.buildContainerBox({shadow:true}));
+                        zoomEffect = axisZoom.drawZoomEffect(paper, selectedRect.rect, zoomAxis.buildContainerBox({shadow : true}));
                     }
 
-                    return;
-                    //set point position
-                    addPoint(fx);
                 });
 
             }

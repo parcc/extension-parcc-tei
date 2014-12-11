@@ -89,22 +89,6 @@ define([
                 paper = createCanvas($container, axisConfig);
                 axis = new axisFactory(paper, axisConfig);
                 intervalFactory = new IntervalFactory(axis, axisConfig.plot);
-
-                return;
-
-                //for zoom number line interaction
-                axis.clickable();
-
-                //bind click event:
-                axis.getSet().click(function(event){
-
-                    // Get the coordinate of the click
-                    var fx = event.layerX;
-
-                    //set point position
-                    addPoint(fx);
-                });
-
             }
 
             function activate(uid){
