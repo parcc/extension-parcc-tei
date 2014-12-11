@@ -143,38 +143,55 @@ define([
                 });
             }
 
+
             initGrid($container, buildGridConfig(this.config));
 
+            /**
+             * Redraw the controlls regarding the new configuration when it change
+             */
             this.on('configchange',function(options){
+                /** @type {Object} Grid configration sanitized */
+                // [TODO] - Maybe clean this by just fire a gridchange event
                 self.config = buildGridConfig(options);
+                // Draw the grid
+                // [TODO] - Maybe clean this by just fire a gridchange event
                 initGrid($container, self.config);
                 // Remove all existing button
                 var $controlArea = $('.shape-controls','.pointAndLineFunctionInteraction');
                 $controlArea.children('button').remove();
                 // Loop over all elements we have
-
                 _.each(options.graphs, function(graphType, typeName){
                     _.each(graphType.elements, function(element){
+                        // Get the template
                         var $template = $('.template-' + typeName, '.pointAndLineFunctionInteraction'),
+                        // Get the button from the template and clone it
                         $button = $template.children().first().clone(),
+                        // Generate a UID for this element
                         uuid = _.uniqueId();
-                        // Change attributes
+                        // Attach config and UID
                         $button.data('uid' , uuid).data('config' , {
                                 uid : uuid,
                                 color : element.color,
                                 label : element.label
                             }).text(element.label).addClass('available');
+                        // Append the button to the controll area
                         $controlArea.append($button);
                     });
                 });
             });
 
-
+            /**
+             * Redraw the grid regarding the new configuration when it change
+             */
             this.on('gridchange', function(config){
                 self.config = config;
                 initGrid($container, buildGridConfig(config));
             });
 
+            /**
+             * On click on a controll button, trigger event with data associate to
+             * the element represented by the button
+             */
             $(dom).on('click', 'button.available', function() {
                 $container.trigger('elementchange',$(this).data('config'));
             });
