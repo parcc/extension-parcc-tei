@@ -156,9 +156,14 @@ define([
                 _.each(options.graphs, function(graphType, typeName){
                     _.each(graphType.elements, function(element){
                         var $template = $('.template-' + typeName, '.pointAndLineFunctionInteraction'),
-                        $button = $template.children().first().clone();
+                        $button = $template.children().first().clone(),
+                        uuid = _.uniqueId();
                         // Change attributes
-                        $button.data('uid',element.uid).text(element.label).addClass('available');
+                        $button.data('uid' , uuid).data('config' , {
+                                uid : uuid,
+                                color : element.color,
+                                label : element.label
+                            }).text(element.label).addClass('available');
                         $controlArea.append($button);
                     });
                 });
@@ -170,7 +175,7 @@ define([
                 initGrid($container, buildGridConfig(config));
             });
 
-            $('.pointAndLineFunctionInteraction').on('click', 'button', function(event) {
+            $(dom).on('click', 'button.available', function() {
                 $container.trigger('elementchange',$(this).data('config'));
             });
 

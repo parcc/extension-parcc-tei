@@ -42,8 +42,7 @@ define([
         for (var i = 0; i < nbElements; i++) {
             elements.push({
                 color : _color[i%4],
-                label: labelSlug + '_' + String(i + existingElements),
-                uid : _.uniqueId()
+                label: labelSlug + '_' + String(i + existingElements)
             });
         }
         return elements;
