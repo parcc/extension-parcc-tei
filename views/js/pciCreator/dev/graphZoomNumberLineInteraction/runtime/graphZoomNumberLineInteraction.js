@@ -14,8 +14,8 @@ define([
         var padding = 2;
         var paper = scaleRaphael(
             $('.shape-container', $container)[0],
-            620,
-            300
+            610,
+            250
             );
 
         //@todo make it responsive
