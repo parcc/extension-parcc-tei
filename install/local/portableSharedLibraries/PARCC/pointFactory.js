@@ -97,6 +97,20 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 _y = grid.getOriginPosition().top - grid.getUnitSizes().y * y;
             },
             /**
+             * Set coordinate in the cartesian coordinate system
+             * 
+             * @param {Number} x
+             * @param {Number} y
+             * @returns {undefined}
+             */
+            getCartesianCoord : function(decimals){
+                decimals = (decimals === undefined) ? 0 : decimals;
+                return {
+                    x: (_x - grid.getOriginPosition().left)/grid.getUnitSizes().x,
+                    y: (_y - grid.getOriginPosition().top)/grid.getUnitSizes().y
+                };
+            },
+            /**
              * Set new coordinates for the point
              * @param {Number} x
              * @param {Number} y
@@ -107,7 +121,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 _y = coord[1];
             },
             /**
-             * Set _r value
+             * Set _r value 
              * @param {Number} val in px
              */
             setR : function(val){
