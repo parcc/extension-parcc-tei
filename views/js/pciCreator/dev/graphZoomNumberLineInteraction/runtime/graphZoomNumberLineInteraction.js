@@ -15,7 +15,7 @@ define([
         var paper = scaleRaphael(
             $('.shape-container', $container)[0],
             610,
-            250
+            260
             );
 
         //@todo make it responsive
@@ -114,6 +114,7 @@ define([
                 axisPoint.render();
 
                 //add the point to the axis set
+                axisPoint.children.attr({cursor : 'default'});
                 axis.getSet().push(axisPoint.children);
 
                 return axisPoint;
@@ -124,10 +125,10 @@ define([
                 if(zoomPoint){
                     zoomPoint.remove();
                 }
-                
+
                 //get the config of zoomAxis to find the xMin and xMax allowed to the point
                 var zoomAxisConfig = zoomAxis.getConfig();
-                
+
                 var pointConfig = {
                     x : left,
                     axis : 'x',
@@ -136,7 +137,10 @@ define([
                     removable : false,
                     on : {
                         dragStop : function(){
-                            addAxisPoint(getZoomPointCoordinate());
+                            //updated the selected coord
+                            selectedCoord = getZoomPointCoordinate();
+                            //draw to axis point
+                            addAxisPoint(selectedCoord);
                         }
                     }
                 };
@@ -151,9 +155,19 @@ define([
 
                 return zoomPoint;
             }
-            
+
             function getZoomPointCoordinate(){
                 return selectedRect.coord + zoomPoint.getCartesianCoord().x / 2;
+            }
+
+            function getSelectedPointPositionLeft(){
+                if(selectedCoord){
+                    var zoomAxisConfig = zoomAxis.getConfig();
+                    var left = 2 * (selectedCoord - selectedRect.coord + .05) * zoomAxisConfig.unitSize;
+                    if(zoomAxisConfig.left <= left && left <= zoomAxisConfig.left + zoomAxisConfig.unitSize){
+                        return left;
+                    }
+                }
             }
             
             function initAxis($container, axisConfig){
@@ -192,6 +206,10 @@ define([
                         if(selectedRect){
                             selectedRect.rect.hide();
                         }
+                        if(zoomEffect){
+                            zoomEffect.remove();
+                        }
+
                         //updated selected rectangle and show it
                         selectedRect = rect;
                         selectedRect.rect.show();
@@ -199,22 +217,27 @@ define([
                         //update the zoom axis label
                         zoomAxis.setConfig('labels', [selectedRect.coord, selectedRect.coord + .5]);
                         zoomAxis.render();
+
+                        var left = getSelectedPointPositionLeft();
+                        if(left !== undefined){
+                            addZoomAxisPoint(left);
+                        }
                         zoomAxis.clickable().click(function(e){
                             addZoomAxisPoint(e.layerX);
-                            addAxisPoint(getZoomPointCoordinate());
+                            //updated the selected coord
+                            selectedCoord = getZoomPointCoordinate();
+                            //draw to axis point
+                            addAxisPoint(selectedCoord);
                         });
 
                         //add zoom effect
-                        if(zoomEffect){
-                            zoomEffect.remove();
-                        }
                         zoomEffect = axisZoom.drawZoomEffect(paper, selectedRect.rect, zoomAxis.buildContainerBox({shadow : true}));
                     }
 
                 });
 
             }
-            
+
             //@todo to be implemented
             function reset(){
 
