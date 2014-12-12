@@ -12,17 +12,12 @@ define([
     function createCanvas($container, config){
 
         var padding = 2;
-        var paper = scaleRaphael(
-            $('.shape-container', $container)[0],
-            610,
-            260
-            );
-
-        //@todo make it responsive
+        var width = 2 * padding + config.unitSize * (2 + config.max - config.min);
+        var paper = scaleRaphael($('.shape-container', $container)[0], width, 260);
 
         return paper;
     }
-
+    
     function buildAxisConfig(rawConfig){
 
         var _color = rawConfig.graphColor || '#266d9c';
