@@ -32,7 +32,3 @@
 .graphZoomNumberLineInteraction .shape-controls .intervals-template {display:none;}
 
 .graphZoomNumberLineInteraction .shape-controls .intervals-row {margin-bottom: 2px;}
-
-/*alternative deleter*/
-/*.graphZoomNumberLineInteraction .shape-controls .intervals-selected .interval .interval-delete {cursor: pointer; position:absolute; top:0; right:0; font-size:2rem;}
-.graphZoomNumberLineInteraction .shape-controls .intervals-selected .interval .deleter {display:none;}*/
