@@ -5,7 +5,7 @@ define([
     'OAT/util/event',
     'OAT/scale.raphael',
     'PARCC/pointFactory',
-    'graphNumberLineInteraction/runtime/libs/axisFactory',
+    'PARCC/axisFactory',
     'graphNumberLineInteraction/runtime/libs/intervalFactory'
 ], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, IntervalFactory){
 

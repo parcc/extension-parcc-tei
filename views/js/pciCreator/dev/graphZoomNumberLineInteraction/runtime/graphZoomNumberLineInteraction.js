@@ -5,7 +5,7 @@ define([
     'OAT/util/event',
     'OAT/scale.raphael',
     'PARCC/pointFactory',
-    'graphZoomNumberLineInteraction/runtime/libs/axisFactory',
+    'PARCC/axisFactory',
     'graphZoomNumberLineInteraction/runtime/libs/axisZoom'
 ], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, axisZoom){
 
@@ -214,7 +214,11 @@ define([
                         //update the zoom axis label
                         zoomAxis.setConfig('labels', [selectedRect.coord, selectedRect.coord + .5]);
                         zoomAxis.render();
-
+                        
+                        //draw container box here, befor esetting the point
+                        var containerBox = zoomAxis.buildContainerBox({shadow : true});
+                        
+                        //set the previously selected point
                         var left = getSelectedPointPositionLeft();
                         if(left !== undefined){
                             drawZoomAxisPoint(left);
@@ -225,7 +229,7 @@ define([
                         });
 
                         //add zoom effect
-                        zoomEffect = axisZoom.drawZoomEffect(paper, selectedRect.rect, zoomAxis.buildContainerBox({shadow : true}));
+                        zoomEffect = axisZoom.drawZoomEffect(paper, selectedRect.rect, containerBox);
                     }
 
                 });

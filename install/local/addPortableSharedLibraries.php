@@ -29,3 +29,4 @@ $registry->registerFromFile('PARCC/graphFunction', $installBasePath . '/PARCC/gr
 $registry->registerFromFile('PARCC/gridFactory', $installBasePath . '/PARCC/gridFactory.js');
 $registry->registerFromFile('PARCC/plotFactory', $installBasePath . '/PARCC/plotFactory.js');
 $registry->registerFromFile('PARCC/pointFactory', $installBasePath . '/PARCC/pointFactory.js');
+$registry->registerFromFile('PARCC/axisFactory', $installBasePath . '/PARCC/axisFactory.js');

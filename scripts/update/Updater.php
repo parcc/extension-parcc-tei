@@ -37,23 +37,31 @@ class Updater extends \common_ext_ExtensionUpdater
      */
     public function update($initialVersion){
 
+        //add portable shared libraries:
+        $libBasePath = ROOT_PATH.'taoQtiItem/views/js/portableSharedLibraries';
+        $libRootUrl = ROOT_URL.'taoQtiItem/views/js/portableSharedLibraries';
+        $installBasePath = ROOT_PATH.'parccTei/install/local/portableSharedLibraries';
+        $registry = new SharedLibrariesRegistry($libBasePath, $libRootUrl);
+
         $currentVersion = $initialVersion;
 
         //migrate from 0.1 to 0.1.1
         if($currentVersion == '0.1'){
 
-            //add portable shared libraries:
-            $libBasePath = ROOT_PATH.'taoQtiItem/views/js/portableSharedLibraries';
-            $libRootUrl = ROOT_URL.'taoQtiItem/views/js/portableSharedLibraries';
-            $installBasePath = ROOT_PATH.'parccTei/install/local/portableSharedLibraries';
-
-            $registry = new SharedLibrariesRegistry($libBasePath, $libRootUrl);
             $registry->registerFromFile('PARCC/graphFunction', $installBasePath.'/PARCC/graphFunction.js');
             $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
             $registry->registerFromFile('PARCC/plotFactory', $installBasePath.'/PARCC/plotFactory.js');
             $registry->registerFromFile('PARCC/pointFactory', $installBasePath.'/PARCC/pointFactory.js');
 
             $currentVersion = '0.1.1';
+        }
+
+        //migrate from 0.1.1 to 0.1.2
+        if($currentVersion == '0.1.1'){
+
+            $registry->registerFromFile('PARCC/axisFactory', $installBasePath.'/PARCC/axisFactory.js');
+
+            $currentVersion = '0.1.2';
         }
 
         return $currentVersion;
