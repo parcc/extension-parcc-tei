@@ -11,20 +11,3 @@
 </div>
 
 <hr/>
-
-<div class="panel" id="creator-graphFunctionInteraction-available-graphs">
-    <label for="" class="has-icon">{{__ "Available Intervals"}}</label>
-    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
-    <div class="tooltip-content">{{__ 'Define which interval types are availabe for the test taker to use.'}}</div>
-    <ul class="plain" data-role="intervals">
-        {{#each intervals}}
-        <li>
-            <label>
-                <input name="intervals" value="{{@key}}" type="checkbox" {{#if checked}}checked="checked"{{/if}}/>
-                       <span class="icon-checkbox"></span>
-                {{label}}
-            </label>
-        </li>
-        {{/each}}
-    </ul>
-</div>
