@@ -266,10 +266,6 @@ define([
              */
             this.axisConfig = buildAxisConfig(this.config);
             initAxis($container, this.axisConfig);
-            
-            _.delay(function(){
-                reset();
-            }, 5000);
 
         },
         /**
