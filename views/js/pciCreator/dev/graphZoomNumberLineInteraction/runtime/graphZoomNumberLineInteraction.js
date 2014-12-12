@@ -75,8 +75,7 @@ define([
                 selectedRect,
                 selectedCoord,
                 axisPoint,
-                zoomPoint,
-                _this = this;
+                zoomPoint;
 
             function findRect(rects, position){
 
@@ -95,7 +94,7 @@ define([
                 return ret;
             }
 
-            function addAxisPoint(coord){
+            function drawAxisPoint(coord){
 
                 if(axisPoint){
                     axisPoint.remove();
@@ -120,7 +119,7 @@ define([
                 return axisPoint;
             }
 
-            function addZoomAxisPoint(left){
+            function drawZoomAxisPoint(left){
 
                 if(zoomPoint){
                     zoomPoint.remove();
@@ -136,12 +135,7 @@ define([
                     xMax : zoomAxisConfig.left + zoomAxisConfig.unitSize,
                     removable : false,
                     on : {
-                        dragStop : function(){
-                            //updated the selected coord
-                            selectedCoord = getZoomPointCoordinate();
-                            //draw to axis point
-                            addAxisPoint(selectedCoord);
-                        }
+                        dragStop : updateAxisPoint
                     }
                 };
                 pointConfig = _.defaults(pointConfig, {});
@@ -169,7 +163,14 @@ define([
                     }
                 }
             }
-            
+
+            function updateAxisPoint(){
+                //updated the selected coord
+                selectedCoord = getZoomPointCoordinate();
+                //draw to axis point
+                drawAxisPoint(selectedCoord);
+            }
+
             function initAxis($container, axisConfig){
 
                 //create paper
@@ -220,14 +221,11 @@ define([
 
                         var left = getSelectedPointPositionLeft();
                         if(left !== undefined){
-                            addZoomAxisPoint(left);
+                            drawZoomAxisPoint(left);
                         }
                         zoomAxis.clickable().click(function(e){
-                            addZoomAxisPoint(e.layerX);
-                            //updated the selected coord
-                            selectedCoord = getZoomPointCoordinate();
-                            //draw to axis point
-                            addAxisPoint(selectedCoord);
+                            drawZoomAxisPoint(e.layerX);
+                            updateAxisPoint();
                         });
 
                         //add zoom effect
@@ -238,9 +236,24 @@ define([
 
             }
 
-            //@todo to be implemented
             function reset(){
-
+                //clear previous drawn elements
+                if(selectedRect){
+                    selectedRect.rect.hide();
+                    selectedRect = undefined;
+                }
+                if(zoomEffect){
+                    zoomEffect.remove();
+                    zoomEffect = undefined;
+                }
+                if(zoomAxis){
+                    zoomAxis.getSet().remove().clear();
+                }
+                if(axisPoint){
+                    axisPoint.remove();
+                    axisPoint = undefined;
+                }
+                selectedCoord = undefined;
             }
 
             //expose the reset() method
@@ -253,6 +266,10 @@ define([
              */
             this.axisConfig = buildAxisConfig(this.config);
             initAxis($container, this.axisConfig);
+            
+            _.delay(function(){
+                reset();
+            }, 5000);
 
         },
         /**
