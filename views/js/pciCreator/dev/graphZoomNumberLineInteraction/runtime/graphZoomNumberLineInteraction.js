@@ -35,13 +35,8 @@ define([
             unitSize : 50,
             unitSubDivision : 2,
             arrows : true,
-            plot : {
-                color : _color,
-                thickness : rawConfig.graphWidth || 5
-            },
             point : {
-                color : _color,
-                radius : 10
+                color : _color
             }
         };
     }
@@ -68,7 +63,8 @@ define([
 
             var $container = $(dom);
 
-            var paper,
+            var _this = this,
+                paper,
                 axis,
                 zoomAxis,
                 zoomEffect,
@@ -106,7 +102,7 @@ define([
                     removable : false,
                     glow : false
                 };
-                pointConfig = _.defaults(pointConfig, {});
+                pointConfig = _.defaults(pointConfig, _this.axisConfig.point);
 
                 axisPoint = pointFactory(paper, axis, pointConfig);
                 axisPoint.setCartesianCoord(coord, top, pointConfig);
@@ -138,7 +134,7 @@ define([
                         dragStop : updateAxisPoint
                     }
                 };
-                pointConfig = _.defaults(pointConfig, {});
+                pointConfig = _.defaults(pointConfig, _this.axisConfig.point);
 
                 zoomPoint = pointFactory(paper, zoomAxis, pointConfig);
                 zoomPoint.render();
