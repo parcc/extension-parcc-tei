@@ -5,24 +5,19 @@ define([
     'OAT/util/event',
     'OAT/scale.raphael',
     'PARCC/pointFactory',
-    'graphZoomNumberLineInteraction/runtime/libs/axisFactory',
+    'PARCC/axisFactory',
     'graphZoomNumberLineInteraction/runtime/libs/axisZoom'
 ], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, axisZoom){
 
     function createCanvas($container, config){
 
         var padding = 2;
-        var paper = scaleRaphael(
-            $('.shape-container', $container)[0],
-            610,
-            260
-            );
-
-        //@todo make it responsive
+        var width = 2 * padding + config.unitSize * (2 + config.max - config.min);
+        var paper = scaleRaphael($('.shape-container', $container)[0], width, 260);
 
         return paper;
     }
-
+    
     function buildAxisConfig(rawConfig){
 
         var _color = rawConfig.graphColor || '#266d9c';
@@ -35,13 +30,8 @@ define([
             unitSize : 50,
             unitSubDivision : 2,
             arrows : true,
-            plot : {
-                color : _color,
-                thickness : rawConfig.graphWidth || 5
-            },
             point : {
-                color : _color,
-                radius : 10
+                color : _color
             }
         };
     }
@@ -68,7 +58,8 @@ define([
 
             var $container = $(dom);
 
-            var paper,
+            var _this = this,
+                paper,
                 axis,
                 zoomAxis,
                 zoomEffect,
@@ -106,7 +97,7 @@ define([
                     removable : false,
                     glow : false
                 };
-                pointConfig = _.defaults(pointConfig, {});
+                pointConfig = _.defaults(pointConfig, _this.axisConfig.point);
 
                 axisPoint = pointFactory(paper, axis, pointConfig);
                 axisPoint.setCartesianCoord(coord, top, pointConfig);
@@ -138,7 +129,7 @@ define([
                         dragStop : updateAxisPoint
                     }
                 };
-                pointConfig = _.defaults(pointConfig, {});
+                pointConfig = _.defaults(pointConfig, _this.axisConfig.point);
 
                 zoomPoint = pointFactory(paper, zoomAxis, pointConfig);
                 zoomPoint.render();
@@ -218,7 +209,11 @@ define([
                         //update the zoom axis label
                         zoomAxis.setConfig('labels', [selectedRect.coord, selectedRect.coord + .5]);
                         zoomAxis.render();
-
+                        
+                        //draw container box here, befor esetting the point
+                        var containerBox = zoomAxis.buildContainerBox({shadow : true});
+                        
+                        //set the previously selected point
                         var left = getSelectedPointPositionLeft();
                         if(left !== undefined){
                             drawZoomAxisPoint(left);
@@ -229,7 +224,7 @@ define([
                         });
 
                         //add zoom effect
-                        zoomEffect = axisZoom.drawZoomEffect(paper, selectedRect.rect, zoomAxis.buildContainerBox({shadow : true}));
+                        zoomEffect = axisZoom.drawZoomEffect(paper, selectedRect.rect, containerBox);
                     }
 
                 });

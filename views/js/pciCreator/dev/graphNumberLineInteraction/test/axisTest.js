@@ -15,7 +15,7 @@ define([
         useExtensionAlias : true
     });
 
-    localRequire(['graphNumberLineInteraction/runtime/libs/axisFactory'], function(axisFactory){
+    localRequire(['PARCC/axisFactory'], function(axisFactory){
 
         test('create axis', function(){
 

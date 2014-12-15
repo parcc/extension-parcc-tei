@@ -8,7 +8,7 @@
     "email": "sam@taotesting.com",
     "libraries": [
         "IMSGlobal/jquery_2_1_1",
-        "./runtime/libs/axisFactory",
+        "PARCC/axisFactory",
         "./runtime/libs/axisZoom"
     ],
     "css": [

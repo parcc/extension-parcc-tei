@@ -5,20 +5,15 @@ define([
     'OAT/util/event',
     'OAT/scale.raphael',
     'PARCC/pointFactory',
-    'graphNumberLineInteraction/runtime/libs/axisFactory',
+    'PARCC/axisFactory',
     'graphNumberLineInteraction/runtime/libs/intervalFactory'
 ], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, IntervalFactory){
 
     function createCanvas($container, config){
 
         var padding = 2;
-        var paper = scaleRaphael(
-            $('.shape-container', $container)[0],
-            620,
-            120
-            );
-
-        //@todo make it responsive
+        var width = 2 * padding + config.unitSize * (2 + config.max - config.min);
+        var paper = scaleRaphael($('.shape-container', $container)[0], width, 120);
 
         return paper;
     }
@@ -30,6 +25,9 @@ define([
         return {
             top : 60,
             left : 50,
+            unitSize : 50,
+            min : -5,
+            max : 5,
             unitSubDivision : 2,
             arrows : true,
             plot : {
