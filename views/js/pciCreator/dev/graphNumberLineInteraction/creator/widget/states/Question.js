@@ -59,7 +59,12 @@ define([
         $form.html(formTpl({
             serial : response.serial,
             intervals : intervals,
-            identifier : interaction.attr('responseIdentifier')
+            identifier : interaction.attr('responseIdentifier'),
+            min : interaction.prop('min'),
+            max : interaction.prop('max'),
+            unitSubDivision : interaction.prop('unitSubDivision'),
+            snapTo : interaction.prop('snapTo'),
+            increment : interaction.prop('increment')
         }));
 
         //init form javascript
@@ -72,7 +77,7 @@ define([
                 interaction.attr('responseIdentifier', value);
             }
         });
-        
+
         //manually get array of checked intervals
         var $intervals = $form.find('[name=intervals]');
         $intervals.on('change', function(){
