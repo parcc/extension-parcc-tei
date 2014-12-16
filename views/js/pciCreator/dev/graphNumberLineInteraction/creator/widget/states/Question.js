@@ -88,6 +88,14 @@ define([
             interaction.prop('intervals', checked.join(','));
             interaction.triggerPci('intervalschange', [checked]);
         });
+        $form.find('#creator-graphFunctionInteraction-axis input').on('change',function(){
+            var property = $(this).attr('name'),
+            value = $(this).val(),
+            result = {};
+            result[property] = value;
+            interaction.prop(property,parseInt(value));
+            interaction.triggerPci('axischange', [result] );
+        });
     };
 
     return StateQuestion;

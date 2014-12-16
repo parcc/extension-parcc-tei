@@ -11,7 +11,7 @@
 </div>
 
 <hr/>
-<div class="panel">
+<div class="panel" id="creator-graphFunctionInteraction-axis">
     <h3>{{__ "Interval"}}</h3>
     <label for="min" class="spinner">{{__ "Start point"}}</label>
     <input name="min" value="{{min}}" data-increment="1" type="text" />
