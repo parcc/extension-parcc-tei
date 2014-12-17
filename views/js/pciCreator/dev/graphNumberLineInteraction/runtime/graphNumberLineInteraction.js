@@ -20,9 +20,7 @@ define([
 
     function buildAxisConfig(rawConfig){
 
-        var _color = rawConfig.graphColor || '#266d9c';
-
-        return {
+        var _default = {
             top : 60,
             left : 50,
             unitSize : 50,
@@ -31,14 +29,27 @@ define([
             unitSubDivision : 2,
             arrows : true,
             plot : {
-                color : _color,
-                thickness : rawConfig.graphWidth || 5
+                color : '#266d9c',
+                thickness : 5
             },
             point : {
-                color : _color,
+                color : '#266d9c',
                 radius : 10
             }
         };
+        return _.merge(_default,{
+            min : rawConfig.min,
+            max : rawConfig.max,
+            unitSubDivision : rawConfig.unitSubDivision,
+            plot : {
+                color : rawConfig.graphColor,
+                thickness : rawConfig.graphWidth
+            },
+            point : {
+                color : rawConfig.graphColor,
+                radius : 10
+            }
+        });
     }
 
     function getAuthorizedIntervals(){
@@ -60,7 +71,7 @@ define([
             return 'graphNumberLineInteraction';
         },
         /**
-         * Render the PCI : 
+         * Render the PCI :
          * @param {String} id
          * @param {Node} dom
          * @param {Object} config - json
@@ -143,6 +154,12 @@ define([
                 reset();
             }
 
+            function setAxis(axisConfig){
+                _this.axisConfig = buildAxisConfig(_.merge(_this.config, _this.axisConfig, axisConfig));
+                initAxis($container, _this.axisConfig);
+                reset();
+            }
+
             var availableIntervals = this.config.intervals ? this.config.intervals.split(',') : getAuthorizedIntervals();
             setAvailableIntervals(availableIntervals);
 
@@ -206,11 +223,12 @@ define([
             });
 
             this.on('intervalschange', setAvailableIntervals);
+            this.on('axischange',setAxis);
         },
         /**
          * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         * 
+         *
          * @param {Object} interaction
          * @param {Object} response
          */
@@ -220,7 +238,7 @@ define([
         /**
          * Get the response in the json format described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         * 
+         *
          * @param {Object} interaction
          * @returns {Object}
          */
@@ -233,7 +251,7 @@ define([
         /**
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
-         * 
+         *
          * @param {Object} interaction
          */
         resetResponse : function(){
@@ -241,9 +259,9 @@ define([
         },
         /**
          * Reverse operation performed by render()
-         * After this function is executed, only the inital naked markup remains 
+         * After this function is executed, only the inital naked markup remains
          * Event listeners are removed and the state and the response are reset
-         * 
+         *
          * @param {Object} interaction
          */
         destroy : function(){
@@ -253,7 +271,7 @@ define([
         },
         /**
          * Restore the state of the interaction from the serializedState.
-         * 
+         *
          * @param {Object} interaction
          * @param {Object} serializedState - json format
          */
@@ -263,7 +281,7 @@ define([
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
-         * 
+         *
          * @param {Object} interaction
          * @returns {Object} json format
          */
