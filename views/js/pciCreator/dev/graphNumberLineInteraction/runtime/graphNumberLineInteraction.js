@@ -38,12 +38,12 @@ define([
             }
         };
         return _.merge(_default,{
-            min : rawConfig.min,
-            max : rawConfig.max,
-            unitSubDivision : rawConfig.unitSubDivision,
+            min : (rawConfig.min === undefined) ? undefined : parseInt(rawConfig.min),
+            max : (rawConfig.max === undefined) ? undefined : parseInt(rawConfig.max),
+            unitSubDivision : (rawConfig.unitSubDivision === undefined) ? undefined : parseInt(rawConfig.unitSubDivision),
             plot : {
                 color : rawConfig.graphColor,
-                thickness : rawConfig.graphWidth
+                thickness : (rawConfig.graphWidth === undefined ) ? undefined : parseInt(rawConfig.graphWidth)
             },
             point : {
                 color : rawConfig.graphColor,
