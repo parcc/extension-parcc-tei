@@ -20,26 +20,36 @@ define([
 
     function buildAxisConfig(rawConfig){
 
-        var _color = rawConfig.graphColor || '#266d9c';
-
-        return {
+        var _default = {
             top : 60,
             left : 50,
             unitSize : 50,
-            min : parseInt(rawConfig.min) || -5,
-            max : parseInt(rawConfig.max) || 5,
-            unitSubDivision : parseInt(rawConfig.unitSubDivision) || 2,
+            min : -5,
+            max : 5,
+            unitSubDivision : 2,
             arrows : true,
-
             plot : {
-                color : _color,
-                thickness : rawConfig.graphWidth || 5
+                color : '#266d9c',
+                thickness : 5
             },
             point : {
-                color : _color,
+                color : '#266d9c',
                 radius : 10
             }
         };
+        return _.merge(_default,{
+            min : rawConfig.min,
+            max : rawConfig.max,
+            unitSubDivision : rawConfig.unitSubDivision,
+            plot : {
+                color : rawConfig.graphColor,
+                thickness : rawConfig.graphWidth
+            },
+            point : {
+                color : rawConfig.graphColor,
+                radius : 10
+            }
+        });
     }
 
     function getAuthorizedIntervals(){
