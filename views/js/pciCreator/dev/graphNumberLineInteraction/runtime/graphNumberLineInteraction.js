@@ -155,8 +155,8 @@ define([
             }
 
             function setAxis(axisConfig){
-                this.axisConfig = buildAxisConfig(_.defaults(axisConfig, this.config));
-                initAxis($container, this.axisConfig);
+                _this.axisConfig = buildAxisConfig(_.merge(_this.config, _this.axisConfig, axisConfig));
+                initAxis($container, _this.axisConfig);
                 reset();
             }
 
