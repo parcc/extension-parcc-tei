@@ -33,8 +33,9 @@ define([
         getDefaultProperties : function(pci){
             return {
                 color : '#266d9c',
-                min : -5,
-                max : 5,unitSubDivision : 2,
+                min : 0,
+                max : 10,
+                unitSubDivision : 2,
                 increment : 1,
                 snapTo : 1
             };
