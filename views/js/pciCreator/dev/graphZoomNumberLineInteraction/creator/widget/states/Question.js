@@ -59,7 +59,12 @@ define([
         $form.html(formTpl({
             serial : response.serial,
             intervals : intervals,
-            identifier : interaction.attr('responseIdentifier')
+            identifier : interaction.attr('responseIdentifier'),
+            min : interaction.prop('min'),
+            max : interaction.prop('max'),
+            unitSubDivision : interaction.prop('unitSubDivision'),
+            snapTo : interaction.prop('snapTo'),
+            increment : interaction.prop('increment')
         }));
 
         //init form javascript
@@ -72,7 +77,23 @@ define([
                 interaction.attr('responseIdentifier', value);
             }
         });
-        
+
+        //prevent user to enter start > end
+        var $start = $('[name="min"]','#creator-graphFunctionInteraction-axis'),
+            $end = $('[name="max"]','#creator-graphFunctionInteraction-axis');
+        $start.on('change',function(){
+            // If start >= end , set it to end - 1
+            if (parseInt($start.val()) >= parseInt($end.val())) {
+                $start.val(parseInt($end.val())-1);
+            }
+        });
+        $end.on('change',function(){
+            // If end <= start, set it to start + 1
+            if (parseInt($end.val()) <= parseInt($start.val())) {
+                $end.val(parseInt($start.val())+1);
+            }
+        });
+
         //manually get array of checked intervals
         var $intervals = $form.find('[name=intervals]');
         $intervals.on('change', function(){
@@ -82,6 +103,14 @@ define([
             });
             interaction.prop('intervals', checked.join(','));
             interaction.triggerPci('intervalschange', [checked]);
+        });
+        $form.find('#creator-graphFunctionInteraction-axis input').on('change',function(){
+            var property = $(this).attr('name'),
+            value = $(this).val(),
+            result = {};
+            result[property] = value;
+            interaction.prop(property,parseInt(value));
+            interaction.triggerPci('axischange', [result] );
         });
     };
 
