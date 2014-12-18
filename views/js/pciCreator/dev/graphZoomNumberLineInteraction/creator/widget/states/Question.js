@@ -37,17 +37,7 @@ define([
         var widget = this.widget,
             interaction = widget.element,
             $form = widget.$form,
-            response = interaction.getResponseDeclaration(),
-            intervals = {
-                'closed-closed' : {label : 'closed-closed'},
-                'closed-open' : {label : 'closed-open'},
-                'open-closed' : {label : 'open-closed'},
-                'open-open' : {label : 'open-open'},
-                'arrow-open' : {label : 'arrow-open'},
-                'arrow-closed' : {label : 'arrow-closed'},
-                'open-arrow' : {label : 'open-arrow'},
-                'closed-arrow' : {label : 'closed-arrow'}
-            };
+            response = interaction.getResponseDeclaration();
 
         var intervalSet = interaction.prop('intervals');
         intervalSet = intervalSet ? intervalSet.split(',') : [];
@@ -58,7 +48,6 @@ define([
         //render the form using the form template
         $form.html(formTpl({
             serial : response.serial,
-            intervals : intervals,
             identifier : interaction.attr('responseIdentifier'),
             min : interaction.prop('min'),
             max : interaction.prop('max'),
@@ -94,16 +83,6 @@ define([
             }
         });
 
-        //manually get array of checked intervals
-        var $intervals = $form.find('[name=intervals]');
-        $intervals.on('change', function(){
-            var checked = [];
-            $intervals.filter(':checked').each(function(){
-                checked.push($(this).val());
-            });
-            interaction.prop('intervals', checked.join(','));
-            interaction.triggerPci('intervalschange', [checked]);
-        });
         $form.find('#creator-graphFunctionInteraction-axis input').on('change',function(){
             var property = $(this).attr('name'),
             value = $(this).val(),
