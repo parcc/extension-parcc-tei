@@ -268,6 +268,14 @@ define([
             this.axisConfig = buildAxisConfig(this.config);
             initAxis($container, this.axisConfig);
 
+
+            function setAxis(axisConfig){
+                _this.axisConfig = buildAxisConfig(_.merge(_this.config, _this.axisConfig, axisConfig));
+                initAxis($container, _this.axisConfig);
+                reset();
+            }
+            this.on('axischange',setAxis);
+
         },
         /**
          * Programmatically set the response following the json schema described in
