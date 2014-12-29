@@ -49,6 +49,8 @@ define(['OAT/lodash'], function(_){
         var x = config.start;
         var y;
         var margin = 100;
+        var topMin = -margin;
+        var topMax = canvas.height + margin;
         var currentPosition;
         var newPosition;
         var path = '';
@@ -63,6 +65,22 @@ define(['OAT/lodash'], function(_){
         function jump(){
             x += config.precision;
             pathMove = true;
+        }
+        
+        /**
+         * Get the postion top value according to canvas size limitation
+         *
+         * @param {Number} top
+         * @returns {Number}
+         */
+        function getBoundedTop(top){
+            if(top < topMin){
+                return topMin;
+            }else if(top > topMax){
+                return topMax;
+            }else{
+                return top;
+            }
         }
 
         /**
@@ -79,14 +97,13 @@ define(['OAT/lodash'], function(_){
                 pathMove = false;//after move, we draw a line
                 if(currentPosition){
                     //need to draw slightly beyond the canvas to prevent from the "cut" effect
-                    path += 'M' + currentPosition.left + ' ' + currentPosition.top;
-
+                    path += 'M' + currentPosition.left + ' ' + getBoundedTop(currentPosition.top);
                 }else{
                     //the very first point
                     prefix = 'M';
                 }
             }
-            path += prefix + newPosition.left + ' ' + newPosition.top;
+            path += prefix + newPosition.left + ' ' + getBoundedTop(newPosition.top);
         }
 
         while(x < config.end){
@@ -267,13 +284,13 @@ define(['OAT/lodash'], function(_){
 
             if(checkPairOfPoints(point1, point2)
                 && point1.y !== point2.y
-                && point2.x*point1.x > 0){
+                && point2.x * point1.x > 0){
 
-                var a = (point2.y - point1.y) / Math.log(point2.x/point1.x);
+                var a = (point2.y - point1.y) / Math.log(point2.x / point1.x);
                 var b = Math.exp(point1.y / a) / point1.x;
                 return [a, b];
             }
-            
+
             return false;
         },
         /**
