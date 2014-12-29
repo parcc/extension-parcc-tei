@@ -14,7 +14,7 @@ define(['OAT/lodash'], function( _){
                 step : 1,
                 unit : 10,
                 color : '#000',
-                weight : 2
+                weight : 3
             },
             y : {
                 start : -10,
@@ -23,7 +23,7 @@ define(['OAT/lodash'], function( _){
                 step : 1,
                 unit : 10,
                 color : '#000',
-                weight : 2
+                weight : 3
             }
         },options);
         /** @type {String} Color of the grid's lines */
