@@ -97,24 +97,40 @@
                         <html5:div class="prompt"> </html5:div>
                         <html5:div class="shape-panel">
                             <html5:div class="shape-controls">
-                                <html5:div class="templates">
-                                    <html5:div class="template-lines">
-                                        <html5:button class="btn btn-info" name="lines" data-uid="" data-config=""></html5:button>
-                                    </html5:div>
-                                    <html5:div class="template-points">
-                                        <html5:button class="btn btn-info" name="points" data-uid="" data-config=""></html5:button>
-                                    </html5:div>
-                                    <html5:div class="template-segments">
-                                        <html5:button class="btn btn-info" name="segment" data-uid="" data-config=""></html5:button>
-                                    </html5:div>
-                                    <html5:div class="template-solutionSet">
-                                        <html5:button class="btn btn-info" name="solutionSet" data-uid="" data-config=""></html5:button>
-                                    </html5:div>
-                                    <html5:div class="template-setPoints">
-                                        <html5:button class="btn btn-info" name="setPoints" data-uid="" data-config=""></html5:button>
+                                
+                                <!-- Controll will be inserted here -->
+                            </html5:div>
+                            <html5:div class="templates">
+                                <html5:div class="template-lines">
+                                    <html5:div class="button-container clearfix">
+                                        <html5:button class="btn btn-info" name="lines"></html5:button>
+                                        <html5:div class="triangle"></html5:div>
                                     </html5:div>
                                 </html5:div>
-                                <!-- Controll will be inserted here -->
+                                <html5:div class="template-points">
+                                    <html5:div class="button-container clearfix">
+                                        <html5:button class="btn btn-info" name="points"></html5:button>
+                                        <html5:div class="triangle"></html5:div>
+                                    </html5:div>
+                                </html5:div>
+                                <html5:div class="template-segments">
+                                    <html5:div class="button-container clearfix">
+                                        <html5:button class="btn btn-info" name="segment"></html5:button>
+                                        <html5:div class="triangle"></html5:div>
+                                    </html5:div>
+                                </html5:div>
+                                <html5:div class="template-solutionSet">
+                                    <html5:div class="button-container clearfix">
+                                        <html5:button class="btn btn-info" name="solutionSet"></html5:button>
+                                        <html5:div class="triangle"></html5:div>
+                                    </html5:div>
+                                </html5:div>
+                                <html5:div class="template-setPoints">
+                                    <html5:div class="button-container clearfix">
+                                        <html5:button class="btn btn-info" name="setPoints"></html5:button>
+                                        <html5:div class="triangle"></html5:div>
+                                    </html5:div>
+                                </html5:div>
                             </html5:div>
                             <html5:div class="shape-container"></html5:div>
                         </html5:div>

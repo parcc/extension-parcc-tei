@@ -7,9 +7,28 @@
     border : 6px solid #f5f3f2;
 }
 
+.pointAndLineFunctionInteraction .shape-controls .clearfix {
+    overflow: auto;
+}
+
 .pointAndLineFunctionInteraction .prompt {margin-bottom:20px;}
 .pointAndLineFunctionInteraction .shape-panel {position:relative; display: inline-block; width: 100%;}
+
+.pointAndLineFunctionInteraction .shape-panel .templates {display:none;}
+
 .pointAndLineFunctionInteraction .shape-panel .shape-container {float:left; margin-left:30px;}
+
 .pointAndLineFunctionInteraction .shape-panel .shape-controls {float:left; margin-bottom:20px;}
-.pointAndLineFunctionInteraction .shape-panel .shape-controls button {width:150px; margin:3px 0; display:none;}
-.pointAndLineFunctionInteraction .shape-panel .shape-controls button.available {display:block;}
+.pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container {width:200px; margin:3px 0; display:block;position:relative;}
+.pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container .btn {width:150px; float:left;}
+.pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container .triangle{
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 16px 0 16px 27.7px;
+    border-color: transparent transparent transparent #266d9c;
+    display:show;
+    float:left;
+    top:2px;
+    position: relative;
+}

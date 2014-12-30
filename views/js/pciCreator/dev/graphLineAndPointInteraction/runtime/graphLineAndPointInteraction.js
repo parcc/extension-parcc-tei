@@ -149,17 +149,32 @@ define([
                 
                 // Remove all existing button
                 var $controlArea = $cont.find('.shape-controls');
-                $controlArea.children('button').remove();
+                $controlArea.empty();
+                
                 // Loop over all elements we have
-
                 _.each(options.graphs, function(graphType, typeName){
+                    
+                    var $template = $templates.find('.template-' + typeName);
+                    
                     _.each(graphType.elements, function(element){
-                        var $template = $templates.find('.template-' + typeName),
-                        $button = $template.children().first().clone();
+                        
+                        var $buttonContainer = $template.children().first().clone();
+                        var $button = $buttonContainer.children('.btn');
+                        
                         // Change attributes
-                        $button.data('uid',element.uid).text(element.label).addClass('available');
-                        $controlArea.append($button);
+                        $buttonContainer.data('uid',element.uid);
+                        $button.text(element.label);
+                        
+                        //insert into dom
+                        $controlArea.append($buttonContainer);
                     });
+                });
+                
+                var $btns = $controlArea.children('.btn').on('click.graphs', function(){
+                    var $btn = $(this);
+                    //toggle active
+                    $btns.removeClass('activated');
+                    $btn.addClass('activated');
                 });
                 
             }
