@@ -42,8 +42,7 @@ define([
                 end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
                 unit : 20
             },
-            element : rawConfig.elements,
-            type : rawConfig.graphs === undefined ? 'points' : rawConfig.graphs
+            graphs : rawConfig.graphs === undefined ? {} : rawConfig.graphs
         };
     }
     /**
@@ -97,8 +96,9 @@ define([
 
             this.id = id;
             this.dom = dom;
-            this.config = config || {};
-
+            this.config = buildGridConfig(config || {});
+            console.dir(this.config);
+            
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
 
@@ -142,34 +142,44 @@ define([
 
                 });
             }
-
-            initGrid($container, buildGridConfig(this.config));
-
-            this.on('configchange',function(options){
-                self.config = buildGridConfig(options);
-                initGrid($container, self.config);
+            
+            function initInteraction($cont, options){
+                
+                var $templates = $cont.find('.templates');
+                
                 // Remove all existing button
-                var $controlArea = $('.shape-controls');
+                var $controlArea = $cont.find('.shape-controls');
                 $controlArea.children('button').remove();
                 // Loop over all elements we have
 
                 _.each(options.graphs, function(graphType, typeName){
                     _.each(graphType.elements, function(element){
-                        var $template = $('.template-' + typeName, '.pointAndLineFunctionInteraction'),
+                        var $template = $templates.find('.template-' + typeName),
                         $button = $template.children().first().clone();
                         // Change attributes
                         $button.data('uid',element.uid).text(element.label).addClass('available');
                         $controlArea.append($button);
                     });
                 });
+                
+            }
+            
+            initGrid($container, this.config);
+            initInteraction($container, this.config);
+            
+            this.on('configchange',function(options){
+                self.config = buildGridConfig(options);
+                initGrid($container, self.config);
+                initInteraction($container, self.config);
             });
-
 
             this.on('gridchange', function(config){
                 self.config = config;
                 initGrid($container, buildGridConfig(config));
             });
-
+            
+            
+            //strange ...
             $('.pointAndLineFunctionInteraction').on('click', 'button', function(event) {
                 $container.trigger('elementchange',$(this).data('config'));
             });
