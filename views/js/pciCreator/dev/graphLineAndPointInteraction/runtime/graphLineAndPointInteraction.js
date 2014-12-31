@@ -170,7 +170,7 @@ define([
                     });
                 });
                 
-                var $btns = $controlArea.children('.btn').on('click.graphs', function(){
+                var $btns = $controlArea.children('.button-container').on('click.graphs', function(){
                     var $btn = $(this);
                     //toggle active
                     $btns.removeClass('activated');

@@ -31,4 +31,9 @@
     float:left;
     top:2px;
     position: relative;
+    visibility: hidden;
 }
+.pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container.activated .triangle{
+    visibility: visible;
+}
+.pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container .btn:hover + .triangle {opacity:.85;}
