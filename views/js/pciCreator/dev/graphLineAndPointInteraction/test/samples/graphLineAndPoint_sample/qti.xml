@@ -82,6 +82,7 @@
                                     <pci:entry key="color">#bb1a2a</pci:entry>
                                     <pci:entry key="label">Point Set A</pci:entry>
                                     <pci:entry key="uid">4</pci:entry>
+                                    <pci:entry key="max">3</pci:entry>
                                 </pci:properties>
                             </pci:properties>
                         </pci:properties>

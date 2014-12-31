@@ -5,6 +5,7 @@ define([
     'OAT/lodash',
     'OAT/scale.raphael',
     'PARCC/gridFactory',
+    'graphLineAndPointInteraction/runtime/wrappers/setOfPoints',
     'graphLineAndPointInteraction/runtime/wrappers/points',
     'graphLineAndPointInteraction/runtime/wrappers/lines',
     'graphLineAndPointInteraction/runtime/wrappers/segments'
@@ -15,6 +16,7 @@ define([
     _,
     scaleRaphael,
     gridFactory,
+    setPointsWrapper,
     pointsWrapper,
     linesWrapper,
     segmentsWrapper
@@ -70,6 +72,8 @@ define([
      */
     function getWrapper(type){
         switch(type){
+            case 'setPoints' :
+                return setPointsWrapper;
             case 'points' :
                 return pointsWrapper;
             case 'lines' :
@@ -97,7 +101,9 @@ define([
             this.id = id;
             this.dom = dom;
             this.config = buildGridConfig(config || {});
-
+            
+            console.log(this.config);
+            
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
 
@@ -170,7 +176,7 @@ define([
                         $button.text(elementConfig.label);
 
                         //init element
-                        if(typeName === 'lines' || typeName === 'segments'){
+                        if(typeName !== 'solutionSet'){
                             var wrapper = getWrapper(typeName);
                             var element = wrapper.initialize(grid, elementConfig);
                             $buttonContainer.data('element', element);

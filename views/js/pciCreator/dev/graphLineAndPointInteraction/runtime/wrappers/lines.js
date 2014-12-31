@@ -135,9 +135,9 @@ define([
                 unbindEvents();
             },
             destroy : function(){
-                if(this.line !== undefined && this.line !== null){
-                    this.line.remove();
-                    this.line = null;
+                if(line !== undefined && line !== null){
+                    line.remove();
+                    line = null;
                 }
                 if(points !== undefined && points !== []){
                     _.forEach(points, function(point){
