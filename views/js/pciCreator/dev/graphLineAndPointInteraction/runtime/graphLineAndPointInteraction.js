@@ -6,7 +6,8 @@ define([
     'OAT/scale.raphael',
     'PARCC/gridFactory',
     'graphLineAndPointInteraction/runtime/wrappers/points',
-    'graphLineAndPointInteraction/runtime/wrappers/lines'
+    'graphLineAndPointInteraction/runtime/wrappers/lines',
+    'graphLineAndPointInteraction/runtime/wrappers/segments'
 ], function(
     $,
     qtiCustomInteractionContext,
@@ -15,7 +16,8 @@ define([
     scaleRaphael,
     gridFactory,
     pointsWrapper,
-    linesWrapper
+    linesWrapper,
+    segmentsWrapper
     ){
 
     'use strict';
@@ -63,17 +65,19 @@ define([
 
     /**
      * Dirty functiion to return the right wrapper for a given config element
-     * @param  {String} element Name of the element you want
+     * @param  {String} type     Name of the element you want
      * @return {Object}         Wrapper corresponding to this element
      */
-    function getWrapper(element){
-        switch(element){
+    function getWrapper(type){
+        switch(type){
             case 'points' :
                 return pointsWrapper;
             case 'lines' :
                 return linesWrapper;
+            case 'segments' :
+                return segmentsWrapper;
             default :
-                return pointsWrapper;
+                throw 'invalid wrapper type';
         }
     }
 
@@ -166,7 +170,7 @@ define([
                         $button.text(elementConfig.label);
 
                         //init element
-                        if(typeName === 'lines'){
+                        if(typeName === 'lines' || typeName === 'segments'){
                             var wrapper = getWrapper(typeName);
                             var element = wrapper.initialize(grid, elementConfig);
                             $buttonContainer.data('element', element);

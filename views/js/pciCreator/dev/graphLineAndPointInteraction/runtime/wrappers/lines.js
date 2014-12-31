@@ -25,6 +25,7 @@ define([
             uid = config.uid,
             color = _defaults.color,
             dashed = false,
+            segment = config.segment || false,
             paper = grid.getCanvas(),
             plotFactory = new PlotFactory(grid),
             line;
@@ -50,7 +51,12 @@ define([
             if(point1 && point2){
 
                 clearPlot();
-                line = plotFactory.plotLinear(point1, point2, {color : color});
+                line = plotFactory.plotLinear(point1, point2, {color : color, segment : segment});
+                if(point1.x === point2.x){
+                    //vertical line : 
+                    //@todo implement this case
+                }
+                
                 if(dashed){
                     line.attr({'stroke-dasharray':'--'});
                 }
