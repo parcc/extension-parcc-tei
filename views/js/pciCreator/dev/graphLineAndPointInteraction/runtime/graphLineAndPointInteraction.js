@@ -5,10 +5,8 @@ define([
     'OAT/lodash',
     'OAT/scale.raphael',
     'PARCC/gridFactory',
-    'PARCC/pointFactory',
-    'PARCC/plotFactory',
-    './wrappers/points.js',
-    './wrappers/lines.js'
+    'graphLineAndPointInteraction/runtime/wrappers/points',
+    'graphLineAndPointInteraction/runtime/wrappers/lines'
 ], function(
     $,
     qtiCustomInteractionContext,
@@ -16,8 +14,6 @@ define([
     _,
     scaleRaphael,
     gridFactory,
-    pointFactory,
-    PlotFactory,
     pointsWrapper,
     linesWrapper
     ){
