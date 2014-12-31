@@ -217,6 +217,13 @@ define([
                 $container.trigger('elementchange', $(this).data('config'));
             });
 
+            //test setLineStyle()
+            _.delay(function(){
+                if(graph && _.isFunction(graph.setLineStyle)){
+                    graph.setLineStyle('dashed');
+                }
+            }, 3000);
+
             // var plotFactory = new PlotFactory(grid);
             //
             // //////////////////////////////////////

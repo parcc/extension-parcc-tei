@@ -24,6 +24,7 @@ define([
         var points = [],
             uid = config.uid,
             color = _defaults.color,
+            dashed = false,
             paper = grid.getCanvas(),
             plotFactory = new PlotFactory(grid),
             line;
@@ -50,6 +51,9 @@ define([
 
                 clearPlot();
                 line = plotFactory.plotLinear(point1, point2, {color : color});
+                if(dashed){
+                    line.attr({'stroke-dasharray':'--'});
+                }
             }
         }
 
@@ -135,6 +139,14 @@ define([
                     });
                     points = [];
                 }
+            },
+            setLineStyle : function(style){
+                if(style === 'dashed'){
+                    dashed = true;
+                }else{
+                    dashed = false;
+                }
+                plot();
             }
         };
 
