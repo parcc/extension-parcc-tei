@@ -222,7 +222,6 @@ define([
             initInteraction(grid, $container, this.config);
 
             this.on('configchange', function(options){
-                console.log(options);
                 self.config = buildGridConfig(options);
                 grid = initGrid($container, self.config);
                 initInteraction(grid, $container, self.config);
