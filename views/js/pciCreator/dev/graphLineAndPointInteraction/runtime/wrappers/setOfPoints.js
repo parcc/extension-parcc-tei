@@ -18,6 +18,7 @@ define([
     function initialize(grid, config){
 
         var points = [],
+            active = false,
             max = config.max || 1,
             uid = config.uid,
             color = color = config.color || _defaults.color,
@@ -72,12 +73,16 @@ define([
         }
 
         var pointsWrapper = {
+            isActive : function(){
+                return active;
+            },
             activate : function(){
                 _.forEach(points, function(point){
                     point.showGlow();
                     point.drag();
                 });
                 bindEvents();
+                active = true;
             },
             disactivate : function(){
                 _.forEach(points, function(point){
@@ -85,6 +90,7 @@ define([
                     point.unDrag();
                 });
                 unbindEvents();
+                active = false;
             },
             destroy : function(){
                 if(points !== undefined && points !== []){
@@ -93,6 +99,16 @@ define([
                     });
                     points = [];
                 }
+            },
+            highlightOn : function(){
+                _.forEach(points, function(point){
+                    point.showGlow();
+                });
+            },
+            highlightOff : function(){
+                _.forEach(points, function(point){
+                    point.hideGlow();
+                });
             }
         };
 

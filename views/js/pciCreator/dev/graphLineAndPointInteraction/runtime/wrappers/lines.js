@@ -22,6 +22,7 @@ define([
     function initialize(grid, config){
 
         var points = [],
+            active = false,
             uid = config.uid,
             color = config.color || _defaults.color,
             dashed = false,
@@ -120,12 +121,16 @@ define([
         }
 
         var linesWrapper = {
+            isActive : function(){
+                return active;
+            },
             activate : function(){
                 _.forEach(points, function(point){
                     point.showGlow();
                     point.drag();
                 });
                 bindEvents();
+                active = true;
             },
             disactivate : function(){
                 _.forEach(points, function(point){
@@ -133,6 +138,7 @@ define([
                     point.unDrag();
                 });
                 unbindEvents();
+                active = false;
             },
             destroy : function(){
                 if(line !== undefined && line !== null){
@@ -153,6 +159,16 @@ define([
                     dashed = false;
                 }
                 plot();
+            },
+            highlightOn : function(){
+                _.forEach(points, function(point){
+                    point.showGlow();
+                });
+            },
+            highlightOff : function(){
+                _.forEach(points, function(point){
+                    point.hideGlow();
+                });
             }
         };
 
