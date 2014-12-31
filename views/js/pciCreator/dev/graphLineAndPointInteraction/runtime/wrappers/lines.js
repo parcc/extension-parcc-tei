@@ -1,60 +1,85 @@
 define([
     'IMSGlobal/jquery_2_1_1',
     'OAT/lodash',
-    'OAT/scale.raphael',
     'PARCC/pointFactory',
     'PARCC/plotFactory'
-    ], function(
-        $,
-        _,
-        scaleRaphael,
-        pointFactory,
-        PlotFactory
+], function(
+    $,
+    _,
+    pointFactory,
+    PlotFactory
     ){
 
     'use strict';
     var _defaults = {
-            label : null,
-            color : '#bb1a2a',
-            lineStyle : 'plain',
-            lineWeight : 1,
-            pointRadius : 7
-        };
+        label : null,
+        color : '#bb1a2a',
+        lineStyle : 'plain',
+        lineWeight : 1,
+        pointRadius : 7
+    };
 
-    var linesWrapper = {
-        points : [],
-        active : true,
-        color : _defaults.color,
-        line : null,
-        initialize : function(paper,grid,config){
-            config = _.defaults(config,_defaults);
-            var self = this,
-                plotFactory = new PlotFactory(grid);
+    function initialize(grid, config){
 
+        var points = [],
+            uid = config.uid,
+            color = _defaults.color,
+            paper = grid.getCanvas(),
+            plotFactory = new PlotFactory(grid),
+            line;
 
-            $(paper.canvas).off('click_grid').on('click_grid',function(event,coord){
-                if (self.points.length < 2) {
+        config = _.defaults(config, _defaults);
+
+        function unbindEvents(){
+            var paper = grid.getCanvas();
+            $(paper.canvas).off('.' + uid);
+        }
+
+        function clearPlot(){
+            if(line){
+                line.remove();
+            }
+        }
+
+        function plot(){
+            
+            var point1 = points[0],
+                point2 = points[1];
+
+            if(point1 && point2){
+
+                clearPlot();
+                line = plotFactory.plotLinear(point1, point2, {color : color});
+            }
+        }
+
+        function bindEvents(){
+
+            $(paper.canvas).on('click_grid.' + uid, function(event, coord){
+
+                if(points.length < 2){
                     var newPoint = pointFactory(paper, grid, {
                         x : coord.x,
                         y : coord.y,
-                        color : self.color
+                        color : color,
+                        on : {
+                            dragStart : clearPlot
+                        }
                     });
                     // Draw the point
                     newPoint.render();
                     // Enable drag'n'drop hability
                     newPoint.drag();
                     // Add it to the list of points
-                    self.points.push(newPoint);
+                    points.push(newPoint);
                     // Raise event ready for line plot
-                    if (self.points.length === 2) {
-                        $(paper.canvas).trigger('pairPointReady.line');
-                        $(paper.canvas).on('moved.point',function(){
-                            $(paper.canvas).trigger('pairPointReady.line');
-                        });
+                    if(points.length === 2){
+                        plot();
+                        $(paper.canvas).on('moved.point', plot);
                     }
                 }else{
                     // Get the last point placed
-                    var oldPoint = self.points.pop();
+                    var oldPoint = points.pop();
                     // Change their coordinates for new ones
                     oldPoint.setCoord(coord.x, coord.y);
                     // Re-draw the point
@@ -62,66 +87,62 @@ define([
                     // re-enable the drag'n'drop
                     oldPoint.drag();
                     // Add it back to the list
-                    self.points.push(oldPoint);
+                    points.push(oldPoint);
                     // Raise event ready for a line plot
-                    $(paper.canvas).trigger('pairPointReady.line');
+                    plot();
                 }
-            });
 
-            $(paper.canvas).off('removed.point').on('removed.point',function(event,removedPoint){
-                if (self.points) {
+            }).on('removed.point.' + uid, function(event, removedPoint){
+                if(points){
                     // get the point to remove from the "registry"
-                    var pointToDelete = _.findIndex(self.points,{uid : removedPoint.uid});
-                    if (pointToDelete > -1) {
-                        console.log('point removed from canvas, let s delete it from array');
-                        self.points.splice(pointToDelete,1);
+                    var pointToDelete = _.findIndex(points, {uid : removedPoint.uid});
+                    if(pointToDelete > -1){
+                        points.splice(pointToDelete, 1);
                         // Remove line
-                        if(self.line){
-                            console.log('there s a line : removing it');
-                            self.line.remove();
-                            self.line = null;
+                        if(line){
+                            line.remove();
+                            line = null;
                         }
                     }
                 }
             });
-            $(paper.canvas).on('pairPointReady.line',function(){
-                // Get the Active Set
-                // var activeSet = _.find(sets,{active : true});
-                // If there's a line, remove it
-                if(self.line){self.line.remove();}
-                // Create and store the new line
-                self.line = plotFactory.plotLinear(self.points[0],self.points[1],{color:self.color});
-            });
 
-
-
-        },
-        activate : function(){
-            this.active = true;
-            _.forEach(this.points, function(point){
-                point.showGlow();
-            });
-        },
-        disactivate : function(){
-            this.active = false;
-            _.forEach(this.points, function(point){
-                point.hideGlow();
-            });
-        },
-        destroy : function(){
-            console.log(this);
-            if(this.line !== undefined && this.line !== null){
-                this.line.remove();
-                this.line = null;
-            }
-            if(this.points !== undefined && this.points !== []){
-                _.forEach(this.points, function(point){
-                    point.children.remove().clear();
-                });
-                this.points = [];
-            }
         }
+
+        var linesWrapper = {
+            activate : function(){
+                _.forEach(points, function(point){
+                    point.showGlow();
+                    point.drag();
+                });
+                bindEvents();
+            },
+            disactivate : function(){
+                _.forEach(points, function(point){
+                    point.hideGlow();
+                    point.unDrag();
+                });
+                unbindEvents();
+            },
+            destroy : function(){
+                if(this.line !== undefined && this.line !== null){
+                    this.line.remove();
+                    this.line = null;
+                }
+                if(points !== undefined && points !== []){
+                    _.forEach(points, function(point){
+                        point.children.remove().clear();
+                    });
+                    points = [];
+                }
+            }
+        };
+
+        return linesWrapper;
+    }
+
+    return {
+        initialize : initialize
     };
-    return linesWrapper;
 
 });
