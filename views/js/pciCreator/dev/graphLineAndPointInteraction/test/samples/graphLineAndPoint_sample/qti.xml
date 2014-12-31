@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd"
+                xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" 
+                identifier="pci002" title="PCI 002" adaptive="false" timeDependent="false">
+    
+    <responseDeclaration identifier="graphLineAndPoint1" cardinality="single" baseType="integer"/>
+    
+    <!--item specific stylesheets will be added by the item in the method postRender()-->
+    <stylesheet href="graphLineAndPointInteraction/runtime/css/graphLineAndPointInteraction.css" title="" type="text/css" media="all"></stylesheet>
+    
+    <itemBody>
+        
+        <customInteraction responseIdentifier="graphLineAndPoint1">
+            <pci:portableCustomInteraction customInteractionTypeIdentifier="graphLineAndPointInteraction" hook="graphLineAndPointInteraction/runtime/graphLineAndPointInteraction.js">
+
+                <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
+                
+                <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
+                    <pci:libraries>
+                        <pci:lib id="IMSGlobal/jquery_2_1_1"></pci:lib>
+                    </pci:libraries>
+                </pci:resources>
+
+                <pci:properties>
+                    <pci:properties key="graphs">
+                        <pci:properties key="points">
+                            <pci:entry key="label">Point</pci:entry>
+                            <pci:entry key="count">1</pci:entry>
+                            <pci:properties key="elements">
+                                <pci:properties key="0">
+                                    <pci:entry key="color">#bb1a2a</pci:entry>
+                                    <pci:entry key="label">Point A</pci:entry>
+                                    <pci:entry key="uid">1</pci:entry>
+                                </pci:properties>
+                            </pci:properties>
+                        </pci:properties>
+                        <pci:properties key="lines">
+                            <pci:entry key="label">Line</pci:entry>
+                            <pci:entry key="count">2</pci:entry>
+                            <pci:properties key="elements">
+                                <pci:properties key="0">
+                                    <pci:entry key="color">#bb1a2a</pci:entry>
+                                    <pci:entry key="label">Line A</pci:entry>
+                                    <pci:entry key="uid">2</pci:entry>
+                                </pci:properties>
+                                <pci:properties key="1">
+                                    <pci:entry key="color">#bb1a2a</pci:entry>
+                                    <pci:entry key="label">Line B</pci:entry>
+                                    <pci:entry key="uid">7</pci:entry>
+                                </pci:properties>
+                            </pci:properties>
+                        </pci:properties>
+                        <pci:properties key="segments">
+                            <pci:entry key="label">Segment</pci:entry>
+                            <pci:entry key="count">1</pci:entry>
+                            <pci:properties key="elements">
+                                <pci:properties key="0">
+                                    <pci:entry key="color">#bb1a2a</pci:entry>
+                                    <pci:entry key="label">Segment A</pci:entry>
+                                    <pci:entry key="uid">5</pci:entry>
+                                </pci:properties>
+                            </pci:properties>
+                        </pci:properties>
+                        <pci:properties key="solutionSet">
+                            <pci:entry key="label">Solution Set</pci:entry>
+                            <pci:entry key="count">1</pci:entry>
+                            <pci:properties key="elements">
+                                <pci:properties key="0">
+                                    <pci:entry key="color">#bb1a2a</pci:entry>
+                                    <pci:entry key="label">Solution Set A</pci:entry>
+                                    <pci:entry key="uid">3</pci:entry>
+                                </pci:properties>
+                            </pci:properties>
+                        </pci:properties>
+                        <pci:properties key="setPoints">
+                            <pci:entry key="label">Set of Points</pci:entry>
+                            <pci:entry key="count">1</pci:entry>
+                            <pci:properties key="elements">
+                                <pci:properties key="0">
+                                    <pci:entry key="color">#bb1a2a</pci:entry>
+                                    <pci:entry key="label">Point Set A</pci:entry>
+                                    <pci:entry key="uid">4</pci:entry>
+                                    <pci:entry key="max">3</pci:entry>
+                                </pci:properties>
+                            </pci:properties>
+                        </pci:properties>
+                    </pci:properties>
+                    <pci:entry key="xMin">-10</pci:entry>
+                    <pci:entry key="xMax">10</pci:entry>
+                    <pci:entry key="yMin">-10</pci:entry>
+                    <pci:entry key="yMax">10</pci:entry>
+                </pci:properties>
+
+                <pci:markup>
+                    <html5:div class="pointAndLineFunctionInteraction">
+                        <html5:div class="prompt"> </html5:div>
+                        <html5:div class="shape-panel">
+                            <html5:div class="shape-controls">
+                                
+                                <!-- Controll will be inserted here -->
+                            </html5:div>
+                            <html5:div class="templates">
+                                <html5:div class="template-lines">
+                                    <html5:div class="button-container clearfix">
+                                        <html5:button class="btn btn-info" name="lines"></html5:button>
+                                        <html5:div class="triangle"></html5:div>
+                                    </html5:div>
+                                </html5:div>
+                                <html5:div class="template-points">
+                                    <html5:div class="button-container clearfix">
+                                        <html5:button class="btn btn-info" name="points"></html5:button>
+                                        <html5:div class="triangle"></html5:div>
+                                    </html5:div>
+                                </html5:div>
+                                <html5:div class="template-segments">
+                                    <html5:div class="button-container clearfix">
+                                        <html5:button class="btn btn-info" name="segment"></html5:button>
+                                        <html5:div class="triangle"></html5:div>
+                                    </html5:div>
+                                </html5:div>
+                                <html5:div class="template-solutionSet">
+                                    <html5:div class="button-container clearfix">
+                                        <html5:button class="btn btn-info" name="solutionSet"></html5:button>
+                                        <html5:div class="triangle"></html5:div>
+                                    </html5:div>
+                                </html5:div>
+                                <html5:div class="template-setPoints">
+                                    <html5:div class="button-container clearfix">
+                                        <html5:button class="btn btn-info" name="setPoints"></html5:button>
+                                        <html5:div class="triangle"></html5:div>
+                                    </html5:div>
+                                </html5:div>
+                            </html5:div>
+                            <html5:div class="shape-container"></html5:div>
+                        </html5:div>
+                    </html5:div>
+                </pci:markup>
+
+            </pci:portableCustomInteraction>
+        </customInteraction>
+
+    </itemBody>
+    
+</assessmentItem>

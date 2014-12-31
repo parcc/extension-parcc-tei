@@ -74,6 +74,10 @@ define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
             try{
                 equation = graphFunction[fnName].get(point1, point2);
                 if(equation){
+                    if(conf.segment){
+                        conf.start = Math.min(point1.x, point2.x);
+                        conf.end = Math.max(point1.x, point2.x);
+                    }
                     plot = graphFunction[fnName].plot(canvas, equation, conf);
                     _applyStyle(plot, conf);
                     return plot;
@@ -107,6 +111,6 @@ define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
     PlotFactory.getPlotName = function(mathFunctionName){
         return 'plot' + mathFunctionName.charAt(0).toUpperCase() + mathFunctionName.substr(1);
     };
-    
+
     return PlotFactory;
 });

@@ -5,21 +5,21 @@ define([
     'OAT/lodash',
     'OAT/scale.raphael',
     'PARCC/gridFactory',
-    'PARCC/pointFactory',
-    'PARCC/plotFactory',
-    './wrappers/points.js',
-    './wrappers/lines.js'
-    ], function(
-        $,
-        qtiCustomInteractionContext,
-        event,
-        _,
-        scaleRaphael,
-        gridFactory,
-        pointFactory,
-        PlotFactory,
-        pointsWrapper,
-        linesWrapper
+    'graphLineAndPointInteraction/runtime/wrappers/setOfPoints',
+    'graphLineAndPointInteraction/runtime/wrappers/points',
+    'graphLineAndPointInteraction/runtime/wrappers/lines',
+    'graphLineAndPointInteraction/runtime/wrappers/segments'
+], function(
+    $,
+    qtiCustomInteractionContext,
+    event,
+    _,
+    scaleRaphael,
+    gridFactory,
+    setPointsWrapper,
+    pointsWrapper,
+    linesWrapper,
+    segmentsWrapper
     ){
 
     'use strict';
@@ -42,8 +42,7 @@ define([
                 end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
                 unit : 20
             },
-            element : rawConfig.elements,
-            type : rawConfig.graphs === undefined ? 'points' : rawConfig.graphs
+            graphs : rawConfig.graphs === undefined ? {} : rawConfig.graphs
         };
     }
     /**
@@ -68,17 +67,21 @@ define([
 
     /**
      * Dirty functiion to return the right wrapper for a given config element
-     * @param  {String} element Name of the element you want
+     * @param  {String} type     Name of the element you want
      * @return {Object}         Wrapper corresponding to this element
      */
-    function getWrapper(element){
-        switch (element){
+    function getWrapper(type){
+        switch(type){
+            case 'setPoints' :
+                return setPointsWrapper;
             case 'points' :
                 return pointsWrapper;
             case 'lines' :
                 return linesWrapper;
+            case 'segments' :
+                return segmentsWrapper;
             default :
-                return pointsWrapper;
+                throw 'invalid wrapper type';
         }
     }
 
@@ -97,12 +100,14 @@ define([
 
             this.id = id;
             this.dom = dom;
-            this.config = config || {};
-
+            this.config = buildGridConfig(config || {});
+            
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
 
-            var $container = $(dom),
+            var grid,
+                graph,
+                $container = $(dom),
                 self = this;
 
             /**
@@ -114,7 +119,7 @@ define([
                 // @todo : Clear Everything
 
                 var paper = createCanvas($container, gridConfig);
-                var grid = gridFactory(paper,gridConfig);
+                var grid = gridFactory(paper, gridConfig);
                 grid.clickable();
 
 
@@ -122,16 +127,16 @@ define([
 
                     // Get the coordinate for a click
                     var bnds = event.target.getBoundingClientRect(),
-                    wfactor = paper.w / paper.width,
-                    fx = Math.round((event.clientX - bnds.left)/bnds.width * grid.getWidth() * wfactor),
-                    fy = Math.round((event.clientY - bnds.top)/bnds.height * grid.getHeight() * wfactor);
+                        wfactor = paper.w / paper.width,
+                        fx = Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
+                        fy = Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
 
-                    $(paper.canvas).trigger('click_grid',{x: fx, y: fy});
+                    $(paper.canvas).trigger('click_grid', {x : fx, y : fy});
 
-
+                    return;
                     var element = getWrapper(gridConfig.type);
-                    element.initialize(paper,grid,{color: '#0f904a'});
+                    element.initialize(paper, grid, {color : '#0f904a'});
 
                     self.on('configchange', function(){
                         element.destroy();
@@ -141,37 +146,96 @@ define([
                     // var activeSet = _.find(sets,{active : true});
 
                 });
+
+                return grid;
             }
 
-            initGrid($container, buildGridConfig(this.config));
+            function initInteraction(grid, $cont, options){
 
-            this.on('configchange',function(options){
-                self.config = buildGridConfig(options);
-                initGrid($container, self.config);
+                var $templates = $cont.find('.templates');
+
                 // Remove all existing button
-                var $controlArea = $('.shape-controls');
-                $controlArea.children('button').remove();
-                // Loop over all elements we have
+                var $controlArea = $cont.find('.shape-controls');
+                $controlArea.empty();
 
+                // Loop over all elements we have
                 _.each(options.graphs, function(graphType, typeName){
-                    _.each(graphType.elements, function(element){
-                        var $template = $('.template-' + typeName, '.pointAndLineFunctionInteraction'),
-                        $button = $template.children().first().clone();
+
+                    var $template = $templates.find('.template-' + typeName);
+
+                    _.each(graphType.elements, function(elementConfig){
+
+                        var $buttonContainer = $template.children().first().clone();
+                        var $button = $buttonContainer.children('.btn');
+                        var $arrow = $buttonContainer.children('.triangle');
+
                         // Change attributes
-                        $button.data('uid',element.uid).text(element.label).addClass('available');
-                        $controlArea.append($button);
+                        $buttonContainer.data('uid', elementConfig.uid);
+                        $buttonContainer.data('config', elementConfig);
+                        $button.text(elementConfig.label);
+                        $button.css({backgroundColor:elementConfig.color});
+                        $arrow.css({borderColor:'transparent transparent transparent '+elementConfig.color});
+                        
+                        //init element
+                        if(typeName !== 'solutionSet'){
+                            var wrapper = getWrapper(typeName);
+                            var element = wrapper.initialize(grid, elementConfig);
+                            $buttonContainer.data('element', element);
+                        }
+
+                        //insert into dom
+                        $controlArea.append($buttonContainer);
                     });
                 });
-            });
 
+                var $btnContainers = $controlArea.children('.button-container');
+                $btnContainers.children('.btn').on('click', function(){
+
+                    var $btn = $(this),
+                        $btnContainer = $btn.parent();
+
+                    //toggle active class appearance
+                    $btnContainers.removeClass('activated');
+                    $btnContainer.addClass('activated');
+
+                    //activate graphs (points, line etc)
+                    if(graph){
+                        graph.disactivate();
+                    }
+                    graph = $btnContainer.data('element');
+                    graph.activate();
+                }).on('mouseenter', function(){
+                    var element = $(this).parent().data('element');
+                    if(element){
+                        element.highlightOn();
+                    }
+                }).on('mouseleave', function(){
+                    var element = $(this).parent().data('element');
+                    if(element && !element.isActive()){
+                        element.highlightOff();
+                    }
+                });
+
+            }
+
+            grid = initGrid($container, this.config);
+            initInteraction(grid, $container, this.config);
+
+            this.on('configchange', function(options){
+                self.config = buildGridConfig(options);
+                grid = initGrid($container, self.config);
+                initInteraction(grid, $container, self.config);
+            });
 
             this.on('gridchange', function(config){
                 self.config = config;
                 initGrid($container, buildGridConfig(config));
             });
 
-            $('.pointAndLineFunctionInteraction').on('click', 'button', function(event) {
-                $container.trigger('elementchange',$(this).data('config'));
+
+            //strange ...
+            $('.pointAndLineFunctionInteraction').on('click', 'button', function(event){
+                $container.trigger('elementchange', $(this).data('config'));
             });
 
             // var plotFactory = new PlotFactory(grid);

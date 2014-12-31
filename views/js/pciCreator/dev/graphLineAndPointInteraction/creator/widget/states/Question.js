@@ -3,10 +3,11 @@ define([
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
+    'graphLineAndPointInteraction/creator/libs/randomColor/randomColor',
     'tpl!graphLineAndPointInteraction/creator/tpl/propertiesForm',
     'lodash',
     'jquery'
-], function(stateFactory, Question, formElement, containerEditor, formTpl, _, $){
+], function(stateFactory, Question, formElement, containerEditor, randomColor, formTpl, _, $){
     'use strict';
     var StateQuestion = stateFactory.extend(Question, function(){
 
@@ -29,22 +30,67 @@ define([
         //code to execute when leaving this state
 
     });
+
+    function generateColorByGraphType(type){
+
+        var _typeHues = {
+            points : 'yellow',
+            setPoints : 'green',
+            lines : 'red',
+            segments : 'orange',
+            solutionSet : 'blue'
+        };
+
+        if(_typeHues[type]){
+            var colors = randomColor({hue : _typeHues[type], luminosity:'dark', count : 1});
+            return colors.pop();
+        }
+    }
+
+    function generateLabelByGraphType(type, rank){
+
+        var _typeLabels = {
+            points : 'Point',
+            setPoints : 'Point Set',
+            lines : 'Line',
+            segments : 'Segment',
+            solutionSet : 'Solution Set'
+        };
+
+        if(_typeLabels[type]){
+            return _typeLabels[type] + ' ' + String.fromCharCode(65 + rank);
+        }
+    }
+
+    var _defaultConfig = {
+        points : {},
+        setPoints : {max : 5},
+        lines : {},
+        segments : {},
+        solutionSet : {}
+    };
+
     /**
      * Create a default config width a label and a color
-     * @param  {String} label_slug slug used in combination with a count
+     * @param  {String} graphType the type of the graph
      * @param  {Number} nbElements How many elements you want to generate
      * @params {Number} existingElements How many elements already exists
      * @return {Array}            Element Collection
      */
-    function defaultConfig(labelSlug, nbElements, existingElements){
-        var _color = ['#bb1a2a','#0f904a','#d9af5b','#0c5d91'],
-        elements = [];
-        for (var i = 0; i < nbElements; i++) {
-            elements.push({
-                color : _color[i%4],
-                label: labelSlug + '_' + String(i + existingElements),
-                uid : _.uniqueId()
-            });
+    function defaultConfig(graphType, nbElements, existingElements){
+
+        var elements = [];
+        for(var i = 0; i < nbElements; i++){
+
+            var color = generateColorByGraphType(graphType);
+            var label = generateLabelByGraphType(graphType, existingElements + i);
+            var element = _.defaults({
+                color : color,
+                label : label,
+                uid : _.uniqueId(graphType)
+            }, _defaultConfig[graphType]);
+
+            elements.push(element);
         }
         return elements;
     }
@@ -57,23 +103,25 @@ define([
      */
     function updateGraphValue(interaction, value, name){
         /** @type {Object} the old graphs object */
-        var temp = interaction.prop('graphs');
+        var _graphs = interaction.prop('graphs');
         value = parseInt(value);
-        temp[name].count = value;
-        if (value > temp[name].elements.length) {
+        _graphs[name].count = value;
+
+
+        if(value > _graphs[name].elements.length){
             /**
              * If value are greater than what we have, add the diff w/ default values
              */
-            temp[name].elements = temp[name].elements.concat(defaultConfig(name,value - temp[name].elements.length,temp[name].elements.length));
-        }else if (value < temp[name].elements.length) {
+            _graphs[name].elements = _graphs[name].elements.concat(defaultConfig(name, value - _graphs[name].elements.length, _graphs[name].elements.length));
+        }else if(value < _graphs[name].elements.length){
             /**
              * If value are smaller than what we have, just take the firsts n elements
              * where n is the value.
              */
-            temp[name].elements = _.first(temp[name].elements, value);
+            _graphs[name].elements = _.first(_graphs[name].elements, value);
         }
-        interaction.prop('graphs', temp);
-        interaction.triggerPci('configchange',[interaction.getProperties()]);
+        interaction.prop('graphs', _graphs);
+        interaction.triggerPci('configchange', [interaction.getProperties()]);
     }
 
     StateQuestion.prototype.initForm = function(){
@@ -96,17 +144,15 @@ define([
             xMax : interaction.prop('xMax'),
             yMin : interaction.prop('yMin'),
             yMax : interaction.prop('yMax'),
-            graphs : graphs,
+            graphs : graphs
         }));
-
-
 
         //init form javascript
         formElement.initWidget($form);
 
         //set change callbacks:
         var options = {
-            updateCardinality: false,
+            updateCardinality : false,
             attrMethodNames : {set : 'prop', remove : 'removeProp'},
             callback : function(){
                 interaction.triggerPci('gridchange', [interaction.getProperties()]);
@@ -119,33 +165,24 @@ define([
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             },
-            nbElement : function(interaction,value){
-                var elements = [];
-                var _color = ['#bb1a2a','#0f904a','#d9af5b','#0c5d91'];
-                for (var i = 0; i < value; i++) {
-                    elements.push({color : _color[i%4],label: 'line_' + i});
-                }
-                interaction.prop('elements',elements);
-                interaction.triggerPci('configchange',[interaction.getProperties()]);
-            },
             lines : updateGraphValue,
             points : updateGraphValue,
             segments : updateGraphValue,
-            setPoints: updateGraphValue,
+            setPoints : updateGraphValue,
             solutionSet : function(interaction, value){
                 var temp = interaction.prop('graphs');
                 temp.solutionSet.count = value;
-                if (temp.lines.count < 1) {
+                if(temp.lines.count < 1){
                     temp.lines.count = 1;
                     temp.lines.elements = defaultConfig('line', 1);
                 }
-                if (value > temp.solutionSet.elements.length) {
-                    temp.solutionSet.elements = temp.solutionSet.elements.concat(defaultConfig('solutionSet',value - temp.solutionSet.elements.length));
-                }else if (value < temp.solutionSet.elements.length) {
+                if(value > temp.solutionSet.elements.length){
+                    temp.solutionSet.elements = temp.solutionSet.elements.concat(defaultConfig('solutionSet', value - temp.solutionSet.elements.length));
+                }else if(value < temp.solutionSet.elements.length){
                     temp.solutionSet.elements = _.first(temp.solutionSet.elements, value);
                 }
                 interaction.prop('graphs', temp);
-                interaction.triggerPci('configchange',[interaction.getProperties()]);
+                interaction.triggerPci('configchange', [interaction.getProperties()]);
             }
         };
         changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks);
