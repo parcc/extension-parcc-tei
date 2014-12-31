@@ -102,8 +102,6 @@ define([
             this.dom = dom;
             this.config = buildGridConfig(config || {});
             
-            console.log(this.config);
-            
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
 
@@ -211,6 +209,7 @@ define([
             initInteraction(grid, $container, this.config);
 
             this.on('configchange', function(options){
+                console.log(options);
                 self.config = buildGridConfig(options);
                 grid = initGrid($container, self.config);
                 initInteraction(grid, $container, self.config);
@@ -226,13 +225,6 @@ define([
             $('.pointAndLineFunctionInteraction').on('click', 'button', function(event){
                 $container.trigger('elementchange', $(this).data('config'));
             });
-
-            //test setLineStyle()
-            _.delay(function(){
-                if(graph && _.isFunction(graph.setLineStyle)){
-                    graph.setLineStyle('dashed');
-                }
-            }, 3000);
 
             // var plotFactory = new PlotFactory(grid);
             //

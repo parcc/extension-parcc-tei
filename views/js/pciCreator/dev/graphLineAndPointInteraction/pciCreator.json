@@ -12,8 +12,10 @@
         "PARCC/gridFactory",
         "PARCC/pointFactory",
         "PARCC/plotFactory",
+        "./runtime/wrappers/setOfPoints",
         "./runtime/wrappers/points",
-        "./runtime/wrappers/lines"
+        "./runtime/wrappers/lines",
+        "./runtime/wrappers/segments"
     ],
     "css": [
         "runtime/css/graphLineAndPointInteraction.css"
@@ -24,5 +26,6 @@
     "response": {
         "baseType": "integer",
         "cardinality": "single"
-    }
+    },
+    "debug":true
 }
