@@ -34,21 +34,21 @@ define([
     function generateColorByGraphType(type){
 
         var _typeHues = {
-            points : 'pink',
-            setPoints : 'red',
-            lines : 'yellow',
-            segments : 'green',
+            points : 'yellow',
+            setPoints : 'green',
+            lines : 'red',
+            segments : 'orange',
             solutionSet : 'blue'
         };
 
         if(_typeHues[type]){
-            var colors = randomColor({hue : _typeHues[type], count : 1});
+            var colors = randomColor({hue : _typeHues[type], luminosity:'dark', count : 1});
             return colors.pop();
         }
     }
 
     function generateLabelByGraphType(type, rank){
-        
+
         var _typeLabels = {
             points : 'Point',
             setPoints : 'Point Set',
@@ -56,11 +56,19 @@ define([
             segments : 'Segment',
             solutionSet : 'Solution Set'
         };
-        
+
         if(_typeLabels[type]){
             return _typeLabels[type] + ' ' + String.fromCharCode(65 + rank);
         }
     }
+
+    var _defaultConfig = {
+        points : {},
+        setPoints : {max : 5},
+        lines : {},
+        segments : {},
+        solutionSet : {}
+    };
 
     /**
      * Create a default config width a label and a color
@@ -71,22 +79,19 @@ define([
      */
     function defaultConfig(graphType, nbElements, existingElements){
 
-        //get a new color :
-
         var elements = [];
-
         for(var i = 0; i < nbElements; i++){
 
             var color = generateColorByGraphType(graphType);
             var label = generateLabelByGraphType(graphType, existingElements + i);
-
-            elements.push({
+            var element = _.defaults({
                 color : color,
                 label : label,
                 uid : _.uniqueId(graphType)
-            });
-        }
+            }, _defaultConfig[graphType]);
 
+            elements.push(element);
+        }
         return elements;
     }
 

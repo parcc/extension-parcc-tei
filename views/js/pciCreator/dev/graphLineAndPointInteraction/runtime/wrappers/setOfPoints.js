@@ -20,7 +20,7 @@ define([
         var points = [],
             max = config.max || 1,
             uid = config.uid,
-            color = _defaults.color,
+            color = color = config.color || _defaults.color,
             paper = grid.getCanvas();
 
         config = _.defaults(config, _defaults);

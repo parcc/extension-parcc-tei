@@ -23,7 +23,7 @@ define([
 
         var points = [],
             uid = config.uid,
-            color = _defaults.color,
+            color = config.color || _defaults.color,
             dashed = false,
             segment = config.segment || false,
             paper = grid.getCanvas(),

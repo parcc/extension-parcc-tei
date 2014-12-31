@@ -167,12 +167,15 @@ define([
 
                         var $buttonContainer = $template.children().first().clone();
                         var $button = $buttonContainer.children('.btn');
+                        var $arrow = $buttonContainer.children('.triangle');
 
                         // Change attributes
                         $buttonContainer.data('uid', elementConfig.uid);
                         $buttonContainer.data('config', elementConfig);
                         $button.text(elementConfig.label);
-
+                        $button.css({backgroundColor:elementConfig.color});
+                        $arrow.css({borderColor:'transparent transparent transparent '+elementConfig.color});
+                        
                         //init element
                         if(typeName !== 'solutionSet'){
                             var wrapper = getWrapper(typeName);
