@@ -45,21 +45,23 @@ define([
         }
 
         function plot(){
-            
+
             var point1 = points[0],
-                point2 = points[1];
+                point2 = points[1],
+                plotConf = {color : color, segment : segment, thickness : 3, opacity : .8};
 
             if(point1 && point2){
 
                 clearPlot();
-                line = plotFactory.plotLinear(point1, point2, {color : color, segment : segment});
-                if(point1.x === point2.x){
+                line = plotFactory.plotLinear(point1, point2, plotConf);
+                if(point1.getX() === point2.getX()){
                     //vertical line : 
                     //@todo implement this case
+                    line = plotFactory.plotVertical(point1, point2, plotConf);
                 }
-                
+
                 if(dashed){
-                    line.attr({'stroke-dasharray':'--'});
+                    line.attr({'stroke-dasharray' : '--'});
                 }
             }
         }
