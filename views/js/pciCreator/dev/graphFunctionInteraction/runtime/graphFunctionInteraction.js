@@ -171,13 +171,15 @@ define([
                     $button = $shapeControls.find('[name=' + $button + ']');
                 }
 
-                var fnName = $button.val();
-                mathFunction = PlotFactory.getPlotName(fnName);
-                $button.removeClass('btn-info').addClass('btn-success');
-                $button.siblings('button').removeClass('btn-success').addClass('btn-info');
+                if($button.length){
+                    var fnName = $button.val();
+                    mathFunction = PlotFactory.getPlotName(fnName);
+                    $button.removeClass('btn-info').addClass('btn-success');
+                    $button.siblings('button').removeClass('btn-success').addClass('btn-info');
 
-                //always replot the default
-                plotDefault();
+                    //always replot the default
+                    plotDefault();
+                }
             }
 
             function clearPlot(){
@@ -199,11 +201,11 @@ define([
                     point2 = points[1];
 
                 if(point1 && point2){
-
                     clearPlot();
-                    path = plotFactory[mathFunction](point1, point2);
+                    if(mathFunction){
+                        path = plotFactory[mathFunction](point1, point2);
+                    }
                 }
-
             }
 
             function addPoint(fx, fy, cartesian){
@@ -234,17 +236,19 @@ define([
                 //clear drawn elements:
                 clearPoint();
                 clearPlot();
-                
+
                 if(mathFunction === 'plotExponential' || mathFunction === 'plotLogarithmic'){
                     //point at (0, 0) is undefined for exponential and logarithmic functions
                     addPoint(1, 1, true);
                     addPoint(2, 2, true);
-                }else{
+                }else if(mathFunction){
                     addPoint(0, 0, true);
                     addPoint(1, 1, true);
                 }
 
-                plot();
+                if(mathFunction){
+                    plot();
+                }
             }
 
             /**
@@ -268,6 +272,10 @@ define([
 
 
             _this.on('functionschange', function(graphs){
+
+                //reset selected graph
+                mathFunction = null;
+
                 //update list of available graph types
                 mathFunctions = graphs;
                 showControl(mathFunctions);
