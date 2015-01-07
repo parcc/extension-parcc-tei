@@ -83,14 +83,16 @@ define([
             $end = $('[name="max"]','#creator-graphFunctionInteraction-axis');
         $start.on('change',function(){
             // If start >= end , set it to end - 1
-            if (parseInt($start.val()) >= parseInt($end.val())) {
-                $start.val(parseInt($end.val())-1);
+            var endValue = parseInt($end.val());
+            if (parseInt($start.val()) >= endValue) {
+                $start.val(endValue-1);
             }
         });
         $end.on('change',function(){
             // If end <= start, set it to start + 1
-            if (parseInt($end.val()) <= parseInt($start.val())) {
-                $end.val(parseInt($start.val())+1);
+            var startValue = parseInt($start.val());
+            if (parseInt($end.val()) <= startValue) {
+                $end.val(startValue+1);
             }
         });
 
