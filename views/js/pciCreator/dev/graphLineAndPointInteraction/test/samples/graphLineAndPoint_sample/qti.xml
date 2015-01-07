@@ -106,6 +106,22 @@
                                     <html5:div class="button-container clearfix">
                                         <html5:button class="btn btn-info" name="lines"></html5:button>
                                         <html5:div class="triangle"></html5:div>
+                                        <html5:ul class="plain">
+                                            <html5:li>
+                                                <html5:label>
+                                                    <html5:input name="ra-test" type="radio"/>
+                                                    <html5:span class="icon-radio"></html5:span>
+                                                    -----------
+                                                </html5:label>
+                                            </html5:li>
+                                            <html5:li>
+                                                <html5:label>
+                                                    <html5:input name="ra-test" type="radio"/>
+                                                    <html5:span class="icon-radio"></html5:span>
+                                                    - - - - - -
+                                                </html5:label>
+                                            </html5:li>
+                                        </html5:ul>
                                     </html5:div>
                                 </html5:div>
                                 <html5:div class="template-points">
