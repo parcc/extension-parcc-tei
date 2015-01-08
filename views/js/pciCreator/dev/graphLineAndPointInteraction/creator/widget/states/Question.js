@@ -5,9 +5,11 @@ define([
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'graphLineAndPointInteraction/creator/libs/randomColor/randomColor',
     'tpl!graphLineAndPointInteraction/creator/tpl/propertiesForm',
+    'tpl!graphLineAndPointInteraction/creator/tpl/pointsForm',
+    'tpl!graphLineAndPointInteraction/creator/tpl/linesForm',
     'lodash',
     'jquery'
-], function(stateFactory, Question, formElement, containerEditor, randomColor, formTpl, _, $){
+], function(stateFactory, Question, formElement, containerEditor, randomColor, formTpl, pointsFormTpl, linesFormTpl, _, $){
     'use strict';
     var StateQuestion = stateFactory.extend(Question, function(){
 
@@ -31,6 +33,11 @@ define([
 
     });
 
+    var _tpl = {
+        points : pointsFormTpl,
+        lines : linesFormTpl
+    };
+
     function generateColorByGraphType(type){
 
         var _typeHues = {
@@ -42,7 +49,7 @@ define([
         };
 
         if(_typeHues[type]){
-            var colors = randomColor({hue : _typeHues[type], luminosity:'dark', count : 1});
+            var colors = randomColor({hue : _typeHues[type], luminosity : 'dark', count : 1});
             return colors.pop();
         }
     }
@@ -190,7 +197,42 @@ define([
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, changeCallbacks);
 
+        var _this = this;
+        $form.on('click', '.more', function(){
+
+            var $more = $(this),
+                type = $more.data('type');
+
+            _this.showOptionsBox(type);
+        });
     };
+
+    StateQuestion.prototype.showOptionsBox = function(type){
+        console.log(type, graphs);
+
+        var interaction = this.widget.element,
+            $container = $('#math-editor-container'),
+            $panel = $container.find('.panel-container');
+        var rendering = '';
+
+        var graphs = interaction.prop('graphs');
+        if(graphs[type] && _tpl[type]){
+            _.each(graphs[type].elements, function(element){
+                rendering += _tpl[type]({
+                });
+                rendering += '<hr/>';
+            });
+        }else{
+            throw 'invalid type';
+        }
+
+        $panel.empty().html(rendering);
+        
+        $container.show();
+        $container.find('.closer').click(function(){
+            $container.hide();
+        });
+    }
 
     return StateQuestion;
 });

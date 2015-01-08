@@ -88,7 +88,7 @@ define([
     }
 
     function drawLineStyle(dom, config){
-        var w = 60, h = 20;
+        var w = 57, h = 20;
         var lineStylePaper = new Raphael(dom, w, h);
         var line = lineStylePaper.path('M0 ' + h / 2 + 'L' + w + ' ' + h / 2);
         line.attr({
@@ -210,16 +210,16 @@ define([
                                     color : elementConfig.color
                                 });
                             });
-
+                            
+                        //insert into dom
+                        $controlArea.append($buttonContainer);
+                        
                         //init element
                         if(typeName !== 'solutionSet'){
                             var wrapper = getWrapper(typeName);
                             var element = wrapper.initialize(grid, elementConfig);
                             $buttonContainer.data('element', element);
                         }
-
-                        //insert into dom
-                        $controlArea.append($buttonContainer);
                     });
                 });
 

@@ -31,5 +31,17 @@
     {{#each graphs}}
     <label for="{{@key}}" class="spinner">{{label}}</label>
     <input name="{{@key}}" value="{{count}}" data-increment="1" data-min="0" type="text">
+    <a class="more" href="#" title="{{__ 'edit options'}}" data-type="{{@key}}">...</a>
     {{/each}}
+</div>
+
+<div class="sidebar-popup-container-box">
+
+    <div id="math-editor-container" class="sidebar-popup">
+        <h3 id="math-editor-title"></h3>
+        <span class="icon-grip-h dragger"></span>
+        <a class="closer" href="#" title="{{__ 'Close'}}"></a>
+        <div class="panel-container"></div>
+    </div>
+    
 </div>
