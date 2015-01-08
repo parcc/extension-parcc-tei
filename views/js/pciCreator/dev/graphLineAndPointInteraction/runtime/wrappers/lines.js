@@ -25,7 +25,7 @@ define([
             active = false,
             uid = config.uid,
             color = config.color || _defaults.color,
-            dashed = false,
+            lineStyle = '',
             segment = config.segment || false,
             paper = grid.getCanvas(),
             plotFactory = new PlotFactory(grid),
@@ -60,8 +60,8 @@ define([
                     line = plotFactory.plotVertical(point1, point2, plotConf);
                 }
 
-                if(dashed){
-                    line.attr({'stroke-dasharray' : '--'});
+                if(lineStyle){
+                    line.attr({'stroke-dasharray' : lineStyle});
                 }
             }
         }
@@ -155,11 +155,7 @@ define([
                 }
             },
             setLineStyle : function(style){
-                if(style === 'dashed'){
-                    dashed = true;
-                }else{
-                    dashed = false;
-                }
+                lineStyle = style || '';
                 plot();
             },
             highlightOn : function(){

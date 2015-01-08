@@ -4,6 +4,7 @@ define([
     'OAT/util/event',
     'OAT/lodash',
     'OAT/scale.raphael',
+    'OAT/raphael',
     'PARCC/gridFactory',
     'graphLineAndPointInteraction/runtime/wrappers/setOfPoints',
     'graphLineAndPointInteraction/runtime/wrappers/points',
@@ -15,6 +16,7 @@ define([
     event,
     _,
     scaleRaphael,
+    Raphael,
     gridFactory,
     setPointsWrapper,
     pointsWrapper,
@@ -85,6 +87,18 @@ define([
         }
     }
 
+    function drawLineStyle(dom, config){
+        var w = 60, h = 20;
+        var lineStylePaper = new Raphael(dom, w, h);
+        var line = lineStylePaper.path('M0 ' + h / 2 + 'L' + w + ' ' + h / 2);
+        line.attr({
+            stroke : config.color || '#000',
+            'stroke-width' : config.thickness || 3,
+            'stroke-dasharray' : config.linestyle || '',
+            opacity : config.opacity || 1
+        });
+    }
+
     var graphLineAndPointInteraction = {
         id : -1,
         getTypeIdentifier : function(){
@@ -101,7 +115,7 @@ define([
             this.id = id;
             this.dom = dom;
             this.config = buildGridConfig(config || {});
-            
+
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
 
@@ -173,9 +187,30 @@ define([
                         $buttonContainer.data('uid', elementConfig.uid);
                         $buttonContainer.data('config', elementConfig);
                         $button.text(elementConfig.label);
-                        $button.css({backgroundColor:elementConfig.color});
-                        $arrow.css({borderColor:'transparent transparent transparent '+elementConfig.color});
-                        
+                        $button.css({backgroundColor : elementConfig.color});
+                        $arrow.css({borderColor : 'transparent transparent transparent ' + elementConfig.color});
+
+                        //configure change line style buttons (for lines and segments wrapper)
+                        $buttonContainer
+                            .find('input[name=line-style]')
+                            .attr('name', 'line-style-' + elementConfig.uid)
+                            .change(function(){
+                                
+                                elementConfig.linestyle = $(this).val();
+                                $buttonContainer.data('element').setLineStyle(elementConfig.linestyle);
+                                $button.click();
+                                
+                            }).each(function(){
+                                
+                                var $input = $(this),
+                                    $lineStyle = $input.siblings('.line-style');
+                                
+                                drawLineStyle($lineStyle[0], {
+                                    linestyle : $input.val(),
+                                    color : elementConfig.color
+                                });
+                            });
+
                         //init element
                         if(typeName !== 'solutionSet'){
                             var wrapper = getWrapper(typeName);

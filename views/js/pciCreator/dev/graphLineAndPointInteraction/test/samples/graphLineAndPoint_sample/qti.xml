@@ -109,16 +109,16 @@
                                         <html5:ul class="plain">
                                             <html5:li>
                                                 <html5:label>
-                                                    <html5:input name="ra-test" type="radio"/>
+                                                    <html5:input name="line-style" type="radio" value="" checked="checked"/>
                                                     <html5:span class="icon-radio"></html5:span>
-                                                    -----------
+                                                    <html5:span class="line-style line-style-plain"></html5:span>
                                                 </html5:label>
                                             </html5:li>
                                             <html5:li>
                                                 <html5:label>
-                                                    <html5:input name="ra-test" type="radio"/>
+                                                    <html5:input name="line-style" type="radio" value="-"/>
                                                     <html5:span class="icon-radio"></html5:span>
-                                                    - - - - - -
+                                                    <html5:span class="line-style line-style-dashed"></html5:span>
                                                 </html5:label>
                                             </html5:li>
                                         </html5:ul>
