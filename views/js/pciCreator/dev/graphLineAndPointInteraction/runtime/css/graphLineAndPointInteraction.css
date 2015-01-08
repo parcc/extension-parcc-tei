@@ -37,6 +37,6 @@
 }
 .pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container .btn:hover + .triangle {opacity:.85;}
 
-.pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container ul.plain {margin-top:30px; padding:10px;width:150px;border: solid 3px #efefef;}
+.pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container .line-styles {margin-top:30px; padding:10px;width:150px;border: solid 3px #efefef;}
 .pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container .line-style {display:inline-block; margin-left:3px;}
 .pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container svg {top:5px;}

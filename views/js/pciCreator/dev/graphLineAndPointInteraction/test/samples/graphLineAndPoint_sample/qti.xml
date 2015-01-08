@@ -98,7 +98,6 @@
                         <html5:div class="prompt"> </html5:div>
                         <html5:div class="shape-panel">
                             <html5:div class="shape-controls">
-                                
                                 <!-- Controll will be inserted here -->
                             </html5:div>
                             <html5:div class="templates">
@@ -106,7 +105,7 @@
                                     <html5:div class="button-container clearfix">
                                         <html5:button class="btn btn-info" name="lines"></html5:button>
                                         <html5:div class="triangle"></html5:div>
-                                        <html5:ul class="plain">
+                                        <html5:ul class="plain line-styles">
                                             <html5:li>
                                                 <html5:label>
                                                     <html5:input name="line-style" type="radio" value="" checked="checked"/>
@@ -134,6 +133,22 @@
                                     <html5:div class="button-container clearfix">
                                         <html5:button class="btn btn-info" name="segment"></html5:button>
                                         <html5:div class="triangle"></html5:div>
+                                        <html5:ul class="plain line-styles">
+                                            <html5:li>
+                                                <html5:label>
+                                                    <html5:input name="line-style" type="radio" value="" checked="checked"/>
+                                                    <html5:span class="icon-radio"></html5:span>
+                                                    <html5:span class="line-style line-style-plain"></html5:span>
+                                                </html5:label>
+                                            </html5:li>
+                                            <html5:li>
+                                                <html5:label>
+                                                    <html5:input name="line-style" type="radio" value="-"/>
+                                                    <html5:span class="icon-radio"></html5:span>
+                                                    <html5:span class="line-style line-style-dashed"></html5:span>
+                                                </html5:label>
+                                            </html5:li>
+                                        </html5:ul>
                                     </html5:div>
                                 </html5:div>
                                 <html5:div class="template-solutionSet">
