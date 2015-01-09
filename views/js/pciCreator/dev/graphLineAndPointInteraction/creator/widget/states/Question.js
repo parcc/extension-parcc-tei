@@ -93,7 +93,7 @@ define([
     var _defaultConfig = {
         points : {pointRadius : 10},
         setPoints : {max : 5},
-        lines : {lineStyle : '', lineStyleToggle : false, lineWidth : 3, pointRadius : 10},
+        lines : {lineStyle : '', lineStyleToggle : true, lineWidth : 3, pointRadius : 10},
         segments : {lineStyle : '-', lineStyleToggle : false, lineWidth : 3, pointRadius : 10},
         solutionSet : {}
     };
