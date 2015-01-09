@@ -5,12 +5,30 @@ define([
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'graphLineAndPointInteraction/creator/libs/randomColor/randomColor',
     'tpl!graphLineAndPointInteraction/creator/tpl/propertiesForm',
-    'tpl!graphLineAndPointInteraction/creator/tpl/pointsForm',
-    'tpl!graphLineAndPointInteraction/creator/tpl/linesForm',
+    'tpl!graphLineAndPointInteraction/creator/tpl/pointForm',
+    'tpl!graphLineAndPointInteraction/creator/tpl/pointSetForm',
+    'tpl!graphLineAndPointInteraction/creator/tpl/lineForm',
+    'tpl!graphLineAndPointInteraction/creator/tpl/segmentForm',
+    'tpl!graphLineAndPointInteraction/creator/tpl/solutionSetForm',
     'lodash',
     'jquery'
-], function(stateFactory, Question, formElement, containerEditor, randomColor, formTpl, pointsFormTpl, linesFormTpl, _, $){
+], function(
+    stateFactory,
+    Question,
+    formElement,
+    containerEditor,
+    randomColor,
+    formTpl,
+    pointFormTpl,
+    pointSetFormTpl,
+    lineFormTpl,
+    segmentFormTpl,
+    solutionSetForm,
+    _,
+    $){
+
     'use strict';
+
     var StateQuestion = stateFactory.extend(Question, function(){
 
         var interaction = this.widget.element,
@@ -34,8 +52,11 @@ define([
     });
 
     var _tpl = {
-        points : pointsFormTpl,
-        lines : linesFormTpl
+        points : pointFormTpl,
+        setPoints : pointSetFormTpl,
+        segments : segmentFormTpl,
+        lines : lineFormTpl,
+        solutionSet : solutionSetForm
     };
 
     function generateColorByGraphType(type){
