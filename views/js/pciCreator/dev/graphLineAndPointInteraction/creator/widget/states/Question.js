@@ -141,7 +141,29 @@ define([
             response = interaction.getResponseDeclaration(),
             graphs = interaction.prop('graphs');
 
-
+        //@todo : provides some caching system
+        function checkMoreTriggerAvailability(graphType){
+            var $availableGraphsContainer = $form.find('#creator-pointAndLineFunctionInteraction-available-graphs');
+            var $graphType = $availableGraphsContainer.find('input[name=' + graphType + ']');
+            var $more = $availableGraphsContainer.find('.more[data-type=' + graphType + ']');
+            if(parseInt($graphType.val())){
+                $more.show();
+            }else{
+                $more.hide();
+            }
+        }
+        
+        /**
+         * Common graph number change callback function
+         * 
+         * @param {Object} interaction
+         * @param {String} value - a number string
+         * @param {String} graphType
+         */
+        function changeCallback(interaction, value, graphType){
+            updateGraphValue(interaction, value, graphType);
+            checkMoreTriggerAvailability(graphType);
+        }
 
         //render the form using the form template
         $form.html(formTpl({
@@ -172,24 +194,28 @@ define([
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             },
-            lines : updateGraphValue,
-            points : updateGraphValue,
-            segments : updateGraphValue,
-            setPoints : updateGraphValue,
-            solutionSet : function(interaction, value){
+            lines : changeCallback,
+            points : changeCallback,
+            segments : changeCallback,
+            setPoints : changeCallback,
+            solutionSet : function(interaction, value, graphType){
+
+                var $availableGraphsContainer = $form.find('#creator-pointAndLineFunctionInteraction-available-graphs');
+                var $graphType = $availableGraphsContainer.find('input[name=lines]');
+                if(!parseInt($graphType.val())){
+                    //set value to one and trigger the ui/incrementer.js change event
+                    $graphType.val(1).keyup();
+                }
+
+                //if there is no line yet, add one !
                 var temp = interaction.prop('graphs');
-                temp.solutionSet.count = value;
                 if(temp.lines.count < 1){
                     temp.lines.count = 1;
                     temp.lines.elements = defaultConfig('line', 1);
                 }
-                if(value > temp.solutionSet.elements.length){
-                    temp.solutionSet.elements = temp.solutionSet.elements.concat(defaultConfig('solutionSet', value - temp.solutionSet.elements.length));
-                }else if(value < temp.solutionSet.elements.length){
-                    temp.solutionSet.elements = _.first(temp.solutionSet.elements, value);
-                }
-                interaction.prop('graphs', temp);
-                interaction.triggerPci('configchange', [interaction.getProperties()]);
+
+                updateGraphValue(interaction, value, graphType);
+                checkMoreTriggerAvailability(graphType);
             }
         };
         changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks);
@@ -227,7 +253,7 @@ define([
         }
 
         $panel.empty().html(rendering);
-        
+
         $container.show();
         $container.find('.closer').click(function(){
             $container.hide();

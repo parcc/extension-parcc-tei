@@ -3,5 +3,5 @@
 .item-editor-sidebar .tool-group .panel.creator-pointAndLineFunctionInteraction .incrementer-ctrl-wrapper {margin:0 5px;}
 
 #creator-pointAndLineFunctionInteraction-available-graphs h3{display:block;}
-#creator-pointAndLineFunctionInteraction-available-graphs .more {font-size:16px; font-weight: bold; margin-left: 3px; color:black;}
+#creator-pointAndLineFunctionInteraction-available-graphs .more {font-size:16px; font-weight: bold; margin-left: 3px; color:black;display:none;}
 #creator-pointAndLineFunctionInteraction-available-graphs .more:hover {text-decoration: none; color:#666;}
