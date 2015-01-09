@@ -9,6 +9,22 @@
                 <div class="button-container clearfix">
                     <button class="btn btn-info" name="line"></button>
                     <div class="triangle"></div>
+                    <ul class="plain line-styles">
+                        <li>
+                            <label>
+                                <input name="line-style" type="radio" value=""/>
+                                <span class="icon-radio"></span>
+                                <span class="line-style line-style-plain"></span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input name="line-style" type="radio" value="-"/>
+                                <span class="icon-radio"></span>
+                                <span class="line-style line-style-dashed"></span>
+                            </label>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="template-points">
@@ -21,6 +37,22 @@
                 <div class="button-container clearfix">
                     <button class="btn btn-info" name="segment"></button>
                     <div class="triangle"></div>
+                    <ul class="plain line-styles">
+                        <li>
+                            <label>
+                                <input name="line-style" type="radio" value=""/>
+                                <span class="icon-radio"></span>
+                                <span class="line-style line-style-plain"></span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input name="line-style" type="radio" value="-"/>
+                                <span class="icon-radio"></span>
+                                <span class="line-style line-style-dashed"></span>
+                            </label>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="template-solutionSet">

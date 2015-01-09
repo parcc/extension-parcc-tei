@@ -4,6 +4,7 @@ define([
     'OAT/util/event',
     'OAT/lodash',
     'OAT/scale.raphael',
+    'OAT/raphael',
     'PARCC/gridFactory',
     'graphLineAndPointInteraction/runtime/wrappers/setOfPoints',
     'graphLineAndPointInteraction/runtime/wrappers/points',
@@ -15,6 +16,7 @@ define([
     event,
     _,
     scaleRaphael,
+    Raphael,
     gridFactory,
     setPointsWrapper,
     pointsWrapper,
@@ -85,6 +87,18 @@ define([
         }
     }
 
+    function drawLineStyle(dom, config){
+        var w = 57, h = 20;
+        var lineStylePaper = new Raphael(dom, w, h);
+        var line = lineStylePaper.path('M0 ' + h / 2 + 'L' + w + ' ' + h / 2);
+        line.attr({
+            stroke : config.lineColor || '#000',
+            'stroke-width' : config.thickness || 3,
+            'stroke-dasharray' : config.lineStyle || '',
+            opacity : config.opacity || 1
+        });
+    }
+
     var graphLineAndPointInteraction = {
         id : -1,
         getTypeIdentifier : function(){
@@ -101,7 +115,7 @@ define([
             this.id = id;
             this.dom = dom;
             this.config = buildGridConfig(config || {});
-            
+
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
 
@@ -168,23 +182,56 @@ define([
                         var $buttonContainer = $template.children().first().clone();
                         var $button = $buttonContainer.children('.btn');
                         var $arrow = $buttonContainer.children('.triangle');
+                        var color = elementConfig.lineColor || elementConfig.pointColor;
 
                         // Change attributes
                         $buttonContainer.data('uid', elementConfig.uid);
                         $buttonContainer.data('config', elementConfig);
                         $button.text(elementConfig.label);
-                        $button.css({backgroundColor:elementConfig.color});
-                        $arrow.css({borderColor:'transparent transparent transparent '+elementConfig.color});
-                        
+                        $button.css({backgroundColor : color});
+                        $arrow.css({borderColor : 'transparent transparent transparent ' + color});
+
+                        //configure change line style buttons (for lines and segments wrapper)
+                        if(elementConfig.lineStyleToggle && elementConfig.lineStyleToggle !== 'false'){
+                            
+                            $buttonContainer
+                                .find('.line-styles')
+                                .show()
+                                .find('input[name=line-style]')
+                                .attr('name', 'line-style-' + elementConfig.uid)
+                                .change(function(){
+
+                                    elementConfig.lineStyle = $(this).val();
+                                    $buttonContainer.data('element').setLineStyle(elementConfig.lineStyle);
+                                    $button.click();
+
+                                }).each(function(){
+
+                                    var $input = $(this),
+                                        $lineStyle = $input.siblings('.line-style'),
+                                        style = $input.val();
+
+                                    drawLineStyle($lineStyle[0], {
+                                        lineStyle : style,
+                                        lineColor : elementConfig.lineColor
+                                    });
+                                    
+                                    if(elementConfig.lineStyle === style){
+                                        $input.prop('checked', true);
+                                    }
+                                });
+                            
+                        }
+
+                        //insert into dom
+                        $controlArea.append($buttonContainer);
+
                         //init element
                         if(typeName !== 'solutionSet'){
                             var wrapper = getWrapper(typeName);
                             var element = wrapper.initialize(grid, elementConfig);
                             $buttonContainer.data('element', element);
                         }
-
-                        //insert into dom
-                        $controlArea.append($buttonContainer);
                     });
                 });
 
@@ -204,12 +251,16 @@ define([
                     }
                     graph = $btnContainer.data('element');
                     graph.activate();
+                    
                 }).on('mouseenter', function(){
+                    
                     var element = $(this).parent().data('element');
                     if(element){
                         element.highlightOn();
                     }
+                    
                 }).on('mouseleave', function(){
+                    
                     var element = $(this).parent().data('element');
                     if(element && !element.isActive()){
                         element.highlightOff();

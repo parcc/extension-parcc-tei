@@ -55,6 +55,8 @@ define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
 
         config.start = bounds.x.start;
         config.end = bounds.x.end;
+        config.start_y = bounds.y.start;
+        config.end_y = bounds.y.end;
 
         function _translateCoordinate(point){
 
@@ -74,10 +76,14 @@ define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
             try{
                 equation = graphFunction[fnName].get(point1, point2);
                 if(equation){
+
                     if(conf.segment){
                         conf.start = Math.min(point1.x, point2.x);
                         conf.end = Math.max(point1.x, point2.x);
+                        conf.start_y = point1.y;
+                        conf.end_y = point2.y;
                     }
+                    
                     plot = graphFunction[fnName].plot(canvas, equation, conf);
                     _applyStyle(plot, conf);
                     return plot;
@@ -90,6 +96,7 @@ define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
         }
 
         var availableFunctions = [
+            'vertical',
             'linear',
             'absolute',
             'cosine',

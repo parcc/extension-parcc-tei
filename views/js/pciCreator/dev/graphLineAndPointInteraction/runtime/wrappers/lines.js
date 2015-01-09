@@ -12,11 +12,11 @@ define([
 
     'use strict';
     var _defaults = {
-        label : null,
-        color : '#bb1a2a',
-        lineStyle : 'plain',
+        pointColor : '#bb1a2a',
+        lineColor : '#bb1a2a',
+        lineStyle : '',
         lineWeight : 1,
-        pointRadius : 7
+        pointRadius : 10
     };
 
     function initialize(grid, config){
@@ -24,8 +24,6 @@ define([
         var points = [],
             active = false,
             uid = config.uid,
-            color = config.color || _defaults.color,
-            dashed = false,
             segment = config.segment || false,
             paper = grid.getCanvas(),
             plotFactory = new PlotFactory(grid),
@@ -45,21 +43,23 @@ define([
         }
 
         function plot(){
-            
+
             var point1 = points[0],
-                point2 = points[1];
+                point2 = points[1],
+                plotConf = {color : config.lineColor, segment : segment, thickness : 3, opacity : .8};
 
             if(point1 && point2){
 
                 clearPlot();
-                line = plotFactory.plotLinear(point1, point2, {color : color, segment : segment});
-                if(point1.x === point2.x){
+                line = plotFactory.plotLinear(point1, point2, plotConf);
+                if(point1.getX() === point2.getX()){
                     //vertical line : 
                     //@todo implement this case
+                    line = plotFactory.plotVertical(point1, point2, plotConf);
                 }
-                
-                if(dashed){
-                    line.attr({'stroke-dasharray':'--'});
+
+                if(config.lineStyle){
+                    line.attr({'stroke-dasharray' : config.lineStyle});
                 }
             }
         }
@@ -72,7 +72,8 @@ define([
                     var newPoint = pointFactory(paper, grid, {
                         x : coord.x,
                         y : coord.y,
-                        color : color,
+                        radius : config.pointRadius,
+                        color : config.pointColor,
                         on : {
                             dragStart : clearPlot
                         }
@@ -153,11 +154,7 @@ define([
                 }
             },
             setLineStyle : function(style){
-                if(style === 'dashed'){
-                    dashed = true;
-                }else{
-                    dashed = false;
-                }
+                config.lineStyle = style || '';
                 plot();
             },
             highlightOn : function(){

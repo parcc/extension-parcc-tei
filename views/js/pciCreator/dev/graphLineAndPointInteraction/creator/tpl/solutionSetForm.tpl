@@ -1,0 +1,9 @@
+<div class="panel">
+    <label for="" class="has-icon">{{__ "Solution set name"}}</label>
+
+    <input type="text"
+           name="identifier"
+           value="{{identifier}}"
+           placeholder="e.g. Solution Set A"
+           data-validate="$notEmpty; $qtiIdentifier;">
+</div>

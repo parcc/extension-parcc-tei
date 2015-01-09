@@ -66,7 +66,7 @@ define(['OAT/lodash'], function(_){
             x += config.precision;
             pathMove = true;
         }
-        
+
         /**
          * Get the postion top value according to canvas size limitation
          *
@@ -476,6 +476,39 @@ define(['OAT/lodash'], function(_){
         }
     }
 
+    var vertical = {
+        /**
+         * Get vertical line equation passing by a point
+         * The returned equation is under the format [a]
+         * which represents x = a;
+         * 
+         * @param {Object} point
+         * @returns {Array}
+         */
+        get : function(point){
+            if(point.x !== undefined){
+                return [point.x];
+            }
+        },
+        /**
+         * Plot an absolute function from its equation
+         * 
+         * @param {Object} canvas - RaphaelJs paper
+         * @param {Array} equation
+         * @param {Object} config
+         * @returns {Object} RaphaelJs path
+         */
+        plot : function(canvas, equation, config){
+
+            var x = equation[0] * config.unitSize.x + config.origin.left;
+            var yStart = -config.start_y * config.unitSize.y + config.origin.top;
+            var yEnd = -config.end_y * config.unitSize.y + config.origin.top;
+            var path = 'M' + x + ' ' + yStart + 'L' + x + ' ' + yEnd;
+            
+            return canvas.path(path);
+        }
+    };
+
     return {
         checkPairOfPoints : checkPairOfPoints,
         linear : linear,
@@ -484,7 +517,8 @@ define(['OAT/lodash'], function(_){
         exponential : exponential,
         logarithmic : logarithmic,
         cosine : cosine,
-        tangent : tangent
+        tangent : tangent,
+        vertical : vertical
     };
 
 });

@@ -5,10 +5,30 @@ define([
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'graphLineAndPointInteraction/creator/libs/randomColor/randomColor',
     'tpl!graphLineAndPointInteraction/creator/tpl/propertiesForm',
+    'tpl!graphLineAndPointInteraction/creator/tpl/pointForm',
+    'tpl!graphLineAndPointInteraction/creator/tpl/pointSetForm',
+    'tpl!graphLineAndPointInteraction/creator/tpl/lineForm',
+    'tpl!graphLineAndPointInteraction/creator/tpl/segmentForm',
+    'tpl!graphLineAndPointInteraction/creator/tpl/solutionSetForm',
     'lodash',
     'jquery'
-], function(stateFactory, Question, formElement, containerEditor, randomColor, formTpl, _, $){
+], function(
+    stateFactory,
+    Question,
+    formElement,
+    containerEditor,
+    randomColor,
+    formTpl,
+    pointFormTpl,
+    pointSetFormTpl,
+    lineFormTpl,
+    segmentFormTpl,
+    solutionSetForm,
+    _,
+    $){
+
     'use strict';
+
     var StateQuestion = stateFactory.extend(Question, function(){
 
         var interaction = this.widget.element,
@@ -31,6 +51,14 @@ define([
 
     });
 
+    var _tpl = {
+        points : pointFormTpl,
+        setPoints : pointSetFormTpl,
+        segments : segmentFormTpl,
+        lines : lineFormTpl,
+        solutionSet : solutionSetForm
+    };
+
     function generateColorByGraphType(type){
 
         var _typeHues = {
@@ -42,7 +70,7 @@ define([
         };
 
         if(_typeHues[type]){
-            var colors = randomColor({hue : _typeHues[type], luminosity:'dark', count : 1});
+            var colors = randomColor({hue : _typeHues[type], luminosity : 'dark', count : 1});
             return colors.pop();
         }
     }
@@ -63,10 +91,10 @@ define([
     }
 
     var _defaultConfig = {
-        points : {},
+        points : {pointRadius : 10},
         setPoints : {max : 5},
-        lines : {},
-        segments : {},
+        lines : {lineStyle : '', lineStyleToggle : false, lineWidth : 3, pointRadius : 10},
+        segments : {lineStyle : '-', lineStyleToggle : false, lineWidth : 3, pointRadius : 10},
         solutionSet : {}
     };
 
@@ -84,11 +112,29 @@ define([
 
             var color = generateColorByGraphType(graphType);
             var label = generateLabelByGraphType(graphType, existingElements + i);
-            var element = _.defaults({
-                color : color,
+            var generatedConfig = {
                 label : label,
                 uid : _.uniqueId(graphType)
-            }, _defaultConfig[graphType]);
+            };
+
+            switch(graphType){
+                case 'points':
+                case 'setPoints':
+                    generatedConfig.pointColor = color;
+                    break;
+                case 'lines':
+                case 'segments':
+                    generatedConfig.pointColor = color;
+                    generatedConfig.lineColor = color;
+                    break;
+                case 'solutionSet':
+                    generatedConfig.color = color;
+                    break;
+                default:
+                    throw 'unknown type of grapth';
+            }
+
+            var element = _.defaults(generatedConfig, _defaultConfig[graphType]);
 
             elements.push(element);
         }
@@ -134,7 +180,29 @@ define([
             response = interaction.getResponseDeclaration(),
             graphs = interaction.prop('graphs');
 
+        //@todo : provides some caching system
+        function checkMoreTriggerAvailability(graphType){
+            var $availableGraphsContainer = $form.find('#creator-pointAndLineFunctionInteraction-available-graphs');
+            var $graphType = $availableGraphsContainer.find('input[name=' + graphType + ']');
+            var $more = $availableGraphsContainer.find('.more[data-type=' + graphType + ']');
+            if(parseInt($graphType.val())){
+                $more.show();
+            }else{
+                $more.hide();
+            }
+        }
 
+        /**
+         * Common graph number change callback function
+         * 
+         * @param {Object} interaction
+         * @param {String} value - a number string
+         * @param {String} graphType
+         */
+        function changeCallback(interaction, value, graphType){
+            updateGraphValue(interaction, value, graphType);
+            checkMoreTriggerAvailability(graphType);
+        }
 
         //render the form using the form template
         $form.html(formTpl({
@@ -165,24 +233,28 @@ define([
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             },
-            lines : updateGraphValue,
-            points : updateGraphValue,
-            segments : updateGraphValue,
-            setPoints : updateGraphValue,
-            solutionSet : function(interaction, value){
+            lines : changeCallback,
+            points : changeCallback,
+            segments : changeCallback,
+            setPoints : changeCallback,
+            solutionSet : function(interaction, value, graphType){
+
+                var $availableGraphsContainer = $form.find('#creator-pointAndLineFunctionInteraction-available-graphs');
+                var $graphType = $availableGraphsContainer.find('input[name=lines]');
+                if(!parseInt($graphType.val())){
+                    //set value to one and trigger the ui/incrementer.js change event
+                    $graphType.val(1).keyup();
+                }
+
+                //if there is no line yet, add one !
                 var temp = interaction.prop('graphs');
-                temp.solutionSet.count = value;
                 if(temp.lines.count < 1){
                     temp.lines.count = 1;
                     temp.lines.elements = defaultConfig('line', 1);
                 }
-                if(value > temp.solutionSet.elements.length){
-                    temp.solutionSet.elements = temp.solutionSet.elements.concat(defaultConfig('solutionSet', value - temp.solutionSet.elements.length));
-                }else if(value < temp.solutionSet.elements.length){
-                    temp.solutionSet.elements = _.first(temp.solutionSet.elements, value);
-                }
-                interaction.prop('graphs', temp);
-                interaction.triggerPci('configchange', [interaction.getProperties()]);
+
+                updateGraphValue(interaction, value, graphType);
+                checkMoreTriggerAvailability(graphType);
             }
         };
         changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks);
@@ -190,7 +262,42 @@ define([
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, changeCallbacks);
 
+        var _this = this;
+        $form.on('click', '.more', function(){
+
+            var $more = $(this),
+                type = $more.data('type');
+
+            _this.showOptionsBox(type);
+        });
     };
+
+    StateQuestion.prototype.showOptionsBox = function(type){
+        console.log(type, graphs);
+
+        var interaction = this.widget.element,
+            $container = $('#math-editor-container'),
+            $panel = $container.find('.panel-container');
+        var rendering = '';
+
+        var graphs = interaction.prop('graphs');
+        if(graphs[type] && _tpl[type]){
+            _.each(graphs[type].elements, function(element){
+                rendering += _tpl[type]({
+                });
+                rendering += '<hr/>';
+            });
+        }else{
+            throw 'invalid type';
+        }
+
+        $panel.empty().html(rendering);
+
+        $container.show();
+        $container.find('.closer').click(function(){
+            $container.hide();
+        });
+    }
 
     return StateQuestion;
 });
