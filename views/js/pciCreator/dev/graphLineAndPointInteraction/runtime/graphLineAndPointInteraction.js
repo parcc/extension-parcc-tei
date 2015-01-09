@@ -251,12 +251,16 @@ define([
                     }
                     graph = $btnContainer.data('element');
                     graph.activate();
+                    
                 }).on('mouseenter', function(){
+                    
                     var element = $(this).parent().data('element');
                     if(element){
                         element.highlightOn();
                     }
+                    
                 }).on('mouseleave', function(){
+                    
                     var element = $(this).parent().data('element');
                     if(element && !element.isActive()){
                         element.highlightOff();

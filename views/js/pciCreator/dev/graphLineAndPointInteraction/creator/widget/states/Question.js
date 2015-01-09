@@ -70,10 +70,10 @@ define([
     }
 
     var _defaultConfig = {
-        points : {},
+        points : {pointRadius : 10},
         setPoints : {max : 5},
-        lines : {},
-        segments : {},
+        lines : {lineStyle : '', lineStyleToggle : false, lineWidth : 3, pointRadius : 10},
+        segments : {lineStyle : '-', lineStyleToggle : false, lineWidth : 3, pointRadius : 10},
         solutionSet : {}
     };
 
@@ -91,11 +91,29 @@ define([
 
             var color = generateColorByGraphType(graphType);
             var label = generateLabelByGraphType(graphType, existingElements + i);
-            var element = _.defaults({
-                color : color,
+            var generatedConfig = {
                 label : label,
                 uid : _.uniqueId(graphType)
-            }, _defaultConfig[graphType]);
+            };
+
+            switch(graphType){
+                case 'points':
+                case 'setPoints':
+                    generatedConfig.pointColor = color;
+                    break;
+                case 'lines':
+                case 'segments':
+                    generatedConfig.pointColor = color;
+                    generatedConfig.lineColor = color;
+                    break;
+                case 'solutionSet':
+                    generatedConfig.color = color;
+                    break;
+                default:
+                    throw 'unknown type of grapth';
+            }
+
+            var element = _.defaults(generatedConfig, _defaultConfig[graphType]);
 
             elements.push(element);
         }
@@ -152,7 +170,7 @@ define([
                 $more.hide();
             }
         }
-        
+
         /**
          * Common graph number change callback function
          * 
