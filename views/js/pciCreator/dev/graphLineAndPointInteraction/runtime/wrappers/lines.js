@@ -12,11 +12,11 @@ define([
 
     'use strict';
     var _defaults = {
-        label : null,
-        color : '#bb1a2a',
-        lineStyle : 'plain',
+        pointColor : '#bb1a2a',
+        lineColor : '#bb1a2a',
+        lineStyle : '',
         lineWeight : 1,
-        pointRadius : 7
+        pointRadius : 10
     };
 
     function initialize(grid, config){
@@ -24,8 +24,6 @@ define([
         var points = [],
             active = false,
             uid = config.uid,
-            color = config.color || _defaults.color,
-            lineStyle = '',
             segment = config.segment || false,
             paper = grid.getCanvas(),
             plotFactory = new PlotFactory(grid),
@@ -48,7 +46,7 @@ define([
 
             var point1 = points[0],
                 point2 = points[1],
-                plotConf = {color : color, segment : segment, thickness : 3, opacity : .8};
+                plotConf = {color : config.lineColor, segment : segment, thickness : 3, opacity : .8};
 
             if(point1 && point2){
 
@@ -60,8 +58,8 @@ define([
                     line = plotFactory.plotVertical(point1, point2, plotConf);
                 }
 
-                if(lineStyle){
-                    line.attr({'stroke-dasharray' : lineStyle});
+                if(config.lineStyle){
+                    line.attr({'stroke-dasharray' : config.lineStyle});
                 }
             }
         }
@@ -74,7 +72,8 @@ define([
                     var newPoint = pointFactory(paper, grid, {
                         x : coord.x,
                         y : coord.y,
-                        color : color,
+                        radius : config.pointRadius,
+                        color : config.pointColor,
                         on : {
                             dragStart : clearPlot
                         }
@@ -155,7 +154,7 @@ define([
                 }
             },
             setLineStyle : function(style){
-                lineStyle = style || '';
+                config.lineStyle = style || '';
                 plot();
             },
             highlightOn : function(){

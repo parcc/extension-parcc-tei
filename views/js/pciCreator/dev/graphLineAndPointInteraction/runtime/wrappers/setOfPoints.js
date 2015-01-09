@@ -10,9 +10,8 @@ define([
 
     'use strict';
     var _defaults = {
-        label : null,
-        color : '#bb1a2a',
-        pointRadius : 7
+        pointColor : '#bb1a2a',
+        pointRadius : 10
     };
 
     function initialize(grid, config){
@@ -21,7 +20,6 @@ define([
             active = false,
             max = config.max || 1,
             uid = config.uid,
-            color = color = config.color || _defaults.color,
             paper = grid.getCanvas();
 
         config = _.defaults(config, _defaults);
@@ -39,7 +37,8 @@ define([
                     var newPoint = pointFactory(paper, grid, {
                         x : coord.x,
                         y : coord.y,
-                        color : color
+                        color : config.pointColor,
+                        radius : config.pointRadius
                     });
                     // Draw the point
                     newPoint.render();

@@ -92,9 +92,9 @@ define([
         var lineStylePaper = new Raphael(dom, w, h);
         var line = lineStylePaper.path('M0 ' + h / 2 + 'L' + w + ' ' + h / 2);
         line.attr({
-            stroke : config.color || '#000',
+            stroke : config.lineColor || '#000',
             'stroke-width' : config.thickness || 3,
-            'stroke-dasharray' : config.linestyle || '',
+            'stroke-dasharray' : config.lineStyle || '',
             opacity : config.opacity || 1
         });
     }
@@ -182,38 +182,50 @@ define([
                         var $buttonContainer = $template.children().first().clone();
                         var $button = $buttonContainer.children('.btn');
                         var $arrow = $buttonContainer.children('.triangle');
+                        var color = elementConfig.lineColor || elementConfig.pointColor;
 
                         // Change attributes
                         $buttonContainer.data('uid', elementConfig.uid);
                         $buttonContainer.data('config', elementConfig);
                         $button.text(elementConfig.label);
-                        $button.css({backgroundColor : elementConfig.color});
-                        $arrow.css({borderColor : 'transparent transparent transparent ' + elementConfig.color});
+                        $button.css({backgroundColor : color});
+                        $arrow.css({borderColor : 'transparent transparent transparent ' + color});
 
                         //configure change line style buttons (for lines and segments wrapper)
-                        $buttonContainer
-                            .find('input[name=line-style]')
-                            .attr('name', 'line-style-' + elementConfig.uid)
-                            .change(function(){
-                                
-                                elementConfig.linestyle = $(this).val();
-                                $buttonContainer.data('element').setLineStyle(elementConfig.linestyle);
-                                $button.click();
-                                
-                            }).each(function(){
-                                
-                                var $input = $(this),
-                                    $lineStyle = $input.siblings('.line-style');
-                                
-                                drawLineStyle($lineStyle[0], {
-                                    linestyle : $input.val(),
-                                    color : elementConfig.color
-                                });
-                            });
+                        if(elementConfig.lineStyleToggle && elementConfig.lineStyleToggle !== 'false'){
                             
+                            $buttonContainer
+                                .find('.line-styles')
+                                .show()
+                                .find('input[name=line-style]')
+                                .attr('name', 'line-style-' + elementConfig.uid)
+                                .change(function(){
+
+                                    elementConfig.lineStyle = $(this).val();
+                                    $buttonContainer.data('element').setLineStyle(elementConfig.lineStyle);
+                                    $button.click();
+
+                                }).each(function(){
+
+                                    var $input = $(this),
+                                        $lineStyle = $input.siblings('.line-style'),
+                                        style = $input.val();
+
+                                    drawLineStyle($lineStyle[0], {
+                                        lineStyle : style,
+                                        lineColor : elementConfig.lineColor
+                                    });
+                                    
+                                    if(elementConfig.lineStyle === style){
+                                        $input.prop('checked', true);
+                                    }
+                                });
+                            
+                        }
+
                         //insert into dom
                         $controlArea.append($buttonContainer);
-                        
+
                         //init element
                         if(typeName !== 'solutionSet'){
                             var wrapper = getWrapper(typeName);

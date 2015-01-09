@@ -12,7 +12,7 @@
                     <ul class="plain line-styles">
                         <li>
                             <label>
-                                <input name="line-style" type="radio" value="" checked="checked"/>
+                                <input name="line-style" type="radio" value=""/>
                                 <span class="icon-radio"></span>
                                 <span class="line-style line-style-plain"></span>
                             </label>
@@ -40,7 +40,7 @@
                     <ul class="plain line-styles">
                         <li>
                             <label>
-                                <input name="line-style" type="radio" value="" checked="checked"/>
+                                <input name="line-style" type="radio" value=""/>
                                 <span class="icon-radio"></span>
                                 <span class="line-style line-style-plain"></span>
                             </label>
