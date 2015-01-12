@@ -29,7 +29,9 @@ define([
             plotFactory = new PlotFactory(grid),
             line;
 
-        config = _.defaults(config, _defaults);
+        function setConfig(cfg){
+            config = _.defaults(cfg, _defaults);
+        }
 
         function unbindEvents(){
             var paper = grid.getCanvas();
@@ -63,32 +65,51 @@ define([
                 }
             }
         }
+        
+        // Remove line
+        function clearPlot(){
+            if(line){
+                line.remove();
+                line = null;
+            }
+        }
+
+        function addPoint(x, y, cartesian){
+
+            var newPoint = pointFactory(paper, grid, {
+                x : x,
+                y : y,
+                cartesian : !!cartesian,
+                radius : config.pointRadius,
+                color : config.pointColor,
+                on : {
+                    dragStart : clearPlot
+                }
+            });
+            // Draw the point
+            newPoint.render();
+            // Enable drag'n'drop hability
+            newPoint.drag();
+            // Add it to the list of points
+            points.push(newPoint);
+            // Raise event ready for line plot
+            if(points.length === 2){
+                plot();
+                $(paper.canvas).on('moved.point', plot);
+            }
+
+            return newPoint;
+        }
+
 
         function bindEvents(){
 
             $(paper.canvas).on('click_grid.' + uid, function(event, coord){
 
                 if(points.length < 2){
-                    var newPoint = pointFactory(paper, grid, {
-                        x : coord.x,
-                        y : coord.y,
-                        radius : config.pointRadius,
-                        color : config.pointColor,
-                        on : {
-                            dragStart : clearPlot
-                        }
-                    });
-                    // Draw the point
-                    newPoint.render();
-                    // Enable drag'n'drop hability
-                    newPoint.drag();
-                    // Add it to the list of points
-                    points.push(newPoint);
-                    // Raise event ready for line plot
-                    if(points.length === 2){
-                        plot();
-                        $(paper.canvas).on('moved.point', plot);
-                    }
+
+                    addPoint(coord.x, coord.y);
+
                 }else{
                     // Get the last point placed
                     var oldPoint = points.pop();
@@ -110,16 +131,14 @@ define([
                     var pointToDelete = _.findIndex(points, {uid : removedPoint.uid});
                     if(pointToDelete > -1){
                         points.splice(pointToDelete, 1);
-                        // Remove line
-                        if(line){
-                            line.remove();
-                            line = null;
-                        }
+                        clearPlot();
                     }
                 }
             });
 
         }
+
+        setConfig(config);
 
         var linesWrapper = {
             isActive : function(){
@@ -166,6 +185,36 @@ define([
                 _.forEach(points, function(point){
                     point.hideGlow();
                 });
+            },
+            getState : function(){
+
+                var pts = [];
+                _.each(points, function(pt){
+                    pts.push(pt.getCartesianCoord());
+                });
+
+                return {
+                    points : pts,
+                    config : _.cloneDeep(config)
+                };
+            },
+            setState : function(state){
+
+                if(state.config){
+                    setConfig(state.config);
+                }
+
+                //clear points and plot
+                clearPlot();
+                _.each(points, function(point){
+                    point.remove();
+                });
+                points = [];
+                if(state.points){
+                    _.each(state.points, function(point){
+                        addPoint(point.x, point.y, true);
+                    });
+                }
             }
         };
 

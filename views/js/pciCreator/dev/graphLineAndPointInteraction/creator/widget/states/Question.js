@@ -4,6 +4,7 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'graphLineAndPointInteraction/creator/libs/randomColor/randomColor',
+    'taoQtiItem/qtiCreator/editor/colorPicker/colorPicker',
     'tpl!graphLineAndPointInteraction/creator/tpl/propertiesForm',
     'tpl!graphLineAndPointInteraction/creator/tpl/pointForm',
     'tpl!graphLineAndPointInteraction/creator/tpl/pointSetForm',
@@ -18,6 +19,7 @@ define([
     formElement,
     containerEditor,
     randomColor,
+    colorPicker,
     formTpl,
     pointFormTpl,
     pointSetFormTpl,
@@ -62,8 +64,8 @@ define([
     function generateColorByGraphType(type){
 
         var _typeHues = {
-            points : 'yellow',
-            setPoints : 'green',
+            points : 'green',
+            setPoints : 'yellow',
             lines : 'red',
             segments : 'orange',
             solutionSet : 'blue'
@@ -93,7 +95,7 @@ define([
     var _defaultConfig = {
         points : {pointRadius : 10},
         setPoints : {max : 5},
-        lines : {lineStyle : '', lineStyleToggle : true, lineWidth : 3, pointRadius : 10},
+        lines : {lineStyle : '', lineStyleToggle : false, lineWidth : 3, pointRadius : 10},
         segments : {lineStyle : '-', lineStyleToggle : false, lineWidth : 3, pointRadius : 10},
         solutionSet : {}
     };
@@ -114,7 +116,7 @@ define([
             var label = generateLabelByGraphType(graphType, existingElements + i);
             var generatedConfig = {
                 label : label,
-                uid : _.uniqueId(graphType)
+                uid : _.uniqueId(graphType+'_')
             };
 
             switch(graphType){
@@ -263,6 +265,8 @@ define([
         formElement.setChangeCallbacks($form, interaction, changeCallbacks);
 
         var _this = this;
+
+        //manage the "more" buttons event
         $form.on('click', '.more', function(){
 
             var $more = $(this),
@@ -270,33 +274,100 @@ define([
 
             _this.showOptionsBox(type);
         });
+
+        //init the "more" buttons visibility:
+        _.each(_.keys(_defaultConfig), function(type){
+            checkMoreTriggerAvailability(type);
+        });
     };
 
     StateQuestion.prototype.showOptionsBox = function(type){
-        console.log(type, graphs);
 
         var interaction = this.widget.element,
             $container = $('#math-editor-container'),
-            $panel = $container.find('.panel-container');
-        var rendering = '';
-
+            $panel = $container.find('.panel-container'),
+            $forms = $('#math-editor-container');
+        
+        $panel.empty();
+        $forms.add('.panel-container');
         var graphs = interaction.prop('graphs');
         if(graphs[type] && _tpl[type]){
             _.each(graphs[type].elements, function(element){
-                rendering += _tpl[type]({
-                });
-                rendering += '<hr/>';
+                var elementForm = new LineForm(element, interaction);
+                elementForm.init();
+                $panel.append(elementForm.$dom).append('<hr/>');
             });
         }else{
             throw 'invalid type';
         }
 
-        $panel.empty().html(rendering);
-
         $container.show();
         $container.find('.closer').click(function(){
             $container.hide();
         });
+    }
+
+    function LineForm(element, interaction){
+
+        var tpl = lineFormTpl;
+        var lineStyle = element.lineStyle;
+        var lineStyles = {
+            '' : {label : "plain", selected : false},
+            '-' : {label : "dotted", selected : false}
+        };
+
+        if(lineStyles[lineStyle]){
+            lineStyles[lineStyle].selected = true;
+        }
+        
+        var data = {
+            uid : element.uid,
+            label : element.label,
+            pointColor : element.pointColor,
+            pointRadius : element.pointRadius,
+            lineColor : element.lineColor,
+            lineWidth : element.lineWidth,
+            lineStyles : lineStyles,
+            lineStyleToggle : element.lineStyleToggle
+        };
+        
+        var $dom = $(tpl(data));
+
+        function propChangeCallback(element, propValue, propName){
+            element[propName] = propValue;
+            interaction.triggerPci('elementPropChange', [element, propName, propValue]);
+        }
+
+        var changeCallbacks = {
+            label : propChangeCallback,
+            pointColor : propChangeCallback,
+            pointRadius : propChangeCallback,
+            lineColor : propChangeCallback,
+            lineStyle : propChangeCallback,
+            lineWidth : propChangeCallback,
+            lineStyleToggle : propChangeCallback
+        };
+
+        //init form javascript
+        function init(){
+
+            formElement.initWidget($dom);
+            $dom.find('.color-trigger').each(function(){
+                colorPicker.create($(this));
+            });
+
+            formElement.setChangeCallbacks($dom, element, changeCallbacks);
+        }
+
+        function clear(){
+
+        }
+
+        return {
+            $dom : $dom,
+            init : init
+        };
+
     }
 
     return StateQuestion;
