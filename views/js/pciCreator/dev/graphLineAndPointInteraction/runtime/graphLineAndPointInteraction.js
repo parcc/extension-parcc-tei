@@ -282,46 +282,15 @@ define([
                 self.config = config;
                 initGrid($container, buildGridConfig(config));
             });
-
-
+            
+            this.on('elementPropChange', function(element, name, value){
+                console.log(arguments);
+            });
+            
             //strange ...
             $('.pointAndLineFunctionInteraction').on('click', 'button', function(event){
                 $container.trigger('elementchange', $(this).data('config'));
             });
-
-            // var plotFactory = new PlotFactory(grid);
-            //
-            // //////////////////////////////////////
-            // // How many lines set did we have ? //
-            // //////////////////////////////////////
-            // var sets = [];
-            // $('[data-set-color]').each(function(){
-            //     sets.push({
-            //         color : $(this).data('set-color'),
-            //         points : [],
-            //         active : false
-            //     });
-            // }).click(function() {
-            //     // Get the currently active set and inactivate it
-            //     var previouslyActiveSet = _.find(sets,{active : true});
-            //     previouslyActiveSet.active = false;
-            //     // Iterate on every other items and remove the flow on points
-            //     _.forEach(previouslyActiveSet.points,function(value){
-            //         value.hideGlow();
-            //     });
-            //     // Activate the right set
-            //     var newActiveSet = _.find(sets,{color : $(this).data('set-color')});
-            //     newActiveSet.active = true;
-            //     _.forEach(newActiveSet.points, function(value){
-            //         value.showGlow();
-            //     });
-            // });
-            // sets[0].active = true;
-            // ///////////////////////////
-            // // Catch the Click Event //
-            // ///////////////////////////
-
-
 
         },
         /**
