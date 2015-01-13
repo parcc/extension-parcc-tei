@@ -11,14 +11,14 @@ define([
     'use strict';
     var _defaults = {
         pointColor : '#bb1a2a',
-        pointRadius : 10
+        pointRadius : 10,
+        maximumPoints : 1
     };
 
     function initialize(grid, config){
 
         var points = [],
             active = false,
-            max = config.max || 1,
             uid = config.uid,
             paper = grid.getCanvas();
         
@@ -32,10 +32,10 @@ define([
         }
         
         function bindEvents(){
-
+            
             $(paper.canvas).on('click_grid.' + uid, function(event, coord){
-
-                if(points.length < max){
+                
+                if(points.length < config.maximumPoints){
                     
                     addPoint(coord.x, coord.y);
                     
@@ -153,6 +153,7 @@ define([
                         addPoint(point.x, point.y, true);
                     });
                 }
+                pointsWrapper.disactivate();
             }
         };
 

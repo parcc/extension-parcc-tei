@@ -218,6 +218,7 @@ define([
                         addPoint(point.x, point.y, true);
                     });
                 }
+                linesWrapper.disactivate();
             }
         };
 
