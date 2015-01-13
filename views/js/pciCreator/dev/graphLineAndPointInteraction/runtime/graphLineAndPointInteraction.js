@@ -131,14 +131,12 @@ define([
              * @param  {Object} gridConfig Config (cleaned)
              */
             function initGrid($container, gridConfig){
+                
                 // @todo : Clear Everything
-
                 elements = {};
                 var paper = createCanvas($container, gridConfig);
                 var grid = gridFactory(paper, gridConfig);
                 grid.clickable();
-
-
                 grid.children.click(function(event){
 
                     // Get the coordinate for a click
@@ -147,19 +145,8 @@ define([
                         fx = Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
                         fy = Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
-
+                    //transfer the click event to the paper    
                     $(paper.canvas).trigger('click_grid', {x : fx, y : fy});
-
-                    return;
-                    var element = getWrapper(gridConfig.type);
-                    element.initialize(paper, grid, {color : '#0f904a'});
-                    self.on('configchange', function(){
-                        element.destroy();
-                    });
-
-                    // @todo : Get the current set
-                    // var activeSet = _.find(sets,{active : true});
-
                 });
 
                 return grid;
@@ -254,7 +241,7 @@ define([
                     }
                     graph = $btnContainer.data('element');
                     graph.activate();
-
+                    
                 }).on('mouseenter', function(){
 
                     var element = $(this).parent().data('element');
@@ -292,7 +279,8 @@ define([
             /**
              * restore state of already initialized elements:
              * 
-             * @param {object} states
+             * @param {Object} states
+             * @param {Boolean} ignoreConfig
              */
             function setStates(states, ignoreConfig){
                 _.forIn(states, function(state, uid){
@@ -306,28 +294,6 @@ define([
                 });
             }
 
-            function reload(newConfig, preserveState){
-
-                var states;
-
-//                if(graph){
-//                    graph.disactivate();
-//                }
-
-                if(preserveState){
-                    states = getStates();
-                }
-
-                self.config = newConfig ? buildGridConfig(newConfig) : self.config;
-                console.log(self.config);
-                grid = initGrid($container, self.config);
-                initInteraction(grid, $container, self.config);
-
-                if(preserveState){
-                    setStates(states, true);
-                }
-            }
-
             grid = initGrid($container, this.config);
             initInteraction(grid, $container, this.config);
 
@@ -338,18 +304,6 @@ define([
                 grid = initGrid($container, self.config);
                 initInteraction(grid, $container, self.config);
                 setStates(states, true);
-
-                return;
-                console.log('configchange');
-                debugger;
-                if(graph){
-                    graph.disactivate();
-                }
-                var states = getStates();
-                self.config = buildGridConfig(options);
-                grid = initGrid($container, self.config);
-                initInteraction(grid, $container, self.config);
-                setStates(states);
             });
 
             this.on('gridchange', function(newConfig){
@@ -357,27 +311,18 @@ define([
                 self.config = newConfig ? buildGridConfig(newConfig) : self.config;
                 grid = initGrid($container, self.config);
                 initInteraction(grid, $container, self.config);
-                
-                return;
-                console.log('gridchange');
-                self.config = buildGridConfig(config);
-                grid = initGrid($container, self.config);
-                initInteraction(grid, $container, self.config);
             });
 
             this.on('elementPropChange', function(elt, name, value){
-                reload(config, true);
-                var states = getStates();
-                if(states[elt.uid]){
-                    states[elt.uid].config[name] = value;
+                
+                var states = getStates(),
+                    element = states[elt.uid];
+                    
+                if(element){
+                    element.config[name] = value;
                     setStates(states);
                 }
             });
-
-            //strange ...
-//            $('.pointAndLineFunctionInteraction').on('click', 'button', function(event){
-//                $container.trigger('elementchange', $(this).data('config'));
-//            });
 
         },
         /**
