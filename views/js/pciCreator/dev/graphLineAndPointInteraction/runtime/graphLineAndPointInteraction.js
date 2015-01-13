@@ -131,7 +131,7 @@ define([
              * @param  {Object} gridConfig Config (cleaned)
              */
             function initGrid($container, gridConfig){
-                
+
                 // @todo : Clear Everything
                 elements = {};
                 var paper = createCanvas($container, gridConfig);
@@ -220,43 +220,48 @@ define([
                             var wrapper = getWrapper(typeName);
                             var element = wrapper.initialize(grid, elementConfig);
                             $buttonContainer.data('element', element);
+                            element.$buttonContainer = $buttonContainer;
                             elements[elementConfig.uid] = element;
                         }
                     });
                 });
 
-                var $btnContainers = $controlArea.children('.button-container');
-                $btnContainers.children('.btn').on('click', function(){
 
-                    var $btn = $(this),
-                        $btnContainer = $btn.parent();
-
-                    //toggle active class appearance
-                    $btnContainers.removeClass('activated');
-                    $btnContainer.addClass('activated');
-
-                    //activate graphs (points, line etc)
-                    if(graph){
-                        graph.disactivate();
-                    }
-                    graph = $btnContainer.data('element');
-                    graph.activate();
+                $controlArea.on('click', '.button-container', function(){
                     
-                }).on('mouseenter', function(){
-
-                    var element = $(this).parent().data('element');
+                    activate($(this).data('element'));
+                    
+                }).on('mouseenter', '.button-container', function(){
+                    
+                    var element = $(this).data('element');
                     if(element){
                         element.highlightOn();
                     }
-
-                }).on('mouseleave', function(){
-
-                    var element = $(this).parent().data('element');
+                    
+                }).on('mouseleave', '.button-container', function(){
+                    
+                    var element = $(this).data('element');
                     if(element && !element.isActive()){
                         element.highlightOff();
                     }
                 });
 
+            }
+
+            function activate(element){
+
+                if(graph){
+                    graph.disactivate();
+                }
+
+                //toggle active class appearance
+                element.$buttonContainer.addClass('activated');
+                element.$buttonContainer.siblings('.button-container').removeClass('activated');
+
+                //activate the element itself to allow interaction
+                element.activate();
+
+                graph = element;
             }
 
             function getElement(uid){
@@ -268,22 +273,30 @@ define([
              * 
              * @returns {Object}
              */
-            function getStates(){
-                var states = {};
+            function getState(){
+
+                var state = {
+                    activeGraph : graph ? graph.getId() : '',
+                    elements : {}
+                };
+
                 _.each(elements, function(element){
-                    states[element.getId()] = element.getState();
+                    state.elements[element.getId()] = element.getState();
                 });
-                return states;
+
+                return state;
             }
 
             /**
              * restore state of already initialized elements:
              * 
-             * @param {Object} states
+             * @param {Object} state
              * @param {Boolean} ignoreConfig
              */
-            function setStates(states, ignoreConfig){
-                _.forIn(states, function(state, uid){
+            function setState(state, ignoreConfig){
+
+                //restore element states
+                _.forIn(state.elements, function(state, uid){
                     var element = getElement(uid);
                     if(element){
                         if(ignoreConfig){
@@ -292,6 +305,15 @@ define([
                         element.setState(state);
                     }
                 });
+
+                //restore the currently selected element
+                if(state.activeGraph){
+                    var currentActive = getElement(state.activeGraph);
+                    if(currentActive){
+                        //restore the active element:
+                        activate(currentActive);
+                    }
+                }
             }
 
             grid = initGrid($container, this.config);
@@ -299,31 +321,19 @@ define([
 
             this.on('configchange', function(newConfig){
 
-                var states = getStates();
+                var state = getState();
                 self.config = newConfig ? buildGridConfig(newConfig) : self.config;
                 grid = initGrid($container, self.config);
                 initInteraction(grid, $container, self.config);
-                setStates(states, true);
+                setState(state, true);
             });
 
             this.on('gridchange', function(newConfig){
-                
+
                 self.config = newConfig ? buildGridConfig(newConfig) : self.config;
                 grid = initGrid($container, self.config);
                 initInteraction(grid, $container, self.config);
             });
-
-            this.on('elementPropChange', function(elt, name, value){
-                
-                var states = getStates(),
-                    element = states[elt.uid];
-                    
-                if(element){
-                    element.config[name] = value;
-                    setStates(states);
-                }
-            });
-
         },
         /**
          * Programmatically set the response following the json schema described in
