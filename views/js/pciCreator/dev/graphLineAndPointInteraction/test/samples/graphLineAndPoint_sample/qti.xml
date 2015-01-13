@@ -93,7 +93,7 @@
                                     <pci:entry key="pointRadius">10</pci:entry>
                                     <pci:entry key="label">Point Set A</pci:entry>
                                     <pci:entry key="uid">4</pci:entry>
-                                    <pci:entry key="max">5</pci:entry>
+                                    <pci:entry key="maximumPoints">5</pci:entry>
                                 </pci:properties>
                             </pci:properties>
                         </pci:properties>
