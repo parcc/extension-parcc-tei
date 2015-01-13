@@ -21,7 +21,7 @@ define([
             active = false,
             uid = config.uid,
             paper = grid.getCanvas();
-        
+
         function setConfig(cfg){
             config = _.defaults(cfg, _defaults);
         }
@@ -30,15 +30,15 @@ define([
             var paper = grid.getCanvas();
             $(paper.canvas).off('.' + uid);
         }
-        
+
         function bindEvents(){
-            
+
             $(paper.canvas).on('click_grid.' + uid, function(event, coord){
-                
+
                 if(points.length < config.maximumPoints){
-                    
+
                     addPoint(coord.x, coord.y);
-                    
+
                 }else{
                     // Get the last point placed
                     var oldPoint = points.pop();
@@ -62,7 +62,7 @@ define([
                 }
             });
         }
-        
+
         function addPoint(x, y, cartesian){
 
             var newPoint = pointFactory(paper, grid, {
@@ -81,9 +81,9 @@ define([
 
             return newPoint;
         }
-        
+
         setConfig(config);
-        
+
         var pointsWrapper = {
             getId : function(){
                 return uid;
@@ -148,9 +148,19 @@ define([
                     point.remove();
                 });
                 points = [];
+                
                 if(state.points){
+                    
+                    var i = 0,
+                        maxPoints = config.maximumPoints;
+                    
                     _.each(state.points, function(point){
-                        addPoint(point.x, point.y, true);
+                        if(i < maxPoints){
+                            addPoint(point.x, point.y, true);
+                            i++;
+                        }else{
+                            return false;
+                        }
                     });
                 }
                 pointsWrapper.disactivate();
