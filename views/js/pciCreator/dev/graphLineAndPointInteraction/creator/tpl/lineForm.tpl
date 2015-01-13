@@ -15,8 +15,8 @@
 </div>
 
 <div class="panel">
-    <label for="lineWidth" class="spinner">{{__ "Line thickness"}}</label>
-    <input name="lineWidth" value="{{lineWidth}}" data-increment="1" data-min="0" type="text" class="incrementer">
+    <label for="lineWeight" class="spinner">{{__ "Line thickness"}}</label>
+    <input name="lineWeight" value="{{lineWeight}}" data-increment="1" data-min="0" type="text" class="incrementer">
 </div>
 
 <div class="panel">

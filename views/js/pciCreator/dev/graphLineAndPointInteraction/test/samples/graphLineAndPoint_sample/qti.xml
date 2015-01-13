@@ -67,7 +67,7 @@
                                     <pci:entry key="uid">5</pci:entry>
                                     <pci:entry key="lineStyle"></pci:entry>
                                     <pci:entry key="lineStyleToggle">true</pci:entry>
-                                    <pci:entry key="lineThickness">2</pci:entry>
+                                    <pci:entry key="lineWeight">2</pci:entry>
                                     <pci:entry key="pointColor">#058919</pci:entry>
                                     <pci:entry key="pointRadius">5</pci:entry>
                                 </pci:properties>
