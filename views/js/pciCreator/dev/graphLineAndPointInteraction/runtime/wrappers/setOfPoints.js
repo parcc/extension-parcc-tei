@@ -21,31 +21,24 @@ define([
             max = config.max || 1,
             uid = config.uid,
             paper = grid.getCanvas();
-
-        config = _.defaults(config, _defaults);
+        
+        function setConfig(cfg){
+            config = _.defaults(cfg, _defaults);
+        }
 
         function unbindEvents(){
             var paper = grid.getCanvas();
             $(paper.canvas).off('.' + uid);
         }
-
+        
         function bindEvents(){
 
             $(paper.canvas).on('click_grid.' + uid, function(event, coord){
 
                 if(points.length < max){
-                    var newPoint = pointFactory(paper, grid, {
-                        x : coord.x,
-                        y : coord.y,
-                        color : config.pointColor,
-                        radius : config.pointRadius
-                    });
-                    // Draw the point
-                    newPoint.render();
-                    // Enable drag'n'drop hability
-                    newPoint.drag();
-                    // Add it to the list of points
-                    points.push(newPoint);
+                    
+                    addPoint(coord.x, coord.y);
+                    
                 }else{
                     // Get the last point placed
                     var oldPoint = points.pop();
@@ -68,10 +61,33 @@ define([
                     }
                 }
             });
-
         }
+        
+        function addPoint(x, y, cartesian){
 
+            var newPoint = pointFactory(paper, grid, {
+                x : x,
+                y : y,
+                cartesian : !!cartesian,
+                radius : config.pointRadius,
+                color : config.pointColor
+            });
+            // Draw the point
+            newPoint.render();
+            // Enable drag'n'drop hability
+            newPoint.drag();
+            // Add it to the list of points
+            points.push(newPoint);
+
+            return newPoint;
+        }
+        
+        setConfig(config);
+        
         var pointsWrapper = {
+            getId : function(){
+                return uid;
+            },
             isActive : function(){
                 return active;
             },
@@ -108,6 +124,35 @@ define([
                 _.forEach(points, function(point){
                     point.hideGlow();
                 });
+            },
+            getState : function(){
+
+                var pts = [];
+                _.each(points, function(pt){
+                    pts.push(pt.getCartesianCoord());
+                });
+
+                return {
+                    points : pts,
+                    config : _.cloneDeep(config)
+                };
+            },
+            setState : function(state){
+
+                if(state.config){
+                    setConfig(state.config);
+                }
+
+                //clear points and plot
+                _.each(points, function(point){
+                    point.remove();
+                });
+                points = [];
+                if(state.points){
+                    _.each(state.points, function(point){
+                        addPoint(point.x, point.y, true);
+                    });
+                }
             }
         };
 
