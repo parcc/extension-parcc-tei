@@ -50,7 +50,6 @@ define([
     }, function(){
 
         //code to execute when leaving this state
-
     });
 
     var _tpl = {
@@ -94,7 +93,7 @@ define([
 
     var _defaultConfig = {
         points : {pointRadius : 10},
-        setPoints : {max : 5},
+        setPoints : {maximumPoints : 5},
         lines : {lineStyle : '', lineStyleToggle : false, lineWeight : 3, pointRadius : 10},
         segments : {lineStyle : '-', lineStyleToggle : false, lineWeight : 3, pointRadius : 10},
         solutionSet : {}
@@ -291,10 +290,10 @@ define([
         $panel.empty();
         $forms.add('.panel-container');
         var graphs = interaction.properties['graphs'];
-        if(graphs[type] && _tpl[type]){
+        if(graphs[type]){
             _.each(graphs[type].elements, function(element){
                 //pass element and interaction by reference
-                var elementForm = new LineForm(element, interaction);
+                var elementForm = buildElementForm(type, element, interaction);
                 elementForm.init();
                 $panel.append(elementForm.$dom).append('<hr/>');
             });
@@ -308,9 +307,9 @@ define([
         });
     }
 
-    function LineForm(element, interaction){
+    function buildElementForm(type, element, interaction){
 
-        var tpl = lineFormTpl;
+        var tpl = _tpl[type];
         var lineStyle = element.lineStyle;
         var lineStyles = {
             '' : {label : "plain", selected : false},
@@ -326,6 +325,7 @@ define([
             label : element.label,
             pointColor : element.pointColor,
             pointRadius : element.pointRadius,
+            maximumPoints : element.maximumPoints,
             lineColor : element.lineColor,
             lineWeight : element.lineWeight,
             lineStyles : lineStyles,
@@ -343,6 +343,7 @@ define([
             label : propChangeCallback,
             pointColor : propChangeCallback,
             pointRadius : propChangeCallback,
+            maximumPoints : propChangeCallback,
             lineColor : propChangeCallback,
             lineStyle : propChangeCallback,
             lineWeight : propChangeCallback,
