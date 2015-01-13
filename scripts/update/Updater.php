@@ -63,6 +63,18 @@ class Updater extends \common_ext_ExtensionUpdater
 
             $currentVersion = '0.1.2';
         }
+        
+        //migrate from 0.1.2 to 0.1.3
+        if($currentVersion == '0.1.2'){
+            
+            $registry->registerFromFile('PARCC/graphFunction', $installBasePath.'/PARCC/graphFunction.js');
+            $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
+            $registry->registerFromFile('PARCC/plotFactory', $installBasePath.'/PARCC/plotFactory.js');
+            $registry->registerFromFile('PARCC/pointFactory', $installBasePath.'/PARCC/pointFactory.js');
+            $registry->registerFromFile('PARCC/axisFactory', $installBasePath.'/PARCC/axisFactory.js');
+
+            $currentVersion = '0.1.3';
+        }
 
         return $currentVersion;
     }

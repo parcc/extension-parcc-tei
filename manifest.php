@@ -24,7 +24,7 @@ return array(
 	'label' => 'PARCC Portable Custom Interaction',
 	'description' => '',
     'license' => 'PARCC',
-    'version' => '0.1.2',
+    'version' => '0.1.3',
 	'author' => 'Open Assessment Technologies',
 	'requires' => array('qtiItemPci' => '>=0.1'),
     'acl' => array(
