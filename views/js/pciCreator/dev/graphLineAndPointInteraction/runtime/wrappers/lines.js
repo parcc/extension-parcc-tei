@@ -15,7 +15,7 @@ define([
         pointColor : '#bb1a2a',
         lineColor : '#bb1a2a',
         lineStyle : '',
-        lineWeight : 1,
+        lineWeight : 3,
         pointRadius : 10
     };
 
@@ -48,7 +48,7 @@ define([
 
             var point1 = points[0],
                 point2 = points[1],
-                plotConf = {color : config.lineColor, segment : segment, thickness : 3, opacity : .8};
+                plotConf = {color : config.lineColor, segment : segment, thickness : config.lineWeight, opacity : .8};
 
             if(point1 && point2){
 
@@ -141,6 +141,9 @@ define([
         setConfig(config);
 
         var linesWrapper = {
+            getId : function(){
+                return uid;
+            },
             isActive : function(){
                 return active;
             },
