@@ -95,7 +95,7 @@ define([
         points : {pointRadius : 10},
         setPoints : {maximumPoints : 5},
         lines : {lineStyle : '', lineStyleToggle : false, lineWeight : 3, pointRadius : 10},
-        segments : {lineStyle : '-', lineStyleToggle : false, lineWeight : 3, pointRadius : 10},
+        segments : {lineStyle : '', lineStyleToggle : false, lineWeight : 3, pointRadius : 10},
         solutionSet : {}
     };
 
