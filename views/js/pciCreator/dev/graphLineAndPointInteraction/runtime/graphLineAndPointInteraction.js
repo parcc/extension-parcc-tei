@@ -93,7 +93,7 @@ define([
         var line = lineStylePaper.path('M0 ' + h / 2 + 'L' + w + ' ' + h / 2);
         line.attr({
             stroke : config.lineColor || '#000',
-            'stroke-width' : config.thickness || 3,
+            'stroke-width' : config.lineWeight || 3,
             'stroke-dasharray' : config.lineStyle || '',
             opacity : config.opacity || 1
         });
@@ -121,6 +121,7 @@ define([
 
             var grid,
                 graph,
+                elements,
                 $container = $(dom),
                 self = this;
 
@@ -132,6 +133,7 @@ define([
             function initGrid($container, gridConfig){
                 // @todo : Clear Everything
 
+                elements = {};
                 var paper = createCanvas($container, gridConfig);
                 var grid = gridFactory(paper, gridConfig);
                 grid.clickable();
@@ -151,7 +153,6 @@ define([
                     return;
                     var element = getWrapper(gridConfig.type);
                     element.initialize(paper, grid, {color : '#0f904a'});
-
                     self.on('configchange', function(){
                         element.destroy();
                     });
@@ -185,7 +186,7 @@ define([
                         var color = elementConfig.lineColor || elementConfig.pointColor;
 
                         // Change attributes
-                        $buttonContainer.data('uid', elementConfig.uid);
+                        $buttonContainer.attr('data-uid', elementConfig.uid);
                         $buttonContainer.data('config', elementConfig);
                         $button.text(elementConfig.label);
                         $button.css({backgroundColor : color});
@@ -193,7 +194,7 @@ define([
 
                         //configure change line style buttons (for lines and segments wrapper)
                         if(elementConfig.lineStyleToggle && elementConfig.lineStyleToggle !== 'false'){
-                            
+
                             $buttonContainer
                                 .find('.line-styles')
                                 .show()
@@ -207,20 +208,21 @@ define([
 
                                 }).each(function(){
 
-                                    var $input = $(this),
-                                        $lineStyle = $input.siblings('.line-style'),
-                                        style = $input.val();
+                                var $input = $(this),
+                                    $lineStyle = $input.siblings('.line-style'),
+                                    style = $input.val();
 
-                                    drawLineStyle($lineStyle[0], {
-                                        lineStyle : style,
-                                        lineColor : elementConfig.lineColor
-                                    });
-                                    
-                                    if(elementConfig.lineStyle === style){
-                                        $input.prop('checked', true);
-                                    }
+                                drawLineStyle($lineStyle[0], {
+                                    lineStyle : style,
+                                    lineColor : elementConfig.lineColor,
+                                    lineWeight : elementConfig.lineWeight
                                 });
-                            
+
+                                if(elementConfig.lineStyle === style){
+                                    $input.prop('checked', true);
+                                }
+                            });
+
                         }
 
                         //insert into dom
@@ -231,6 +233,7 @@ define([
                             var wrapper = getWrapper(typeName);
                             var element = wrapper.initialize(grid, elementConfig);
                             $buttonContainer.data('element', element);
+                            elements[elementConfig.uid] = element;
                         }
                     });
                 });
@@ -251,16 +254,16 @@ define([
                     }
                     graph = $btnContainer.data('element');
                     graph.activate();
-                    
+
                 }).on('mouseenter', function(){
-                    
+
                     var element = $(this).parent().data('element');
                     if(element){
                         element.highlightOn();
                     }
-                    
+
                 }).on('mouseleave', function(){
-                    
+
                     var element = $(this).parent().data('element');
                     if(element && !element.isActive()){
                         element.highlightOff();
@@ -269,28 +272,112 @@ define([
 
             }
 
+            function getElement(uid){
+                return elements[uid];
+            }
+
+            /**
+             * Get the current state of initialized element
+             * 
+             * @returns {Object}
+             */
+            function getStates(){
+                var states = {};
+                _.each(elements, function(element){
+                    states[element.getId()] = element.getState();
+                });
+                return states;
+            }
+
+            /**
+             * restore state of already initialized elements:
+             * 
+             * @param {object} states
+             */
+            function setStates(states, ignoreConfig){
+                _.forIn(states, function(state, uid){
+                    var element = getElement(uid);
+                    if(element){
+                        if(ignoreConfig){
+                            delete state.config;
+                        }
+                        element.setState(state);
+                    }
+                });
+            }
+
+            function reload(newConfig, preserveState){
+
+                var states;
+
+//                if(graph){
+//                    graph.disactivate();
+//                }
+
+                if(preserveState){
+                    states = getStates();
+                }
+
+                self.config = newConfig ? buildGridConfig(newConfig) : self.config;
+                console.log(self.config);
+                grid = initGrid($container, self.config);
+                initInteraction(grid, $container, self.config);
+
+                if(preserveState){
+                    setStates(states, true);
+                }
+            }
+
             grid = initGrid($container, this.config);
             initInteraction(grid, $container, this.config);
 
-            this.on('configchange', function(options){
+            this.on('configchange', function(newConfig){
+
+                var states = getStates();
+                self.config = newConfig ? buildGridConfig(newConfig) : self.config;
+                grid = initGrid($container, self.config);
+                initInteraction(grid, $container, self.config);
+                setStates(states, true);
+
+                return;
+                console.log('configchange');
+                debugger;
+                if(graph){
+                    graph.disactivate();
+                }
+                var states = getStates();
                 self.config = buildGridConfig(options);
+                grid = initGrid($container, self.config);
+                initInteraction(grid, $container, self.config);
+                setStates(states);
+            });
+
+            this.on('gridchange', function(newConfig){
+                
+                self.config = newConfig ? buildGridConfig(newConfig) : self.config;
+                grid = initGrid($container, self.config);
+                initInteraction(grid, $container, self.config);
+                
+                return;
+                console.log('gridchange');
+                self.config = buildGridConfig(config);
                 grid = initGrid($container, self.config);
                 initInteraction(grid, $container, self.config);
             });
 
-            this.on('gridchange', function(config){
-                self.config = config;
-                initGrid($container, buildGridConfig(config));
+            this.on('elementPropChange', function(elt, name, value){
+                reload(config, true);
+                var states = getStates();
+                if(states[elt.uid]){
+                    states[elt.uid].config[name] = value;
+                    setStates(states);
+                }
             });
-            
-            this.on('elementPropChange', function(element, name, value){
-                console.log(arguments);
-            });
-            
+
             //strange ...
-            $('.pointAndLineFunctionInteraction').on('click', 'button', function(event){
-                $container.trigger('elementchange', $(this).data('config'));
-            });
+//            $('.pointAndLineFunctionInteraction').on('click', 'button', function(event){
+//                $container.trigger('elementchange', $(this).data('config'));
+//            });
 
         },
         /**
