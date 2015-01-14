@@ -65,6 +65,42 @@ define([
                 }
             }
         }
+        
+        // Remove line
+        function clearPlot(){
+            if(line){
+                line.remove();
+                line = null;
+            }
+        }
+
+        function addPoint(x, y, cartesian){
+
+            var newPoint = pointFactory(paper, grid, {
+                x : x,
+                y : y,
+                cartesian : !!cartesian,
+                radius : config.pointRadius,
+                color : config.pointColor,
+                on : {
+                    dragStart : clearPlot
+                }
+            });
+            // Draw the point
+            newPoint.render();
+            // Enable drag'n'drop hability
+            newPoint.drag();
+            // Add it to the list of points
+            points.push(newPoint);
+            // Raise event ready for line plot
+            if(points.length === 2){
+                plot();
+                $(paper.canvas).on('moved.point', plot);
+            }
+
+            return newPoint;
+        }
+
 
         // Remove line
         function clearPlot(){

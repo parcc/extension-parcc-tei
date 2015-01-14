@@ -19,6 +19,7 @@ define([
 
         var points = [],
             active = false,
+            max = config.max || 1,
             uid = config.uid,
             paper = grid.getCanvas();
 
