@@ -40,123 +40,39 @@ define(['OAT/lodash'], function( _){
         _drawAxis = function (){
             var height = (Math.abs(_y.end - _y.start) * _y.unit),
                 width  = (Math.abs(_x.end - _x.start) * _x.unit);
-
-            /**
-             * ______
-             * x     |
-             *    o  |   x1 < x2 < 0
-             *      y|   y1 < y2 < 0
-             */
-             if (
-                    (_x.start < 0) && (_x.end <= 0) &&
-                    (_y.start < 0 ) && (_y.end <= 0)
-                ) {
-                /** X */
-                paper.path('M' + width + ' 0H0').attr({
-                    'stroke' :  _x.color,
-                    'stroke-width': _x.weight,
-                    'arrow-end': 'block-midium-midium'
-                   });
-                /** Y */
-                 paper.path('M' + width + ' 0V' + height).attr({
-                    'stroke' :  _y.color,
-                    'stroke-width': _y.weight,
-                    'arrow-end': 'block-midium-midium'
-                });
-             }
-              /**
-             *  _____
-             * |     x
-             * |   o     0 < x1 < x2
-             * |y         y1 < y2 < 0
-             */
-             else if (
-                    (_x.start >= 0) && (_x.end > 0) &&
-                    (_y.start < 0 ) && (_y.end <= 0)
-                ) {
-                /** X */
-                paper.path('M0 0H'+ width).attr('stroke', _x.color).attr({
-                    'stroke' :  _x.color,
-                    'stroke-width': _x.weight,
-                    'arrow-end': 'block-midium-midium'
-                   });
-                /** Y */
-                 paper.path('M0 0V' + height).attr('stroke', _y.color).attr({
-                    'stroke' :  _y.color,
-                    'stroke-width': _y.weight,
-                    'arrow-end': 'block-midium-midium'
-                });
-
-             }
-
-             /**     y
-             *        |
-             *     o  |
-             *        |
-             * x _____|
-             */
-            else if (
-                    (_x.start < 0) && (_x.end <= 0) &&
-                    (_y.start >= 0 ) && (_y.end > 0)
-                ) {
-                /** X */
-                paper.path('M' + width + ' ' + height +'H0').attr({
-                    'stroke' :  _x.color,
-                    'stroke-width': _x.weight,
-                    'arrow-end': 'block-midium-midium'
-                   });
-                /** Y */
-                 paper.path('M' + width + ' ' + height +'V0').attr({
-                    'stroke' :  _y.color,
-                    'stroke-width': _y.weight,
-                    'arrow-end': 'block-midium-midium'
-                });
-
-             }
-
-            /** y
-             * |
-             * |   o
-             * |
-             * |______ x
-             */
-            else if (
-                    (_x.start >= 0) && (_x.end > 0) &&
-                    (_y.start >= 0 ) && (_y.end > 0)
-                ) {
-                /** X */
-                paper.path('M0 ' + height +'H' + width).attr({
-                    'stroke' :  _x.color,
-                    'stroke-width': _x.weight,
-                    'arrow-end': 'block-midium-midium'
-                   });
-                /** Y */
-                paper.path('M0 ' + height + 'V0').attr({
-                    'stroke' :  _y.color,
-                    'stroke-width': _y.weight,
-                    'arrow-end': 'block-midium-midium'
-                });
-
+            
+            function drawLine(start, end, style){
+                return paper.path('M'+start[0]+' '+start[1]+'L'+end[0]+' '+end[1]).attr(style);
             }
-            /**  y
-             *    | o
-             * ___|___ x
-             *    |
-             *    |
-             */
-            else {
-                /** X */
-                paper.path('M0 ' + (Math.abs(_y.start) * _y.unit) + 'H' + width).attr({
-                     'stroke' :  _x.color,
-                     'stroke-width': _x.weight,
-                     'arrow-end': 'block-midium-midium'
-                    });
-                /** Y */
-                paper.path('M' + (Math.abs(_x.start) * _x.unit) + ' ' + height +'V0').attr({
-                    'stroke' :  _y.color,
-                    'stroke-width': _y.weight,
-                    'arrow-end': 'block-midium-midium'
-                });
+            
+            var xStyle = {
+                'stroke' :  _x.color,
+                'stroke-width': _x.weight,
+                'arrow-end': 'block-medium-medium'
+            };
+
+            var yStyle = {
+                'stroke' :  _y.color,
+                'stroke-width': _y.weight,
+                'arrow-end': 'block-midium-midium'
+            };
+            
+            if((_y.start < 0) && (_y.end <= 0)){
+                drawLine([0, height], [width, height], xStyle);
+            }else if((_y.start >= 0) && (_y.end > 0)){
+                drawLine([0, _x.weight-1], [width, _x.weight-1], xStyle);
+            }else{
+                var h = Math.abs(_y.start) * _y.unit;
+                drawLine([0, h], [width, h], xStyle);
+            }
+            
+            if((_x.start < 0 ) && (_x.end <= 0)){
+                drawLine([width, height], [width, 0], yStyle);
+            }else if((_x.start >= 0 ) && (_x.end > 0)){
+                drawLine([_y.weight-1, height], [_y.weight-1, 0], yStyle);
+            }else{
+                var w = Math.abs(_x.start) * _x.unit;
+                drawLine([w, height], [w, 0], yStyle);
             }
 
         };
@@ -250,6 +166,7 @@ define(['OAT/lodash'], function( _){
              * Rendering function
              */
             render : function(){
+//                debugger;
                 var height = (Math.abs(_y.end - _y.start) * _y.unit),
                 width  = (Math.abs(_x.end - _x.start) * _x.unit);
                 for(var y = 0; y <= height; y += _y.step * _y.unit){
