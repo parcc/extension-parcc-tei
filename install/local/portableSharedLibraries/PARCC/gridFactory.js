@@ -155,6 +155,22 @@ define(['OAT/lodash'], function( _){
             }
         }
         
+        function _calculateBBox(){
+            
+            var height = (Math.abs(_y.end - _y.start) * _y.unit),
+                width  = (Math.abs(_x.end - _x.start) * _x.unit),
+                x = options.padding,
+                y = options.padding;
+            
+            _borderBox = {
+                x : x,
+                y : y,
+                width : width,
+                height : height,
+                x2 : x+width,
+                y2 : y+height
+            };
+        }
         var obj = {
             children : set,
             snapping : options.snapping || false,
@@ -175,6 +191,15 @@ define(['OAT/lodash'], function( _){
                 _weight = parseInt(value);
                 set.remove().clear();
                 this.render();
+            },
+            getX : function(){
+                return _borderBox.x;
+            },
+            getY : function(){
+                return _borderBox.y;
+            },
+            getBBox : function(){
+                return _.clone(_borderBox);
             },
             /**
              * Get width of the _borderBox
@@ -219,8 +244,8 @@ define(['OAT/lodash'], function( _){
              */
             getOriginPosition : function(){
                 return {
-                    left : -1 * _x.start * _x.unit,
-                    top : -1 * _y.start * _y.unit
+                    left : options.padding - _x.start * _x.unit,
+                    top : options.padding - _y.start * _y.unit
                 };
             },
             /**
@@ -246,8 +271,7 @@ define(['OAT/lodash'], function( _){
             render : function(){
                 _drawGrid();
                 _drawAxis();
-                _borderBox = set.getBBox();
-            },
+            },   
             /**
              * Return a callback function to determine for a value the corrected value according grid snapping
              * @param {Number} x coordinate x to convert to snapped value
@@ -273,7 +297,10 @@ define(['OAT/lodash'], function( _){
                 set.push(clickableArea);
             }
         };
+        
+        _calculateBBox();
         obj.render();
+        
         return obj;
     }
     
