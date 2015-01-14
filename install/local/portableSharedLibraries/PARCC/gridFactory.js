@@ -32,6 +32,7 @@ define(['OAT/lodash'], function( _){
         _weight = options.weight,
         _x = options.x,
         _y = options.y,
+        set = paper.set(),
         /** @type {Object} [description] */
         _borderBox = {},
         /**
@@ -76,9 +77,26 @@ define(['OAT/lodash'], function( _){
             }
 
         };
-
+        
+        function _drawGrid(){
+            var height = (Math.abs(_y.end - _y.start) * _y.unit),
+                width  = (Math.abs(_x.end - _x.start) * _x.unit);
+                for(var y = 0; y <= height; y += _y.step * _y.unit){
+                    set.push(paper.path('M0 ' + y + 'H' + width).attr({
+                        'stroke': _color,
+                        'stroke-width' : _weight
+                    }));
+                }
+                for(var x = 0; x <= width; x += _x.step * _x.unit) {
+                    set.push(paper.path('M' + x + ' 0V' + height).attr({
+                        'stroke' : _color,
+                        'stoke-width': _weight
+                    }));
+                }
+        }
+        
         var obj = {
-            children : paper.set(),
+            children : set,
             snapping : options.snapping || false,
             /**
              * Set _color value
@@ -86,7 +104,7 @@ define(['OAT/lodash'], function( _){
              */
             setColor : function(color){
                 _color = String(color);
-                this.children.remove().clear();
+                set.remove().clear();
                 this.render();
             },
             /**
@@ -95,7 +113,7 @@ define(['OAT/lodash'], function( _){
              */
             setWeight : function(value){
                 _weight = parseInt(value);
-                this.children.remove().clear();
+                set.remove().clear();
                 this.render();
             },
             /**
@@ -166,23 +184,9 @@ define(['OAT/lodash'], function( _){
              * Rendering function
              */
             render : function(){
-//                debugger;
-                var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit);
-                for(var y = 0; y <= height; y += _y.step * _y.unit){
-                    this.children.push(paper.path('M0 ' + y + 'H' + width).attr({
-                        'stroke': _color,
-                        'stroke-width' : _weight
-                    }));
-                }
-                for(var x = 0; x <= width; x += _x.step * _x.unit) {
-                    this.children.push(paper.path('M' + x + ' 0V' + height).attr({
-                        'stroke' : _color,
-                        'stoke-width': _weight
-                    }));
-                }
+                _drawGrid();
                 _drawAxis();
-                _borderBox = this.children.getBBox();
+                _borderBox = set.getBBox();
             },
             /**
              * Return a callback function to determine for a value the corrected value according grid snapping
@@ -206,7 +210,7 @@ define(['OAT/lodash'], function( _){
                     fill : 'rgba(0,0,0,0)',
                     stroke : 0
                 });
-                this.children.push(clickableArea);
+                set.push(clickableArea);
             }
         };
         obj.render();
