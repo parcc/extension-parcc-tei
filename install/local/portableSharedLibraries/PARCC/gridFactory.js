@@ -2,11 +2,24 @@ define(['OAT/lodash'], function( _){
     'use strict';
 
     function gridFactory(paper,options){
-        if (typeof options.x !== 'object' && typeof options.y !== 'object'){ throw 'I need x and y axis';}
-        if ( (options.x.start >= options.x.end) || (options.y.start >= options.y.end) ) { throw 'Start must be minus than end';}
+        
+        if (typeof options.x !== 'object' && typeof options.y !== 'object'){ 
+            throw 'I need x and y axis';
+        }
+        
+        if ( (options.x.start >= options.x.end) || (options.y.start >= options.y.end) ) {
+            throw 'Start must be minus than end';
+        }
+        
+        function drawLine(start, end, style){
+            var padding = options.padding;
+            return paper.path('M'+(padding+start[0])+' '+(padding+start[1])+'L'+(padding+end[0])+' '+(padding+end[1])).attr(style);
+        }
+        
         options = _.merge({},{
             color : '#222',
             weigth : 1,
+            padding : 20,
             x : {
                 start : -10,
                 end :  10,
@@ -39,60 +52,107 @@ define(['OAT/lodash'], function( _){
          * Draw Axis on the paper according the configuration of the grid
          */
         _drawAxis = function (){
+            
             var height = (Math.abs(_y.end - _y.start) * _y.unit),
                 width  = (Math.abs(_x.end - _x.start) * _x.unit);
             
-            function drawLine(start, end, style){
-                return paper.path('M'+start[0]+' '+start[1]+'L'+end[0]+' '+end[1]).attr(style);
-            }
-            
             var xStyle = {
                 'stroke' :  _x.color,
-                'stroke-width': _x.weight,
-                'arrow-end': 'block-medium-medium'
+                'stroke-width': _x.weight
             };
 
             var yStyle = {
                 'stroke' :  _y.color,
-                'stroke-width': _y.weight,
-                'arrow-end': 'block-midium-midium'
+                'stroke-width': _y.weight
             };
             
+            function drawXaxis(top, config){
+                
+                config = config || {};
+                
+                var line =  drawLine([0, top], [width, top], config.style);
+                
+                var padding = options.padding, 
+                    position = 0,
+                    fontSize = 10,
+                    textTop;
+                
+                if(config.labelOnTop){
+                    textTop = top + padding - fontSize/2;
+                }else{
+                    textTop = top + padding + fontSize;
+                }
+                
+                for(var i = _x.start; i <= _x.end ; i++){
+                    paper.text(padding + position, textTop, i).attr({
+                        'font-size' : fontSize
+                    });
+                    position += _x.unit;
+                }
+                
+                return line;
+            }
+            
+            function drawYaxis(left, config){
+                
+                config = config || {};
+                
+                var line =  drawLine([left, height], [left, 0], config.style);
+                
+                var padding = options.padding, 
+                    position = 0,
+                    fontSize = 10,
+                    textLeft;
+                
+                if(config.labelOnRight){
+                    textLeft = left + padding + fontSize/2;
+                }else{
+                    textLeft = left + padding - fontSize;
+                }
+                
+                for(var i = _y.start; i <= _y.end ; i++){
+                    paper.text(textLeft, padding + position, -i).attr({
+                        'font-size' : fontSize
+                    });
+                    position += _y.unit;
+                }
+                
+                return line;
+            }
+            
             if((_y.start < 0) && (_y.end <= 0)){
-                drawLine([0, height], [width, height], xStyle);
+                drawXaxis(height, {style : xStyle});
             }else if((_y.start >= 0) && (_y.end > 0)){
-                drawLine([0, _x.weight-1], [width, _x.weight-1], xStyle);
+                drawXaxis(0, {style : xStyle, labelOnTop : true});
             }else{
-                var h = Math.abs(_y.start) * _y.unit;
-                drawLine([0, h], [width, h], xStyle);
+                drawXaxis(Math.abs(_y.start) * _y.unit, {style : xStyle});
             }
             
             if((_x.start < 0 ) && (_x.end <= 0)){
-                drawLine([width, height], [width, 0], yStyle);
+                drawYaxis(width, {style : yStyle, labelOnRight:true});
             }else if((_x.start >= 0 ) && (_x.end > 0)){
-                drawLine([_y.weight-1, height], [_y.weight-1, 0], yStyle);
+                drawYaxis(0, {style : yStyle});
             }else{
-                var w = Math.abs(_x.start) * _x.unit;
-                drawLine([w, height], [w, 0], yStyle);
+                drawYaxis(Math.abs(_x.start) * _x.unit, {style : yStyle});
             }
 
         };
         
         function _drawGrid(){
+            
             var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit);
-                for(var y = 0; y <= height; y += _y.step * _y.unit){
-                    set.push(paper.path('M0 ' + y + 'H' + width).attr({
-                        'stroke': _color,
-                        'stroke-width' : _weight
-                    }));
-                }
-                for(var x = 0; x <= width; x += _x.step * _x.unit) {
-                    set.push(paper.path('M' + x + ' 0V' + height).attr({
-                        'stroke' : _color,
-                        'stoke-width': _weight
-                    }));
-                }
+                width  = (Math.abs(_x.end - _x.start) * _x.unit),
+                style = {
+                    'stroke': _color,
+                    'stroke-width' : _weight
+                };
+            
+            for(var y = 0; y <= height; y += _y.step * _y.unit){
+                drawLine([0, y], [width, y], style);
+            }
+            for(var x = 0; x <= width; x += _x.step * _x.unit) {
+                drawLine([x, 0], [x, height], style);
+            }
         }
         
         var obj = {

@@ -14,7 +14,7 @@ define([
      */
     function createCanvas($container, config){
 
-        var padding = 2;
+        var padding = 20*2;
         var paper = scaleRaphael(
             $('.shape-container', $container)[0],
             (config.x.end - config.x.start) * config.x.unit + padding,

@@ -21,112 +21,115 @@
             require(['/tao/ClientConfig/config'], function(){
                 require(['parccTei/pciCreator/dev/graphLineAndPointInteraction/test/gridFactoryTest'], function(tester){
                     QUnit.start();
+                    
+                    var unitSize = 20;
+                    
                     tester.test('simple', {
                         x : {
                             start : -6,
                             end : 10,
-                            unit : 10
+                            unit : unitSize
                         },
                         y : {
                             start : -10,
                             end : 6,
-                            unit : 10
+                            unit : unitSize
                         }
                     });
                     tester.test('x > 0', {
                         x : {
                             start : 5,
                             end : 10,
-                            unit : 10
+                            unit : unitSize
                         },
                         y : {
                             start : -6,
                             end : 10,
-                            unit : 10
+                            unit : unitSize
                         }
                     });
                     tester.test('x < 0', {
                         x : {
                             start : -10,
                             end : -2,
-                            unit : 10
+                            unit : unitSize
                         },
                         y : {
                             start : -6,
                             end : 10,
-                            unit : 10
+                            unit : unitSize
                         }
                     });
                     tester.test('y > 0', {
                         x : {
                             start : -6,
                             end : 10,
-                            unit : 10
+                            unit : unitSize
                         },
                         y : {
                             start : 2,
                             end : 6,
-                            unit : 10
+                            unit : unitSize
                         }
                     });
                     tester.test('y < 0', {
                         x : {
                             start : -6,
                             end : 10,
-                            unit : 10
+                            unit : unitSize
                         },
                         y : {
                             start : -8,
                             end : -1,
-                            unit : 10
+                            unit : unitSize
                         }
                     });
                     tester.test('x > 0 && y > 0', {
                         x : {
                             start : 5,
                             end : 10,
-                            unit : 10
+                            unit : unitSize
                         },
                         y : {
                             start : 5,
                             end : 10,
-                            unit : 10
+                            unit : unitSize
                         }
                     });
                     tester.test('x > 0 && y < 0', {
                         x : {
                             start : 5,
                             end : 10,
-                            unit : 10
+                            unit : unitSize
                         },
                         y : {
                             start : -10,
                             end : -5,
-                            unit : 10
+                            unit : unitSize
                         }
                     });
                     tester.test('x < 0 && y < 0', {
                         x : {
                             start : -10,
                             end : -5,
-                            unit : 10
+                            unit : unitSize
                         },
                         y : {
                             start : -10,
                             end : -5,
-                            unit : 10
+                            unit : unitSize
                         }
                     });
                     tester.test('x < 0 && y > 0', {
                         x : {
                             start : -10,
                             end : -5,
-                            unit : 10
+                            unit : unitSize
                         },
                         y : {
                             start : 5,
                             end : 10,
-                            unit : 10
+                            unit : unitSize
                         }
                     });
                 });
