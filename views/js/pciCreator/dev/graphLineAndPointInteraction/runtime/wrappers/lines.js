@@ -65,7 +65,7 @@ define([
                 }
             }
         }
-        
+
         // Remove line
         function clearPlot(){
             if(line){
@@ -76,9 +76,15 @@ define([
 
         function addPoint(x, y, cartesian){
 
+            var gridBBox = grid.getBBox();
+
             var newPoint = pointFactory(paper, grid, {
                 x : x,
                 y : y,
+                xMin : gridBBox.x,
+                xMax : gridBBox.x2,
+                yMin : gridBBox.y,
+                yMax : gridBBox.y2,
                 cartesian : !!cartesian,
                 radius : config.pointRadius,
                 color : config.pointColor,

@@ -65,9 +65,15 @@ define([
 
         function addPoint(x, y, cartesian){
 
+            var gridBBox = grid.getBBox();
+
             var newPoint = pointFactory(paper, grid, {
                 x : x,
                 y : y,
+                xMin : gridBBox.x,
+                xMax : gridBBox.x2,
+                yMin : gridBBox.y,
+                yMax : gridBBox.y2,
                 cartesian : !!cartesian,
                 radius : config.pointRadius,
                 color : config.pointColor
@@ -148,12 +154,12 @@ define([
                     point.remove();
                 });
                 points = [];
-                
+
                 if(state.points){
-                    
+
                     var i = 0,
                         maxPoints = config.maximumPoints;
-                    
+
                     _.each(state.points, function(point){
                         if(i < maxPoints){
                             addPoint(point.x, point.y, true);
