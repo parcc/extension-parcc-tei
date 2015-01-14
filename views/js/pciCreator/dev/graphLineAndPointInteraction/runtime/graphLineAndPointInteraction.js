@@ -44,7 +44,8 @@ define([
                 end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
                 unit : 20
             },
-            graphs : rawConfig.graphs === undefined ? {} : rawConfig.graphs
+            graphs : rawConfig.graphs === undefined ? {} : rawConfig.graphs,
+            padding : 20
         };
     }
     /**
@@ -55,7 +56,7 @@ define([
      */
     function createCanvas($container, config){
 
-        var padding = 20*2;
+        var padding = 2 * config.padding;
         var paper = scaleRaphael(
             $('.shape-container', $container)[0],
             (config.x.end - config.x.start) * config.x.unit + padding,
@@ -142,8 +143,8 @@ define([
                     // Get the coordinate for a click
                     var bnds = event.target.getBoundingClientRect(),
                         wfactor = paper.w / paper.width,
-                        fx = Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
-                        fy = Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
+                        fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
+                        fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
                     //transfer the click event to the paper    
                     $(paper.canvas).trigger('click_grid', {x : fx, y : fy});
