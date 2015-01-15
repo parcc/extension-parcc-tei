@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+        <title>PCI Grid Factory tests</title>
+        <link rel="stylesheet" type="text/css" href="/tao/views/js/lib/qunit/qunit.css">
+        <script type="text/javascript" src="/tao/views/js/lib/require.js"></script>
+        <script type="text/javascript" src="/tao/views/js/lib/qunit/qunit.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="/tao/views/css/tao-main-style.css" />
+        <link rel="stylesheet" type="text/css" href="/taoQtiItem/views/css/qti.css" />
+        <style>
+            pre {outline: 1px solid #ccc; padding: 3px; margin: 3px; font-size:1.2rem; color : #333;}
+            h3 {margin-bottom : 5px; color : #3e7da7;}
+            .shape-container {padding : 3px;}
+            .test{padding:20px;}
+        </style>
+        <script  type="text/javascript">
+            QUnit.config.autostart = false;
+            require(['/tao/ClientConfig/config'], function(){
+                require(['parccTei/pciCreator/dev/graphLineAndPointInteraction/test/gridFactoryTest'], function(tester){
+                    QUnit.start();
+                    
+                    var unitSize = 20;
+                    
+                    tester.test('simple', {
+                        x : {
+                            start : -6,
+                            end : 10,
+                            unit : unitSize
+                        },
+                        y : {
+                            start : -10,
+                            end : 6,
+                            unit : unitSize
+                        }
+                    });
+                    tester.test('x > 0', {
+                        x : {
+                            start : 5,
+                            end : 10,
+                            unit : unitSize
+                        },
+                        y : {
+                            start : -6,
+                            end : 10,
+                            unit : unitSize
+                        }
+                    });
+                    tester.test('x < 0', {
+                        x : {
+                            start : -10,
+                            end : -2,
+                            unit : unitSize
+                        },
+                        y : {
+                            start : -6,
+                            end : 10,
+                            unit : unitSize
+                        }
+                    });
+                    tester.test('y > 0', {
+                        x : {
+                            start : -6,
+                            end : 10,
+                            unit : unitSize
+                        },
+                        y : {
+                            start : 2,
+                            end : 6,
+                            unit : unitSize
+                        }
+                    });
+                    tester.test('y < 0', {
+                        x : {
+                            start : -6,
+                            end : 10,
+                            unit : unitSize
+                        },
+                        y : {
+                            start : -8,
+                            end : -1,
+                            unit : unitSize
+                        }
+                    });
+                    tester.test('x > 0 && y > 0', {
+                        x : {
+                            start : 5,
+                            end : 10,
+                            unit : unitSize
+                        },
+                        y : {
+                            start : 5,
+                            end : 10,
+                            unit : unitSize
+                        }
+                    });
+                    tester.test('x > 0 && y < 0', {
+                        x : {
+                            start : 5,
+                            end : 10,
+                            unit : unitSize
+                        },
+                        y : {
+                            start : -10,
+                            end : -5,
+                            unit : unitSize
+                        }
+                    });
+                    tester.test('x < 0 && y < 0', {
+                        x : {
+                            start : -10,
+                            end : -5,
+                            unit : unitSize
+                        },
+                        y : {
+                            start : -10,
+                            end : -5,
+                            unit : unitSize
+                        }
+                    });
+                    tester.test('x < 0 && y > 0', {
+                        x : {
+                            start : -10,
+                            end : -5,
+                            unit : unitSize
+                        },
+                        y : {
+                            start : 5,
+                            end : 10,
+                            unit : unitSize
+                        }
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="qunit"></div>
+        <div id="qunit-fixture"></div>
+        <div id="paper"></div>
+    </body>
+</html>

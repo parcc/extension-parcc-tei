@@ -204,9 +204,9 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                     }else if(options.xMax && absoluteX + newX > options.xMax){
                         newX = options.xMax - absoluteX;
                     }
-                    if(options.yMin && absoluteY < options.yMin){
+                    if(options.yMin && absoluteY + newY < options.yMin){
                         newY = options.yMin - absoluteY;
-                    }else if(options.yMax && absoluteY > options.yMax){
+                    }else if(options.yMax && absoluteY + newY > options.yMax){
                         newY = options.yMax - absoluteY;
                     }
 

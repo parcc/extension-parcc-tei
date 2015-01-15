@@ -43,13 +43,14 @@ define([
             point : {
                 color : _color,
                 radius : 10
-            }
+            },
+            padding : 20
         };
     }
 
     function createCanvas($container, config){
 
-        var padding = 2;
+        var padding = 2 * config.padding;
         var paper = scaleRaphael(
             $('.shape-container', $container)[0],
             (config.x.end - config.x.start) * config.x.unit + padding,
@@ -109,8 +110,8 @@ define([
                     // Get the coordinate for a click
                     var bnds = event.target.getBoundingClientRect(),
                         wfactor = paper.w / paper.width,
-                        fx = Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
-                        fy = Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
+                        fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
+                        fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
                     // Create the first point or the second or replace the second according the rules defined by the client                  
                     if(points.length < 2){
@@ -209,10 +210,16 @@ define([
             }
 
             function addPoint(fx, fy, cartesian){
-
+                
+                var gridBBox = grid.getBBox();
+                    
                 var pointConfig = {
                     x : fx,
                     y : fy,
+                    xMin : gridBBox.x,
+                    xMax : gridBBox.x2,
+                    yMin : gridBBox.y,
+                    yMax : gridBBox.y2,
                     on : {
                         dragStart : clearPlot,
                         dragStop : plot
