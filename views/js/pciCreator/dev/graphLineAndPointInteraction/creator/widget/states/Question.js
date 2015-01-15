@@ -221,6 +221,7 @@ define([
 
         //set change callbacks:
         var options = {
+            allowNull : true,
             updateCardinality : false,
             attrMethodNames : {set : 'prop', remove : 'removeProp'},
             callback : function(){
