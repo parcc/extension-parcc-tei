@@ -237,7 +237,7 @@ define([
 
                 return newPoint;
             }
-
+            
             function plotDefault(){
 
                 //clear drawn elements:
