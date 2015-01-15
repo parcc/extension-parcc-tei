@@ -210,9 +210,9 @@ define([
             }
 
             function addPoint(fx, fy, cartesian){
-                
+
                 var gridBBox = grid.getBBox();
-                    
+
                 var pointConfig = {
                     x : fx,
                     y : fy,
@@ -237,20 +237,49 @@ define([
 
                 return newPoint;
             }
-            
+
+            function getGraphOrigin(){
+
+                var _y = _this.gridConfig.y,
+                    _x = _this.gridConfig.x,
+                    x0,y0;
+
+                if((_y.start < 0) && (_y.end <= 0)){
+                    y0 = _y.start;
+                }else if((_y.start >= 0) && (_y.end > 0)){
+                    y0 = _y.start;
+                }else{
+                    y0 = 0;
+                }
+
+                if((_x.start < 0) && (_x.end <= 0)){
+                    x0 = _x.start;
+                }else if((_x.start >= 0) && (_x.end > 0)){
+                    x0 = _x.start;
+                }else{
+                    x0 = 0;
+                }
+                
+                return {
+                    x : x0,
+                    y : y0
+                };
+            }
+
+
             function plotDefault(){
 
                 //clear drawn elements:
                 clearPoint();
                 clearPlot();
-
+                var origin = getGraphOrigin();
                 if(mathFunction === 'plotExponential' || mathFunction === 'plotLogarithmic'){
                     //point at (0, 0) is undefined for exponential and logarithmic functions
-                    addPoint(1, 1, true);
-                    addPoint(2, 2, true);
+                    addPoint(origin.x + 1, origin.y + 1, true);
+                    addPoint(origin.x + 2, origin.y + 2, true);
                 }else if(mathFunction){
-                    addPoint(0, 0, true);
-                    addPoint(1, 1, true);
+                    addPoint(origin.x + 0, origin.y + 0, true);
+                    addPoint(origin.x + 1, origin.y + 1, true);
                 }
 
                 if(mathFunction){
