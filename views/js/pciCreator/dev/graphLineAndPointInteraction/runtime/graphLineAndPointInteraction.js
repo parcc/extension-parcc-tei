@@ -128,6 +128,7 @@ define([
 
             /**
              * Initialize a new graphic element called grid with all needed
+             * 
              * @param  {Object} $container jQuery node
              * @param  {Object} gridConfig Config (cleaned)
              */
@@ -152,7 +153,15 @@ define([
 
                 return grid;
             }
-
+            
+            /**
+             * Init the interaction
+             * 
+             * @param {Object} grid - the grid object build from GridFactory
+             * @param {Object} $cont - the container
+             * @param {Object} options
+             * @returns {undefined}
+             */
             function initInteraction(grid, $cont, options){
 
                 var $templates = $cont.find('.templates');
@@ -248,7 +257,12 @@ define([
                 });
 
             }
-
+            
+            /**
+             * Activate a graph element
+             * 
+             * @param {Object} element
+             */
             function activate(element){
 
                 if(graph){
