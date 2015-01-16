@@ -21,7 +21,7 @@
 
 <div class="panel">
     <label for="lineStyle" class="spinner">{{__ "Line style"}}</label>
-    <select name="lineStyle" class="select2" data-has-search="false">
+    <select name="lineStyle">
         {{#each lineStyles}}
         <option value="{{@key}}" {{#if selected}}selected="selected"{{/if}}>{{label}}</option>
         {{/each}}

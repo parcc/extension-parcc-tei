@@ -27,21 +27,22 @@
 </div>
 
 <div class="panel" id="creator-pointAndLineFunctionInteraction-available-graphs">
+
     <h3>{{__ "Type of Elements"}}</h3>
+
     {{#each graphs}}
-    <label for="{{@key}}" class="spinner">{{label}}</label>
-    <input name="{{@key}}" value="{{count}}" data-increment="1" data-min="0" type="text">
-    <a class="more" href="#" title="{{__ 'edit options'}}" data-type="{{@key}}">...</a>
-    {{/each}}
-</div>
-
-<div class="sidebar-popup-container-box">
-
-    <div id="math-editor-container" class="sidebar-popup">
-        <h3 id="math-editor-title"></h3>
-        <span class="icon-grip-h dragger"></span>
-        <a class="closer" href="#" title="{{__ 'Close'}}"></a>
-        <div class="panel-container"></div>
+    <div>
+        <label for="{{@key}}" class="spinner">{{label}}</label>
+        <input name="{{@key}}" value="{{count}}" data-increment="1" data-min="0" type="text">
+        <a href="#" title="{{__ 'edit options'}}" class="more sidebar-popup-trigger" data-popup="~ .sidebar-popup" data-type="{{@key}}">...</a>
+        <div class="sidebar-popup">
+            <div class="sidebar-popup-title">
+                <h3>{{@key}} options</h3>
+                <a class="closer" href="#" title="{{__ 'Close'}}"></a>
+            </div>
+            <div class="sidebar-popup-content"></div>
+        </div>
     </div>
-    
+    {{/each}}
+
 </div>
