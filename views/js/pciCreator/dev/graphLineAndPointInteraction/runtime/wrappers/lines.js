@@ -183,6 +183,7 @@ define([
         setConfig(config);
 
         var linesWrapper = {
+            type : 'line',
             getId : function(){
                 return uid;
             },

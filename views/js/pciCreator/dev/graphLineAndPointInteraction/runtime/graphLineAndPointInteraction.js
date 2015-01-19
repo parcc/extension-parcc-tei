@@ -349,6 +349,8 @@ define([
                 grid = initGrid($container, self.config);
                 initInteraction(grid, $container, self.config);
             });
+            
+            console.log(elements);
         },
         /**
          * Programmatically set the response following the json schema described in
