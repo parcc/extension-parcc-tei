@@ -38,12 +38,6 @@ define([
             $(paper.canvas).off('.' + uid);
         }
 
-        function clearPlot(){
-            if(line){
-                line.remove();
-            }
-        }
-
         function plot(){
 
             var point1 = points[0],
@@ -59,49 +53,16 @@ define([
                     //@todo implement this case
                     line = plotFactory.plotVertical(point1, point2, plotConf);
                 }
-
+                line.uid = uid;
+                
                 if(config.lineStyle){
                     line.attr({'stroke-dasharray' : config.lineStyle});
                 }
+                
+                $(paper.canvas).trigger('drawn.lines', [line]);
             }
         }
         
-        // Remove line
-        function clearPlot(){
-            if(line){
-                line.remove();
-                line = null;
-            }
-        }
-
-        function addPoint(x, y, cartesian){
-
-            var newPoint = pointFactory(paper, grid, {
-                x : x,
-                y : y,
-                cartesian : !!cartesian,
-                radius : config.pointRadius,
-                color : config.pointColor,
-                on : {
-                    dragStart : clearPlot
-                }
-            });
-            // Draw the point
-            newPoint.render();
-            // Enable drag'n'drop hability
-            newPoint.drag();
-            // Add it to the list of points
-            points.push(newPoint);
-            // Raise event ready for line plot
-            if(points.length === 2){
-                plot();
-                $(paper.canvas).on('moved.point', plot);
-            }
-
-            return newPoint;
-        }
-
-
         // Remove line
         function clearPlot(){
             if(line){
@@ -137,7 +98,6 @@ define([
             // Raise event ready for line plot
             if(points.length === 2){
                 plot();
-                $(paper.canvas).on('moved.point', plot);
             }
 
             return newPoint;
@@ -186,6 +146,9 @@ define([
             type : 'line',
             getId : function(){
                 return uid;
+            },
+            getLine : function(){
+                return line;
             },
             isActive : function(){
                 return active;
