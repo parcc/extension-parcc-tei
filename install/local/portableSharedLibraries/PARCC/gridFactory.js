@@ -248,6 +248,14 @@ define(['OAT/lodash'], function( _){
                     top : options.padding - _y.start * _y.unit
                 };
             },
+            getPostionFromCartesian : function(x,y){
+                var origin = this.getOriginPosition();
+                var unitSizes = this.getUnits();
+                return {
+                    left : origin.left + unitSizes.x * x,
+                top : origin.top - unitSizes.y * y
+                }
+            },
             /**
              * The the upper and lower bounds fof the grid on both axis
              * 
