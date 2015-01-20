@@ -3,6 +3,7 @@
 
     <input type="text"
            name="label"
+           data-role="title"
            value="{{label}}"
            placeholder="e.g. Point A"
            data-validate="$notEmpty;">

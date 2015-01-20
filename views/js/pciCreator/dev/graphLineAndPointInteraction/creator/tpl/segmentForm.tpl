@@ -4,6 +4,7 @@
     <input type="text"
            name="label"
            value="{{label}}"
+           data-role="title"
            placeholder="e.g. Segment A"
            data-validate="$notEmpty;">
 </div>

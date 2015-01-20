@@ -1,7 +1,7 @@
 <div class="panel">
     <label for="" class="has-icon">{{__ "Response identifier"}}</label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
-    <div class="tooltip-content">{{__ 'The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore ("_") and contain only Letters, underscores, hyphens ("-"), period (".", a.k.a. full-stop), Digits, CombiningChars and Extenders.'}}</div>
+    <div class="tooltip-content">{{__ 'The identifier of your choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore ("_") and contain only Letters, underscores, hyphens ("-"), period (".", a.k.a. full-stop), Digits, CombiningChars and Extenders.'}}</div>
 
     <input type="text"
            name="identifier"
@@ -34,10 +34,10 @@
     <div>
         <label for="{{@key}}" class="spinner">{{label}}</label>
         <input name="{{@key}}" value="{{count}}" data-increment="1" data-min="0" type="text">
-        <a href="#" title="{{__ 'edit options'}}" class="more sidebar-popup-trigger" data-popup="~ .sidebar-popup" data-type="{{@key}}">...</a>
-        <div class="sidebar-popup">
+        <a href="#" title="{{__ 'Edit options'}}" class="more sidebar-popup-trigger" data-popup="~ .sidebar-popup" data-type="{{@key}}">...</a>
+        <div class="sidebar-popup one-fifty">
             <div class="sidebar-popup-title">
-                <h3>{{@key}} options</h3>
+                <h3>Options for &quot;{{label}}&quot;</h3>
                 <a class="closer" href="#" title="{{__ 'Close'}}"></a>
             </div>
             <div class="sidebar-popup-content"></div>
