@@ -98,9 +98,9 @@
                             </pci:properties>
                         </pci:properties>
                     </pci:properties>
-                    <pci:entry key="xMin">-10</pci:entry>
-                    <pci:entry key="xMax">10</pci:entry>
-                    <pci:entry key="yMin">-10</pci:entry>
+                    <pci:entry key="xMin">-8</pci:entry>
+                    <pci:entry key="xMax">12</pci:entry>
+                    <pci:entry key="yMin">-6</pci:entry>
                     <pci:entry key="yMax">10</pci:entry>
                 </pci:properties>
 
