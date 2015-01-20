@@ -52,6 +52,14 @@
                                     <pci:entry key="label">Line B</pci:entry>
                                     <pci:entry key="uid">7</pci:entry>
                                     <pci:entry key="lineColor">#bb1a2a</pci:entry>
+                                    <pci:entry key="lineStyle"></pci:entry>
+                                    <pci:entry key="lineStyleToggle">true</pci:entry>
+                                </pci:properties>
+                                <pci:properties key="2">
+                                    <pci:entry key="pointColor">#03845b</pci:entry>
+                                    <pci:entry key="label">Line C</pci:entry>
+                                    <pci:entry key="uid">70</pci:entry>
+                                    <pci:entry key="lineColor">#03845b</pci:entry>
                                     <pci:entry key="lineStyle">-</pci:entry>
                                     <pci:entry key="lineStyleToggle">true</pci:entry>
                                 </pci:properties>
