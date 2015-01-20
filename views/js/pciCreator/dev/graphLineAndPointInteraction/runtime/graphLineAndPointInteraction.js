@@ -572,9 +572,12 @@ define([
             
             function convertPath(pathArray){
                 
-                //translate coord
-                
-                return pathArray;
+                var positionArray = []
+                _.each(pathArray, function(coord){
+                    var pos = grid.getPostionFromCartesian(coord[0], coord[1]);
+                    positionArray.push([pos.left, pos.top]);
+                });
+                return positionArray;
             }
             
             function drawSolutionSet(){
@@ -619,10 +622,9 @@ define([
                 _.each(intersections, function(intersection){
                     var closedPath = getClosedPath(intersection);
                     if(closedPath.length){
+                        console.log(closedPath);
                         closedPath = convertPath(closedPath);
-                        closedPaths.push(zipPath(closedPath));
-                        
-                        return true;
+                        closedPath = zipPath(closedPath);
                         grid.getCanvas().path(closedPath).attr({
                             stroke : '#333',
                             fill : '#ddd',
@@ -630,7 +632,6 @@ define([
                         });
                     }
                 });
-                console.log(closedPaths);
 
                 //draw shape coord
             }
