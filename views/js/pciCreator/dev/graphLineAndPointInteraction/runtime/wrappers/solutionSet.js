@@ -12,7 +12,13 @@ define([
         lineWeight : 3,
         pointRadius : 10
     };
-
+    
+    var _style = {
+        opacityDefault : .1,
+        opacityHover : .4,
+        opacitySelected : .8
+    };
+    
     function getHorizontalEquation(y){
         y = -y;
         var equation = [0, y];
@@ -89,7 +95,7 @@ define([
                     throw 'unexpected situation';
                 }
 
-                if(y > -bounds.y.end){
+                if(y > -bounds.y.end || y === -bounds.y.end && nextDirection.equation[0] > 0){
                     //allow init for points that are inside the grid
                     siblings = nextDirection.getSiblings(intersection);
                     next = siblings.next;
@@ -256,7 +262,7 @@ define([
         });
         return positionArray;
     }
-
+    
     function drawSolutionSet(grid, lines, config){
 
         var paper = grid.getCanvas(),
@@ -311,18 +317,31 @@ define([
                     fill : '#ddd',
                     opacity : .3
                 });
+                area.selected = false;
                 
                 //add event listener
                 $(area[0]).on('mouseenter', function(){
                    area.attr({
-                       opacity : .6
+                       opacity : _style.opacityHover
                    });
                 }).on('mouseleave', function(){
                    area.attr({
-                       opacity : .3
+                       opacity : area.selected ? _style.opacitySelected : _style.opacityDefault
                    });
                 }).on('click', function(){
                     console.log('selected', area);
+                    //toggle selection:
+                    if(area.selected){
+                        area.selected = false;
+                        area.attr({
+                            opacity : _style.opacityDefault
+                        });
+                    }else{
+                        area.selected = true;
+                        area.attr({
+                            opacity : _style.opacitySelected
+                        });
+                    }
                 });
                 
                 
