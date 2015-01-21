@@ -324,9 +324,7 @@ define(['OAT/lodash'], function( _){
              * @param {Object} shape - a RaphaelJs Element
              */
             toFront : function(shape){
-                if(clickableArea){
-                    shape.insertAfter(clickableArea);
-                }
+                shape.toFront();
             }
         };
         
