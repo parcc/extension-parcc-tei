@@ -222,7 +222,7 @@ define(['OAT/lodash'], function(_){
              * Get the units size for x,y axis
              * @return {Object}
              */
-            getUnitSizes : function(){
+            getUnits : function(){
                 return {
                     x : config.unitSize,
                     y : 0

@@ -2,7 +2,9 @@ define(['graphLineAndPointInteraction/runtime/wrappers/setOfPoints'], function(s
     
     function initialize(grid, config){
         config.max = 1;
-        return setOfPoints.initialize(grid, config);
+        var point = setOfPoints.initialize(grid, config);
+        point.type = 'point';
+        return point;
     }
     
     return {

@@ -52,6 +52,14 @@
                                     <pci:entry key="label">Line B</pci:entry>
                                     <pci:entry key="uid">7</pci:entry>
                                     <pci:entry key="lineColor">#bb1a2a</pci:entry>
+                                    <pci:entry key="lineStyle"></pci:entry>
+                                    <pci:entry key="lineStyleToggle">true</pci:entry>
+                                </pci:properties>
+                                <pci:properties key="2">
+                                    <pci:entry key="pointColor">#03845b</pci:entry>
+                                    <pci:entry key="label">Line C</pci:entry>
+                                    <pci:entry key="uid">70</pci:entry>
+                                    <pci:entry key="lineColor">#03845b</pci:entry>
                                     <pci:entry key="lineStyle">-</pci:entry>
                                     <pci:entry key="lineStyleToggle">true</pci:entry>
                                 </pci:properties>
@@ -67,7 +75,7 @@
                                     <pci:entry key="uid">5</pci:entry>
                                     <pci:entry key="lineStyle"></pci:entry>
                                     <pci:entry key="lineStyleToggle">true</pci:entry>
-                                    <pci:entry key="lineThickness">2</pci:entry>
+                                    <pci:entry key="lineWeight">2</pci:entry>
                                     <pci:entry key="pointColor">#058919</pci:entry>
                                     <pci:entry key="pointRadius">5</pci:entry>
                                 </pci:properties>
@@ -78,8 +86,8 @@
                             <pci:entry key="count">1</pci:entry>
                             <pci:properties key="elements">
                                 <pci:properties key="0">
-                                    <pci:entry key="lineColor">#bb1a2a</pci:entry>
-                                    <pci:entry key="label">Solution Set A</pci:entry>
+                                    <pci:entry key="color">#326399</pci:entry>
+                                    <pci:entry key="label">Solution Set</pci:entry>
                                     <pci:entry key="uid">3</pci:entry>
                                 </pci:properties>
                             </pci:properties>
@@ -93,14 +101,14 @@
                                     <pci:entry key="pointRadius">10</pci:entry>
                                     <pci:entry key="label">Point Set A</pci:entry>
                                     <pci:entry key="uid">4</pci:entry>
-                                    <pci:entry key="max">5</pci:entry>
+                                    <pci:entry key="maximumPoints">5</pci:entry>
                                 </pci:properties>
                             </pci:properties>
                         </pci:properties>
                     </pci:properties>
-                    <pci:entry key="xMin">-10</pci:entry>
-                    <pci:entry key="xMax">10</pci:entry>
-                    <pci:entry key="yMin">-10</pci:entry>
+                    <pci:entry key="xMin">-8</pci:entry>
+                    <pci:entry key="xMax">12</pci:entry>
+                    <pci:entry key="yMin">-6</pci:entry>
                     <pci:entry key="yMax">10</pci:entry>
                 </pci:properties>
 

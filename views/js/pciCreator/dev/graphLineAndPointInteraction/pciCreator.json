@@ -15,7 +15,8 @@
         "./runtime/wrappers/setOfPoints",
         "./runtime/wrappers/points",
         "./runtime/wrappers/lines",
-        "./runtime/wrappers/segments"
+        "./runtime/wrappers/segments",
+        "./runtime/wrappers/solutionSet"
     ],
     "css": [
         "runtime/css/graphLineAndPointInteraction.css"
@@ -26,5 +27,6 @@
     "response": {
         "baseType": "integer",
         "cardinality": "single"
-    }
+    },
+    "debug" : false
 }

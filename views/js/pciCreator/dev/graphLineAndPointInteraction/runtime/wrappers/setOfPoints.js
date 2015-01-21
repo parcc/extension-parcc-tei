@@ -11,7 +11,8 @@ define([
     'use strict';
     var _defaults = {
         pointColor : '#bb1a2a',
-        pointRadius : 10
+        pointRadius : 10,
+        maximumPoints : 1
     };
 
     function initialize(grid, config){
@@ -22,7 +23,9 @@ define([
             uid = config.uid,
             paper = grid.getCanvas();
 
-        config = _.defaults(config, _defaults);
+        function setConfig(cfg){
+            config = _.defaults(cfg, _defaults);
+        }
 
         function unbindEvents(){
             var paper = grid.getCanvas();
@@ -33,19 +36,10 @@ define([
 
             $(paper.canvas).on('click_grid.' + uid, function(event, coord){
 
-                if(points.length < max){
-                    var newPoint = pointFactory(paper, grid, {
-                        x : coord.x,
-                        y : coord.y,
-                        color : config.pointColor,
-                        radius : config.pointRadius
-                    });
-                    // Draw the point
-                    newPoint.render();
-                    // Enable drag'n'drop hability
-                    newPoint.drag();
-                    // Add it to the list of points
-                    points.push(newPoint);
+                if(points.length < config.maximumPoints){
+
+                    addPoint(coord.x, coord.y);
+
                 }else{
                     // Get the last point placed
                     var oldPoint = points.pop();
@@ -68,10 +62,40 @@ define([
                     }
                 }
             });
-
         }
 
+        function addPoint(x, y, cartesian){
+
+            var gridBBox = grid.getBBox();
+
+            var newPoint = pointFactory(paper, grid, {
+                x : x,
+                y : y,
+                xMin : gridBBox.x,
+                xMax : gridBBox.x2,
+                yMin : gridBBox.y,
+                yMax : gridBBox.y2,
+                cartesian : !!cartesian,
+                radius : config.pointRadius,
+                color : config.pointColor
+            });
+            // Draw the point
+            newPoint.render();
+            // Enable drag'n'drop hability
+            newPoint.drag();
+            // Add it to the list of points
+            points.push(newPoint);
+
+            return newPoint;
+        }
+
+        setConfig(config);
+
         var pointsWrapper = {
+            type : 'pointSet',
+            getId : function(){
+                return uid;
+            },
             isActive : function(){
                 return active;
             },
@@ -108,6 +132,46 @@ define([
                 _.forEach(points, function(point){
                     point.hideGlow();
                 });
+            },
+            getState : function(){
+
+                var pts = [];
+                _.each(points, function(pt){
+                    pts.push(pt.getCartesianCoord());
+                });
+
+                return {
+                    points : pts,
+                    config : _.cloneDeep(config)
+                };
+            },
+            setState : function(state){
+
+                if(state.config){
+                    setConfig(state.config);
+                }
+
+                //clear points and plot
+                _.each(points, function(point){
+                    point.remove();
+                });
+                points = [];
+
+                if(state.points){
+
+                    var i = 0,
+                        maxPoints = config.maximumPoints;
+
+                    _.each(state.points, function(point){
+                        if(i < maxPoints){
+                            addPoint(point.x, point.y, true);
+                            i++;
+                        }else{
+                            return false;
+                        }
+                    });
+                }
+                pointsWrapper.disactivate();
             }
         };
 

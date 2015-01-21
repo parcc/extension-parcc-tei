@@ -2,7 +2,9 @@ define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
+    'taoQtiItem/qtiCreator/helper/popup',
     'taoQtiItem/qtiCreator/editor/containerEditor',
+    'taoQtiItem/qtiCreator/editor/colorPicker/colorPicker',
     'graphLineAndPointInteraction/creator/libs/randomColor/randomColor',
     'tpl!graphLineAndPointInteraction/creator/tpl/propertiesForm',
     'tpl!graphLineAndPointInteraction/creator/tpl/pointForm',
@@ -16,7 +18,9 @@ define([
     stateFactory,
     Question,
     formElement,
+    popup,
     containerEditor,
+    colorPicker,
     randomColor,
     formTpl,
     pointFormTpl,
@@ -48,7 +52,6 @@ define([
     }, function(){
 
         //code to execute when leaving this state
-
     });
 
     var _tpl = {
@@ -62,10 +65,10 @@ define([
     function generateColorByGraphType(type){
 
         var _typeHues = {
-            points : 'yellow',
+            points : 'blue',
             setPoints : 'green',
             lines : 'red',
-            segments : 'orange',
+            segments : 'yellow',
             solutionSet : 'blue'
         };
 
@@ -92,9 +95,9 @@ define([
 
     var _defaultConfig = {
         points : {pointRadius : 10},
-        setPoints : {max : 5},
-        lines : {lineStyle : '', lineStyleToggle : true, lineWidth : 3, pointRadius : 10},
-        segments : {lineStyle : '-', lineStyleToggle : false, lineWidth : 3, pointRadius : 10},
+        setPoints : {maximumPoints : 5},
+        lines : {lineStyle : '', lineStyleToggle : false, lineWeight : 3, pointRadius : 10},
+        segments : {lineStyle : '', lineStyleToggle : false, lineWeight : 3, pointRadius : 10},
         solutionSet : {}
     };
 
@@ -114,7 +117,7 @@ define([
             var label = generateLabelByGraphType(graphType, existingElements + i);
             var generatedConfig = {
                 label : label,
-                uid : _.uniqueId(graphType)
+                uid : _.uniqueId(graphType + '_')
             };
 
             switch(graphType){
@@ -128,7 +131,8 @@ define([
                     generatedConfig.lineColor = color;
                     break;
                 case 'solutionSet':
-                    generatedConfig.color = color;
+                    //force solution set color
+                    generatedConfig.color = '#326399';
                     break;
                 default:
                     throw 'unknown type of grapth';
@@ -148,7 +152,7 @@ define([
      * @param  {String} name        name of the changed element
      */
     function updateGraphValue(interaction, value, name){
-        /** @type {Object} the old graphs object */
+        
         var _graphs = interaction.prop('graphs');
         value = parseInt(value);
         _graphs[name].count = value;
@@ -177,10 +181,22 @@ define([
         var widget = this.widget,
             interaction = widget.element,
             $form = widget.$form,
+            allowSolutionSet = false,
             response = interaction.getResponseDeclaration(),
-            graphs = interaction.prop('graphs');
+            graphs = _.clone(interaction.prop('graphs'));
 
-        //@todo : provides some caching system
+        //for the itme being only allow one single solutionSet:
+        if(graphs.solutionSet.elements.length){
+            allowSolutionSet = true;
+        }
+        delete graphs.solutionSet;
+
+        /**
+         * Check if the "more" button should be displayed
+         * 
+         * @todo provides some caching system
+         * @param {String} graphType
+         */
         function checkMoreTriggerAvailability(graphType){
             var $availableGraphsContainer = $form.find('#creator-pointAndLineFunctionInteraction-available-graphs');
             var $graphType = $availableGraphsContainer.find('input[name=' + graphType + ']');
@@ -212,7 +228,8 @@ define([
             xMax : interaction.prop('xMax'),
             yMin : interaction.prop('yMin'),
             yMax : interaction.prop('yMax'),
-            graphs : graphs
+            graphs : graphs,
+            allowSolutionSet : allowSolutionSet
         }));
 
         //init form javascript
@@ -220,6 +237,7 @@ define([
 
         //set change callbacks:
         var options = {
+            allowNull : true,
             updateCardinality : false,
             attrMethodNames : {set : 'prop', remove : 'removeProp'},
             callback : function(){
@@ -237,24 +255,18 @@ define([
             points : changeCallback,
             segments : changeCallback,
             setPoints : changeCallback,
-            solutionSet : function(interaction, value, graphType){
+            allowSolutionSet : function(interaction, value){
 
-                var $availableGraphsContainer = $form.find('#creator-pointAndLineFunctionInteraction-available-graphs');
-                var $graphType = $availableGraphsContainer.find('input[name=lines]');
-                if(!parseInt($graphType.val())){
-                    //set value to one and trigger the ui/incrementer.js change event
-                    $graphType.val(1).keyup();
+                if(value){
+                    var $availableGraphsContainer = $form.find('#creator-pointAndLineFunctionInteraction-available-graphs');
+                    var $graphType = $availableGraphsContainer.find('input[name=lines]');
+                    if(!parseInt($graphType.val())){
+                        //set value to one and trigger the ui/incrementer.js change event
+                        $graphType.val(1).keyup();
+                    }
                 }
 
-                //if there is no line yet, add one !
-                var temp = interaction.prop('graphs');
-                if(temp.lines.count < 1){
-                    temp.lines.count = 1;
-                    temp.lines.elements = defaultConfig('line', 1);
-                }
-
-                updateGraphValue(interaction, value, graphType);
-                checkMoreTriggerAvailability(graphType);
+                updateGraphValue(interaction, value ? 1 : 0, 'solutionSet');
             }
         };
         changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks);
@@ -263,40 +275,107 @@ define([
         formElement.setChangeCallbacks($form, interaction, changeCallbacks);
 
         var _this = this;
-        $form.on('click', '.more', function(){
 
-            var $more = $(this),
-                type = $more.data('type');
+        $form.find('.sidebar-popup-trigger').each(function(){
 
-            _this.showOptionsBox(type);
+            var $trigger = $(this),
+                $panel = $trigger.siblings('.sidebar-popup').find('.sidebar-popup-content'),
+                type = $trigger.data('type');
+
+            // basic popup functionality
+            popup.init($trigger);
+
+            // after popup opens
+            $trigger.on('beforeopen.popup', function(e, params){
+                _this.showOptionsBox(type, $panel);
+            });
+        });
+
+        //init the "more" buttons visibility:
+        _.each(_.keys(_defaultConfig), function(type){
+            checkMoreTriggerAvailability(type);
         });
     };
 
-    StateQuestion.prototype.showOptionsBox = function(type){
-        console.log(type, graphs);
+    StateQuestion.prototype.showOptionsBox = function(type, $panel){
 
         var interaction = this.widget.element,
-            $container = $('#math-editor-container'),
-            $panel = $container.find('.panel-container');
-        var rendering = '';
+            graphs = interaction.properties['graphs'];
 
-        var graphs = interaction.prop('graphs');
-        if(graphs[type] && _tpl[type]){
+        $panel.empty();
+
+        if(graphs[type]){
             _.each(graphs[type].elements, function(element){
-                rendering += _tpl[type]({
-                });
-                rendering += '<hr/>';
+                //pass element and interaction by reference
+                var elementForm = buildElementForm(type, element, interaction);
+                elementForm.init();
+                $panel.append(elementForm.$dom).append('<hr/>');
             });
         }else{
             throw 'invalid type';
         }
 
-        $panel.empty().html(rendering);
+    }
 
-        $container.show();
-        $container.find('.closer').click(function(){
-            $container.hide();
-        });
+    function buildElementForm(type, element, interaction){
+
+        var tpl = _tpl[type];
+        var lineStyle = element.lineStyle;
+        var lineStyles = {
+            '' : {label : "plain", selected : false},
+            '-' : {label : "dotted", selected : false}
+        };
+
+        if(lineStyles[lineStyle]){
+            lineStyles[lineStyle].selected = true;
+        }
+
+        var data = {
+            uid : element.uid,
+            label : element.label,
+            pointColor : element.pointColor,
+            pointRadius : element.pointRadius,
+            maximumPoints : element.maximumPoints,
+            lineColor : element.lineColor,
+            lineWeight : element.lineWeight,
+            lineStyles : lineStyles,
+            lineStyleToggle : element.lineStyleToggle
+        };
+
+        var $dom = $(tpl(data));
+
+        function propChangeCallback(element, propValue, propName){
+            element[propName] = propValue;
+            interaction.triggerPci('configchange', [interaction.getProperties()]);
+        }
+
+        var changeCallbacks = {
+            label : propChangeCallback,
+            pointColor : propChangeCallback,
+            pointRadius : propChangeCallback,
+            maximumPoints : propChangeCallback,
+            lineColor : propChangeCallback,
+            lineStyle : propChangeCallback,
+            lineWeight : propChangeCallback,
+            lineStyleToggle : propChangeCallback
+        };
+
+        //init form javascript
+        function init(){
+
+            formElement.initWidget($dom);
+            $dom.find('.color-trigger').each(function(){
+                colorPicker.create($(this));
+            });
+
+            formElement.setChangeCallbacks($dom, element, changeCallbacks);
+        }
+
+        return {
+            $dom : $dom,
+            init : init
+        };
+
     }
 
     return StateQuestion;

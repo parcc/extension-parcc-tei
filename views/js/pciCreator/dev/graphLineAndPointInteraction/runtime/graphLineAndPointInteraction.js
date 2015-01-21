@@ -9,7 +9,8 @@ define([
     'graphLineAndPointInteraction/runtime/wrappers/setOfPoints',
     'graphLineAndPointInteraction/runtime/wrappers/points',
     'graphLineAndPointInteraction/runtime/wrappers/lines',
-    'graphLineAndPointInteraction/runtime/wrappers/segments'
+    'graphLineAndPointInteraction/runtime/wrappers/segments',
+    'graphLineAndPointInteraction/runtime/wrappers/solutionSet'
 ], function(
     $,
     qtiCustomInteractionContext,
@@ -21,7 +22,8 @@ define([
     setPointsWrapper,
     pointsWrapper,
     linesWrapper,
-    segmentsWrapper
+    segmentsWrapper,
+    solutionSetWrapper
     ){
 
     'use strict';
@@ -44,7 +46,8 @@ define([
                 end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
                 unit : 20
             },
-            graphs : rawConfig.graphs === undefined ? {} : rawConfig.graphs
+            graphs : rawConfig.graphs === undefined ? {} : rawConfig.graphs,
+            padding : 20
         };
     }
     /**
@@ -55,7 +58,7 @@ define([
      */
     function createCanvas($container, config){
 
-        var padding = 20*2;
+        var padding = 2 * config.padding;
         var paper = scaleRaphael(
             $('.shape-container', $container)[0],
             (config.x.end - config.x.start) * config.x.unit + padding,
@@ -66,25 +69,22 @@ define([
 
         return paper;
     }
-
+    
+    var _wrappers = {
+        setPoints : setPointsWrapper,
+        points : pointsWrapper,
+        lines : linesWrapper,
+        segments : segmentsWrapper,
+        solutionSet : solutionSetWrapper
+    };
+    
     /**
      * Dirty functiion to return the right wrapper for a given config element
      * @param  {String} type     Name of the element you want
      * @return {Object}         Wrapper corresponding to this element
      */
     function getWrapper(type){
-        switch(type){
-            case 'setPoints' :
-                return setPointsWrapper;
-            case 'points' :
-                return pointsWrapper;
-            case 'lines' :
-                return linesWrapper;
-            case 'segments' :
-                return segmentsWrapper;
-            default :
-                throw 'invalid wrapper type';
-        }
+        return _wrappers[type];
     }
 
     function drawLineStyle(dom, config){
@@ -93,7 +93,7 @@ define([
         var line = lineStylePaper.path('M0 ' + h / 2 + 'L' + w + ' ' + h / 2);
         line.attr({
             stroke : config.lineColor || '#000',
-            'stroke-width' : config.thickness || 3,
+            'stroke-width' : config.lineWeight || 3,
             'stroke-dasharray' : config.lineStyle || '',
             opacity : config.opacity || 1
         });
@@ -121,49 +121,47 @@ define([
 
             var grid,
                 graph,
+                elements,
                 $container = $(dom),
                 self = this;
 
             /**
              * Initialize a new graphic element called grid with all needed
+             * 
              * @param  {Object} $container jQuery node
              * @param  {Object} gridConfig Config (cleaned)
              */
             function initGrid($container, gridConfig){
-                // @todo : Clear Everything
 
+                // @todo : Clear Everything
+                elements = {};
                 var paper = createCanvas($container, gridConfig);
                 var grid = gridFactory(paper, gridConfig);
+                var $canvas = $(paper.canvas);
                 grid.clickable();
-
-
                 grid.children.click(function(event){
 
                     // Get the coordinate for a click
                     var bnds = event.target.getBoundingClientRect(),
                         wfactor = paper.w / paper.width,
-                        fx = Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
-                        fy = Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
+                        fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
+                        fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
-
-                    $(paper.canvas).trigger('click_grid', {x : fx, y : fy});
-
-                    return;
-                    var element = getWrapper(gridConfig.type);
-                    element.initialize(paper, grid, {color : '#0f904a'});
-
-                    self.on('configchange', function(){
-                        element.destroy();
-                    });
-
-                    // @todo : Get the current set
-                    // var activeSet = _.find(sets,{active : true});
-
+                    //transfer the click event to the paper    
+                    $canvas.trigger('click_grid', {x : fx, y : fy});
                 });
 
                 return grid;
             }
 
+            /**
+             * Init the interaction
+             * 
+             * @param {Object} grid - the grid object build from GridFactory
+             * @param {Object} $cont - the container
+             * @param {Object} options
+             * @returns {undefined}
+             */
             function initInteraction(grid, $cont, options){
 
                 var $templates = $cont.find('.templates');
@@ -185,7 +183,7 @@ define([
                         var color = elementConfig.lineColor || elementConfig.pointColor;
 
                         // Change attributes
-                        $buttonContainer.data('uid', elementConfig.uid);
+                        $buttonContainer.attr('data-uid', elementConfig.uid);
                         $buttonContainer.data('config', elementConfig);
                         $button.text(elementConfig.label);
                         $button.css({backgroundColor : color});
@@ -193,7 +191,7 @@ define([
 
                         //configure change line style buttons (for lines and segments wrapper)
                         if(elementConfig.lineStyleToggle && elementConfig.lineStyleToggle !== 'false'){
-                            
+
                             $buttonContainer
                                 .find('.line-styles')
                                 .show()
@@ -207,61 +205,50 @@ define([
 
                                 }).each(function(){
 
-                                    var $input = $(this),
-                                        $lineStyle = $input.siblings('.line-style'),
-                                        style = $input.val();
+                                var $input = $(this),
+                                    $lineStyle = $input.siblings('.line-style'),
+                                    style = $input.val();
 
-                                    drawLineStyle($lineStyle[0], {
-                                        lineStyle : style,
-                                        lineColor : elementConfig.lineColor
-                                    });
-                                    
-                                    if(elementConfig.lineStyle === style){
-                                        $input.prop('checked', true);
-                                    }
+                                drawLineStyle($lineStyle[0], {
+                                    lineStyle : style,
+                                    lineColor : elementConfig.lineColor,
+                                    lineWeight : elementConfig.lineWeight
                                 });
-                            
+
+                                if(elementConfig.lineStyle === style){
+                                    $input.prop('checked', true);
+                                }
+                            });
+
                         }
 
                         //insert into dom
                         $controlArea.append($buttonContainer);
 
                         //init element
-                        if(typeName !== 'solutionSet'){
-                            var wrapper = getWrapper(typeName);
-                            var element = wrapper.initialize(grid, elementConfig);
-                            $buttonContainer.data('element', element);
-                        }
+                        var wrapper = getWrapper(typeName);
+                        var element = wrapper.initialize(grid, elementConfig);
+                        $buttonContainer.data('element', element);
+                        element.$buttonContainer = $buttonContainer;
+                        elements[elementConfig.uid] = element;
                     });
                 });
 
-                var $btnContainers = $controlArea.children('.button-container');
-                $btnContainers.children('.btn').on('click', function(){
 
-                    var $btn = $(this),
-                        $btnContainer = $btn.parent();
+                $controlArea.on('click', '.button-container', function(){
 
-                    //toggle active class appearance
-                    $btnContainers.removeClass('activated');
-                    $btnContainer.addClass('activated');
+                    activate($(this).data('element'));
 
-                    //activate graphs (points, line etc)
-                    if(graph){
-                        graph.disactivate();
-                    }
-                    graph = $btnContainer.data('element');
-                    graph.activate();
-                    
-                }).on('mouseenter', function(){
-                    
-                    var element = $(this).parent().data('element');
+                }).on('mouseenter', '.button-container', function(){
+
+                    var element = $(this).data('element');
                     if(element){
                         element.highlightOn();
                     }
-                    
-                }).on('mouseleave', function(){
-                    
-                    var element = $(this).parent().data('element');
+
+                }).on('mouseleave', '.button-container', function(){
+
+                    var element = $(this).data('element');
                     if(element && !element.isActive()){
                         element.highlightOff();
                     }
@@ -269,60 +256,97 @@ define([
 
             }
 
+            /**
+             * Activate a graph element
+             * 
+             * @param {Object} element
+             */
+            function activate(element){
+
+                if(graph){
+                    graph.disactivate();
+                }
+
+                //toggle active class appearance
+                element.$buttonContainer.addClass('activated');
+                element.$buttonContainer.siblings('.button-container').removeClass('activated');
+
+                //activate the element itself to allow interaction
+                element.activate(elements);
+
+                graph = element;
+            }
+
+            function getElement(uid){
+                return elements[uid];
+            }
+
+            /**
+             * Get the current state of initialized element
+             * 
+             * @returns {Object}
+             */
+            function getState(){
+
+                var state = {
+                    activeGraph : graph ? graph.getId() : '',
+                    elements : {}
+                };
+
+                _.each(elements, function(element){
+                    state.elements[element.getId()] = element.getState();
+                });
+
+                return state;
+            }
+
+            /**
+             * restore state of already initialized elements:
+             * 
+             * @param {Object} state
+             * @param {Boolean} ignoreConfig
+             */
+            function setState(state, ignoreConfig){
+
+                //restore element states
+                _.forIn(state.elements, function(state, uid){
+                    var element = getElement(uid);
+                    if(element){
+                        if(ignoreConfig){
+                            delete state.config;
+                        }
+                        element.setState(state);
+                    }
+                });
+
+                //restore the currently selected element
+                if(state.activeGraph){
+                    var currentActive = getElement(state.activeGraph);
+                    if(currentActive){
+                        //restore the active element:
+                        activate(currentActive);
+                    }
+                }
+            }
+
             grid = initGrid($container, this.config);
             initInteraction(grid, $container, this.config);
 
-            this.on('configchange', function(options){
-                self.config = buildGridConfig(options);
+            this.on('configchange', function(newConfig){
+
+                var state = getState();
+                self.config = newConfig ? buildGridConfig(newConfig) : self.config;
+                grid = initGrid($container, self.config);
+                initInteraction(grid, $container, self.config);
+                setState(state, true);
+            });
+
+            this.on('gridchange', function(newConfig){
+
+                self.config = newConfig ? buildGridConfig(newConfig) : self.config;
                 grid = initGrid($container, self.config);
                 initInteraction(grid, $container, self.config);
             });
-
-            this.on('gridchange', function(config){
-                self.config = config;
-                initGrid($container, buildGridConfig(config));
-            });
-
-
-            //strange ...
-            $('.pointAndLineFunctionInteraction').on('click', 'button', function(event){
-                $container.trigger('elementchange', $(this).data('config'));
-            });
-
-            // var plotFactory = new PlotFactory(grid);
-            //
-            // //////////////////////////////////////
-            // // How many lines set did we have ? //
-            // //////////////////////////////////////
-            // var sets = [];
-            // $('[data-set-color]').each(function(){
-            //     sets.push({
-            //         color : $(this).data('set-color'),
-            //         points : [],
-            //         active : false
-            //     });
-            // }).click(function() {
-            //     // Get the currently active set and inactivate it
-            //     var previouslyActiveSet = _.find(sets,{active : true});
-            //     previouslyActiveSet.active = false;
-            //     // Iterate on every other items and remove the flow on points
-            //     _.forEach(previouslyActiveSet.points,function(value){
-            //         value.hideGlow();
-            //     });
-            //     // Activate the right set
-            //     var newActiveSet = _.find(sets,{color : $(this).data('set-color')});
-            //     newActiveSet.active = true;
-            //     _.forEach(newActiveSet.points, function(value){
-            //         value.showGlow();
-            //     });
-            // });
-            // sets[0].active = true;
-            // ///////////////////////////
-            // // Catch the Click Event //
-            // ///////////////////////////
-
-
-
         },
         /**
          * Programmatically set the response following the json schema described in

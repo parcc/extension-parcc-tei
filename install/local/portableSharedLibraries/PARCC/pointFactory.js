@@ -10,7 +10,8 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
         glowRadius : 0,
         glowOpacity : .3,
         fill : true,
-        removable : true
+        removable : true,
+        cartesian : false
     };
 
     /**
@@ -26,6 +27,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
      * @param  {Number} [options.glow=true]                 remove glow if not needed
      * @param  {Number} [options.fill=true]                 fill the point with given color, the border is colored otherwise
      * @param  {Number} [options.removable=true]            define if the point should be remove on simple click
+     * @param  {Number} [options.cartesian=false]           define the inital position as cartesian coordinate
      * @return {Object}                                     point Object
      */
     function pointFactory(paper, grid, options){
@@ -295,7 +297,13 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 options[key] = value;
             }
         };
-        obj.setCoord(options.x, options.y);
+        
+        if(options.cartesian){
+            obj.setCartesianCoord(options.x, options.y);
+        }else{
+            obj.setCoord(options.x, options.y);
+        }
+        
         return obj;
     }
     return pointFactory;

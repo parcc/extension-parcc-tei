@@ -4,6 +4,7 @@
     <input type="text"
            name="identifier"
            value="{{identifier}}"
+           data-role="title"
            placeholder="e.g. Solution Set A"
            data-validate="$notEmpty; $qtiIdentifier;">
 </div>

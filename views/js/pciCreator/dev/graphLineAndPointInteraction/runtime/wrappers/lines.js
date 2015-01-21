@@ -15,7 +15,7 @@ define([
         pointColor : '#bb1a2a',
         lineColor : '#bb1a2a',
         lineStyle : '',
-        lineWeight : 1,
+        lineWeight : 3,
         pointRadius : 10
     };
 
@@ -26,27 +26,23 @@ define([
             uid = config.uid,
             segment = config.segment || false,
             paper = grid.getCanvas(),
+            $paperCanvas = $(paper.canvas),
             plotFactory = new PlotFactory(grid),
             line;
-
-        config = _.defaults(config, _defaults);
-
-        function unbindEvents(){
-            var paper = grid.getCanvas();
-            $(paper.canvas).off('.' + uid);
+        
+        function setConfig(cfg){
+            config = _.defaults(cfg, _defaults);
         }
 
-        function clearPlot(){
-            if(line){
-                line.remove();
-            }
+        function unbindEvents(){
+            $paperCanvas.off('.' + uid);
         }
 
         function plot(){
 
             var point1 = points[0],
                 point2 = points[1],
-                plotConf = {color : config.lineColor, segment : segment, thickness : 3, opacity : .8};
+                plotConf = {color : config.lineColor, segment : segment, thickness : config.lineWeight, opacity : .8};
 
             if(point1 && point2){
 
@@ -57,38 +53,67 @@ define([
                     //@todo implement this case
                     line = plotFactory.plotVertical(point1, point2, plotConf);
                 }
-
+                line.uid = uid;
+                
                 if(config.lineStyle){
                     line.attr({'stroke-dasharray' : config.lineStyle});
                 }
+                
+                $paperCanvas.trigger('drawn.lines', [line]);
+            }
+        }
+        
+        // Remove line
+        function clearPlot(){
+            if(line){
+                line.remove();
+                line = null;
+                $paperCanvas.trigger('removed.lines', [line]);
             }
         }
 
+        function addPoint(x, y, cartesian){
+
+            var gridBBox = grid.getBBox();
+
+            var newPoint = pointFactory(paper, grid, {
+                x : x,
+                y : y,
+                xMin : gridBBox.x,
+                xMax : gridBBox.x2,
+                yMin : gridBBox.y,
+                yMax : gridBBox.y2,
+                cartesian : !!cartesian,
+                radius : config.pointRadius,
+                color : config.pointColor,
+                on : {
+                    dragStart : clearPlot
+                }
+            });
+            // Draw the point
+            newPoint.render();
+            // Enable drag'n'drop hability
+            newPoint.drag();
+            // Add it to the list of points
+            points.push(newPoint);
+            // Raise event ready for line plot
+            if(points.length === 2){
+                plot();
+                $paperCanvas.on('moved.point', plot);
+            }
+
+            return newPoint;
+        }
+
+
         function bindEvents(){
 
-            $(paper.canvas).on('click_grid.' + uid, function(event, coord){
+            $paperCanvas.on('click_grid.' + uid, function(event, coord){
 
                 if(points.length < 2){
-                    var newPoint = pointFactory(paper, grid, {
-                        x : coord.x,
-                        y : coord.y,
-                        radius : config.pointRadius,
-                        color : config.pointColor,
-                        on : {
-                            dragStart : clearPlot
-                        }
-                    });
-                    // Draw the point
-                    newPoint.render();
-                    // Enable drag'n'drop hability
-                    newPoint.drag();
-                    // Add it to the list of points
-                    points.push(newPoint);
-                    // Raise event ready for line plot
-                    if(points.length === 2){
-                        plot();
-                        $(paper.canvas).on('moved.point', plot);
-                    }
+
+                    addPoint(coord.x, coord.y);
+
                 }else{
                     // Get the last point placed
                     var oldPoint = points.pop();
@@ -110,18 +135,23 @@ define([
                     var pointToDelete = _.findIndex(points, {uid : removedPoint.uid});
                     if(pointToDelete > -1){
                         points.splice(pointToDelete, 1);
-                        // Remove line
-                        if(line){
-                            line.remove();
-                            line = null;
-                        }
+                        clearPlot();
                     }
                 }
             });
 
         }
 
+        setConfig(config);
+
         var linesWrapper = {
+            type : 'line',
+            getId : function(){
+                return uid;
+            },
+            getLine : function(){
+                return line;
+            },
             isActive : function(){
                 return active;
             },
@@ -166,6 +196,37 @@ define([
                 _.forEach(points, function(point){
                     point.hideGlow();
                 });
+            },
+            getState : function(){
+
+                var pts = [];
+                _.each(points, function(pt){
+                    pts.push(pt.getCartesianCoord());
+                });
+
+                return {
+                    points : pts,
+                    config : _.cloneDeep(config)
+                };
+            },
+            setState : function(state){
+
+                if(state.config){
+                    setConfig(state.config);
+                }
+
+                //clear points and plot
+                clearPlot();
+                _.each(points, function(point){
+                    point.remove();
+                });
+                points = [];
+                if(state.points){
+                    _.each(state.points, function(point){
+                        addPoint(point.x, point.y, true);
+                    });
+                }
+                linesWrapper.disactivate();
             }
         };
 
