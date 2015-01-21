@@ -109,7 +109,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 decimals = (decimals === undefined) ? 0 : decimals;
                 return {
                     x: (_x - grid.getOriginPosition().left)/grid.getUnits().x,
-                    y: (_y - grid.getOriginPosition().top)/grid.getUnits().y
+                    y: - (_y - grid.getOriginPosition().top)/grid.getUnits().y
                 };
             },
             /**
