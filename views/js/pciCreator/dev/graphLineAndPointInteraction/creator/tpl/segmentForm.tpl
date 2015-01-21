@@ -17,7 +17,7 @@
 
 <div class="panel">
     <label for="lineWeight" class="spinner">{{__ "Segment thickness"}}</label>
-    <input name="lineWeight" value="{{lineWeight}}" data-increment="1" data-min="0" type="text" class="incrementer">
+    <input name="lineWeight" value="{{lineWeight}}" data-increment="1" data-min="1" type="text" class="incrementer">
 </div>
 
 <div class="panel">
@@ -45,5 +45,5 @@
 
 <div class="panel">
     <label for="pointRadius" class="spinner">{{__ "Point Radius"}}</label>
-    <input name="pointRadius" value="{{pointRadius}}" data-increment="1" data-min="0" type="text" class="incrementer">
+    <input name="pointRadius" value="{{pointRadius}}" data-increment="1" data-min="2" type="text" class="incrementer">
 </div>

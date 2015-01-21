@@ -92,6 +92,7 @@ define([
         setConfig(config);
 
         var pointsWrapper = {
+            type : 'pointSet',
             getId : function(){
                 return uid;
             },

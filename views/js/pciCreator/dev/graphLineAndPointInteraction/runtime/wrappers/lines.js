@@ -26,22 +26,16 @@ define([
             uid = config.uid,
             segment = config.segment || false,
             paper = grid.getCanvas(),
+            $paperCanvas = $(paper.canvas),
             plotFactory = new PlotFactory(grid),
             line;
-
+        
         function setConfig(cfg){
             config = _.defaults(cfg, _defaults);
         }
 
         function unbindEvents(){
-            var paper = grid.getCanvas();
-            $(paper.canvas).off('.' + uid);
-        }
-
-        function clearPlot(){
-            if(line){
-                line.remove();
-            }
+            $paperCanvas.off('.' + uid);
         }
 
         function plot(){
@@ -59,10 +53,13 @@ define([
                     //@todo implement this case
                     line = plotFactory.plotVertical(point1, point2, plotConf);
                 }
-
+                line.uid = uid;
+                
                 if(config.lineStyle){
                     line.attr({'stroke-dasharray' : config.lineStyle});
                 }
+                
+                $paperCanvas.trigger('drawn.lines', [line]);
             }
         }
         
@@ -71,42 +68,7 @@ define([
             if(line){
                 line.remove();
                 line = null;
-            }
-        }
-
-        function addPoint(x, y, cartesian){
-
-            var newPoint = pointFactory(paper, grid, {
-                x : x,
-                y : y,
-                cartesian : !!cartesian,
-                radius : config.pointRadius,
-                color : config.pointColor,
-                on : {
-                    dragStart : clearPlot
-                }
-            });
-            // Draw the point
-            newPoint.render();
-            // Enable drag'n'drop hability
-            newPoint.drag();
-            // Add it to the list of points
-            points.push(newPoint);
-            // Raise event ready for line plot
-            if(points.length === 2){
-                plot();
-                $(paper.canvas).on('moved.point', plot);
-            }
-
-            return newPoint;
-        }
-
-
-        // Remove line
-        function clearPlot(){
-            if(line){
-                line.remove();
-                line = null;
+                $paperCanvas.trigger('removed.lines', [line]);
             }
         }
 
@@ -137,7 +99,7 @@ define([
             // Raise event ready for line plot
             if(points.length === 2){
                 plot();
-                $(paper.canvas).on('moved.point', plot);
+                $paperCanvas.on('moved.point', plot);
             }
 
             return newPoint;
@@ -146,7 +108,7 @@ define([
 
         function bindEvents(){
 
-            $(paper.canvas).on('click_grid.' + uid, function(event, coord){
+            $paperCanvas.on('click_grid.' + uid, function(event, coord){
 
                 if(points.length < 2){
 
@@ -183,8 +145,12 @@ define([
         setConfig(config);
 
         var linesWrapper = {
+            type : 'line',
             getId : function(){
                 return uid;
+            },
+            getLine : function(){
+                return line;
             },
             isActive : function(){
                 return active;

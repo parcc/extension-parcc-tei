@@ -84,8 +84,11 @@ define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
                         conf.end_y = point2.y;
                     }
                     
+                    equation.type = fnName;
                     plot = graphFunction[fnName].plot(canvas, equation, conf);
+                    plot.equation = equation;
                     _applyStyle(plot, conf);
+                    
                     return plot;
                 }
             }catch(e){

@@ -9,7 +9,8 @@ define([
     'graphLineAndPointInteraction/runtime/wrappers/setOfPoints',
     'graphLineAndPointInteraction/runtime/wrappers/points',
     'graphLineAndPointInteraction/runtime/wrappers/lines',
-    'graphLineAndPointInteraction/runtime/wrappers/segments'
+    'graphLineAndPointInteraction/runtime/wrappers/segments',
+    'graphLineAndPointInteraction/runtime/wrappers/solutionSet'
 ], function(
     $,
     qtiCustomInteractionContext,
@@ -21,7 +22,8 @@ define([
     setPointsWrapper,
     pointsWrapper,
     linesWrapper,
-    segmentsWrapper
+    segmentsWrapper,
+    solutionSetWrapper
     ){
 
     'use strict';
@@ -67,25 +69,22 @@ define([
 
         return paper;
     }
-
+    
+    var _wrappers = {
+        setPoints : setPointsWrapper,
+        points : pointsWrapper,
+        lines : linesWrapper,
+        segments : segmentsWrapper,
+        solutionSet : solutionSetWrapper
+    };
+    
     /**
      * Dirty functiion to return the right wrapper for a given config element
      * @param  {String} type     Name of the element you want
      * @return {Object}         Wrapper corresponding to this element
      */
     function getWrapper(type){
-        switch(type){
-            case 'setPoints' :
-                return setPointsWrapper;
-            case 'points' :
-                return pointsWrapper;
-            case 'lines' :
-                return linesWrapper;
-            case 'segments' :
-                return segmentsWrapper;
-            default :
-                throw 'invalid wrapper type';
-        }
+        return _wrappers[type];
     }
 
     function drawLineStyle(dom, config){
@@ -138,6 +137,7 @@ define([
                 elements = {};
                 var paper = createCanvas($container, gridConfig);
                 var grid = gridFactory(paper, gridConfig);
+                var $canvas = $(paper.canvas);
                 grid.clickable();
                 grid.children.click(function(event){
 
@@ -148,12 +148,16 @@ define([
                         fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
                     //transfer the click event to the paper    
-                    $(paper.canvas).trigger('click_grid', {x : fx, y : fy});
+                    $canvas.trigger('click_grid', {x : fx, y : fy});
+                });
+
+                $canvas.on('drawn.lines removed.lines', function(e, line){
+                    console.log('need to update solution set');
                 });
 
                 return grid;
             }
-            
+
             /**
              * Init the interaction
              * 
@@ -226,30 +230,28 @@ define([
                         $controlArea.append($buttonContainer);
 
                         //init element
-                        if(typeName !== 'solutionSet'){
-                            var wrapper = getWrapper(typeName);
-                            var element = wrapper.initialize(grid, elementConfig);
-                            $buttonContainer.data('element', element);
-                            element.$buttonContainer = $buttonContainer;
-                            elements[elementConfig.uid] = element;
-                        }
+                        var wrapper = getWrapper(typeName);
+                        var element = wrapper.initialize(grid, elementConfig);
+                        $buttonContainer.data('element', element);
+                        element.$buttonContainer = $buttonContainer;
+                        elements[elementConfig.uid] = element;
                     });
                 });
 
 
                 $controlArea.on('click', '.button-container', function(){
-                    
+
                     activate($(this).data('element'));
-                    
+
                 }).on('mouseenter', '.button-container', function(){
-                    
+
                     var element = $(this).data('element');
                     if(element){
                         element.highlightOn();
                     }
-                    
+
                 }).on('mouseleave', '.button-container', function(){
-                    
+
                     var element = $(this).data('element');
                     if(element && !element.isActive()){
                         element.highlightOff();
@@ -257,7 +259,7 @@ define([
                 });
 
             }
-            
+
             /**
              * Activate a graph element
              * 
@@ -274,7 +276,7 @@ define([
                 element.$buttonContainer.siblings('.button-container').removeClass('activated');
 
                 //activate the element itself to allow interaction
-                element.activate();
+                element.activate(elements);
 
                 graph = element;
             }
