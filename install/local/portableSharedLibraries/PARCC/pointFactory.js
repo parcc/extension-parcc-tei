@@ -95,8 +95,8 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
              * @returns {undefined}
              */
             setCartesianCoord : function(x, y){
-                _x = grid.getOriginPosition().left + grid.getUnitSizes().x * x;
-                _y = grid.getOriginPosition().top - grid.getUnitSizes().y * y;
+                _x = grid.getOriginPosition().left + grid.getUnits().x * x;
+                _y = grid.getOriginPosition().top - grid.getUnits().y * y;
             },
             /**
              * Set coordinate in the cartesian coordinate system
@@ -108,8 +108,8 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
             getCartesianCoord : function(decimals){
                 decimals = (decimals === undefined) ? 0 : decimals;
                 return {
-                    x: (_x - grid.getOriginPosition().left)/grid.getUnitSizes().x,
-                    y: -(_y - grid.getOriginPosition().top)/grid.getUnitSizes().y
+                    x: (_x - grid.getOriginPosition().left)/grid.getUnits().x,
+                    y: (_y - grid.getOriginPosition().top)/grid.getUnits().y
                 };
             },
             /**

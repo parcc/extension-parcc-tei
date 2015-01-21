@@ -110,7 +110,7 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
             }, function(x){
                 start.left = x;
                 _drawLine();
-                pointMax.setOption('xMin', x + .5 * axis.getUnitSizes().x);
+                pointMax.setOption('xMin', x + .5 * axis.getUnits().x);
             });
             pointMin.setOption('xMin', getPosition(axis.getMin(), true).left);
             pointMin.setOption('xMax', getPosition(max.coord - .5, true).left);
@@ -122,7 +122,7 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
             }, function(x){
                 end.left = x;
                 _drawLine();
-                pointMin.setOption('xMax', x - .5 * axis.getUnitSizes().x);
+                pointMin.setOption('xMax', x - .5 * axis.getUnits().x);
             });
             pointMax.setOption('xMin', getPosition(min.coord + .5, true).left);
             pointMax.setOption('xMax', getPosition(axis.getMax(), true).left);
