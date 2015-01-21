@@ -4,19 +4,17 @@ define([
 ], function($, _){
 
     'use strict';
-
+    
+    var _debug = true;
+    
     var _defaults = {
-        pointColor : '#bb1a2a',
-        lineColor : '#bb1a2a',
-        lineStyle : '',
-        lineWeight : 3,
-        pointRadius : 10
+        color : '#326399',
     };
 
     var _style = {
-        opacityDefault : .1,
+        opacityDefault : _debug ? .1 : 0,
         opacityHover : .4,
-        opacitySelected : .8
+        opacitySelected : .7
     };
 
     function getHorizontalEquation(y){
@@ -313,12 +311,15 @@ define([
 
                 //draw shape from path
                 var area = paper.path(closedPath).attr({
-                    stroke : '#333',
-                    fill : '#ddd',
+                    fill : config.color,
                     opacity : _style.opacityDefault
                 });
                 area.selected = false;
-
+                
+                if(_debug){
+                    area.attr({stroke : '#222'});
+                }
+                
                 //add event listener
                 $(area[0]).on('mouseenter', function(){
                     area.attr({
