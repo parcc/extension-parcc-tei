@@ -6,10 +6,7 @@
 #creator-pointAndLineFunctionInteraction-available-graphs .more {font-size:16px; font-weight: bold; margin-left: 3px; color:black;display:none;}
 #creator-pointAndLineFunctionInteraction-available-graphs .more:hover {text-decoration: none; color:#666;}
 
-#math-editor-container .panel {margin-bottom:3px; min-width:180px; position:relative; min-height: 36px;}
-#math-editor-container .color-trigger {height : 24px; position:relative; float:none; top:6px;}
-#math-editor-container .lineStyleToggle {display:inline-block; width:100px;}
-#math-editor-container .lineStyleToggle ~ .icon-checkbox{margin-left:-5px;}
-
-/*tmp hack before the actual fix*/
-#item-editor-item-widget-bar {overflow : visible;}
+#creator-pointAndLineFunctionInteraction-available-graphs .sidebar-popup .panel {margin-bottom:3px; min-width:180px; position:relative; min-height: 36px;}
+#creator-pointAndLineFunctionInteraction-available-graphs .sidebar-popup .color-trigger {height : 24px; position:relative; float:none; top:6px;}
+#creator-pointAndLineFunctionInteraction-available-graphs .sidebar-popup .lineStyleToggle {display:inline-block; width:100px;}
+#creator-pointAndLineFunctionInteraction-available-graphs .sidebar-popup .lineStyleToggle ~ .icon-checkbox{margin-left:-5px;}

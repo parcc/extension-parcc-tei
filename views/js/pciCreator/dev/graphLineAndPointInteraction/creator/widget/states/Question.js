@@ -2,9 +2,10 @@ define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
+    'taoQtiItem/qtiCreator/helper/popup',
     'taoQtiItem/qtiCreator/editor/containerEditor',
-    'graphLineAndPointInteraction/creator/libs/randomColor/randomColor',
     'taoQtiItem/qtiCreator/editor/colorPicker/colorPicker',
+    'graphLineAndPointInteraction/creator/libs/randomColor/randomColor',
     'tpl!graphLineAndPointInteraction/creator/tpl/propertiesForm',
     'tpl!graphLineAndPointInteraction/creator/tpl/pointForm',
     'tpl!graphLineAndPointInteraction/creator/tpl/pointSetForm',
@@ -17,9 +18,10 @@ define([
     stateFactory,
     Question,
     formElement,
+    popup,
     containerEditor,
-    randomColor,
     colorPicker,
+    randomColor,
     formTpl,
     pointFormTpl,
     pointSetFormTpl,
@@ -265,32 +267,35 @@ define([
         formElement.setChangeCallbacks($form, interaction, changeCallbacks);
 
         var _this = this;
+        
+        $form.find('.sidebar-popup-trigger').each(function(){
+            
+            var $trigger = $(this),
+                $panel = $trigger.siblings('.sidebar-popup').find('.sidebar-popup-content'),
+                type = $trigger.data('type');
 
-        //manage the "more" buttons event
-        $form.on('click', '.more', function(){
+            // basic popup functionality
+            popup.init($trigger);
 
-            var $more = $(this),
-                type = $more.data('type');
-
-            _this.showOptionsBox(type);
+            // after popup opens
+            $trigger.on('beforeopen.popup', function(e, params) {
+                _this.showOptionsBox(type, $panel);
+            });
         });
-
+        
         //init the "more" buttons visibility:
         _.each(_.keys(_defaultConfig), function(type){
             checkMoreTriggerAvailability(type);
         });
     };
 
-    StateQuestion.prototype.showOptionsBox = function(type){
+    StateQuestion.prototype.showOptionsBox = function(type, $panel){
 
         var interaction = this.widget.element,
-            $container = $('#math-editor-container'),
-            $panel = $container.find('.panel-container'),
-            $forms = $('#math-editor-container');
+            graphs = interaction.properties['graphs'];
         
         $panel.empty();
-        $forms.add('.panel-container');
-        var graphs = interaction.properties['graphs'];
+        
         if(graphs[type]){
             _.each(graphs[type].elements, function(element){
                 //pass element and interaction by reference
@@ -302,10 +307,6 @@ define([
             throw 'invalid type';
         }
 
-        $container.show();
-        $container.find('.closer').click(function(){
-            $container.hide();
-        });
     }
 
     function buildElementForm(type, element, interaction){
