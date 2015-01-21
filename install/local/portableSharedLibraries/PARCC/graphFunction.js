@@ -393,7 +393,7 @@ define(['OAT/lodash'], function(_){
          * @returns {Object} RaphaelJs path
          */
         plot : function(canvas, equation, config){
-
+            
             function calc(equation, x){
 
                 var a = equation[0],

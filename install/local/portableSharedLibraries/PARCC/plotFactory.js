@@ -50,7 +50,7 @@ define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
         config = _.defaults(config, _defaults);
         var bounds = grid.getGridBounds();
 
-        config.unitSize = grid.getUnitSizes();
+        config.unitSize = grid.getUnits();
         config.origin = grid.getOriginPosition();
 
         config.start = bounds.x.start;

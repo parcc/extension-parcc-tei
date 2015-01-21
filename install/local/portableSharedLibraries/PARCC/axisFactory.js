@@ -230,7 +230,7 @@ define(['OAT/lodash'], function(_){
             },
             coordinateToPosition : function(x){
                 return {
-                    left : this.getOriginPosition().left + this.getUnitSizes().x * x,
+                    left : this.getOriginPosition().left + this.getUnits().x * x,
                     top : this.getOriginPosition().top
                 };
             },
