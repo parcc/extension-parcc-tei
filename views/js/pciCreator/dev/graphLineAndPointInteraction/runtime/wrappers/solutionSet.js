@@ -4,7 +4,7 @@ define([
 ], function($, _){
 
     'use strict';
-    
+
     var _defaults = {
         pointColor : '#bb1a2a',
         lineColor : '#bb1a2a',
@@ -12,13 +12,13 @@ define([
         lineWeight : 3,
         pointRadius : 10
     };
-    
+
     var _style = {
         opacityDefault : .1,
         opacityHover : .4,
         opacitySelected : .8
     };
-    
+
     function getHorizontalEquation(y){
         y = -y;
         var equation = [0, y];
@@ -44,10 +44,10 @@ define([
 
     function intersect(grid, line1, line2){
 
-        var bounds = grid.getGridBounds(), 
-            x, 
-            y, 
-            eq1 = line1.equation, 
+        var bounds = grid.getGridBounds(),
+            x,
+            y,
+            eq1 = line1.equation,
             eq2 = line2.equation;
 
         //parallel lines :
@@ -262,7 +262,7 @@ define([
         });
         return positionArray;
     }
-    
+
     function drawSolutionSet(grid, lines, config){
 
         var paper = grid.getCanvas(),
@@ -306,30 +306,29 @@ define([
         _.each(intersections, function(intersection){
             var closedPath = getClosedPath(intersection);
             if(closedPath.length){
-                
+
                 //format and transform path
                 closedPath = convertPath(grid, closedPath);
                 closedPath = zipPath(closedPath);
-                
+
                 //draw shape from path
                 var area = paper.path(closedPath).attr({
                     stroke : '#333',
                     fill : '#ddd',
-                    opacity : .3
+                    opacity : _style.opacityDefault
                 });
                 area.selected = false;
-                
+
                 //add event listener
                 $(area[0]).on('mouseenter', function(){
-                   area.attr({
-                       opacity : _style.opacityHover
-                   });
+                    area.attr({
+                        opacity : _style.opacityHover
+                    });
                 }).on('mouseleave', function(){
-                   area.attr({
-                       opacity : area.selected ? _style.opacitySelected : _style.opacityDefault
-                   });
+                    area.attr({
+                        opacity : area.selected ? _style.opacitySelected : _style.opacityDefault
+                    });
                 }).on('click', function(){
-                    console.log('selected', area);
                     //toggle selection:
                     if(area.selected){
                         area.selected = false;
@@ -343,37 +342,45 @@ define([
                         });
                     }
                 });
-                
-                
+
+
                 //push to stack
                 areas.push(area);
             }
         });
-        
+
         return areas;
     }
 
     function initialize(grid, config){
 
-        var points = [],
+        var areas = [],
             active = false,
             uid = config.uid,
-            set = grid.getCanvas().set(),
-            areas,
+            paper = grid.getCanvas(),
+            $paperCanvas = $(paper.canvas),
+            set = paper.set(),
             line;
 
         function setConfig(cfg){
             config = _.defaults(cfg, _defaults);
         }
 
-        function unbindEvents(){
+        function createSolutionSet(elements){
+            areas = drawSolutionSet(grid, _.where(elements, {type : 'line'}), config);
+            _.each(areas, function(area){
+                set.push(area);
+            });
         }
-
-        function bindEvents(){
+        
+        function clearSolutionSet(){
+            set.remove().clear();
         }
-
+        
         setConfig(config);
-
+        
+        $paperCanvas.on('drawn.lines removed.lines', clearSolutionSet);
+        
         var linesWrapper = {
             type : 'line',
             getId : function(){
@@ -386,28 +393,24 @@ define([
                 return active;
             },
             activate : function(elements){
-                areas = drawSolutionSet(grid, _.where(elements, {type : 'line'}), config);
-                _.each(areas, function(){
-                    set.push(areas);
-                });
+                if(!set.length){
+                    createSolutionSet(elements);
+                }
+                grid.toFront(set);
                 active = true;
             },
             disactivate : function(){
-                _.forEach(points, function(point){
-                    point.hideGlow();
-                    point.unDrag();
-                });
-                unbindEvents();
+                grid.toBack(set);
                 active = false;
             },
             destroy : function(){
-                
+
             },
             highlightOn : function(){
-                
+
             },
             highlightOff : function(){
-                
+
             },
             getState : function(){
 

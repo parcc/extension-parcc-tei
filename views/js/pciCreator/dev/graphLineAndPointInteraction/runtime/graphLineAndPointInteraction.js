@@ -151,7 +151,7 @@ define([
                     $canvas.trigger('click_grid', {x : fx, y : fy});
                 });
 
-                $canvas.on('drawn.lines', function(e, line){
+                $canvas.on('drawn.lines removed.lines', function(e, line){
                     console.log('need to update solution set');
                 });
 
