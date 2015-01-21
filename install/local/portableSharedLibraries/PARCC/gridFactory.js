@@ -46,6 +46,7 @@ define(['OAT/lodash'], function( _){
         _x = options.x,
         _y = options.y,
         set = paper.set(),
+        clickableArea,
         /** @type {Object} [description] */
         _borderBox = {},
         /**
@@ -293,16 +294,39 @@ define(['OAT/lodash'], function( _){
             },
             /**
              * Create a transparent rectangle object in front of every element
-             * inside the set to gain clickability
+             * inside the set to gain clickability :add the interactive layer
              */
             clickable : function(){
                 /** @type {Object} Rectangle Object to cover the all grid area */
-                var clickableArea = paper.rect(_borderBox.x,_borderBox.y, _borderBox.width, _borderBox.height);
+                if(clickableArea){
+                    clickableArea.remove();
+                }
+                clickableArea = paper.rect(_borderBox.x,_borderBox.y, _borderBox.width, _borderBox.height);
                 clickableArea.attr({
                     fill : 'rgba(0,0,0,0)',
                     stroke : 0
                 });
                 set.push(clickableArea);
+            },
+            /**
+             * Take the shape back to the interactive layer
+             * 
+             * @param {Object} shape - a RaphaelJs Element
+             */
+            toBack : function(shape){
+                if(clickableArea){
+                    shape.insertBefore(clickableArea);
+                }
+            },
+            /**
+             * Bring the shape in front of the interactive layer
+             * 
+             * @param {Object} shape - a RaphaelJs Element
+             */
+            toFront : function(shape){
+                if(clickableArea){
+                    shape.insertAfter(clickableArea);
+                }
             }
         };
         
