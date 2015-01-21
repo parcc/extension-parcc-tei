@@ -44,5 +44,12 @@
         </div>
     </div>
     {{/each}}
-
+    
+    <div class="panel allowSolutionSet">
+        <label>
+            <span class="label">{{__ "Allow solution set"}}</span>
+            <input name="allowSolutionSet" type="checkbox" {{#if allowSolutionSet}}checked="checked"{{/if}}/>
+            <span class="icon-checkbox"></span>
+        </label>
+    </div>
 </div>

@@ -117,7 +117,7 @@ define([
             var label = generateLabelByGraphType(graphType, existingElements + i);
             var generatedConfig = {
                 label : label,
-                uid : _.uniqueId(graphType+'_')
+                uid : _.uniqueId(graphType + '_')
             };
 
             switch(graphType){
@@ -131,7 +131,8 @@ define([
                     generatedConfig.lineColor = color;
                     break;
                 case 'solutionSet':
-                    generatedConfig.color = color;
+                    //force solution set color
+                    generatedConfig.color = '#326399';
                     break;
                 default:
                     throw 'unknown type of grapth';
@@ -151,7 +152,7 @@ define([
      * @param  {String} name        name of the changed element
      */
     function updateGraphValue(interaction, value, name){
-        /** @type {Object} the old graphs object */
+        
         var _graphs = interaction.prop('graphs');
         value = parseInt(value);
         _graphs[name].count = value;
@@ -180,10 +181,22 @@ define([
         var widget = this.widget,
             interaction = widget.element,
             $form = widget.$form,
+            allowSolutionSet = false,
             response = interaction.getResponseDeclaration(),
-            graphs = interaction.prop('graphs');
+            graphs = _.clone(interaction.prop('graphs'));
 
-        //@todo : provides some caching system
+        //for the itme being only allow one single solutionSet:
+        if(graphs.solutionSet.elements.length){
+            allowSolutionSet = true;
+        }
+        delete graphs.solutionSet;
+
+        /**
+         * Check if the "more" button should be displayed
+         * 
+         * @todo provides some caching system
+         * @param {String} graphType
+         */
         function checkMoreTriggerAvailability(graphType){
             var $availableGraphsContainer = $form.find('#creator-pointAndLineFunctionInteraction-available-graphs');
             var $graphType = $availableGraphsContainer.find('input[name=' + graphType + ']');
@@ -215,7 +228,8 @@ define([
             xMax : interaction.prop('xMax'),
             yMin : interaction.prop('yMin'),
             yMax : interaction.prop('yMax'),
-            graphs : graphs
+            graphs : graphs,
+            allowSolutionSet : allowSolutionSet
         }));
 
         //init form javascript
@@ -241,24 +255,18 @@ define([
             points : changeCallback,
             segments : changeCallback,
             setPoints : changeCallback,
-            solutionSet : function(interaction, value, graphType){
+            allowSolutionSet : function(interaction, value){
 
-                var $availableGraphsContainer = $form.find('#creator-pointAndLineFunctionInteraction-available-graphs');
-                var $graphType = $availableGraphsContainer.find('input[name=lines]');
-                if(!parseInt($graphType.val())){
-                    //set value to one and trigger the ui/incrementer.js change event
-                    $graphType.val(1).keyup();
+                if(value){
+                    var $availableGraphsContainer = $form.find('#creator-pointAndLineFunctionInteraction-available-graphs');
+                    var $graphType = $availableGraphsContainer.find('input[name=lines]');
+                    if(!parseInt($graphType.val())){
+                        //set value to one and trigger the ui/incrementer.js change event
+                        $graphType.val(1).keyup();
+                    }
                 }
 
-                //if there is no line yet, add one !
-                var temp = interaction.prop('graphs');
-                if(temp.lines.count < 1){
-                    temp.lines.count = 1;
-                    temp.lines.elements = defaultConfig('line', 1);
-                }
-
-                updateGraphValue(interaction, value, graphType);
-                checkMoreTriggerAvailability(graphType);
+                updateGraphValue(interaction, value ? 1 : 0, 'solutionSet');
             }
         };
         changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks);
@@ -267,9 +275,9 @@ define([
         formElement.setChangeCallbacks($form, interaction, changeCallbacks);
 
         var _this = this;
-        
+
         $form.find('.sidebar-popup-trigger').each(function(){
-            
+
             var $trigger = $(this),
                 $panel = $trigger.siblings('.sidebar-popup').find('.sidebar-popup-content'),
                 type = $trigger.data('type');
@@ -278,11 +286,11 @@ define([
             popup.init($trigger);
 
             // after popup opens
-            $trigger.on('beforeopen.popup', function(e, params) {
+            $trigger.on('beforeopen.popup', function(e, params){
                 _this.showOptionsBox(type, $panel);
             });
         });
-        
+
         //init the "more" buttons visibility:
         _.each(_.keys(_defaultConfig), function(type){
             checkMoreTriggerAvailability(type);
@@ -293,9 +301,9 @@ define([
 
         var interaction = this.widget.element,
             graphs = interaction.properties['graphs'];
-        
+
         $panel.empty();
-        
+
         if(graphs[type]){
             _.each(graphs[type].elements, function(element){
                 //pass element and interaction by reference
@@ -321,7 +329,7 @@ define([
         if(lineStyles[lineStyle]){
             lineStyles[lineStyle].selected = true;
         }
-        
+
         var data = {
             uid : element.uid,
             label : element.label,
@@ -333,7 +341,7 @@ define([
             lineStyles : lineStyles,
             lineStyleToggle : element.lineStyleToggle
         };
-        
+
         var $dom = $(tpl(data));
 
         function propChangeCallback(element, propValue, propName){

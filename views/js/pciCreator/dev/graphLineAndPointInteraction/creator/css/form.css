@@ -10,3 +10,6 @@
 #creator-pointAndLineFunctionInteraction-available-graphs .sidebar-popup .color-trigger {height : 24px; position:relative; float:none; top:6px;}
 #creator-pointAndLineFunctionInteraction-available-graphs .sidebar-popup .lineStyleToggle {display:inline-block; width:100px;}
 #creator-pointAndLineFunctionInteraction-available-graphs .sidebar-popup .lineStyleToggle ~ .icon-checkbox{margin-left:-5px;}
+
+#creator-pointAndLineFunctionInteraction-available-graphs .panel.allowSolutionSet {padding-top : 5px;}
+#creator-pointAndLineFunctionInteraction-available-graphs .panel.allowSolutionSet span.label {min-width:100px; display:inline-block;}
