@@ -26,16 +26,16 @@ define([
             uid = config.uid,
             segment = config.segment || false,
             paper = grid.getCanvas(),
+            $paperCanvas = $(paper.canvas),
             plotFactory = new PlotFactory(grid),
             line;
-
+        
         function setConfig(cfg){
             config = _.defaults(cfg, _defaults);
         }
 
         function unbindEvents(){
-            var paper = grid.getCanvas();
-            $(paper.canvas).off('.' + uid);
+            $paperCanvas.off('.' + uid);
         }
 
         function plot(){
@@ -59,7 +59,7 @@ define([
                     line.attr({'stroke-dasharray' : config.lineStyle});
                 }
                 
-                $(paper.canvas).trigger('drawn.lines', [line]);
+                $paperCanvas.trigger('drawn.lines', [line]);
             }
         }
         
@@ -68,6 +68,7 @@ define([
             if(line){
                 line.remove();
                 line = null;
+                $paperCanvas.trigger('removed.lines', [line]);
             }
         }
 
@@ -98,6 +99,7 @@ define([
             // Raise event ready for line plot
             if(points.length === 2){
                 plot();
+                $paperCanvas.on('moved.point', plot);
             }
 
             return newPoint;
@@ -106,7 +108,7 @@ define([
 
         function bindEvents(){
 
-            $(paper.canvas).on('click_grid.' + uid, function(event, coord){
+            $paperCanvas.on('click_grid.' + uid, function(event, coord){
 
                 if(points.length < 2){
 
