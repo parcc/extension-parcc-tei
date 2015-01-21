@@ -5,7 +5,7 @@ define([
 
     'use strict';
     
-    var _debug = true;
+    var _debug = false;
     
     var _defaults = {
         color : '#326399',
@@ -13,8 +13,8 @@ define([
 
     var _style = {
         opacityDefault : _debug ? .1 : 0,
-        opacityHover : .4,
-        opacitySelected : .7
+        opacityHover : .3,
+        opacitySelected : .6
     };
 
     function getHorizontalEquation(y){
