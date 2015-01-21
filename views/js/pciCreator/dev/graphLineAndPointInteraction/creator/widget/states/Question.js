@@ -65,10 +65,10 @@ define([
     function generateColorByGraphType(type){
 
         var _typeHues = {
-            points : 'green',
-            setPoints : 'yellow',
+            points : 'blue',
+            setPoints : 'green',
             lines : 'red',
-            segments : 'orange',
+            segments : 'yellow',
             solutionSet : 'blue'
         };
 
