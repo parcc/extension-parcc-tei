@@ -16,7 +16,7 @@
 
 .pointAndLineFunctionInteraction .shape-panel .templates {display:none;}
 
-.pointAndLineFunctionInteraction .shape-panel .shape-container {float:left; margin-left:30px;}
+.pointAndLineFunctionInteraction .shape-panel .shape-container {float:left;}
 
 .pointAndLineFunctionInteraction .shape-panel .shape-controls {float:left; margin-bottom:20px;}
 .pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container {width:200px; margin:3px 0; display:block; position:relative; padding: 3px;}
