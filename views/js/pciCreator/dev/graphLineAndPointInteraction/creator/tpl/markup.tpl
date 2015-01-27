@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="template-solutionSet">
-                <div class="button-container clearfix">
+                <div class="button-container clearfix graph-solutionSet deactivated">
                     <button class="btn btn-info" name="solutionSet"></button>
                     <div class="triangle"></div>
                 </div>

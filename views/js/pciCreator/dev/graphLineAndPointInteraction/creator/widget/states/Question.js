@@ -62,16 +62,23 @@ define([
         solutionSet : solutionSetForm
     };
 
+    var _typeHues = {
+        points : 'blue',
+        setPoints : 'green',
+        lines : 'red',
+        segments : 'yellow',
+        solutionSet : 'blue'
+    };
+
+    var _typeLabels = {
+        points : 'Point',
+        setPoints : 'Point Set',
+        lines : 'Line',
+        segments : 'Segment',
+        solutionSet : 'Solution Set'
+    };
+
     function generateColorByGraphType(type){
-
-        var _typeHues = {
-            points : 'blue',
-            setPoints : 'green',
-            lines : 'red',
-            segments : 'yellow',
-            solutionSet : 'blue'
-        };
-
         if(_typeHues[type]){
             var colors = randomColor({hue : _typeHues[type], luminosity : 'dark', count : 1});
             return colors.pop();
@@ -79,15 +86,6 @@ define([
     }
 
     function generateLabelByGraphType(type, rank){
-
-        var _typeLabels = {
-            points : 'Point',
-            setPoints : 'Point Set',
-            lines : 'Line',
-            segments : 'Segment',
-            solutionSet : 'Solution Set'
-        };
-
         if(_typeLabels[type]){
             return _typeLabels[type] + ' ' + String.fromCharCode(65 + rank);
         }
@@ -131,7 +129,8 @@ define([
                     generatedConfig.lineColor = color;
                     break;
                 case 'solutionSet':
-                    //force solution set color
+                    //force solution set label and color (only one allowed currently)
+                    generatedConfig.label = _typeLabels.solutionSet;
                     generatedConfig.color = '#326399';
                     break;
                 default:
@@ -152,7 +151,7 @@ define([
      * @param  {String} name        name of the changed element
      */
     function updateGraphValue(interaction, value, name){
-        
+
         var _graphs = interaction.prop('graphs');
         value = parseInt(value);
         _graphs[name].count = value;
