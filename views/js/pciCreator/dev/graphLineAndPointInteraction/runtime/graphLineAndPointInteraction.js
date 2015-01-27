@@ -235,25 +235,42 @@ define([
                 });
 
 
-                $controlArea.on('click', '.button-container', function(){
+                $controlArea.on('click', '.button-container:not(.deactivated)', function(){
 
                     activate($(this).data('element'));
 
-                }).on('mouseenter', '.button-container', function(){
+                }).on('mouseenter', '.button-container:not(.deactivated)', function(){
 
                     var element = $(this).data('element');
                     if(element){
                         element.highlightOn();
                     }
 
-                }).on('mouseleave', '.button-container', function(){
+                }).on('mouseleave', '.button-container:not(.deactivated)', function(){
 
                     var element = $(this).data('element');
                     if(element && !element.isActive()){
                         element.highlightOff();
                     }
                 });
-
+                
+                //check if solution set should be active or not
+                var $solutionSet = $controlArea.find('.graph-solutionSet');
+                $(grid.getCanvas().canvas).on('drawn.lines removed.lines', function(){
+                    var drawnLineExists = false;
+                    _.each(_.where(elements, {type : 'line'}), function(line){
+                        var drawnLine = line.getLine();
+                        if(drawnLine){
+                            drawnLineExists = true;
+                            return false;
+                        }
+                    });
+                    if(drawnLineExists){
+                        $solutionSet.removeClass('deactivated');
+                    }else{
+                        $solutionSet.addClass('deactivated');
+                    }
+                });
             }
 
             /**
