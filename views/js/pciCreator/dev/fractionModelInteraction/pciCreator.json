@@ -5,7 +5,7 @@
     "description": "Select one or more fraction",
     "version": "0.1",
     "author": "Thibault Milan",
-    "email": "thibault.milan@vesperiagroup.com",
+    "email": "contact@taotesting.com",
     "libraries": [
         "IMSGlobal/jquery_2_1_1",
         "./runtime/libs/pieChart"
