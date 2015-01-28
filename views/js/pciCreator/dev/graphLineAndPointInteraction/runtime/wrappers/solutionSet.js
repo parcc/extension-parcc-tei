@@ -123,7 +123,7 @@ define([
 
                 var siblings = nextDirection.getSiblings(intersection);
                 if(nextDirection.type === 'linear'){
-                    if(nextDirection.equation[0] > previousDirection.equation[0]){
+                    if(previousDirection.type === 'linear' && nextDirection.equation[0] > previousDirection.equation[0]){
                         ascendingX = !ascendingX;
                     }
                     next = ascendingX ? siblings.next : siblings.previous;
