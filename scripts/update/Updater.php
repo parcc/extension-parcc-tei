@@ -22,6 +22,7 @@
 namespace oat\parccTei\scripts\update;
 
 use oat\taoQtiItem\model\SharedLibrariesRegistry;
+use oat\taoQtiItem\model\HookRegistry;
 
 /**
  * 
@@ -74,6 +75,14 @@ class Updater extends \common_ext_ExtensionUpdater
             $registry->registerFromFile('PARCC/axisFactory', $installBasePath.'/PARCC/axisFactory.js');
 
             $currentVersion = '0.1.3';
+        }
+        
+        //migrate from 0.1.3 to 0.1.4
+        if($currentVersion == '0.1.3'){
+            
+            HookRegistry::add('teiSystemItem', 'oat\parccTei\model\SystemItemHook');
+
+            $currentVersion = '0.1.4';
         }
 
         return $currentVersion;
