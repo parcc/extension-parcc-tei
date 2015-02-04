@@ -22,3 +22,4 @@
 use oat\taoQtiItem\model\HookRegistry;
 
 HookRegistry::add('teiCreator', 'oat\parccTei\model\CreatorHook');
+HookRegistry::add('teiSystemItem', 'oat\parccTei\model\SystemItemHook');
