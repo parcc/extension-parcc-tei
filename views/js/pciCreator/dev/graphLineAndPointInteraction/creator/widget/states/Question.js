@@ -101,10 +101,10 @@ define([
 
     /**
      * Create a default config width a label and a color
-     * @param  {String} graphType the type of the graph
-     * @param  {Number} nbElements How many elements you want to generate
-     * @params {Number} existingElements How many elements already exists
-     * @return {Array}            Element Collection
+     * @param  {String} graphType - the type of the graph
+     * @param  {Number} nbElements - How many elements you want to generate
+     * @param {Number} existingElements - How many elements already exists
+     * @return {Array} Element Collection
      */
     function defaultConfig(graphType, nbElements, existingElements){
 
@@ -287,6 +287,9 @@ define([
             // after popup opens
             $trigger.on('beforeopen.popup', function(e, params){
                 _this.showOptionsBox(type, $panel);
+            }).on('close.popup', function(){
+                //clean the popup content
+                _this.hideOptionsBox($panel);
             });
         });
 
@@ -301,8 +304,6 @@ define([
         var interaction = this.widget.element,
             graphs = interaction.properties['graphs'];
 
-        $panel.empty();
-
         if(graphs[type]){
             _.each(graphs[type].elements, function(element){
                 //pass element and interaction by reference
@@ -315,7 +316,15 @@ define([
         }
 
     };
-
+    
+    StateQuestion.prototype.hideOptionsBox = function($panel){
+        
+        $panel.find('.color-trigger').each(function(){
+            colorPicker.destroy($(this));
+        });
+        $panel.empty();
+    };
+    
     function buildElementForm(type, element, interaction){
 
         var tpl = _tpl[type];
