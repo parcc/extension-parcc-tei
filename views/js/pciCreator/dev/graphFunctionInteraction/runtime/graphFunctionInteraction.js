@@ -101,56 +101,65 @@ define([
 
                 //create paper
                 paper = createCanvas($container, gridConfig);
-                grid = gridFactory(paper, gridConfig);
-                grid.clickable();
 
-                //bind click event:
-                grid.children.click(function(event){
+                //intialize the grid only if the configuration is correct
+                if(_.isObject(gridConfig.x) &&
+                    _.isObject(gridConfig.y) &&
+                    gridConfig.x.start < gridConfig.x.end &&
+                    gridConfig.y.start < gridConfig.y.end
+                    ){
+                    
+                    grid = gridFactory(paper, gridConfig);
+                    grid.clickable();
 
-                    // Get the coordinate for a click
-                    var bnds = event.target.getBoundingClientRect(),
-                        wfactor = paper.w / paper.width,
-                        fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
-                        fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
+                    //bind click event:
+                    grid.children.click(function(event){
 
-                    // Create the first point or the second or replace the second according the rules defined by the client                  
-                    if(points.length < 2){
-                        addPoint(fx, fy);
-                        if(points.length === 2){
+                        // Get the coordinate for a click
+                        var bnds = event.target.getBoundingClientRect(),
+                            wfactor = paper.w / paper.width,
+                            fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
+                            fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
+
+                        // Create the first point or the second or replace the second according the rules defined by the client                  
+                        if(points.length < 2){
+                            addPoint(fx, fy);
+                            if(points.length === 2){
+                                // pair ready : plot the graph
+                                plot();
+                            }
+                        }else{
+                            // Get the last point placed
+                            var oldPoint = points.pop();
+                            // Change their coordinates for new ones
+                            oldPoint.setCoord(fx, fy);
+                            // Re-draw the point
+                            oldPoint.render();
+                            // re-enable the drag'n'drop
+                            oldPoint.drag();
+                            // Add it back to the list
+                            points.push(oldPoint);
                             // pair ready : plot the graph
                             plot();
                         }
-                    }else{
-                        // Get the last point placed
-                        var oldPoint = points.pop();
-                        // Change their coordinates for new ones
-                        oldPoint.setCoord(fx, fy);
-                        // Re-draw the point
-                        oldPoint.render();
-                        // re-enable the drag'n'drop
-                        oldPoint.drag();
-                        // Add it back to the list
-                        points.push(oldPoint);
-                        // pair ready : plot the graph
-                        plot();
-                    }
 
-                });
+                    });
 
-                //init related plot factory
-                plotFactory = new PlotFactory(grid, gridConfig.plot);
+                    //init related plot factory
+                    plotFactory = new PlotFactory(grid, gridConfig.plot);
 
-                //add listener to removed.point
-                $(paper.canvas).off('removed.point').on('removed.point', function(event, removedPoint){
-                    // get the point to remove from the "registry"
-                    var pointToDelete = _.findIndex(points, {uid : removedPoint.uid});
-                    if(pointToDelete > -1){
-                        //remove it from the model
-                        points.splice(pointToDelete, 1);
-                        clearPlot();
-                    }
-                });
-
+                    //add listener to removed.point
+                    $(paper.canvas).off('removed.point').on('removed.point', function(event, removedPoint){
+                        // get the point to remove from the "registry"
+                        var pointToDelete = _.findIndex(points, {uid : removedPoint.uid});
+                        if(pointToDelete > -1){
+                            //remove it from the model
+                            points.splice(pointToDelete, 1);
+                            clearPlot();
+                        }
+                    });
+                }
+                
                 return grid;
             }
 
@@ -210,30 +219,35 @@ define([
             }
 
             function addPoint(fx, fy, cartesian){
+                
+                 var gridBBox, newPoint, pointConfig;
+                 
+                if(grid){
+                    
+                    gridBBox = grid.getBBox();
 
-                var gridBBox = grid.getBBox();
+                    pointConfig = _.defaults({
+                        x : fx,
+                        y : fy,
+                        xMin : gridBBox.x,
+                        xMax : gridBBox.x2,
+                        yMin : gridBBox.y,
+                        yMax : gridBBox.y2,
+                        on : {
+                            dragStart : clearPlot,
+                            dragStop : plot
+                        }
+                    }, _this.gridConfig.point);
 
-                var pointConfig = {
-                    x : fx,
-                    y : fy,
-                    xMin : gridBBox.x,
-                    xMax : gridBBox.x2,
-                    yMin : gridBBox.y,
-                    yMax : gridBBox.y2,
-                    on : {
-                        dragStart : clearPlot,
-                        dragStop : plot
+                    newPoint = pointFactory(paper, grid, pointConfig);
+                    if(cartesian){
+                        newPoint.setCartesianCoord(fx, fy, pointConfig);
                     }
-                };
-                pointConfig = _.defaults(pointConfig, _this.gridConfig.point);
-
-                var newPoint = pointFactory(paper, grid, pointConfig);
-                if(cartesian){
-                    newPoint.setCartesianCoord(fx, fy, pointConfig);
+                    newPoint.render();
+                    newPoint.drag();
+                    points.push(newPoint);
                 }
-                newPoint.render();
-                newPoint.drag();
-                points.push(newPoint);
+                
 
                 return newPoint;
             }
@@ -242,7 +256,7 @@ define([
 
                 var _y = _this.gridConfig.y,
                     _x = _this.gridConfig.x,
-                    x0,y0;
+                    x0, y0;
 
                 if((_y.start < 0) && (_y.end <= 0)){
                     y0 = _y.start;
@@ -259,7 +273,7 @@ define([
                 }else{
                     x0 = 0;
                 }
-                
+
                 return {
                     x : x0,
                     y : y0
