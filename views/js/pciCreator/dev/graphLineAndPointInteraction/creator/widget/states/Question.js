@@ -286,10 +286,10 @@ define([
 
             // after popup opens
             $trigger.on('beforeopen.popup', function(e, params){
-                _this.showOptionsBox(type, $panel);
+                _this.buildOptionsBoxContent(type, $panel);
             }).on('close.popup', function(){
                 //clean the popup content
-                _this.hideOptionsBox($panel);
+                _this.destroyOptionsBoxContent($panel);
             });
         });
 
@@ -299,7 +299,14 @@ define([
         });
     };
     
-    StateQuestion.prototype.showOptionsBox = function(type, $panel){
+    /**
+     * Build the content of the graph otpion box
+     * 
+     * @param {String} type
+     * @param {Object} $panel - the JQuery container
+     * @returns {undefined}
+     */
+    StateQuestion.prototype.buildOptionsBoxContent = function(type, $panel){
 
         var interaction = this.widget.element,
             graphs = interaction.properties['graphs'];
@@ -317,7 +324,13 @@ define([
 
     };
     
-    StateQuestion.prototype.hideOptionsBox = function($panel){
+    /**
+     * Destroy the content of the graph option box
+     * 
+     * @param {Object} $panel - the JQuery container
+     * @returns {undefined}
+     */
+    StateQuestion.prototype.destroyOptionsBoxContent = function($panel){
         
         $panel.find('.color-trigger').each(function(){
             colorPicker.destroy($(this));
@@ -325,6 +338,14 @@ define([
         $panel.empty();
     };
     
+    /**
+     * Build the form of a graph element
+     * 
+     * @param {String} type - the type of graph the form of which to be built
+     * @param {Object} element
+     * @param {Object} interaction
+     * @returns {Object}
+     */
     function buildElementForm(type, element, interaction){
 
         var tpl = _tpl[type];
@@ -351,12 +372,7 @@ define([
         };
 
         var $dom = $(tpl(data));
-
-        function propChangeCallback(element, propValue, propName){
-            element[propName] = propValue;
-            interaction.triggerPci('configchange', [interaction.getProperties()]);
-        }
-
+        
         var changeCallbacks = {
             label : propChangeCallback,
             pointColor : propChangeCallback,
@@ -367,8 +383,25 @@ define([
             lineWeight : propChangeCallback,
             lineStyleToggle : propChangeCallback
         };
+        
+        /**
+         * Define the callback function for all property elements
+         * 
+         * @param {Object} element
+         * @param {Mixed} propValue
+         * @param {String} propName
+         * @returns {undefined}
+         */
+        function propChangeCallback(element, propValue, propName){
+            element[propName] = propValue;
+            interaction.triggerPci('configchange', [interaction.getProperties()]);
+        }
 
-        //init form javascript
+        /**
+         * Init the form elements
+         * 
+         * @returns {undefined}
+         */
         function init(){
 
             formElement.initWidget($dom);
