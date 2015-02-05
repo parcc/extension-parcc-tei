@@ -4,7 +4,7 @@
     "short": "Line & Point",
     "description": "Graphing Line And Point",
     "version": "0.1",
-    "author": "Thibault Milan",
+    "author": "Thibault Milan, Sam Sipasseuth",
     "email": "contact@taotesting.com",
     "libraries": [
         "IMSGlobal/jquery_2_1_1",
@@ -27,6 +27,5 @@
     "response": {
         "baseType": "integer",
         "cardinality": "single"
-    },
-    "debug" : false
+    }
 }
