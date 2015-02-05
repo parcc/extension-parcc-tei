@@ -295,7 +295,7 @@ define([
             checkMoreTriggerAvailability(type);
         });
     };
-
+    
     StateQuestion.prototype.showOptionsBox = function(type, $panel){
 
         var interaction = this.widget.element,
@@ -314,7 +314,7 @@ define([
             throw 'invalid type';
         }
 
-    }
+    };
 
     function buildElementForm(type, element, interaction){
 
@@ -364,7 +364,13 @@ define([
 
             formElement.initWidget($dom);
             $dom.find('.color-trigger').each(function(){
-                colorPicker.create($(this));
+                var $trigger = $(this);
+                colorPicker.create($trigger, {
+                    title : function(){
+                        var $title = $trigger.parents('.graph-form-container').find('input[name=label]');
+                        return $title.val();
+                    }
+                });
             });
 
             formElement.setChangeCallbacks($dom, element, changeCallbacks);
