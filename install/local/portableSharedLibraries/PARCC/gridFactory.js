@@ -8,7 +8,7 @@ define(['OAT/lodash'], function( _){
         }
         
         if ( (options.x.start >= options.x.end) || (options.y.start >= options.y.end) ) {
-            throw 'Start must be minus than end';
+            throw 'end must be greater than start';
         }
         
         function drawLine(start, end, style){
