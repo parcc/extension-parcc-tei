@@ -69,7 +69,7 @@ define([
 
         return paper;
     }
-    
+
     var _wrappers = {
         setPoints : setPointsWrapper,
         points : pointsWrapper,
@@ -77,7 +77,7 @@ define([
         segments : segmentsWrapper,
         solutionSet : solutionSetWrapper
     };
-    
+
     /**
      * Dirty functiion to return the right wrapper for a given config element
      * @param  {String} type     Name of the element you want
@@ -136,20 +136,31 @@ define([
                 // @todo : Clear Everything
                 elements = {};
                 var paper = createCanvas($container, gridConfig);
-                var grid = gridFactory(paper, gridConfig);
+                var grid;
                 var $canvas = $(paper.canvas);
-                grid.clickable();
-                grid.children.click(function(event){
 
-                    // Get the coordinate for a click
-                    var bnds = event.target.getBoundingClientRect(),
-                        wfactor = paper.w / paper.width,
-                        fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
-                        fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
+                //intialize the grid only if the configuration is correct
+                if(_.isObject(gridConfig.x) &&
+                    _.isObject(gridConfig.y) &&
+                    gridConfig.x.start < gridConfig.x.end &&
+                    gridConfig.y.start < gridConfig.y.end
+                    ){
 
-                    //transfer the click event to the paper    
-                    $canvas.trigger('click_grid', {x : fx, y : fy});
-                });
+                    grid = gridFactory(paper, gridConfig);
+                    grid.clickable();
+                    grid.children.click(function(event){
+
+                        // Get the coordinate for a click
+                        var bnds = event.target.getBoundingClientRect(),
+                            wfactor = paper.w / paper.width,
+                            fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
+                            fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
+
+                        //transfer the click event to the paper    
+                        $canvas.trigger('click_grid', {x : fx, y : fy});
+                    });
+
+                }
 
                 return grid;
             }
@@ -227,10 +238,14 @@ define([
 
                         //init element
                         var wrapper = getWrapper(typeName);
-                        var element = wrapper.initialize(grid, elementConfig);
-                        $buttonContainer.data('element', element);
-                        element.$buttonContainer = $buttonContainer;
-                        elements[elementConfig.uid] = element;
+
+                        //initialize the element only if the grid has been properly initialized
+                        if(grid){
+                            var element = wrapper.initialize(grid, elementConfig);
+                            $buttonContainer.data('element', element);
+                            element.$buttonContainer = $buttonContainer;
+                            elements[elementConfig.uid] = element;
+                        }
                     });
                 });
 
@@ -253,24 +268,26 @@ define([
                         element.highlightOff();
                     }
                 });
-                
-                //check if solution set should be active or not
-                var $solutionSet = $controlArea.find('.graph-solutionSet');
-                $(grid.getCanvas().canvas).on('drawn.lines removed.lines', function(){
-                    var drawnLineExists = false;
-                    _.each(_.where(elements, {type : 'line'}), function(line){
-                        var drawnLine = line.getLine();
-                        if(drawnLine){
-                            drawnLineExists = true;
-                            return false;
+
+                if(grid){
+                    //check if solution set should be active or not
+                    var $solutionSet = $controlArea.find('.graph-solutionSet');
+                    $(grid.getCanvas().canvas).on('drawn.lines removed.lines', function(){
+                        var drawnLineExists = false;
+                        _.each(_.where(elements, {type : 'line'}), function(line){
+                            var drawnLine = line.getLine();
+                            if(drawnLine){
+                                drawnLineExists = true;
+                                return false;
+                            }
+                        });
+                        if(drawnLineExists){
+                            $solutionSet.removeClass('deactivated');
+                        }else{
+                            $solutionSet.addClass('deactivated');
                         }
                     });
-                    if(drawnLineExists){
-                        $solutionSet.removeClass('deactivated');
-                    }else{
-                        $solutionSet.addClass('deactivated');
-                    }
-                });
+                }
             }
 
             /**
