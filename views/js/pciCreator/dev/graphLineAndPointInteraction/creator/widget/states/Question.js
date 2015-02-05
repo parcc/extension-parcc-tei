@@ -101,10 +101,10 @@ define([
 
     /**
      * Create a default config width a label and a color
-     * @param  {String} graphType the type of the graph
-     * @param  {Number} nbElements How many elements you want to generate
-     * @params {Number} existingElements How many elements already exists
-     * @return {Array}            Element Collection
+     * @param  {String} graphType - the type of the graph
+     * @param  {Number} nbElements - How many elements you want to generate
+     * @param {Number} existingElements - How many elements already exists
+     * @return {Array} Element Collection
      */
     function defaultConfig(graphType, nbElements, existingElements){
 
@@ -286,7 +286,10 @@ define([
 
             // after popup opens
             $trigger.on('beforeopen.popup', function(e, params){
-                _this.showOptionsBox(type, $panel);
+                _this.buildOptionsBoxContent(type, $panel);
+            }).on('close.popup', function(){
+                //clean the popup content
+                _this.destroyOptionsBoxContent($panel);
             });
         });
 
@@ -295,13 +298,18 @@ define([
             checkMoreTriggerAvailability(type);
         });
     };
-
-    StateQuestion.prototype.showOptionsBox = function(type, $panel){
+    
+    /**
+     * Build the content of the graph otpion box
+     * 
+     * @param {String} type
+     * @param {Object} $panel - the JQuery container
+     * @returns {undefined}
+     */
+    StateQuestion.prototype.buildOptionsBoxContent = function(type, $panel){
 
         var interaction = this.widget.element,
             graphs = interaction.properties['graphs'];
-
-        $panel.empty();
 
         if(graphs[type]){
             _.each(graphs[type].elements, function(element){
@@ -314,8 +322,30 @@ define([
             throw 'invalid type';
         }
 
-    }
-
+    };
+    
+    /**
+     * Destroy the content of the graph option box
+     * 
+     * @param {Object} $panel - the JQuery container
+     * @returns {undefined}
+     */
+    StateQuestion.prototype.destroyOptionsBoxContent = function($panel){
+        
+        $panel.find('.color-trigger').each(function(){
+            colorPicker.destroy($(this));
+        });
+        $panel.empty();
+    };
+    
+    /**
+     * Build the form of a graph element
+     * 
+     * @param {String} type - the type of graph the form of which to be built
+     * @param {Object} element
+     * @param {Object} interaction
+     * @returns {Object}
+     */
     function buildElementForm(type, element, interaction){
 
         var tpl = _tpl[type];
@@ -342,12 +372,7 @@ define([
         };
 
         var $dom = $(tpl(data));
-
-        function propChangeCallback(element, propValue, propName){
-            element[propName] = propValue;
-            interaction.triggerPci('configchange', [interaction.getProperties()]);
-        }
-
+        
         var changeCallbacks = {
             label : propChangeCallback,
             pointColor : propChangeCallback,
@@ -358,13 +383,36 @@ define([
             lineWeight : propChangeCallback,
             lineStyleToggle : propChangeCallback
         };
+        
+        /**
+         * Define the callback function for all property elements
+         * 
+         * @param {Object} element
+         * @param {Mixed} propValue
+         * @param {String} propName
+         * @returns {undefined}
+         */
+        function propChangeCallback(element, propValue, propName){
+            element[propName] = propValue;
+            interaction.triggerPci('configchange', [interaction.getProperties()]);
+        }
 
-        //init form javascript
+        /**
+         * Init the form elements
+         * 
+         * @returns {undefined}
+         */
         function init(){
 
             formElement.initWidget($dom);
             $dom.find('.color-trigger').each(function(){
-                colorPicker.create($(this));
+                var $trigger = $(this);
+                colorPicker.create($trigger, {
+                    title : function(){
+                        var $title = $trigger.parents('.graph-form-container').find('input[name=label]');
+                        return $title.val();
+                    }
+                });
             });
 
             formElement.setChangeCallbacks($dom, element, changeCallbacks);
