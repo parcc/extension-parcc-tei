@@ -33,8 +33,8 @@ class SystemItemHook implements Hook
     
     protected $endAttemptIdentifiers = array(
         'CONTINUE' => 'Continue',
-        'REVIEW' => 'Review',
-        'SUBMIT' => 'Submit'
+        'REVIEW' => 'Review Responses',
+        'SUBMIT' => 'Submit Test'
     );
     /**
      * Affect the config
