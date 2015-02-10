@@ -138,7 +138,7 @@ define([
                         clearPlot();
                     }
                 }
-            });
+            }).trigger('activated.lines', [uid]);
 
         }
 

@@ -380,7 +380,7 @@ define([
         
         setConfig(config);
         
-        $paperCanvas.on('drawn.lines removed.lines', clearSolutionSet);
+        $paperCanvas.on('drawn.lines removed.lines activated.lines', clearSolutionSet);
         
         var linesWrapper = {
             type : 'line',
