@@ -7,7 +7,7 @@ define([
     'use strict';
     var _typeIdentifier = 'graphLineAndPointInteraction';
 
-    var likertScaleInteractionCreator = {
+    var creatorHook = {
         /**
          * (required) Get the typeIdentifier of the custom interaction
          *
@@ -70,20 +70,13 @@ define([
          */
         getMarkupData : function(pci, defaultData){
 
-            var hook = ciRegistry.get(_typeIdentifier),
-                manifest = hook.manifest;
-
-            defaultData = _.defaults(defaultData , {
-                typeIdentifier : _typeIdentifier,
-                label : manifest.label,
-                description : manifest.description
+            return _.defaults(defaultData, {
+                prompt : pci.data('prompt')
             });
-
-            return defaultData;
         }
     };
 
     //since we assume we are in a tao context, there is no use to expose the a global object for lib registration
     //all libs should be declared here
-    return likertScaleInteractionCreator;
+    return creatorHook;
 });
