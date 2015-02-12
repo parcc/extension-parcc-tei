@@ -51,7 +51,7 @@ define([
 
     }, function(){
 
-        //code to execute when leaving this state
+        containerEditor.destroy(this.widget.$container.find('.prompt'));
     });
 
     var _tpl = {

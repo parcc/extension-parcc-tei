@@ -6,7 +6,7 @@ define([
 
     var _typeIdentifier = 'graphNumberLineInteraction';
 
-    var likertScaleInteractionCreator = {
+    var creatorHook = {
         /**
          * (required) Get the typeIdentifier of the custom interaction
          *
@@ -68,12 +68,10 @@ define([
             return _.defaults(defaultData, {
                 prompt : pci.data('prompt')
             });
-
-            return defaultData;
         }
     };
 
     //since we assume we are in a tao context, there is no use to expose the a global object for lib registration
     //all libs should be declared here
-    return likertScaleInteractionCreator;
+    return creatorHook;
 });
