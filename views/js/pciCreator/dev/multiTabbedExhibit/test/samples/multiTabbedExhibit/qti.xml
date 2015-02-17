@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd"
+                xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" 
+                identifier="pci005" title="PCI 005" adaptive="false" timeDependent="false">
+    
+    <responseDeclaration identifier="graphNumberLine1" cardinality="single" baseType="integer"/>
+    
+    <!--item specific stylesheets will be added by the item in the method postRender()-->
+    <stylesheet href="multiTabbedExhibit/runtime/css/multiTabbedExhibit" title="" type="text/css" media="all"></stylesheet>
+    
+    <itemBody>
+        
+        <customInteraction responseIdentifier="graphNumberLine1">
+            <pci:portableCustomInteraction customInteractionTypeIdentifier="multiTabbedExhibit" hook="multiTabbedExhibit/runtime/multiTabbedExhibit.js">
+
+                <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
+                
+                <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
+                    <pci:libraries>
+                    </pci:libraries>
+                </pci:resources>
+
+                <pci:properties>
+                </pci:properties>
+
+                <pci:markup>
+<!--                    <html5:div class="multiTabbedExhibit">
+                        <html5:div class="prompt">
+                            Use the number line to plot the <html5:em>approximate</html5:em> area of a circle with a diamter of 2 units.
+                        </html5:div>
+                        <html5:div class="passages">
+                            <html5:div class="passage passage-scrolling passage240">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. Duis consectetur dignissim egestas. Nunc tempor molestie magna, ac vulputate ligula cursus ac. Integer dignissim, ante ut molestie tempor, neque turpis tempus purus, sed gravida mi ipsum quis purus. Phasellus sit amet ex porta, maximus leo a, vestibulum tellus. Maecenas ut efficitur diam, ut consectetur lacus. Aenean ac nisi ac arcu suscipit malesuada vel at orci. Fusce at rutrum ligula. Suspendisse id turpis sed risus ultricies consectetur vitae sit amet justo. Cras tristique nisl in enim ultrices, a aliquet tortor scelerisque. Suspendisse interdum urna commodo, dapibus turpis ut, facilisis dui.
+                                Nunc suscipit nibh sodales tellus posuere feugiat. Donec lacus risus, pharetra sed risus eget, imperdiet convallis nulla. Duis accumsan ac augue congue convallis. Vestibulum ultrices vitae libero eget malesuada. Aliquam volutpat nisl at neque rutrum vestibulum. Aenean eu feugiat eros. Nullam mattis, erat in faucibus tincidunt, turpis lectus dictum purus, et mollis nisi enim eu nibh. Pellentesque id elit fringilla, finibus massa a, mollis urna. Proin a accumsan dui, eu laoreet nibh. Aliquam eu gravida augue. Vestibulum consequat consectetur nunc eu accumsan.
+                                Phasellus enim tortor, suscipit a congue in, fermentum id nisl. Vivamus tincidunt pharetra diam et tincidunt. Aenean sodales vel enim a sagittis. Donec facilisis enim in leo varius, vitae vehicula est tincidunt. Suspendisse id libero magna. Nulla eleifend, mauris et fringilla dignissim, diam velit rutrum mi, eu posuere elit sapien quis libero. Phasellus eros purus, faucibus vel mollis quis, egestas in ante. Integer et neque in ipsum aliquam auctor. Proin eu elit vitae risus interdum pulvinar vel in dolor. Curabitur nec rhoncus dolor, volutpat iaculis nulla. Vivamus luctus ex lorem, non bibendum augue porta eget. Donec pellentesque aliquet odio, vel condimentum lectus elementum in. In ut libero ullamcorper, porttitor diam at, fermentum est. Sed eleifend, ante sed eleifend feugiat, diam felis lobortis est, ac pretium ligula erat id purus.
+                                Proin aliquet commodo risus sed faucibus. Aenean quis lacus sit amet ex posuere dictum. Nulla facilisi. Curabitur sapien turpis, dictum vitae rhoncus ut, egestas non ligula. Sed mollis, elit eu feugiat tristique, velit nunc rutrum magna, vitae elementum enim mauris dictum mi. Aenean porta euismod elit quis sagittis. Pellentesque tempus maximus aliquam. Quisque sollicitudin dui ac odio elementum, a fringilla ligula porta. In malesuada dignissim arcu, in porttitor nunc mollis vitae. Maecenas massa risus, convallis ut ultricies vel, luctus id risus.
+                                Mauris nibh purus, eleifend quis convallis vel, porttitor sollicitudin velit. Suspendisse vel eleifend felis, sed viverra ipsum. Nullam venenatis ex id ex lacinia, quis congue eros pulvinar. Praesent pretium gravida malesuada. Donec eu luctus dui, ut suscipit nibh. Ut non pretium eros. Nulla sapien est, sollicitudin et sapien a, convallis sagittis nisl. Ut mollis viverra est sit amet efficitur. 
+                            </html5:div>
+                            <html5:div class="passage passage-paging passage540 activated">
+                                <html5:div class="page">
+                                    page 1 content
+                                </html5:div>
+                                <html5:div class="page">
+                                    page 2 content
+                                </html5:div>
+                                <html5:div class="page">
+                                    page 3 content
+                                </html5:div>
+                            </html5:div>
+                            <html5:div class="passage">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. Duis consectetur dignissim egestas. Nunc tempor molestie magna, ac vulputate ligula cursus ac. Integer dignissim, ante ut molestie tempor, neque turpis tempus purus, sed gravida mi ipsum quis purus. Phasellus sit amet ex porta, maximus leo a, vestibulum tellus. Maecenas ut efficitur diam, ut consectetur lacus. Aenean ac nisi ac arcu suscipit malesuada vel at orci. Fusce at rutrum ligula. Suspendisse id turpis sed risus ultricies consectetur vitae sit amet justo. Cras tristique nisl in enim ultrices, a aliquet tortor scelerisque. Suspendisse interdum urna commodo, dapibus turpis ut, facilisis dui.
+                                Nunc suscipit nibh sodales tellus posuere feugiat. Donec lacus risus, pharetra sed risus eget, imperdiet convallis nulla. Duis accumsan ac augue congue convallis. Vestibulum ultrices vitae libero eget malesuada. Aliquam volutpat nisl at neque rutrum vestibulum. Aenean eu feugiat eros. Nullam mattis, erat in faucibus tincidunt, turpis lectus dictum purus, et mollis nisi enim eu nibh. Pellentesque id elit fringilla, finibus massa a, mollis urna. Proin a accumsan dui, eu laoreet nibh. Aliquam eu gravida augue. Vestibulum consequat consectetur nunc eu accumsan.
+                                Phasellus enim tortor, suscipit a congue in, fermentum id nisl. Vivamus tincidunt pharetra diam et tincidunt. Aenean sodales vel enim a sagittis. Donec facilisis enim in leo varius, vitae vehicula est tincidunt. Suspendisse id libero magna. Nulla eleifend, mauris et fringilla dignissim, diam velit rutrum mi, eu posuere elit sapien quis libero. Phasellus eros purus, faucibus vel mollis quis, egestas in ante. Integer et neque in ipsum aliquam auctor. Proin eu elit vitae risus interdum pulvinar vel in dolor. Curabitur nec rhoncus dolor, volutpat iaculis nulla. Vivamus luctus ex lorem, non bibendum augue porta eget. Donec pellentesque aliquet odio, vel condimentum lectus elementum in. In ut libero ullamcorper, porttitor diam at, fermentum est. Sed eleifend, ante sed eleifend feugiat, diam felis lobortis est, ac pretium ligula erat id purus.
+                                Proin aliquet commodo risus sed faucibus. Aenean quis lacus sit amet ex posuere dictum. Nulla facilisi. Curabitur sapien turpis, dictum vitae rhoncus ut, egestas non ligula. Sed mollis, elit eu feugiat tristique, velit nunc rutrum magna, vitae elementum enim mauris dictum mi. Aenean porta euismod elit quis sagittis. Pellentesque tempus maximus aliquam. Quisque sollicitudin dui ac odio elementum, a fringilla ligula porta. In malesuada dignissim arcu, in porttitor nunc mollis vitae. Maecenas massa risus, convallis ut ultricies vel, luctus id risus.
+                                Mauris nibh purus, eleifend quis convallis vel, porttitor sollicitudin velit. Suspendisse vel eleifend felis, sed viverra ipsum. Nullam venenatis ex id ex lacinia, quis congue eros pulvinar. Praesent pretium gravida malesuada. Donec eu luctus dui, ut suscipit nibh. Ut non pretium eros. Nulla sapien est, sollicitudin et sapien a, convallis sagittis nisl. Ut mollis viverra est sit amet efficitur. 
+                            </html5:div>
+                        </html5:div>
+                        <html5:div class="templates">
+                            <html5:div class="pager">
+                                <html5:div class="pager-previous">
+                                    <html5:button name="previous" value="previous" class="btn btn-info small" type="button">Page Up</html5:button>
+                                </html5:div>
+                                <html5:div class="pager-counter">
+                                </html5:div>
+                                <html5:div class="pager-next">
+                                    <html5:button name="next" value="next" class="btn btn-info small" type="button">Page Down</html5:button>
+                                </html5:div>
+                            </html5:div>
+                            <html5:div class="page">
+                                <html5:div class="page-header">
+                                    <html5:span class="page-number"></html5:span>>
+                                </html5:div>
+                                <html5:div class="page-content"></html5:div>
+                            </html5:div>
+                        </html5:div>
+                    </html5:div>-->
+                </pci:markup>
+
+            </pci:portableCustomInteraction>
+        </customInteraction>
+
+    </itemBody>
+    
+</assessmentItem>
