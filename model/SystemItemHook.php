@@ -47,7 +47,7 @@ class SystemItemHook implements Hook
         if(!is_array($endAttemptInteractionConfig)){
             $endAttemptInteractionConfig = array();
         }
-        if(!is_array($endAttemptInteractionConfig['responseIdentifiers'])){
+        if(!isset($endAttemptInteractionConfig['responseIdentifiers'])){
             $endAttemptInteractionConfig['responseIdentifiers'] = array();
         }
         $endAttemptInteractionConfig['responseIdentifiers'] = array_merge($endAttemptInteractionConfig['responseIdentifiers'], $this->endAttemptIdentifiers);
