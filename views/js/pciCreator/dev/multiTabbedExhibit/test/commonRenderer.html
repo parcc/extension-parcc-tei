@@ -41,7 +41,7 @@
 
             <ul class="passages-tab-navigation">
                 <li><a href="#">Passage 1</a></li>
-                <li class="passages-tab-active"><a href="#">Passage 2</a></li>
+                <li class="passages-tab-activeX"><a href="#">Passage 2</a></li>
                 <li><a href="#">Passage 3</a></li>
             </ul>
 
@@ -164,6 +164,17 @@
                 <div class="scrollbar">
                     <div class="handle">
                         <div class="cursor"></div>
+                    </div>
+                </div>
+                <div class="passage-pager">
+                    <div class="passage-pager-previous">
+                        <button name="previous" value="previous" class="btn btn-info small" type="button">Page Up</button>
+                    </div>
+                    <div class="passage-pager-counter">
+                        Page<span class="counter-current">3</span>of<span class="counter-total">4</span>
+                    </div>
+                    <div class="passage-pager-next">
+                        <button name="next" value="next" class="btn btn-info small" type="button">Page Down</button>
                     </div>
                 </div>
             </div>

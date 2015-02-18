@@ -43,7 +43,31 @@ define([
                 var $frameContainer = $(this);
                 var $frame = $frameContainer.children('.frame');
                 var $scrollbar = $frameContainer.children('.scrollbar');
-
+                var events = {};
+                
+                if($frameContainer.hasClass('passage-paging')){
+                    
+                    var $pages = $frameContainer.find('.page');
+                    var pages = [];
+                    
+                    $pages.each(function(){
+                        var $page = $(this);
+                        pages.push({
+                           position : $page.position() 
+                        });
+                    });
+                    console.log(pages);
+                    
+                    //add page manager:
+                    events.move = _.throttle(function(){
+                        var pos = this.pos;
+                        
+                        console.log(this);
+                        //check position of the pages
+                    },1000);
+                }
+                
+                //init the sly scrollbar
                 $frame.sly({
                     scrollBar: $scrollbar,
                     scrollBy: 20,
@@ -52,12 +76,7 @@ define([
                     clickBar : true,
                     dragHandle: true,
                     mouseDragging: false
-                },{
-                    move : _.throttle(function(){
-                        console.log(this);
-                        //check position of the pages
-                    },600)
-                });
+                },events);
             });
 
             //init tabbing
