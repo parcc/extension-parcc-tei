@@ -43,10 +43,6 @@ define([
                 var $scrollbar = $frameContainer.children('.scrollbar');
                 
                 $frame.sly({
-//                    smart : false,
-//                    itemNav : 'forceCentered',
-//                    activateOn: 'click',
-//                    activateMiddle : true,
                     scrollBar : $scrollbar,
                     scrollBy : 12,
                     scrollTrap : true,
@@ -54,11 +50,8 @@ define([
                     mouseDragging : false
                 });
             });
-            return;
-            var $dom = $(dom);
-            var $sly = $dom.find('.passage.scrolling');
-            $sly.addClass('frame').wrapInner($('<div>', {class : 'slidee'}));
-            $sly.sly();
+            
+            
 
         },
         /**
