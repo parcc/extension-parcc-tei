@@ -4,22 +4,22 @@ define([
     'OAT/util/event',
     'OAT/lodash',
     'multiTabbedExhibit/runtime/lib/sly.min'
-], function(
-    $,
-    qtiCustomInteractionContext,
-    event,
-    _
-    ){
+], function (
+        $,
+        qtiCustomInteractionContext,
+        event,
+        _
+        ) {
 
     'use strict';
 
-    function buildConfig(config){
+    function buildConfig(config) {
         return config;
     }
 
     var multiTabbedExhibit = {
-        id : -1,
-        getTypeIdentifier : function(){
+        id: -1,
+        getTypeIdentifier: function () {
             return 'multiTabbedExhibit';
         },
         /**
@@ -28,7 +28,7 @@ define([
          * @param {Node} dom
          * @param {Object} config - json
          */
-        initialize : function(id, dom, config){
+        initialize: function (id, dom, config) {
 
             this.id = id;
             this.dom = dom;
@@ -36,23 +36,63 @@ define([
 
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
-            $('.frame-container').each(function(){
-                
+
+            //init scrolling
+            $('.frame-container').each(function () {
+
                 var $frameContainer = $(this);
                 var $frame = $frameContainer.children('.frame');
                 var $scrollbar = $frameContainer.children('.scrollbar');
-                
+
                 $frame.sly({
-                    scrollBar : $scrollbar,
-                    scrollBy : 12,
-                    scrollTrap : true,
-                    dragHandle : true,
-                    mouseDragging : false
+                    scrollBar: $scrollbar,
+                    scrollBy: 20,
+                    scrollTrap: true,
+                    dragHandle: true,
+                    mouseDragging: false
                 });
             });
-            
-            
 
+            //init tabbing
+            var $tabContainer = $('.passages-tabs');
+            var $tabs = $tabContainer.children('.passage');
+            var $nav = $tabContainer.children('.passages-tab-navigation');
+            var i = 0;
+            var $active = $nav.find('li:first-child a');
+            
+            $tabs.hide();
+            $nav.children('li').each(function () {
+                var $li = $(this),
+                        $a = $li.children('a');
+
+                if (i < $tabs.length) {
+                    var $tab = $($tabs[i]);
+                    $a.data('passage-tab', $tab);
+
+                    if ($li.hasClass('passages-tab-active')) {
+                        $active = $a;
+                    }
+                } else {
+                    $a.hide();
+                }
+                i++;
+            });
+            $nav.on('click', 'a', function () {
+                activateTab($(this));
+            });
+            //activate initial tab:
+            activateTab($active);
+            
+            function activateTab($a){
+                var $li = $a.parent();
+                var $tab = $a.data('passage-tab');
+                if ($tab && $tab.length) {
+                    //toggle visibility:
+                    $tab.show().siblings('.passage').hide();
+                    //change li class:
+                    $li.addClass('passages-tab-active').siblings('li').removeClass('passages-tab-active');
+                }
+            }
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -61,7 +101,7 @@ define([
          * @param {Object} interaction
          * @param {Object} response
          */
-        setResponse : function(response){
+        setResponse: function (response) {
 
         },
         /**
@@ -71,11 +111,11 @@ define([
          * @param {Object} interaction
          * @returns {Object}
          */
-        getResponse : function(){
+        getResponse: function () {
 
             var value = 0;
 
-            return {base : {integer : value}};
+            return {base: {integer: value}};
         },
         /**
          * Remove the current response set in the interaction
@@ -83,7 +123,7 @@ define([
          *
          * @param {Object} interaction
          */
-        resetResponse : function(){
+        resetResponse: function () {
 
         },
         /**
@@ -93,7 +133,7 @@ define([
          *
          * @param {Object} interaction
          */
-        destroy : function(){
+        destroy: function () {
 
             var $container = $(this.dom);
             $container.off().empty();
@@ -104,7 +144,7 @@ define([
          * @param {Object} interaction
          * @param {Object} serializedState - json format
          */
-        setSerializedState : function(state){
+        setSerializedState: function (state) {
 
         },
         /**
@@ -114,7 +154,7 @@ define([
          * @param {Object} interaction
          * @returns {Object} json format
          */
-        getSerializedState : function(){
+        getSerializedState: function () {
 
             return {};
         }
