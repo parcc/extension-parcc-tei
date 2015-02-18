@@ -13,18 +13,18 @@
 
         <script  type="text/javascript">
             QUnit.config.autostart = false;
-            require(['/tao/ClientConfig/config'], function(){
-                require(['taoQtiItem/qtiCommonRenderer/test/runner'], function(runner){
+            require(['/tao/ClientConfig/config'], function () {
+                require(['taoQtiItem/qtiCommonRenderer/test/runner'], function (runner) {
                     QUnit.start();
 
                     runner.run({
-                        relBaseUrl : 'parccTei/pciCreator/dev/multiTabbedExhibit/test/samples/multiTabbedExhibit/',
-                        runtimeLocations : {
-                            multiTabbedExhibit : 'parccTei/pciCreator/dev/multiTabbedExhibit/'
+                        relBaseUrl: 'parccTei/pciCreator/dev/multiTabbedExhibit/test/samples/multiTabbedExhibit/',
+                        runtimeLocations: {
+                            multiTabbedExhibit: 'parccTei/pciCreator/dev/multiTabbedExhibit/'
                         },
-                        assertions : {
-                            interactionCount : 1,
-                            responses : []
+                        assertions: {
+                            interactionCount: 1,
+                            responses: []
                         }
                     });
 
@@ -36,65 +36,75 @@
     <body>
         <div id="qunit"></div>
         <div id="qunit-fixture"></div>
-
-        <div class="passage passage-paging frame-container">
-            <div class="frame">
-                <div class="slidee">
-                    <ul class="pages">
-                        <li class="page shadowed">
-                            <h2>page 1</h2>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
-                            </p>
-                        </li>
-                        <li class="page shadowed">
-                            <h2>page 2</h2>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
-                            </p>
-                        </li>
-                        <li class="page shadowed">
-                            <h2>page 3</h2>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
-                            </p>
-                        </li>
-                    </ul>
+        
+        <div class="passages passages-tabs">
+            
+            <ul class="passages-tab-navigation">
+                <li><a href="#">Passage 1</a></li>
+                <li class="passages-tab-active"><a href="#">Passage 2</a></li>
+                <li><a href="#">Passage 3</a></li>
+            </ul>
+            
+            <div class="passage passage-paging frame-container passage-tab">
+                <div class="frame">
+                    <div class="slidee">
+                        <ul class="pages">
+                            <li class="page shadowed">
+                                <h2>page 1</h2>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
+                                </p>
+                            </li>
+                            <li class="page shadowed">
+                                <h2>page 2</h2>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
+                                </p>
+                            </li>
+                            <li class="page shadowed">
+                                <h2>page 3</h2>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. D
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="scrollbar">
-                <div class="handle">
-                    <div class="cursor"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="passage passage-scrolling frame-container">
-            <div class="frame">
-                <div class="slidee">
-                    <div class="passage-content">
-                        <h2>This in here...</h2>
-                        <p>...can be anything. <strong>Anything!</strong></p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. Duis consectetur dignissim egestas. Nunc tempor molestie magna, ac vulputate ligula cursus ac. Integer dignissim, ante ut molestie tempor, neque turpis tempus purus, sed gravida mi ipsum quis purus. Phasellus sit amet ex porta, maximus leo a, vestibulum tellus. Maecenas ut efficitur diam, ut consectetur lacus. Aenean ac nisi ac arcu suscipit malesuada vel at orci. Fusce at rutrum ligula. Suspendisse id turpis sed risus ultricies consectetur vitae sit amet justo. Cras tristique nisl in enim ultrices, a aliquet tortor scelerisque. Suspendisse interdum urna commodo, dapibus turpis ut, facilisis dui.
-                            Nunc suscipit nibh sodales tellus posuere feugiat. Donec lacus risus, pharetra sed risus eget, imperdiet convallis nulla. Duis accumsan ac augue congue convallis. Vestibulum ultrices vitae libero eget malesuada. Aliquam volutpat nisl at neque rutrum vestibulum. Aenean eu feugiat eros. Nullam mattis, erat in faucibus tincidunt, turpis lectus dictum purus, et mollis nisi enim eu nibh. Pellentesque id elit fringilla, finibus massa a, mollis urna. Proin a accumsan dui, eu laoreet nibh. Aliquam eu gravida augue. Vestibulum consequat consectetur nunc eu accumsan.
-                            Phasellus enim tortor, suscipit a congue in, fermentum id nisl. Vivamus tincidunt pharetra diam et tincidunt. Aenean sodales vel enim a sagittis. Donec facilisis enim in leo varius, vitae vehicula est tincidunt. Suspendisse id libero magna. Nulla eleifend, mauris et fringilla dignissim, diam velit rutrum mi, eu posuere elit sapien quis libero. Phasellus eros purus, faucibus vel mollis quis, egestas in ante. Integer et neque in ipsum aliquam auctor. Proin eu elit vitae risus interdum pulvinar vel in dolor. Curabitur nec rhoncus dolor, volutpat iaculis nulla. Vivamus luctus ex lorem, non bibendum augue porta eget. Donec pellentesque aliquet odio, vel condimentum lectus elementum in. In ut libero ullamcorper, porttitor diam at, fermentum est. Sed eleifend, ante sed eleifend feugiat, diam felis lobortis est, ac pretium ligula erat id purus.
-                            Proin aliquet commodo risus sed faucibus. Aenean quis lacus sit amet ex posuere dictum. Nulla facilisi. Curabitur sapien turpis, dictum vitae rhoncus ut, egestas non ligula. Sed mollis, elit eu feugiat tristique, velit nunc rutrum magna, vitae elementum enim mauris dictum mi. Aenean porta euismod elit quis sagittis. Pellentesque tempus maximus aliquam. Quisque sollicitudin dui ac odio elementum, a fringilla ligula porta. In malesuada dignissim arcu, in porttitor nunc mollis vitae. Maecenas massa risus, convallis ut ultricies vel, luctus id risus.
-                            Mauris nibh purus, eleifend quis convallis vel, porttitor sollicitudin velit. Suspendisse vel eleifend felis, sed viverra ipsum. Nullam venenatis ex id ex lacinia, quis congue eros pulvinar. Praesent pretium gravida malesuada. Donec eu luctus dui, ut suscipit nibh. Ut no XXx </p>
+                <div class="scrollbar">
+                    <div class="handle">
+                        <div class="cursor"></div>
                     </div>
                 </div>
             </div>
-            <div class="scrollbar">
-                <div class="handle">
-                    <div class="cursor"></div>
+
+            <div class="passage passage-scrolling frame-container passage-tab">
+                <div class="frame">
+                    <div class="slidee">
+                        <div class="passage-content">
+                            <h2>This in here...</h2>
+                            <p>...can be anything. <strong>Anything!</strong></p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare diam in ante gravida, quis condimentum felis tempor. Duis consectetur dignissim egestas. Nunc tempor molestie magna, ac vulputate ligula cursus ac. Integer dignissim, ante ut molestie tempor, neque turpis tempus purus, sed gravida mi ipsum quis purus. Phasellus sit amet ex porta, maximus leo a, vestibulum tellus. Maecenas ut efficitur diam, ut consectetur lacus. Aenean ac nisi ac arcu suscipit malesuada vel at orci. Fusce at rutrum ligula. Suspendisse id turpis sed risus ultricies consectetur vitae sit amet justo. Cras tristique nisl in enim ultrices, a aliquet tortor scelerisque. Suspendisse interdum urna commodo, dapibus turpis ut, facilisis dui.
+                                Nunc suscipit nibh sodales tellus posuere feugiat. Donec lacus risus, pharetra sed risus eget, imperdiet convallis nulla. Duis accumsan ac augue congue convallis. Vestibulum ultrices vitae libero eget malesuada. Aliquam volutpat nisl at neque rutrum vestibulum. Aenean eu feugiat eros. Nullam mattis, erat in faucibus tincidunt, turpis lectus dictum purus, et mollis nisi enim eu nibh. Pellentesque id elit fringilla, finibus massa a, mollis urna. Proin a accumsan dui, eu laoreet nibh. Aliquam eu gravida augue. Vestibulum consequat consectetur nunc eu accumsan.
+                                Phasellus enim tortor, suscipit a congue in, fermentum id nisl. Vivamus tincidunt pharetra diam et tincidunt. Aenean sodales vel enim a sagittis. Donec facilisis enim in leo varius, vitae vehicula est tincidunt. Suspendisse id libero magna. Nulla eleifend, mauris et fringilla dignissim, diam velit rutrum mi, eu posuere elit sapien quis libero. Phasellus eros purus, faucibus vel mollis quis, egestas in ante. Integer et neque in ipsum aliquam auctor. Proin eu elit vitae risus interdum pulvinar vel in dolor. Curabitur nec rhoncus dolor, volutpat iaculis nulla. Vivamus luctus ex lorem, non bibendum augue porta eget. Donec pellentesque aliquet odio, vel condimentum lectus elementum in. In ut libero ullamcorper, porttitor diam at, fermentum est. Sed eleifend, ante sed eleifend feugiat, diam felis lobortis est, ac pretium ligula erat id purus.
+                                Proin aliquet commodo risus sed faucibus. Aenean quis lacus sit amet ex posuere dictum. Nulla facilisi. Curabitur sapien turpis, dictum vitae rhoncus ut, egestas non ligula. Sed mollis, elit eu feugiat tristique, velit nunc rutrum magna, vitae elementum enim mauris dictum mi. Aenean porta euismod elit quis sagittis. Pellentesque tempus maximus aliquam. Quisque sollicitudin dui ac odio elementum, a fringilla ligula porta. In malesuada dignissim arcu, in porttitor nunc mollis vitae. Maecenas massa risus, convallis ut ultricies vel, luctus id risus.
+                                Mauris nibh purus, eleifend quis convallis vel, porttitor sollicitudin velit. Suspendisse vel eleifend felis, sed viverra ipsum. Nullam venenatis ex id ex lacinia, quis congue eros pulvinar. Praesent pretium gravida malesuada. Donec eu luctus dui, ut suscipit nibh. Ut no XXx </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="scrollbar">
+                    <div class="handle">
+                        <div class="cursor"></div>
+                    </div>
                 </div>
             </div>
+            
         </div>
-
+        
     </body>
 </html>
