@@ -20,7 +20,7 @@
 .frame { padding: 0; width: 100%; height: 400px; }
 .frame .slidee { margin: 0;}
 
-.scrollbar { width: 10px; height: 400px; position:absolute; right:0px; top:0; }
+.scrollbar { width: 10px; height: 400px; position:absolute; right:-7px; top:0; }
 .scrollbar .handle {
     width: 100%;
     height: 100px; /* overriden if dynamicHandle: 1 */
@@ -100,7 +100,7 @@ ul.passages-tab-navigation li:not(.passages-tab-active) a:hover {
 }
 
 ul.passages-tab-navigation > li:nth-child(n+2) > a {
-    margin-left: 5px;
+    margin-left: 3px;
 }
 
 ul.passages-tab-navigation li.passages-tab-active a{
