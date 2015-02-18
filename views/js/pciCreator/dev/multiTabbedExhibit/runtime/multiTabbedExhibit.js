@@ -48,8 +48,15 @@ define([
                     scrollBar: $scrollbar,
                     scrollBy: 20,
                     scrollTrap: true,
+                    dynamicHandle : true,
+                    clickBar : true,
                     dragHandle: true,
                     mouseDragging: false
+                },{
+                    move : _.throttle(function(){
+                        console.log(this);
+                        //check position of the pages
+                    },600)
                 });
             });
 
