@@ -71,10 +71,9 @@ define([
         }
 
         /**
-         * 
-         * @type @exp;_@call;throttle
+         * The callback to be executed after 
          */
-        var moveCallback = _.throttle(function(){
+        function moveCallback(){
 
             var pos = this.pos;
             var currentPage = 0;
@@ -90,8 +89,11 @@ define([
 
             //set current page:
             setCurrent(currentPage);
-        }, 400);
-
+        }
+        
+        //bind the move event to callback
+        $frame.sly('on', 'move', _.throttle(moveCallback, 600));
+        
         //init next/previous buttons
         $previous.on('click', function(){
             if(!$previous.hasClass('disabled') && current > 0){
@@ -120,14 +122,7 @@ define([
 
         var $frame = $frameContainer.children('.frame');
         var $scrollbar = $frameContainer.children('.scrollbar');
-        var events = {};
-
-        if($frameContainer.hasClass('passage-paging')){
-            var pagging = initPaging($frameContainer);
-            events.moveEnd = pagging.getMoveCallback();
-            pagging.setPage(0);
-        }
-
+        
         //init the sly scrollbar
         $frame.sly({
             scrollBar : $scrollbar,
@@ -137,7 +132,12 @@ define([
             clickBar : true,
             dragHandle : true,
             mouseDragging : false
-        }, events);
+        });
+        
+        //init paging if needed
+        if($frameContainer.hasClass('passage-paging')){
+            initPaging($frameContainer).setPage(0);
+        }
 
     }
 
