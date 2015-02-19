@@ -19,10 +19,16 @@ define([
 
     function initPaging($frameContainer){
 
+        var $frame = $frameContainer.children('.frame');
+        var $pager = $frameContainer.children('.passage-pager');
+        var $previous = $pager.find('.passage-pager-previous button');
+        var $next = $pager.find('.passage-pager-next button');
         var $counterCurrent = $frameContainer.find('.counter-current');
         var $counterTotal = $frameContainer.find('.counter-total');
         var $pages = $frameContainer.find('.page');
         var pages = [];
+        var current = 0;//page count starts at zero
+        var total = 0;//numimum one page
 
         $pages.each(function(){
             var $page = $(this);
@@ -33,34 +39,75 @@ define([
                 middle : Math.round(pos.top + h / 2),
                 bottom : Math.round(pos.top + h)
             });
+            total++;
         });
-        $counterTotal.html(pages.length);
+        $counterTotal.html(total);
+        
+        /**
+         * Set the current page number 
+         * 
+         * @param {Integer} num - the new page number (the page coutn starts from O)
+         * @param {Boolean} [slideTo] - tells if the frame should be scrolled to position of the page
+         * @returns {undefined}
+         */
+        function setCurrent(num, slideTo){
+            current = num;
+            $counterCurrent.html(num + 1);
+            if(num === 0){
+                $previous.addClass('disabled');
+            }else{
+                $previous.removeClass('disabled');
+            }
+            if(num === total-1){
+                $next.addClass('disabled');
+            }else{
+                $next.removeClass('disabled');
+            }
+            if(slideTo){
+                var page = pages[current];
+                $frame.sly('slideTo', page.top, false);
+            }
+        }
 
-        //add page manager:
-        var moveEnd = _.throttle(function(){
+        /**
+         * 
+         * @type @exp;_@call;throttle
+         */
+        var moveCallback = _.throttle(function(){
 
             var pos = this.pos;
-            var currentPage = 1;
+            var currentPage = 0;
 
             //check position of the pages
             for(var i in pages){
                 i = parseInt(i);
                 if(pos.cur > pages[i].middle && (!pages[i + 1] || pos.cur < pages[i + 1].middle)){
-                    currentPage = i + 2;
+                    currentPage = i + 1;
                     break;
                 }
             }
 
             //set current page:
-            if(currentPage){
-                $counterCurrent.html(currentPage);
-            }
+            setCurrent(currentPage);
         }, 400);
 
-        return {
-            getMoveCallback : function getMoveEndCallback(){
-                return moveEnd;
+        //init next/previous buttons
+        $previous.on('click', function(){
+            if(!$previous.hasClass('disabled') && current > 0){
+                setCurrent(current - 1, true);
             }
+        });
+        $next.on('click', function(){
+            if(!$next.hasClass('disabled') && current < total-1){
+                setCurrent(current + 1, true);
+            }
+        });
+
+        return {
+            getMoveCallback : function getMoveCallback(){
+                return moveCallback;
+            },
+            setPage : setCurrent
         };
     }
 
@@ -77,6 +124,7 @@ define([
         if($frameContainer.hasClass('passage-paging')){
             var pagging = initPaging($frameContainer);
             events.moveEnd = pagging.getMoveCallback();
+            pagging.setPage(0);
         }
 
         //init the sly scrollbar

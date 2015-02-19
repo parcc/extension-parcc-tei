@@ -62,6 +62,7 @@
 .passage-paging .passage-pager .passage-pager-next {position:absolute; top:3px; right:3px;}
 .passage-paging .passage-pager .passage-pager-counter {text-align:center; padding:5px 6px; font-weight: bold;font-size:1.5rem;}
 .passage-paging .passage-pager .passage-pager-counter span {margin:0 3px;}
+.passage-paging .disabled {cursor:default !important;}
 
 .passage-scrolling, .passage-paging {border:solid 1px #CCC;}
 .passage-scrolling .passage-content {padding:1rem;}
@@ -112,9 +113,7 @@ ul.passages-tab-navigation li:not(.passages-tab-active) a:hover {
     padding-bottom: 7px;
 }
 
-ul.passages-tab-navigation > li:nth-child(n+2) > a {
-    margin-left: 3px;
-}
+ul.passages-tab-navigation > li:nth-child(n+2) > a {margin-left: 3px;}
 
 ul.passages-tab-navigation li.passages-tab-active a{
     border-color: #DDD #DDD transparent;
