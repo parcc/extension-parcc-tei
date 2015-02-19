@@ -20,6 +20,7 @@ define([
     function initPaging($frameContainer){
 
         var $frame = $frameContainer.children('.frame');
+        var frameHalfHeight = Math.round($frame.height()/2);
         var $pager = $frameContainer.children('.passage-pager');
         var $previous = $pager.find('.passage-pager-previous button');
         var $next = $pager.find('.passage-pager-next button');
@@ -81,8 +82,8 @@ define([
             //check position of the pages
             for(var i in pages){
                 i = parseInt(i);
-                if(pos.cur > pages[i].middle && (!pages[i + 1] || pos.cur < pages[i + 1].middle)){
-                    currentPage = i + 1;
+                if(pos.cur + frameHalfHeight > pages[i].top && (!pages[i + 1] || pos.cur  + frameHalfHeight < pages[i + 1].top)){
+                    currentPage = i;
                     break;
                 }
             }
