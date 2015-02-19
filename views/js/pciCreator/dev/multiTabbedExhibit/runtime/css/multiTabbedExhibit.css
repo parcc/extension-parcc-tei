@@ -60,7 +60,7 @@
 .passage-paging .passage-pager button {width:96px;}
 .passage-paging .passage-pager .passage-pager-previous {position:absolute; top:3px; left:3px;}
 .passage-paging .passage-pager .passage-pager-next {position:absolute; top:3px; right:3px;}
-.passage-paging .passage-pager .passage-pager-counter {text-align:center; padding:6px 6px 4px; font-weight: bold;font-size:1.5rem;}
+.passage-paging .passage-pager .passage-pager-counter {text-align:center; padding:5px 6px; font-weight: bold;font-size:1.5rem;}
 .passage-paging .passage-pager .passage-pager-counter span {margin:0 3px;}
 
 .passage-scrolling, .passage-paging {border:solid 1px #CCC;}

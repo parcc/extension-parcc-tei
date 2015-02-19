@@ -47,24 +47,43 @@ define([
                 
                 if($frameContainer.hasClass('passage-paging')){
                     
+                    var $counterCurrent = $frameContainer.find('.counter-current');
+                    var $counterTotal = $frameContainer.find('.counter-total');
                     var $pages = $frameContainer.find('.page');
                     var pages = [];
                     
                     $pages.each(function(){
                         var $page = $(this);
+                        var pos = $page.position();
+                        var h = $page.outerHeight();
                         pages.push({
-                           position : $page.position() 
+                           top :  Math.round(pos.top),
+                           middle : Math.round(pos.top + h/2),
+                           bottom : Math.round(pos.top + h)
                         });
                     });
-                    console.log(pages);
+                    $counterTotal.html(pages.length);
                     
                     //add page manager:
-                    events.move = _.throttle(function(){
-                        var pos = this.pos;
+                    events.moveEnd = _.throttle(function(){
                         
-                        console.log(this);
+                        var pos = this.pos;
+                        var currentPage = 1;
+                        
                         //check position of the pages
-                    },1000);
+                        for(var i in pages){
+                            i = parseInt(i);
+                            if(pos.cur > pages[i].middle && (!pages[i+1] || pos.cur < pages[i+1].middle)){
+                                currentPage = i+2;
+                                break;
+                            }
+                        }
+                        
+                        //set current page:
+                        if(currentPage){
+                            $counterCurrent.html(currentPage);
+                        }
+                    },400);
                 }
                 
                 //init the sly scrollbar
