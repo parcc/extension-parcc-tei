@@ -55,12 +55,12 @@
 .passage-paging .page-header .page-number {position:absolute;right:0px;font-weight: bold; font-size:1.8rem;}
 .passage-paging .page-content {padding:0 20px;}
 
-.passage-paging .passage-pager {border:solid 1px #CCC; position:relative;}
+.passage-paging .passage-pager {position:relative; border:solid 0 #CCC; border-top-width: 1px;}
 .passage-paging .passage-pager:after {clear:both; content:""; display:table;}
 .passage-paging .passage-pager button {width:96px;}
 .passage-paging .passage-pager .passage-pager-previous {position:absolute; top:3px; left:3px;}
 .passage-paging .passage-pager .passage-pager-next {position:absolute; top:3px; right:3px;}
-.passage-paging .passage-pager .passage-pager-counter {text-align:center; padding:6px; font-weight: bold;font-size:1.5rem;}
+.passage-paging .passage-pager .passage-pager-counter {text-align:center; padding:6px 6px 4px; font-weight: bold;font-size:1.5rem;}
 .passage-paging .passage-pager .passage-pager-counter span {margin:0 3px;}
 
 .passage-scrolling, .passage-paging {border:solid 1px #CCC;}
