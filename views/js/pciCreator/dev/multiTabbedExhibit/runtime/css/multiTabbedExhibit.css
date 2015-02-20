@@ -11,16 +11,14 @@
 
 .multiTabbedExhibit .templates {display:none;}
 
-.multiTabbedExhibit .passage240 {height:240px;}
-.multiTabbedExhibit .passage440 {height:440px;}
-.multiTabbedExhibit .passage540 {height:540px;}
+.multiTabbedExhibit .passage240 .frame, .multiTabbedExhibit .passage240 .scrollbar {height:240px;}
+.multiTabbedExhibit .passage440 .frame, .multiTabbedExhibit .passage440 .scrollbar  {height:440px;}
+.multiTabbedExhibit .passage540 .frame, .multiTabbedExhibit .passage540 .scrollbar  {height:540px;}
 
-.multiTabbedExhibit .paging{display:none;}
-
-.frame { padding: 0; width: 100%; height: 400px; }
+.frame { padding: 0; width: 100%;}
 .frame .slidee { margin: 0;}
 
-.scrollbar { width: 10px; height: 400px; position:absolute; right:-7px; top:0; }
+.scrollbar { width: 10px; position:absolute; right:-7px; top:0; }
 .scrollbar .handle {
     width: 100%;
     height: 80px; /* overriden if dynamicHandle: 1 */

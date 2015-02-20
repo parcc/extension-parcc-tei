@@ -194,6 +194,8 @@ define([
                 $tab.show().siblings('.passage').hide();
                 //change li class:
                 $li.addClass('passages-tab-active').siblings('li').removeClass('passages-tab-active');
+                //reload scrollbar settings:
+                $tab.find('.frame').sly('reload');
             }
         }
     }
