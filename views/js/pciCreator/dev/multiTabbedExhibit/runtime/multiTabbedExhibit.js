@@ -20,7 +20,7 @@ define([
     function initPaging($frameContainer){
 
         var $frame = $frameContainer.children('.frame');
-        var frameHalfHeight = Math.round($frame.height()/2);
+        var frameHalfHeight = Math.round($frame.height() / 2);
         var $pager = $frameContainer.children('.passage-pager');
         var $previous = $pager.find('.passage-pager-previous button');
         var $next = $pager.find('.passage-pager-next button');
@@ -29,21 +29,26 @@ define([
         var $pages = $frameContainer.find('.page');
         var pages = [];
         var current = 0;//page count starts at zero
-        var total = 0;//numimum one page
 
-        $pages.each(function(){
-            var $page = $(this);
-            var pos = $page.position();
-            var h = $page.outerHeight();
-            pages.push({
-                top : Math.round(pos.top),
-                middle : Math.round(pos.top + h / 2),
-                bottom : Math.round(pos.top + h)
+        function init(){
+            //reset pages registry
+            pages = [];
+            $frame.sly('getCurrentPos', function(currentPos){
+                $pages.each(function(){
+                    var $page = $(this);
+                    var pos = $page.position();
+                    var h = $page.outerHeight();
+                    pages.push({
+                        top : Math.round(currentPos + pos.top),
+                        middle : Math.round(currentPos + pos.top + h / 2),
+                        bottom : Math.round(currentPos + pos.top + h)
+                    });
+                });
+                $counterTotal.html(pages.length);
+                moveCallback(currentPos);
             });
-            total++;
-        });
-        $counterTotal.html(total);
-        
+        }
+
         /**
          * Set the current page number 
          * 
@@ -59,7 +64,7 @@ define([
             }else{
                 $previous.removeClass('disabled');
             }
-            if(num === total-1){
+            if(num === pages.length - 1){
                 $next.addClass('disabled');
             }else{
                 $next.removeClass('disabled');
@@ -72,16 +77,17 @@ define([
 
         /**
          * The callback to be executed after 
+         * 
          */
-        function moveCallback(){
+        function moveCallback(newPos){
 
-            var pos = this.pos;
+            var threshold = newPos + frameHalfHeight + 80;
             var currentPage = 0;
 
             //check position of the pages
             for(var i in pages){
                 i = parseInt(i);
-                if(pos.cur + frameHalfHeight > pages[i].top && (!pages[i + 1] || pos.cur  + frameHalfHeight < pages[i + 1].top)){
+                if(threshold > pages[i].top && (!pages[i + 1] || threshold < pages[i + 1].top)){
                     currentPage = i;
                     break;
                 }
@@ -90,10 +96,16 @@ define([
             //set current page:
             setCurrent(currentPage);
         }
-        
-        //bind the move event to callback
-        $frame.sly('on', 'move', _.throttle(moveCallback, 600));
-        
+
+        //start pager
+        init();
+
+        //bind event listeners to the sly scrollbar
+        $frame.sly('on', 'move', _.throttle(function(){
+            moveCallback(this.pos.cur);
+        }, 600));
+        $frame.sly('on', 'load', _.throttle(init, 600));
+
         //init next/previous buttons
         $previous.on('click', function(){
             if(!$previous.hasClass('disabled') && current > 0){
@@ -101,52 +113,51 @@ define([
             }
         });
         $next.on('click', function(){
-            if(!$next.hasClass('disabled') && current < total-1){
+            if(!$next.hasClass('disabled') && current < pages.length - 1){
                 setCurrent(current + 1, true);
             }
         });
 
         return {
-            getMoveCallback : function getMoveCallback(){
-                return moveCallback;
-            },
-            setPage : setCurrent
+            getMoveCallback : moveCallback,
+            setPage : setCurrent,
+            reload : init
         };
     }
 
-    function initScrolling($frameContainer){
+    function initScrolling(pci){
 
-        if(!$frameContainer.hasClass('frame-container')){
-            throw 'the container has not the right css class';
-        }
+        $('.frame-container').each(function(){
 
-        var $frame = $frameContainer.children('.frame');
-        var $scrollbar = $frameContainer.children('.scrollbar');
-        
-        //init the sly scrollbar
-        $frame.sly({
-            scrollBar : $scrollbar,
-            scrollBy : 20,
-            scrollTrap : true,
-            dynamicHandle : true,
-            clickBar : true,
-            dragHandle : true,
-            mouseDragging : false
+            var $frameContainer = $(this);
+            var $frame = $frameContainer.children('.frame');
+            var $scrollbar = $frameContainer.children('.scrollbar');
+
+            //init the sly scrollbar
+            $frame.sly({
+                scrollBar : $scrollbar,
+                scrollBy : 20,
+                scrollTrap : true,
+                dynamicHandle : true,
+                clickBar : true,
+                dragHandle : true,
+                mouseDragging : false
+            });
+            $(window).on('resize.multiTabbedExhibit.' + pci.id, function(){
+                //reload slider setting because the container might have been resized
+                $frame.sly('reload');
+            });
+
+            //init paging if needed
+            if($frameContainer.hasClass('passage-paging')){
+                initPaging($frameContainer);
+            }
         });
-        
-        //init paging if needed
-        if($frameContainer.hasClass('passage-paging')){
-            initPaging($frameContainer).setPage(0);
-        }
-
     }
 
-    function initTabbing($tabContainer){
+    function initTabbing(pci){
 
-        if(!$tabContainer.hasClass('passages-tabs')){
-            throw 'the container has not the right css class';
-        }
-
+        var $tabContainer = $('.passages-tabs');
         var $tabs = $tabContainer.children('.passage');
         var $nav = $tabContainer.children('.passages-tab-navigation');
         var i = 0;
@@ -208,13 +219,10 @@ define([
             event.addEventMgr(this);
 
             //init scrolling on all "scrollable" frame container
-            $('.frame-container').each(function(){
-                initScrolling($(this));
-            });
+            initScrolling(this);
 
             //init tabbing
-            var $tabContainer = $('.passages-tabs');
-            initTabbing($tabContainer);
+            initTabbing(this);
 
         },
         /**
@@ -260,6 +268,7 @@ define([
 
             var $container = $(this.dom);
             $container.off().empty();
+            $(window).off('resize.multiTabbedExhibit.' + this.id);
         },
         /**
          * Restore the state of the interaction from the serializedState.
