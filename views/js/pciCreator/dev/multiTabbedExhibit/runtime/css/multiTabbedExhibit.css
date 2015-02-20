@@ -33,7 +33,7 @@
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
-.frame-container {
+.passage-paging, .passage-scrolling {
     position:relative;
 }
 

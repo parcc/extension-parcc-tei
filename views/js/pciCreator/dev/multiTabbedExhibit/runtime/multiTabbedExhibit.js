@@ -3,12 +3,14 @@ define([
     'qtiCustomInteractionContext',
     'OAT/util/event',
     'OAT/lodash',
+    'OAT/handlebars',
     'multiTabbedExhibit/runtime/lib/sly.min'
 ], function(
     $,
     qtiCustomInteractionContext,
     event,
-    _
+    _,
+    handlebars
     ){
 
     'use strict';
@@ -31,18 +33,25 @@ define([
         var current = 0;//page count starts at zero
 
         function init(){
+            
             //reset pages registry
             pages = [];
             $frame.sly('getCurrentPos', function(currentPos){
                 $pages.each(function(){
+                    
                     var $page = $(this);
                     var pos = $page.position();
                     var h = $page.outerHeight();
+                    
+                    //append page position object
                     pages.push({
                         top : Math.round(currentPos + pos.top),
                         middle : Math.round(currentPos + pos.top + h / 2),
                         bottom : Math.round(currentPos + pos.top + h)
                     });
+                    
+                    //set page number:
+                    $page.find('.page-number').html(pages.length);
                 });
                 $counterTotal.html(pages.length);
                 moveCallback(currentPos);
@@ -125,37 +134,103 @@ define([
         };
     }
 
-    function initScrolling(pci){
+    function initScrolling(pci, $frameContainer){
+        
+        var $frame = $frameContainer.children('.frame');
+        var $scrollbar = $frameContainer.children('.scrollbar');
 
-        $('.frame-container').each(function(){
-
-            var $frameContainer = $(this);
-            var $frame = $frameContainer.children('.frame');
-            var $scrollbar = $frameContainer.children('.scrollbar');
-
-            //init the sly scrollbar
-            $frame.sly({
-                scrollBar : $scrollbar,
-                scrollBy : 20,
-                scrollTrap : true,
-                dynamicHandle : true,
-                clickBar : true,
-                dragHandle : true,
-                mouseDragging : false
+        //init the sly scrollbar
+        $frame.sly({
+            scrollBar : $scrollbar,
+            scrollBy : 20,
+            scrollTrap : true,
+            dynamicHandle : true,
+            clickBar : true,
+            dragHandle : true,
+            mouseDragging : false
+        });
+        $(window).on('resize.multiTabbedExhibit.' + pci.id, function(){
+            //reload slider setting because the container might have been resized
+            $frame.sly('reload');
+        });
+    }
+    
+    function renderTemplate(pci, tplName, data){
+        var source = pci.$dom.find(".templates ."+tplName).html();
+        var template = handlebars.compile(source);
+        return template(data || {});
+    }
+    
+    function initScrollingPassageMarkup(pci, $passage){
+        
+        //prepare content
+        var passageContent = renderTemplate(pci, 'simple', {
+            content : $passage.html()
+        });
+        //add scrollbar
+        $passage.html(renderTemplate(pci, 'scrolling', {
+            content : passageContent
+        }));
+    }
+    
+    function initPaggingPassageMarkup(pci, $passage){
+        
+        var tplData = {pages:[]};
+        $passage.find('.page').each(function(){
+            tplData.pages.push({
+                content:$(this).html()
             });
-            $(window).on('resize.multiTabbedExhibit.' + pci.id, function(){
-                //reload slider setting because the container might have been resized
-                $frame.sly('reload');
-            });
+        });
+        //prepare content
+        var passageContent = renderTemplate(pci, 'pages', tplData);
+        //add scrollbar
+        $passage.html(renderTemplate(pci, 'scrolling', {
+            content : passageContent
+        }));
+        //add pager
+        $passage.append(renderTemplate(pci, 'pager'));
+    }
+    
+    function initPassages(pci){
 
-            //init paging if needed
-            if($frameContainer.hasClass('passage-paging')){
-                initPaging($frameContainer);
-            }
+        pci.$dom.find('.passage-scrolling').each(function(){
+            var $passage = $(this);
+            initScrollingPassageMarkup(pci, $passage);
+            initScrolling(pci, $passage);
+        });
+
+        pci.$dom.find('.passage-paging').each(function(){
+            var $passage = $(this);
+            initPaggingPassageMarkup(pci, $passage);
+            initScrolling(pci, $passage);
+            initPaging($passage);
         });
     }
 
+    function initTabbingMarkup(pci){
+        
+        var tplData = {
+            passages : []
+        };
+        var $tabContainer = pci.$dom.children('.passages').addClass('passages-tabs');
+        var $passages = $tabContainer.children('.passage').addClass('passage-tab');
+        $passages.each(function(){
+            var $passage = $(this);
+            tplData.passages.push({
+                title : $passage.attr('title'),
+                active : $passage.hasClass('active')
+            });
+        });
+
+        //clear old markup:
+        $tabContainer.children('.passages-tab-navigation').remove();
+        $tabContainer.prepend(renderTemplate(pci, 'tab-navigation', tplData));
+    }
+
     function initTabbing(pci){
+
+        //create markup:
+        initTabbingMarkup(pci);
 
         var $tabContainer = $('.passages-tabs');
         var $tabs = $tabContainer.children('.passage');
@@ -214,14 +289,14 @@ define([
         initialize : function(id, dom, config){
 
             this.id = id;
-            this.dom = dom;
+            this.$dom = $(dom);
             this.config = buildConfig(config || {});
 
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
 
             //init scrolling on all "scrollable" frame container
-            initScrolling(this);
+            initPassages(this);
 
             //init tabbing
             initTabbing(this);
