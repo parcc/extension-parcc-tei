@@ -4,14 +4,14 @@ define([
     'css!multiTabbedExhibit/creator/css/form'
 ], function(Widget, states){
 
-    var GraphLineAndPointInteracitonWidget = Widget.clone();
+    var MultiTabbedExhibitWidget = Widget.clone();
 
-    GraphLineAndPointInteracitonWidget.initCreator = function(){
+    MultiTabbedExhibitWidget.initCreator = function(){
 
         this.registerStates(states);
 
         Widget.initCreator.call(this);
     };
 
-    return GraphLineAndPointInteracitonWidget;
+    return MultiTabbedExhibitWidget;
 });

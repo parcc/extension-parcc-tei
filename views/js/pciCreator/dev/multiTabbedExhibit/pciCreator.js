@@ -1,9 +1,8 @@
 define([
     'lodash',
-    'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'multiTabbedExhibit/creator/widget/Widget',
     'tpl!multiTabbedExhibit/creator/tpl/markup'
-], function(_, ciRegistry, Widget, markupTpl){
+], function(_, Widget, markupTpl){
     'use strict';
     var _typeIdentifier = 'multiTabbedExhibit';
 
@@ -33,27 +32,8 @@ define([
          */
         getDefaultProperties : function(pci){
             return {
-                graphs : {
-                    points : {label : 'Points', count : 0, elements : []},
-                    setPoints : {label : 'Sets of Points', count : 0, elements: []},
-                    segments : {label : 'Segments', count : 0, elements:[]},
-                    lines : {label : 'Lines', count : 0, elements : []},
-                    solutionSet : {label : 'Solution Sets', count : 0, elements:[]}
-                },
-                xMin : -10,
-                xMax : 10,
-                yMin : -10,
-                yMax : 10
+                tabbed : false
             };
-        },
-        /**
-         * (optional) Callback to execute on the
-         * Used on new pci instance creation
-         *
-         * @returns {Object}
-         */
-        afterCreate : function(pci){
-            //do some stuff
         },
         /**
          * (required) Gives the qti pci xml template
@@ -71,7 +51,8 @@ define([
         getMarkupData : function(pci, defaultData){
 
             return _.defaults(defaultData, {
-                prompt : pci.data('prompt')
+                prompt : pci.data('prompt'),
+                passages : pci.data('passages')
             });
         }
     };
