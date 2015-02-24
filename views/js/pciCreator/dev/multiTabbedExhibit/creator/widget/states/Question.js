@@ -3,6 +3,7 @@ define([
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
+    'multiTabbedExhibit/creator/widget/helper/passageEditor',
     'tpl!multiTabbedExhibit/creator/tpl/propertiesForm',
     'lodash',
     'jquery'
@@ -11,6 +12,7 @@ define([
     Question,
     formElement,
     containerEditor,
+    passageEditor,
     formTpl,
     _,
     $){
@@ -33,6 +35,9 @@ define([
             related : interaction
         });
 
+        //load passages content into authoring model
+        passageEditor.loadData(interaction);
+
     }, function(){
 
         containerEditor.destroy(this.widget.$container.find('.prompt'));
@@ -44,12 +49,16 @@ define([
 
         var widget = this.widget,
             interaction = widget.element,
+            tabbed = interaction.prop('tabbed'),
             $form = widget.$form;
 
         //render the form using the form template
         $form.html(formTpl({
-            tabbed : interaction.prop('tabbed')
+            tabbed : tabbed
         }));
+
+        var $panelTabManager = $form.find('.creator-multiTabbedExhibit'),
+            $panelTabForms = $panelTabManager.find('.tab-form-add');
 
         //init form javascript
         formElement.initWidget($form);
@@ -58,19 +67,25 @@ define([
         formElement.setChangeCallbacks($form, interaction, {
             tabbed : function(i, value){
                 interaction.prop('tabbed', value);
-                
+
                 //toggle tabbed editing panel visibility
-                
+
                 //communicate change to pci:
             }
         });
-        
+
         //toggle visibility of tabs editing panel
-        
+        if(!tabbed){
+            $panelTabManager.hide();
+        }
+
         //add tabs option forms
-        
+
+
         //init add tab button
-        
+        $panelTabForms.on('click', function(){
+        });
+
     };
 
     return StateQuestion;

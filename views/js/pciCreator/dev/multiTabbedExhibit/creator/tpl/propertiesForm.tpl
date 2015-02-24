@@ -16,5 +16,6 @@
     </div>
     
     <div class="tab-form-add">
+        <button class="btn btn-info small">Add Tab</button>
     </div>
 </div>
