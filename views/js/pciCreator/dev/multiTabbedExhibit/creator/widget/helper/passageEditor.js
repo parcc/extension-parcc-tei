@@ -75,8 +75,6 @@ define(['jquery', 'lodash'], function($, _){
             passagesData[_.uniqueId('passage_')] = data;
         });
         interaction.data('passages', passagesData);
-        
-        console.log(interaction);
     }
 
     function create(interaction){
