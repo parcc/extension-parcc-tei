@@ -70,7 +70,7 @@ define([
         }));
 
         var $panelTabManager = $form.find('.creator-multiTabbedExhibit'),
-            $panelTabAdd = $panelTabManager.find('.tab-form-add');
+            $panelTabAdd = $panelTabManager.find('.tab-form-add'),
             $panelTabForms = $panelTabManager.find('.tab-form-container');
 
         //init form javascript
@@ -144,7 +144,7 @@ define([
             hasSize : false
         };
 
-        if(passageType !== 'passage-simple'){
+        if(passage.type !== 'passage-simple'){
             data.hasSize = true;
             data.sizes = [];
             var _availableSizes = [
@@ -162,7 +162,7 @@ define([
                 }
             ];
             _.each(_availableSizes, function(size){
-                if(passage.type === size.cssClass){
+                if(passage.size === size.cssClass){
                     size.selected = true;
                 }
                 data.sizes.push(size);
