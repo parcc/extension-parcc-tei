@@ -162,16 +162,38 @@ define(['jquery', 'lodash'], function($, _){
         }
     }
     
+    function removePage(interaction, passageId, pageId){
+        var passage = getPassage(interaction, passageId);
+        if(passage.type === 'passage-paging'){
+            pageId = parseInt(pageId);
+            passage.pages[pageId].content = content;
+        }else{
+            throw 'the passage is not of a paging type';
+        }
+    }
+    
+    function removePassage(interaction, passageId){
+        var passages = interaction.data('passages');
+        delete passages[passageId];
+    }
+    
     return {
         loadData : loadData,
         create : create,
         setType : setType,
         setSize : setSize,
         getPassage : function(interaction, passageId){
-            return _.clone(getPassage(interaction, passageId));
+            //read-only, pass a clone only,
+            try{
+                return _.clone(getPassage(interaction, passageId));
+            }catch(e){
+                return null;
+            }
         },
         addPage : addPage,
         setPageContent : setPageContent,
-        setPassageContent : setPassageContent
+        setPassageContent : setPassageContent,
+        removePage : removePage,
+        removePassage : removePassage
     };
 });

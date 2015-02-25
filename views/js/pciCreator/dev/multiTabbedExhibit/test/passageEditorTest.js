@@ -81,4 +81,8 @@ define([
         QUnit.assert.equal(passage.pages, undefined, 'content transformed');
         QUnit.assert.equal(passage.content, passageContent, 'content correctly transformed back into single page');
     });
+    
+    QUnit.test('addPage & setPageContent', function () {
+        QUnit.assert.ok(true, 'in progress');
+    });
 });
