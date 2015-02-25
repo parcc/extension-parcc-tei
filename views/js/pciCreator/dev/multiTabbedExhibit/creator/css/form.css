@@ -1,0 +1,3 @@
+
+.passage-form {position : relative; margin : 5px 0px; padding : 8px; border:1px solid #DDD; border-radius:2px;background-color:#DDD;}
+.passage-form .passage-button-delete {position: absolute; top: 12px; right: 10px; cursor: pointer; font-size: 1.3rem;}

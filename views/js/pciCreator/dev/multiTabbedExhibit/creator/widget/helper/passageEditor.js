@@ -86,6 +86,7 @@ define(['jquery', 'lodash'], function($, _){
             interaction.data('passages', passages);
         }
         passages[uid] = {
+            uid : uid,
             type : 'passage-simple',
             content : ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec mi eu turpis molestie egestas. In hac habitasse platea dictumst. Fusce efficitur sed nibh sed dictum. Sed blandit arcu ut nunc facilisis, nec tincidunt ante scelerisque. Ut augue orci, convallis sit amet elementum sed, gravida non turpis. Sed posuere ipsum et placerat suscipit.'
         };
