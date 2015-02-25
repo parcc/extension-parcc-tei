@@ -288,6 +288,8 @@ define([
          */
         initialize : function(id, dom, config){
 
+            var self = this;
+
             this.id = id;
             this.$dom = $(dom);
             this.config = buildConfig(config || {});
@@ -301,6 +303,9 @@ define([
             //init tabbing
             initTabbing(this);
 
+            this.on('passagechange', function(){
+                self.trigger('passagereload');
+            });
         },
         /**
          * Programmatically set the response following the json schema described in
