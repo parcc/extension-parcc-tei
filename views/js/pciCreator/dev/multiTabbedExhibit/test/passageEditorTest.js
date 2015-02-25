@@ -47,11 +47,38 @@ define([
         QUnit.assert.equal(interaction.data('passages'), undefined, 'passage empty');
         
         var passageId = passageEditor.create(interaction);
-        
         QUnit.assert.equal(_.size(interaction.data('passages')), 1, 'passage created');
         
         var passage = passageEditor.getPassage(interaction, passageId);
         QUnit.assert.equal(passage.type, 'passage-simple', 'new passage type correct');
         QUnit.assert.ok(passage.content, 'new passage has content');
+    });
+    
+    QUnit.test('setPassageContent & setType', function () {
+        
+        var passage;
+        var passageContent = 'some content';
+        var interaction = new PortableCustomInteraction();
+        var passageId = passageEditor.create(interaction);
+        QUnit.assert.equal(_.size(interaction.data('passages')), 1, 'passage created');
+        
+        passageEditor.setPassageContent(interaction, passageId, passageContent);
+        passage = passageEditor.getPassage(interaction, passageId);
+        QUnit.assert.equal(passage.content, passageContent, 'content correctly set');
+        
+        //set to paging type
+        passageEditor.setType(interaction, passageId, 'passage-paging');
+        passage = passageEditor.getPassage(interaction, passageId);
+        QUnit.assert.equal(passage.type, 'passage-paging', 'page type set');
+        QUnit.assert.equal(passage.content, undefined, 'content transformed');
+        QUnit.assert.equal(passage.pages.length, 1, 'one page created');
+        QUnit.assert.equal(passage.pages[0].content, passageContent, 'content transformed into page');
+        
+        //set to scrolling type
+        passageEditor.setType(interaction, passageId, 'passage-scrolling');
+        passage = passageEditor.getPassage(interaction, passageId);
+        QUnit.assert.equal(passage.type, 'passage-scrolling', 'page type set');
+        QUnit.assert.equal(passage.pages, undefined, 'content transformed');
+        QUnit.assert.equal(passage.content, passageContent, 'content correctly transformed back into single page');
     });
 });

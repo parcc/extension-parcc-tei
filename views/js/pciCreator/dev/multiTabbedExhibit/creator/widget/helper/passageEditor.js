@@ -101,12 +101,13 @@ define(['jquery', 'lodash'], function($, _){
                 passage.content = '';
                 var i = 0;
                 _.each(_.pluck(passage.pages, 'content'), function(html){
-                    if(!i){
+                    if(i){
                         passage.content += '<hr/>';
                     }
                     passage.content += html;
                     i++;
                 });
+                delete passage.pages;
             }else if(type === 'passage-paging'){
                 //the new passage has paging : add the content into a page
                 passage.pages = [{content : passage.content}];
@@ -154,7 +155,7 @@ define(['jquery', 'lodash'], function($, _){
     
     function setPassageContent(interaction, passageId, content){
         var passage = getPassage(interaction, passageId);
-        if(!passage.type === 'passage-paging'){
+        if(passage.type !== 'passage-paging'){
             passage.content = content;
         }else{
             throw 'the passage is of a paging type';
