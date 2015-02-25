@@ -69,7 +69,7 @@ define(['jquery', 'lodash'], function($, _){
                     });
                 });
             }else{
-                $passage.content = $passage.html();
+                data.content = $passage.html();
             }
 
             passagesData[_.uniqueId('passage_')] = data;
