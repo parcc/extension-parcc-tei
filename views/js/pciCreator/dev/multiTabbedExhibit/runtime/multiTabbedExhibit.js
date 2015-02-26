@@ -214,6 +214,7 @@ define([
         };
         var $tabContainer = pci.$dom.children('.passages').addClass('passages-tabs');
         var $passages = $tabContainer.children('.passage').addClass('passage-tab');
+        
         $passages.each(function(){
             var $passage = $(this);
             tplData.passages.push({
@@ -221,8 +222,9 @@ define([
                 active : $passage.hasClass('active')
             });
         });
-
-        //clear old markup:
+        
+        console.log($passages, tplData);
+        //remove old markup:
         $tabContainer.children('.passages-tab-navigation').remove();
         $tabContainer.prepend(renderTemplate(pci, 'tab-navigation', tplData));
     }
@@ -274,7 +276,20 @@ define([
             }
         }
     }
+    
+    function init(pci){
+        
+        //init scrolling on all "scrollable" frame container
+        initPassages(pci);
 
+        //init tabbing
+        var tabbed = pci.config['tabbed'];
+        if(tabbed && tabbed !== 'false'){
+            initTabbing(pci);
+        }
+        
+    }
+    
     var multiTabbedExhibit = {
         id : -1,
         getTypeIdentifier : function(){
@@ -296,14 +311,24 @@ define([
 
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
+            
+            //load all widgets
+            init(this);
 
-            //init scrolling on all "scrollable" frame container
-            initPassages(this);
-
-            //init tabbing
-            initTabbing(this);
-
-            this.on('passagechange', function(){
+            this.on('passagechange', function(markup, tabbed){
+                
+                console.log(markup);
+                var $newMarkup = $(markup);
+                
+                self.config.tabbed = tabbed;
+                
+                //replace markup
+                self.$dom.children('.passages').replaceWith($newMarkup.children('.passages'));
+                
+                //reload all widgets
+                init(self);
+                
+                //fires event "reloaded"
                 self.trigger('passagereload');
             });
         },

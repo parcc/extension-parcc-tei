@@ -3,14 +3,14 @@
 .multiTabbedExhibit {
     width: 100%;
     margin: 20px 0;
-    padding: 20px;
-    border : 6px solid #f5f3f2;
+    padding : 5px;
 }
 
 .multiTabbedExhibit .prompt {margin-bottom:20px;}
 
 .multiTabbedExhibit .templates {display:none;}
 
+.multiTabbedExhibit .passage {min-height: 100px;}
 .multiTabbedExhibit .passage240 .frame, .multiTabbedExhibit .passage240 .scrollbar {height:240px;}
 .multiTabbedExhibit .passage440 .frame, .multiTabbedExhibit .passage440 .scrollbar  {height:440px;}
 .multiTabbedExhibit .passage540 .frame, .multiTabbedExhibit .passage540 .scrollbar  {height:540px;}

@@ -26,17 +26,6 @@ define([
         var interaction = this.widget.element,
             $container = this.widget.$container;
 
-        //init prompt editor
-        containerEditor.create($container.find('.prompt'), {
-            change : function(text){
-                interaction.data('prompt', text);
-                interaction.updateMarkup();
-            },
-            markup : interaction.markup,
-            markupSelector : '.prompt',
-            related : interaction
-        });
-
         //load passages content into authoring model
         passageEditor.loadData(interaction);
 
@@ -51,7 +40,6 @@ define([
 
     }, function(){
 
-        containerEditor.destroy(this.widget.$container.find('.prompt'));
     });
 
     StateQuestion.prototype.initForm = function(){
@@ -84,14 +72,16 @@ define([
                 //toggle tabbed editing panel visibility
                 if(value){
                     $panelTabManager.show();
-                    //create a new tab
                 }else{
                     $panelTabManager.hide();
+                    
+                    //ask for confirmation first
+                    
                     //merge all tab together
                 }
 
                 //communicate change to pci
-                interaction.triggerPci('passagechange');//reload the pci
+                refreshRendering(interaction);
             }
         });
 
@@ -108,30 +98,30 @@ define([
         //init add tab button
         $panelTabAdd.on('click', function(){
             //create a new passage
-            var passageId = passageEditor.create(interaction);
+            var passageId = passageEditor.addPassage(interaction);
 
             //append the passage form
-            var passage = passageEditor.getPassage(passageId);
+            var passage = passageEditor.getPassage(interaction, passageId);
             $panelTabForms.append(renderPassageForm(passage));
 
             //communicate change to pci
-            interaction.triggerPci('passagechange');//reload the pci
+            refreshRendering(interaction);
         });
 
         //add delete button click event listener
         $panelTabManager.on('click', '.passage-form .passage-button-delete', function(){
 
-            var $passageForm = $(this).paarent('.passage-form');
+            var $passageForm = $(this).parent('.passage-form');
             var id = $passageForm.data('passage-id');
             
             //delete the passage from the interaction model
-            passageEditor.deletePassage(id);
+            passageEditor.removePassage(interaction, id);
 
             //remove the form from dom
             $passageForm.remove();
 
             //communicate change to pci
-            interaction.triggerPci('passagechange');//reload the pci
+            refreshRendering(interaction);
         });
 
     };
@@ -171,6 +161,15 @@ define([
 
         return tabTpl(data);
     }
-
+    
+    function refreshRendering(interaction){
+        
+        //update the markup
+        interaction.updateMarkup();
+        
+        //reload the pci
+        interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed')]);
+    }
+    
     return StateQuestion;
 });

@@ -46,22 +46,22 @@ define(['jquery', 'lodash'], function($, _){
 
         return props;
     }
-    
+
     function clear(interaction){
         interaction.removeData('passages');
     }
-    
+
     /**
      * Load passages data from markup into interaction metaData
      * 
      * @param {Object} interaction
      */
     function loadData(interaction){
-        
+
         var $markup = $('<div>').html(interaction.markup);
-        
+
         clear(interaction);
-        
+
         $markup.find('.passages .passage').each(function(){
 
             var $passage = $(this);
@@ -77,28 +77,40 @@ define(['jquery', 'lodash'], function($, _){
             }else{
                 data.content = $passage.html();
             }
-            
+
             addPassage(interaction, data);
         });
     }
 
-    function addPassage(interaction, attributes){
-        
-        var uid = _.uniqueId('passage_');
-        var passage = _.defaults(attributes || {}, {
-            uid : uid,
-            type : 'passage-simple'
-        });
-        
-        if(!passage.content && !passage.pages){
-            passage.content = '';
-        }
-        
+    function generatePassageTitle(interaction){
+
         var passages = interaction.data('passages');
+        return 'Passage ' + (passages.length + 1);
+    }
+
+    function addPassage(interaction, attributes){
+
+        var passages = interaction.data('passages');
+        var uid = _.uniqueId('passage_');
+        var passage;
+
         if(!passages){
+            //init passages data if not exist yet
             passages = [];
             interaction.data('passages', passages);
         }
+
+        passage = _.defaults(attributes || {}, {
+            uid : uid,
+            title : generatePassageTitle(interaction),
+            type : 'passage-simple'
+        });
+
+        //set default content
+        if(!passage.content && !passage.pages){
+            passage.content = '';
+        }
+
         passages.push(passage);
         return uid;
     }
@@ -192,7 +204,6 @@ define(['jquery', 'lodash'], function($, _){
         _.remove(passages, function(passage){
             return (passage.uid === passageId);
         });
-        console.log(passages);
     }
 
     return {

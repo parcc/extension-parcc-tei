@@ -1,8 +1,9 @@
 define([
     'lodash',
     'multiTabbedExhibit/creator/widget/Widget',
+    'multiTabbedExhibit/creator/widget/helper/passageEditor',
     'tpl!multiTabbedExhibit/creator/tpl/markup'
-], function(_, Widget, markupTpl){
+], function(_, Widget, passageEditor, markupTpl){
     'use strict';
     var _typeIdentifier = 'multiTabbedExhibit';
 
@@ -36,6 +37,17 @@ define([
             };
         },
         /**
+         * (optional) Callback to execute on the 
+         * Used on new pci instance creation
+         * 
+         * @returns {Object}
+         */
+        afterCreate : function(pci){
+            //add one passage
+            passageEditor.addPassage(pci);
+            pci.updateMarkup();
+        },
+        /**
          * (required) Gives the qti pci xml template
          *
          * @returns {function} handlebar template
@@ -49,7 +61,7 @@ define([
          * @returns {function} handlebar template
          */
         getMarkupData : function(pci, defaultData){
-
+            
             return _.defaults(defaultData, {
                 prompt : pci.data('prompt'),
                 passages : pci.data('passages')
