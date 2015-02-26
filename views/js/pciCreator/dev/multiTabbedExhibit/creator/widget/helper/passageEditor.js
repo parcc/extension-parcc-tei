@@ -1,7 +1,7 @@
 define(['jquery', 'lodash'], function($, _){
 
     'use strict';
-    
+
     var _availableSizes = [
         {
             label : 'small',
@@ -46,16 +46,22 @@ define(['jquery', 'lodash'], function($, _){
 
         return props;
     }
-
+    
+    function clear(interaction){
+        interaction.removeData('passages');
+    }
+    
     /**
      * Load passages data from markup into interaction metaData
      * 
      * @param {Object} interaction
      */
     function loadData(interaction){
-
-        var passagesData = {};
+        
         var $markup = $('<div>').html(interaction.markup);
+        
+        clear(interaction);
+        
         $markup.find('.passages .passage').each(function(){
 
             var $passage = $(this);
@@ -71,25 +77,29 @@ define(['jquery', 'lodash'], function($, _){
             }else{
                 data.content = $passage.html();
             }
-
-            passagesData[_.uniqueId('passage_')] = data;
+            
+            addPassage(interaction, data);
         });
-        interaction.data('passages', passagesData);
     }
 
-    function create(interaction){
+    function addPassage(interaction, attributes){
         
         var uid = _.uniqueId('passage_');
+        var passage = _.defaults(attributes || {}, {
+            uid : uid,
+            type : 'passage-simple'
+        });
+        
+        if(!passage.content && !passage.pages){
+            passage.content = '';
+        }
+        
         var passages = interaction.data('passages');
         if(!passages){
-            passages = {};
+            passages = [];
             interaction.data('passages', passages);
         }
-        passages[uid] = {
-            uid : uid,
-            type : 'passage-simple',
-            content : ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec mi eu turpis molestie egestas. In hac habitasse platea dictumst. Fusce efficitur sed nibh sed dictum. Sed blandit arcu ut nunc facilisis, nec tincidunt ante scelerisque. Ut augue orci, convallis sit amet elementum sed, gravida non turpis. Sed posuere ipsum et placerat suscipit.'
-        };
+        passages.push(passage);
         return uid;
     }
 
@@ -126,34 +136,37 @@ define(['jquery', 'lodash'], function($, _){
 
     function getPassage(interaction, passageId){
         var passages = interaction.data('passages');
-        var passage = passages[passageId];
+        var passage = _.find(passages, {uid : passageId});
         if(passage){
             return passage;
         }else{
             throw 'the passage does not exist';
         }
     }
-    
+
     function addPage(interaction, passageId){
         var passage = getPassage(interaction, passageId);
         if(passage.type === 'passage-paging'){
-            passage.pages.push({content : ''});
-            return passage.pages.length;
+            var uid = _.uniqueId('page_');
+            passage.pages.push({
+                uid : uid,
+                content : ''
+            });
+            return uid;
         }else{
             throw 'the passage is not of a paging type';
         }
     }
-    
+
     function setPageContent(interaction, passageId, pageId, content){
         var passage = getPassage(interaction, passageId);
         if(passage.type === 'passage-paging'){
-            pageId = parseInt(pageId);
             passage.pages[pageId].content = content;
         }else{
             throw 'the passage is not of a paging type';
         }
     }
-    
+
     function setPassageContent(interaction, passageId, content){
         var passage = getPassage(interaction, passageId);
         if(passage.type !== 'passage-paging'){
@@ -162,35 +175,42 @@ define(['jquery', 'lodash'], function($, _){
             throw 'the passage is of a paging type';
         }
     }
-    
+
     function removePage(interaction, passageId, pageId){
         var passage = getPassage(interaction, passageId);
         if(passage.type === 'passage-paging'){
-            pageId = parseInt(pageId);
-            passage.pages[pageId].content = content;
+            _.remove(passage.pages, function(page){
+                return (page.uid === pageId);
+            });
         }else{
             throw 'the passage is not of a paging type';
         }
     }
-    
+
     function removePassage(interaction, passageId){
         var passages = interaction.data('passages');
-        delete passages[passageId];
+        _.remove(passages, function(passage){
+            return (passage.uid === passageId);
+        });
+        console.log(passages);
     }
-    
+
     return {
-        loadData : loadData,
-        create : create,
-        setType : setType,
-        setSize : setSize,
+        getAvailableSize : function(){
+            return _.clone(_availableSizes);
+        },
         getPassage : function(interaction, passageId){
-            //read-only, pass a clone only,
             try{
+                //read-only, pass a clone only,
                 return _.clone(getPassage(interaction, passageId));
             }catch(e){
                 return null;
             }
         },
+        loadData : loadData,
+        addPassage : addPassage,
+        setType : setType,
+        setSize : setSize,
         addPage : addPage,
         setPageContent : setPageContent,
         setPassageContent : setPassageContent,

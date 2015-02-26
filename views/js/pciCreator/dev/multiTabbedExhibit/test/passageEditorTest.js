@@ -41,17 +41,20 @@ define([
         QUnit.assert.equal(passagesArray[2].size, 'passage240', 'passage size ok');
     });
     
-    QUnit.test('create & get', function () {
+    QUnit.test('add/get/remove passages', function () {
         
         var interaction = new PortableCustomInteraction();
         QUnit.assert.equal(interaction.data('passages'), undefined, 'passage empty');
         
-        var passageId = passageEditor.create(interaction);
+        var passageId = passageEditor.addPassage(interaction);
         QUnit.assert.equal(_.size(interaction.data('passages')), 1, 'passage created');
         
         var passage = passageEditor.getPassage(interaction, passageId);
         QUnit.assert.equal(passage.type, 'passage-simple', 'new passage type correct');
-        QUnit.assert.ok(passage.content, 'new passage has content');
+        QUnit.assert.notEqual(passage.content, undefined, 'new passage has initialized');
+        
+        passageEditor.removePassage(interaction, passageId);
+        QUnit.assert.equal(_.size(interaction.data('passages')), 0, 'passage removed');
     });
     
     QUnit.test('setPassageContent & setType', function () {
@@ -59,7 +62,7 @@ define([
         var passage;
         var passageContent = 'some content';
         var interaction = new PortableCustomInteraction();
-        var passageId = passageEditor.create(interaction);
+        var passageId = passageEditor.addPassage(interaction);
         QUnit.assert.equal(_.size(interaction.data('passages')), 1, 'passage created');
         
         passageEditor.setPassageContent(interaction, passageId, passageContent);
@@ -82,7 +85,27 @@ define([
         QUnit.assert.equal(passage.content, passageContent, 'content correctly transformed back into single page');
     });
     
-    QUnit.test('addPage & setPageContent', function () {
+    QUnit.test('addPage & removePage', function () {
+        
         QUnit.assert.ok(true, 'in progress');
+        
+        var passage;
+        var interaction = new PortableCustomInteraction();
+        var passageId = passageEditor.addPassage(interaction);
+        QUnit.assert.equal(_.size(interaction.data('passages')), 1, 'passage created');
+        
+        //set to paging type
+        passageEditor.setType(interaction, passageId, 'passage-paging');
+        passage = passageEditor.getPassage(interaction, passageId);
+        QUnit.assert.equal(passage.pages.length, 1, 'one page created');
+        
+        var pageId = passageEditor.addPage(interaction, passageId);
+        passage = passageEditor.getPassage(interaction, passageId);
+        QUnit.assert.equal(passage.pages.length, 2, 'another page created');
+        
+        passageEditor.removePage(interaction, passageId, pageId);
+        passage = passageEditor.getPassage(interaction, passageId);
+        QUnit.assert.equal(passage.pages.length, 1, 'one page removed');
+        
     });
 });
