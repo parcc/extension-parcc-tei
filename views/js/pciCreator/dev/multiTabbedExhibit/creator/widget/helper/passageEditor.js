@@ -85,7 +85,14 @@ define(['jquery', 'lodash'], function($, _){
     function generatePassageTitle(interaction){
 
         var passages = interaction.data('passages');
-        return 'Passage ' + (passages.length + 1);
+        var passage, title, index = passages.length + 1;
+        do{
+            title = 'Passage ' + index;
+            passage = _.find(passages, {title : title});
+            index++;
+        }while(passage)
+
+        return title;
     }
 
     function addPassage(interaction, attributes){
