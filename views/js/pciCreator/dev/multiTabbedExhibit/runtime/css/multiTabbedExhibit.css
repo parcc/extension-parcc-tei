@@ -39,7 +39,8 @@
 
 .passage {margin : 20px 10px;}
 
-.passage-paging .frame .pages { margin: 0; padding: 10px; list-style: none; background:#EFEFEF; border:#CCC;}
+.passage-paging .frame {background:#EFEFEF;}
+.passage-paging .frame .pages { margin: 0; padding: 10px; list-style: none; border:#CCC;}
 .passage-paging .frame .pages .page {margin: 16px 10px; padding: 10px; background:white;}
 .passage-paging .frame .pages li.page.shadowed {
     -moz-box-shadow: 0px 0px 5px 2px #aaa;
@@ -51,7 +52,7 @@
 .passage-paging .page-header, .page-footer {position:relative; min-height:2rem;}
 .passage-paging .page-header {margin-bottom: 12px;}
 .passage-paging .page-header .page-number {position:absolute;right:0px;font-weight: bold; font-size:1.8rem;}
-.passage-paging .page-content {padding:0 20px;}
+.passage-paging .page-content {padding:0 20px; min-height:100px;}
 
 .passage-paging .passage-pager {position:relative; border:solid 0 #CCC; border-top-width: 1px;}
 .passage-paging .passage-pager:after {clear:both; content:""; display:table;}
