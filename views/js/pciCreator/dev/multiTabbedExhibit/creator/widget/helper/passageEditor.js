@@ -39,6 +39,7 @@ define(['jquery', 'lodash'], function($, _){
         });
 
         var props = {
+            uid : $passage.data('passage-id'),
             title : $passage.attr('title'),
             type : type,
             size : size
@@ -63,15 +64,17 @@ define(['jquery', 'lodash'], function($, _){
         clear(interaction);
 
         $markup.find('.passages .passage').each(function(){
-
+            
             var $passage = $(this);
             var data = getPassagePropertiesFromMarkup($passage);
 
             if($passage.hasClass('passage-paging')){
                 data.pages = [];
                 $passage.children('.page').each(function(){
+                    var $page = $(this);
                     data.pages.push({
-                        content : $(this).html()
+                        uid : $page.attr('page-id'),
+                        content : $page.html()
                     });
                 });
             }else{
@@ -98,7 +101,6 @@ define(['jquery', 'lodash'], function($, _){
     function addPassage(interaction, attributes){
 
         var passages = interaction.data('passages');
-        var uid = _.uniqueId('passage_');
         var passage;
 
         if(!passages){
@@ -108,7 +110,7 @@ define(['jquery', 'lodash'], function($, _){
         }
 
         passage = _.defaults(attributes || {}, {
-            uid : uid,
+            uid : _.uniqueId('passage_'),
             title : generatePassageTitle(interaction),
             type : 'passage-simple'
         });
@@ -119,7 +121,7 @@ define(['jquery', 'lodash'], function($, _){
         }
 
         passages.push(passage);
-        return uid;
+        return passage.uid;
     }
 
     function setType(interaction, passageId, type){
@@ -142,7 +144,7 @@ define(['jquery', 'lodash'], function($, _){
                 delete passage.pages;
             }else if(type === 'passage-paging'){
                 //the new passage has paging : add the content into a page
-                passage.pages = [{content : passage.content}];
+                passage.pages = [{content : passage.content, uid : _.uniqueId('page_converted_')}];
                 delete passage.content;
             }
             

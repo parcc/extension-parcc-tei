@@ -23,17 +23,15 @@ define([
 
     var StateQuestion = stateFactory.extend(Question, function(){
 
-        var interaction = this.widget.element,
-            $container = this.widget.$container;
+        var self = this,
+            interaction = this.widget.element;
 
-        console.log('StateQuestion');
-        
         //init passage editors
-
+        this.initPassagesContentEditors();
 
         interaction.onPci('passagereload', function(){
             //init passage editors
-
+            self.initPassagesContentEditors();
         });
 
     }, function(){
@@ -72,9 +70,9 @@ define([
                     $panelTabManager.show();
                 }else{
                     $panelTabManager.hide();
-                    
+
                     //ask for confirmation first
-                    
+
                     //merge all tab together
                 }
 
@@ -89,7 +87,6 @@ define([
         }
 
         //add tabs option forms
-        console.log('form rendered', passages)
         _.each(passages, function(passage){
             $panelTabForms.append(renderPassageForm(passage));
         });
@@ -112,7 +109,7 @@ define([
 
             var $passageForm = $(this).parent('.passage-form');
             var id = $passageForm.data('passage-id');
-            
+
             //delete the passage from the interaction model
             passageEditor.removePassage(interaction, id);
 
@@ -121,15 +118,59 @@ define([
 
             //communicate change to pci
             refreshRendering(interaction);
-            
+
         }).on('change', 'select[name=type]', function(){
+
             var $select = $(this);
             var type = $select.val();
             var id = $select.parents('.passage-form').data('passage-id');
+
             passageEditor.setType(interaction, id, type);
             refreshRendering(interaction);
         });
 
+    };
+
+    function initContentEditor($editable, passage, interaction){
+        if($editable.length){
+            containerEditor.create($editable, {
+                change : _.throttle(function(text){
+                    passage.content = text;
+                    interaction.updateMarkup();
+                    interaction.triggerPci('resize');
+                }, 600),
+                markup : passage.content
+            });
+        }else{
+            debugger;
+        }
+    }
+
+    StateQuestion.prototype.initPassagesContentEditors = function(){
+        
+        var interaction = this.widget.element,
+            $container = this.widget.$container;
+        var passages = interaction.data('passages');
+        
+        _.each(passages, function(passage){
+
+            switch(passage.type){
+                case 'passage-simple':
+                    initContentEditor($container.find('.passage-simple[data-passage-id=' + passage.uid + ']'), passage, interaction);
+                    break;
+                case 'passage-scrolling':
+                    initContentEditor($container.find('.passage-scrolling[data-passage-id=' + passage.uid + '] .passage-content'), passage, interaction);
+                    break;
+                case 'passage-paging':
+                    _.each(passage.pages, function(page){
+                        initContentEditor($container.find('.page[data-page-id=' + passage.uid + '] .page-content'), page, interaction);
+                    });
+                    break;
+                default:
+                    throw 'unknown type of passage';
+            }
+
+        });
     };
 
     function renderPassageForm(passage){
@@ -139,7 +180,7 @@ define([
             name : passage.title,
             hasSize : false
         };
-        
+
         data.types = [];
         _.each(_availableTypes, function(type){
             if(passage.size === type.cssClass){
@@ -147,7 +188,7 @@ define([
             }
             data.types.push(type);
         });
-            
+
         if(passage.type !== 'passage-simple'){
             data.hasSize = true;
             data.sizes = [];
@@ -161,16 +202,16 @@ define([
 
         return tabTpl(data);
     }
-    
+
     function refreshRendering(interaction){
-        
+
         //update the markup
         interaction.updateMarkup();
-        
+
         //reload the pci
         interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed')]);
     }
-    
+
     var _availableSizes = [
         {
             label : 'small',
@@ -200,6 +241,6 @@ define([
             cssClass : 'passage-paging'
         }
     ];
-            
+
     return StateQuestion;
 });

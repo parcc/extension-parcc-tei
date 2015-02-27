@@ -1,10 +1,10 @@
 <div class="multiTabbedExhibit">
     <div class="passages">
         {{#each passages}}
-        <div class="passage {{type}} {{#if size}}{{size}}{{/if}}" title="{{title}}">
+        <div class="passage {{type}} {{#if size}}{{size}}{{/if}}" title="{{title}}" data-passage-id="{{uid}}">
             {{#if pages}}
             {{#each pages}}
-            <div class="page">
+            <div class="page" data-page-id="{{uid}}">
                 {{{content}}}
             </div>
             {{/each}}
@@ -42,7 +42,7 @@
         <script class="pages" type="text/x-handlebars-template">
             <ul class="pages">
             \{{#each pages}}
-            <li class="page shadowed">
+            <li class="page shadowed" data-page-id="\{{id}}">
             <div class="page-header">
             <span class="page-number"></span>
             </div>

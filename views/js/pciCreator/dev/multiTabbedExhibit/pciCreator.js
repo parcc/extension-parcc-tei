@@ -45,6 +45,7 @@ define([
         afterCreate : function(pci){
             //add one passage
             passageEditor.addPassage(pci);
+            
             //something wrong here
             pci.updateMarkup();
         },

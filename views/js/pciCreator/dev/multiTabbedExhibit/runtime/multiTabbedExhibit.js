@@ -149,8 +149,12 @@ define([
             dragHandle : true,
             mouseDragging : false
         });
+        
+        //reload slider setting because the container might have been resized
         $(window).on('resize.multiTabbedExhibit.' + pci.id, function(){
-            //reload slider setting because the container might have been resized
+            $frame.sly('reload');
+        });
+        pci.on('resize', function(){
             $frame.sly('reload');
         });
     }
@@ -177,8 +181,10 @@ define([
         
         var tplData = {pages:[]};
         $passage.find('.page').each(function(){
+            var $page = $(this);
             tplData.pages.push({
-                content:$(this).html()
+                content: $page.html(),
+                id : $page.data('page-id')
             });
         });
         //prepare content
@@ -223,7 +229,6 @@ define([
             });
         });
         
-        console.log($passages, tplData);
         //remove old markup:
         $tabContainer.children('.passages-tab-navigation').remove();
         $tabContainer.prepend(renderTemplate(pci, 'tab-navigation', tplData));
@@ -317,7 +322,6 @@ define([
 
             this.on('passagechange', function(markup, tabbed){
                 
-                console.log(markup);
                 var $newMarkup = $(markup);
                 
                 self.config.tabbed = tabbed;
