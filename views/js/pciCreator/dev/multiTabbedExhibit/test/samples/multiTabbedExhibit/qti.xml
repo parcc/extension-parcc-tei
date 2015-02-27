@@ -23,7 +23,7 @@
                 </pci:resources>
 
                 <pci:properties>
-                    <pci:entry key="tabbed">false</pci:entry>
+                    <pci:entry key="tabbed">true</pci:entry>
                 </pci:properties>
 
                 <pci:markup>

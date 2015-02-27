@@ -76,6 +76,7 @@ define([
         QUnit.assert.equal(passage.content, undefined, 'content transformed');
         QUnit.assert.equal(passage.pages.length, 1, 'one page created');
         QUnit.assert.equal(passage.pages[0].content, passageContent, 'content transformed into page');
+        QUnit.assert.equal(passage.size, 'passage240', 'size added');
         
         //set to scrolling type
         passageEditor.setType(interaction, passageId, 'passage-scrolling');
@@ -83,6 +84,14 @@ define([
         QUnit.assert.equal(passage.type, 'passage-scrolling', 'page type set');
         QUnit.assert.equal(passage.pages, undefined, 'content transformed');
         QUnit.assert.equal(passage.content, passageContent, 'content correctly transformed back into single page');
+        QUnit.assert.equal(passage.size, 'passage240', 'size preserved');
+        
+        //set to simple type
+        passageEditor.setType(interaction, passageId, 'passage-simple');
+        passage = passageEditor.getPassage(interaction, passageId);
+        QUnit.assert.equal(passage.type, 'passage-simple', 'page type set');
+        QUnit.assert.equal(passage.content, passageContent, 'content preserved');
+        QUnit.assert.equal(passage.size, undefined, 'size removed');
     });
     
     QUnit.test('addPage & removePage', function () {

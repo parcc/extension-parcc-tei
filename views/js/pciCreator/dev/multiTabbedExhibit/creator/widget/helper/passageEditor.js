@@ -126,6 +126,8 @@ define(['jquery', 'lodash'], function($, _){
 
         var passage = getPassage(interaction, passageId);
         if(passage.type !== type){
+            
+            //adapt the content:
             if(passage.type === 'passage-paging'){
                 //the old passage has paging : merge the pages into a single content
                 passage.content = '';
@@ -143,6 +145,14 @@ define(['jquery', 'lodash'], function($, _){
                 passage.pages = [{content : passage.content}];
                 delete passage.content;
             }
+            
+            //adapt the size
+            if(type === 'passage-simple'){
+                delete passage.size;
+            }else if(passage.type === 'passage-simple'){
+                passage.size = 'passage240';
+            }
+            
             passage.type = type;
         }
     }

@@ -26,15 +26,13 @@ define([
         var interaction = this.widget.element,
             $container = this.widget.$container;
 
-        //load passages content into authoring model
-        passageEditor.loadData(interaction);
-
+        console.log('StateQuestion');
+        
         //init passage editors
 
 
         interaction.onPci('passagereload', function(){
             //init passage editors
-            console.log('passagereload');
 
         });
 
@@ -91,6 +89,7 @@ define([
         }
 
         //add tabs option forms
+        console.log('form rendered', passages)
         _.each(passages, function(passage){
             $panelTabForms.append(renderPassageForm(passage));
         });
@@ -122,6 +121,13 @@ define([
 
             //communicate change to pci
             refreshRendering(interaction);
+            
+        }).on('change', 'select[name=type]', function(){
+            var $select = $(this);
+            var type = $select.val();
+            var id = $select.parents('.passage-form').data('passage-id');
+            passageEditor.setType(interaction, id, type);
+            refreshRendering(interaction);
         });
 
     };
@@ -133,24 +139,18 @@ define([
             name : passage.title,
             hasSize : false
         };
-
+        
+        data.types = [];
+        _.each(_availableTypes, function(type){
+            if(passage.size === type.cssClass){
+                type.selected = true;
+            }
+            data.types.push(type);
+        });
+            
         if(passage.type !== 'passage-simple'){
             data.hasSize = true;
             data.sizes = [];
-            var _availableSizes = [
-                {
-                    label : 'small',
-                    cssClass : 'passage240'
-                },
-                {
-                    label : 'medium',
-                    cssClass : 'passage440'
-                },
-                {
-                    label : 'large',
-                    cssClass : 'passage540'
-                }
-            ];
             _.each(_availableSizes, function(size){
                 if(passage.size === size.cssClass){
                     size.selected = true;
@@ -171,5 +171,35 @@ define([
         interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed')]);
     }
     
+    var _availableSizes = [
+        {
+            label : 'small',
+            cssClass : 'passage240'
+        },
+        {
+            label : 'medium',
+            cssClass : 'passage440'
+        },
+        {
+            label : 'large',
+            cssClass : 'passage540'
+        }
+    ];
+
+    var _availableTypes = [
+        {
+            label : 'simple',
+            cssClass : 'passage-simple'
+        },
+        {
+            label : 'scrolling',
+            cssClass : 'passage-scrolling'
+        },
+        {
+            label : 'paging',
+            cssClass : 'passage-paging'
+        }
+    ];
+            
     return StateQuestion;
 });
