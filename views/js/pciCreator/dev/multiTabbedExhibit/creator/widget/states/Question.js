@@ -58,6 +58,11 @@ define([
             $panelTabAdd = $panelTabManager.find('.tab-form-add'),
             $panelTabForms = $panelTabManager.find('.tab-form-container');
 
+        //add tabs option forms
+        _.each(passages, function(passage){
+            $panelTabForms.append(renderPassageForm(passage));
+        });
+        
         //init form javascript
         formElement.initWidget($form);
 
@@ -86,12 +91,7 @@ define([
         if(!tabbed){
             $panelTabManager.hide();
         }
-
-        //add tabs option forms
-        _.each(passages, function(passage){
-            $panelTabForms.append(renderPassageForm(passage));
-        });
-
+        
         //init add tab button
         $panelTabAdd.on('click', function(){
             //create a new passage
@@ -101,7 +101,8 @@ define([
             var passage = passageEditor.getPassage(interaction, passageId);
             var $passageForm = $(renderPassageForm(passage));
             $panelTabForms.append($passageForm);
-
+            formElement.initWidget($passageForm);
+            
             //communicate change to pci
             self.refreshRendering();
         });
