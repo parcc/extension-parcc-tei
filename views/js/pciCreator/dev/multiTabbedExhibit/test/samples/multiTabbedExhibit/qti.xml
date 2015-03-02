@@ -32,7 +32,7 @@
                             Use the number line to plot the <html5:em>approximate</html5:em> area of a circle with a diamter of 2 units.
                         </html5:div>
                         <html5:div class="passages">
-                            <html5:div class="passage" title="Passage 1">
+                            <html5:div class="passage" title="Passage 1" data-passage-id="passage1">
                                 <html5:div>
                                     <html5:table>
                                         <html5:thead>
@@ -62,8 +62,8 @@
                                     </html5:table>
                                 </html5:div>
                             </html5:div>
-                            <html5:div class="passage passage-paging passage540" title="Passage 2">
-                                <html5:div class="page">
+                            <html5:div class="passage passage-paging passage540" title="Passage 2" data-passage-id="passage2">
+                                <html5:div class="page" data-page-id="page1">
                                     <html5:h4>Gone With the Wind By Margaret Mitchell</html5:h4>
                                     <html5:p>Part One Chapter I</html5:p>
                                     <html5:p>Scarlett O'Hara was not beautiful, but men seldom
@@ -84,7 +84,7 @@
                                         porch of Tara, her father's plantation, that bright
                                         April afternoon of 1861, she made a pretty picture.</html5:p>
                                 </html5:div>
-                                <html5:div class="page">
+                                <html5:div class="page" data-page-id="page2">
                                     <html5:p>Her new green flowered-muslin dress spread its
                                     twelve yards of billowing material over herhoops and
                                     exactly matched the flat-heeled green morocco slippers
@@ -104,7 +104,7 @@
                                     admonitions and the sterner discipline of her mammy;
                                     her eyes were her own.</html5:p>
                                 </html5:div>
-                                <html5:div class="page">
+                                <html5:div class="page" data-page-id="page3">
                                     <html5:p>On either side of her, the twins lounged easily in
                                     their chairs, squinting at the sunlight through tall
                                     mint-garnished glasses as they laughed and talked,
@@ -144,7 +144,7 @@
                                     the pack of lean, nervous possum hounds that
                                     accompanied Stuart and Brent wherever they went.</html5:p>
                                 </html5:div>
-                                <html5:div class="page">
+                                <html5:div class="page" data-page-id="page4">
                                     <html5:p>A little aloof, as became an aristocrat, lay a
                                     black-spotted carriage dog, muzzle on paws, patiently
                                     waiting for the boys to go home to supper. Between the
@@ -168,7 +168,7 @@
                                     up-country</html5:p>
                                 </html5:div>
                             </html5:div>
-                            <html5:div class="passage passage-scrolling passage240" title="Passage 3">
+                            <html5:div class="passage passage-scrolling passage240" title="Passage 3" data-passage-id="passage3">
                                 <html5:h4>Gone With the Wind By Margaret Mitchell</html5:h4>
                                 <html5:p>Part One Chapter I</html5:p>
                                 <html5:p>Scarlett O'Hara was not beautiful, but men seldom

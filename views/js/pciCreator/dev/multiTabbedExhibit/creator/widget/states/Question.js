@@ -6,6 +6,7 @@ define([
     'multiTabbedExhibit/creator/widget/helper/passageEditor',
     'tpl!multiTabbedExhibit/creator/tpl/propertiesForm',
     'tpl!multiTabbedExhibit/creator/tpl/tabForm',
+    'tpl!multiTabbedExhibit/creator/tpl/page-adder',
     'lodash',
     'jquery'
 ], function(
@@ -16,6 +17,7 @@ define([
     passageEditor,
     formTpl,
     tabTpl,
+    pageAdderTpl,
     _,
     $){
 
@@ -63,7 +65,7 @@ define([
         _.each(passages, function(passage){
             $panelTabForms.append(renderPassageForm(passage));
         });
-        
+
         //init form javascript
         formElement.initWidget($form);
 
@@ -92,7 +94,7 @@ define([
         if(!tabbed){
             $panelTabManager.hide();
         }
-        
+
         //init add tab button
         $panelTabAdd.on('click', function(){
             //create a new passage
@@ -103,7 +105,7 @@ define([
             var $passageForm = $(renderPassageForm(passage));
             $panelTabForms.append($passageForm);
             formElement.initWidget($passageForm);
-            
+
             //communicate change to pci
             self.refreshRendering();
         });
@@ -132,7 +134,7 @@ define([
 
             passageEditor.setType(interaction, id, type);
             self.refreshRendering();
-            
+
             //toggle size selection visibility
             if(type === 'passage-simple'){
                 //hide size selector
@@ -140,23 +142,23 @@ define([
             }else{
                 $form.find('.passage-size').show();
             }
-            
+
         }).on('change', 'select[name=size]', function(){
-            
+
             var $select = $(this);
             var size = $select.val();
             var $form = $select.parents('.passage-form');
             var id = $form.data('passage-id');
             var oldSize = passageEditor.getPassage(interaction, id);
-            
+
             passageEditor.setSize(interaction, id, size);
-            
+
             //save the change in the model
             interaction.updateMarkup();
-            
+
             //directly affect the dom
             $container.find('[data-passage-id=' + id + ']').removeClass(oldSize.size).addClass(size);
-            
+
             //the container has been resized
             interaction.triggerPci('resize');
         });
@@ -180,11 +182,11 @@ define([
     }
 
     StateQuestion.prototype.initPassagesContentEditors = function(){
-        
+
         var interaction = this.widget.element,
             $container = this.widget.$container;
         var passages = interaction.data('passages');
-        
+
         _.each(passages, function(passage){
 
             switch(passage.type){
@@ -199,6 +201,12 @@ define([
                     _.each(passage.pages, function(page){
                         var $page = $passage.find('.page[data-page-id=' + page.uid + ']');
                         initContentEditor($page.find('.page-content'), page, interaction);
+
+                        //init insert page buttons
+                        if($page.is(':first')){
+                            console.log('is first', $page);
+                        }
+                        $page.find('.page-footer').append(pageAdderTpl());
                     });
                     break;
                 default:
@@ -223,7 +231,7 @@ define([
             }
             data.types.push(type);
         });
-        
+
         if(passage.type !== 'passage-simple'){
             data.hasSize = true;
             data.sizes = [];
@@ -237,27 +245,31 @@ define([
 
         return tabTpl(data);
     }
-    
+
     function destroyEditor($container){
         $container.find('.passage-simple, .passage-scrolling .passage-content, .passage-paging .page .page-content').each(function(){
             containerEditor.destroy($(this));
         });
     }
-    
-    StateQuestion.prototype.refreshRendering = function(){
-        
+
+    StateQuestion.prototype.refreshRendering = function(state){
+
         var interaction = this.widget.element,
-            $container = this.widget.$container;
-        
+            $container = this.widget.$container,
+            state;
+
         //update the markup
         interaction.updateMarkup();
-
-        //reload the pci
-        interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed')]);
         
+        //get the current edition state
+        state = _.defaults(state || {}, interaction.data('pci').getSerializedState());
+        
+        //reload the pci
+        interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed'), state]);
+
         //destroy editors
         destroyEditor($container);
     };
-
+    
     return StateQuestion;
 });

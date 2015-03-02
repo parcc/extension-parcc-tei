@@ -29,27 +29,31 @@ define([
         var $counterCurrent = $frameContainer.find('.counter-current');
         var $counterTotal = $frameContainer.find('.counter-total');
         var $pages = $frameContainer.find('.page');
+        var $current;
         var pages = [];
         var current = 0;//page count starts at zero
 
         function init(){
-            
+
             //reset pages registry
             pages = [];
             $frame.sly('getCurrentPos', function(currentPos){
                 $pages.each(function(){
-                    
+
                     var $page = $(this);
                     var pos = $page.position();
                     var h = $page.outerHeight();
-                    
+
                     //append page position object
                     pages.push({
                         top : Math.round(currentPos + pos.top),
                         middle : Math.round(currentPos + pos.top + h / 2),
-                        bottom : Math.round(currentPos + pos.top + h)
+                        bottom : Math.round(currentPos + pos.top + h),
+                        $dom : $page,
+                        id : $page.data('page-id'),
+                        index : pages.length
                     });
-                    
+
                     //set page number:
                     $page.find('.page-number').html(pages.length);
                 });
@@ -66,7 +70,9 @@ define([
          * @returns {undefined}
          */
         function setCurrent(num, slideTo){
+            var page = pages[current];
             current = num;
+            $current = page.$dom;
             $counterCurrent.html(num + 1);
             if(num === 0){
                 $previous.addClass('disabled');
@@ -79,7 +85,6 @@ define([
                 $next.removeClass('disabled');
             }
             if(slideTo){
-                var page = pages[current];
                 $frame.sly('slideTo', page.top, false);
             }
         }
@@ -127,15 +132,28 @@ define([
             }
         });
 
-        return {
+        var pagingApi = {
             getMoveCallback : moveCallback,
-            setPage : setCurrent,
-            reload : init
+            reload : init,
+            getActive : function(){
+                if($current){
+                    return $current;
+                }
+            },
+            setActive : function(pageId){
+                var page = _.find(pages, {id : pageId});
+                if(page){
+                    setCurrent(page.index, true);
+                }
+            }
         };
+
+        $frameContainer.data('paging-api', pagingApi);
+        return pagingApi;
     }
 
     function initScrolling(pci, $frameContainer){
-        
+
         var $frame = $frameContainer.children('.frame');
         var $scrollbar = $frameContainer.children('.scrollbar');
 
@@ -149,7 +167,7 @@ define([
             dragHandle : true,
             mouseDragging : false
         });
-        
+
         //reload slider setting because the container might have been resized
         $(window).on('resize.multiTabbedExhibit.' + pci.id, function(){
             $frame.sly('reload');
@@ -158,15 +176,15 @@ define([
             $frame.sly('reload');
         });
     }
-    
+
     function renderTemplate(pci, tplName, data){
-        var source = pci.$dom.find(".templates ."+tplName).html();
+        var source = pci.$dom.find(".templates ." + tplName).html();
         var template = handlebars.compile(source);
         return template(data || {});
     }
-    
+
     function initScrollingPassageMarkup(pci, $passage){
-        
+
         //prepare content
         var passageContent = renderTemplate(pci, 'simple', {
             content : $passage.html()
@@ -176,14 +194,14 @@ define([
             content : passageContent
         }));
     }
-    
+
     function initPaggingPassageMarkup(pci, $passage){
-        
-        var tplData = {pages:[]};
+
+        var tplData = {pages : []};
         $passage.find('.page').each(function(){
             var $page = $(this);
             tplData.pages.push({
-                content: $page.html(),
+                content : $page.html(),
                 id : $page.data('page-id')
             });
         });
@@ -196,7 +214,7 @@ define([
         //add pager
         $passage.append(renderTemplate(pci, 'pager'));
     }
-    
+
     function initPassages(pci){
 
         pci.$dom.find('.passage-scrolling').each(function(){
@@ -214,21 +232,22 @@ define([
     }
 
     function initTabbingMarkup(pci){
-        
+
         var tplData = {
             passages : []
         };
         var $tabContainer = pci.$dom.children('.passages').addClass('passages-tabs');
         var $passages = $tabContainer.children('.passage').addClass('passage-tab');
-        
+
         $passages.each(function(){
             var $passage = $(this);
             tplData.passages.push({
                 title : $passage.attr('title'),
-                active : $passage.hasClass('active')
+                active : $passage.hasClass('active'),
+                id : $passage.data('passage-id')
             });
         });
-        
+
         //remove old markup:
         $tabContainer.children('.passages-tab-navigation').remove();
         $tabContainer.prepend(renderTemplate(pci, 'tab-navigation', tplData));
@@ -239,7 +258,7 @@ define([
         //create markup:
         initTabbingMarkup(pci);
 
-        var $tabContainer = $('.passages-tabs');
+        var $tabContainer = pci.$dom.find('.passages-tabs');
         var $tabs = $tabContainer.children('.passage');
         var $nav = $tabContainer.children('.passages-tab-navigation');
         var i = 0;
@@ -278,12 +297,31 @@ define([
                 $li.addClass('passages-tab-active').siblings('li').removeClass('passages-tab-active');
                 //reload scrollbar settings:
                 $tab.find('.frame').sly('reload');
+                //update active element:
+                $active = $a;
             }
         }
+
+        var tabbingApi = {
+            activate : function(passageId){
+                var $trigger = $nav.find('a[data-passage-id=' + passageId + ']');
+                activateTab($trigger);
+            },
+            getActive : function(){
+                var $passage = $active.data('passage-tab');
+                if($passage.length){
+                    return $passage;
+                }
+            }
+        };
+
+        $tabContainer.attr('data-stuff', true);
+        $tabContainer.data('tabbing-api', tabbingApi);
+        return tabbingApi;
     }
-    
+
     function init(pci){
-        
+
         //init scrolling on all "scrollable" frame container
         initPassages(pci);
 
@@ -292,9 +330,9 @@ define([
         if(tabbed && tabbed !== 'false'){
             initTabbing(pci);
         }
-        
+
     }
-    
+
     var multiTabbedExhibit = {
         id : -1,
         getTypeIdentifier : function(){
@@ -316,22 +354,28 @@ define([
 
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
-            
+
             //load all widgets
             init(this);
 
-            this.on('passagechange', function(markup, tabbed){
-                
+            this.on('passagechange', function(markup, tabbed, state){
+
                 var $newMarkup = $(markup);
-                
+
                 self.config.tabbed = tabbed;
-                
+
                 //replace markup
                 self.$dom.children('.passages').replaceWith($newMarkup.children('.passages'));
-                
+
                 //reload all widgets
                 init(self);
-                
+
+                console.log(state);
+                //restore state if applicable
+                if(state && state.passage){
+                    self.setSerializedState(state);
+                }
+
                 //fires event "reloaded"
                 self.trigger('passagereload');
             });
@@ -377,8 +421,7 @@ define([
          */
         destroy : function(){
 
-            var $container = $(this.dom);
-            $container.off().empty();
+            this.$dom.off().empty();
             $(window).off('resize.multiTabbedExhibit.' + this.id);
         },
         /**
@@ -388,6 +431,19 @@ define([
          * @param {Object} serializedState - json format
          */
         setSerializedState : function(state){
+
+            if(state.passage){
+                var $tabs = this.$dom.find('.passages-tabs');
+                var tabApi = $tabs.data('tabbing-api');
+                tabApi.activate(state.passage);
+                if(state.page){
+                    var $passage = tabApi.getActive();
+                    if($passage && $passage.hasClass('passage-paging')){
+                        var pagingApi = $passage.data('paging-api');
+                        pagingApi.setActive(state.page);
+                    }
+                }
+            }
 
         },
         /**
@@ -399,7 +455,24 @@ define([
          */
         getSerializedState : function(){
 
-            return {};
+            var tabApi, pagingApi, $passage, $page, state = {};
+            var $tabs = this.$dom.find('.passages-tabs');
+            if($tabs.length){
+                tabApi = $tabs.data('tabbing-api');
+                $passage = tabApi.getActive();
+                if($passage){
+                    state.passage = $passage.data('passage-id');
+                    if($passage.hasClass('passage-paging')){
+                        pagingApi = $passage.data('paging-api');
+                        $page = pagingApi.getActive();
+                        if($page){
+                            state.page = $page.data('page-id');
+                        }
+                    }
+                }
+            }
+
+            return state;
         }
     };
 

@@ -19,7 +19,7 @@
             <ul class="passages-tab-navigation">
             \{{#each passages}}
             <li>
-            <a href="#" class="passages-tab-active">\{{title}}</a>
+            <a href="#" class="passages-tab-active" data-passage-id="\{{id}}">\{{title}}</a>
             </li>
             \{{/each}}
             </ul>
