@@ -42,7 +42,8 @@ define([
 
         //code to init your interaction property form (on the right side bar)
 
-        var widget = this.widget,
+        var self = this,
+            widget = this.widget,
             interaction = widget.element,
             passages = interaction.data('passages') || {},
             tabbed = interaction.prop('tabbed'),
@@ -77,7 +78,7 @@ define([
                 }
 
                 //communicate change to pci
-                refreshRendering(interaction);
+                self.refreshRendering();
             }
         });
 
@@ -98,10 +99,11 @@ define([
 
             //append the passage form
             var passage = passageEditor.getPassage(interaction, passageId);
-            $panelTabForms.append(renderPassageForm(passage));
+            var $passageForm = $(renderPassageForm(passage));
+            $panelTabForms.append($passageForm);
 
             //communicate change to pci
-            refreshRendering(interaction);
+            self.refreshRendering();
         });
 
         //add delete button click event listener
@@ -117,7 +119,7 @@ define([
             $passageForm.remove();
 
             //communicate change to pci
-            refreshRendering(interaction);
+            self.refreshRendering();
 
         }).on('change', 'select[name=type]', function(){
 
@@ -126,7 +128,7 @@ define([
             var id = $select.parents('.passage-form').data('passage-id');
 
             passageEditor.setType(interaction, id, type);
-            refreshRendering(interaction);
+            self.refreshRendering();
         });
 
     };
@@ -163,7 +165,7 @@ define([
                     break;
                 case 'passage-paging':
                     _.each(passage.pages, function(page){
-                        initContentEditor($container.find('.page[data-page-id=' + passage.uid + '] .page-content'), page, interaction);
+                        initContentEditor($container.find('.passage-paging .page[data-page-id=' + passage.uid + '] .page-content'), page, interaction);
                     });
                     break;
                 default:
@@ -202,15 +204,27 @@ define([
 
         return tabTpl(data);
     }
-
-    function refreshRendering(interaction){
-
+    
+    function destroyEditor($container){
+        $container.find('.passage-simple, .passage-scrolling .passage-content, .passage-paging .page .page-content').each(function(){
+            containerEditor.destroy($(this));
+        });
+    }
+    
+    StateQuestion.prototype.refreshRendering = function(){
+        
+        var interaction = this.widget.element,
+            $container = this.widget.$container;
+        
         //update the markup
         interaction.updateMarkup();
 
         //reload the pci
         interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed')]);
-    }
+        
+        //destroy editors
+        destroyEditor($container);
+    };
 
     var _availableSizes = [
         {
