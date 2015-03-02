@@ -44,6 +44,7 @@ define([
 
         var self = this,
             widget = this.widget,
+            $container = widget.$container,
             interaction = widget.element,
             passages = interaction.data('passages') || {},
             tabbed = interaction.prop('tabbed'),
@@ -126,10 +127,38 @@ define([
 
             var $select = $(this);
             var type = $select.val();
-            var id = $select.parents('.passage-form').data('passage-id');
+            var $form = $select.parents('.passage-form');
+            var id = $form.data('passage-id');
 
             passageEditor.setType(interaction, id, type);
             self.refreshRendering();
+            
+            //toggle size selection visibility
+            if(type === 'passage-simple'){
+                //hide size selector
+                $form.find('.passage-size').hide();
+            }else{
+                $form.find('.passage-size').show();
+            }
+            
+        }).on('change', 'select[name=size]', function(){
+            
+            var $select = $(this);
+            var size = $select.val();
+            var $form = $select.parents('.passage-form');
+            var id = $form.data('passage-id');
+            var oldSize = passageEditor.getPassage(interaction, id);
+            
+            passageEditor.setSize(interaction, id, size);
+            
+            //save the change in the model
+            interaction.updateMarkup();
+            
+            //directly affect the dom
+            $container.find('[data-passage-id=' + id + ']').removeClass(oldSize.size).addClass(size);
+            
+            //the container has been resized
+            interaction.triggerPci('resize');
         });
 
     };
@@ -145,6 +174,7 @@ define([
                 markup : passage.content
             });
         }else{
+            //@todo remove me after completion
             debugger;
         }
     }
@@ -165,8 +195,10 @@ define([
                     initContentEditor($container.find('.passage-scrolling[data-passage-id=' + passage.uid + '] .passage-content'), passage, interaction);
                     break;
                 case 'passage-paging':
+                    var $passage = $container.find('.passage-paging[data-passage-id=' + passage.uid + ']');
                     _.each(passage.pages, function(page){
-                        initContentEditor($container.find('.passage-paging .page[data-page-id=' + passage.uid + '] .page-content'), page, interaction);
+                        var $page = $passage.find('.page[data-page-id=' + page.uid + ']');
+                        initContentEditor($page.find('.page-content'), page, interaction);
                     });
                     break;
                 default:
@@ -185,17 +217,17 @@ define([
         };
 
         data.types = [];
-        _.each(_availableTypes, function(type){
-            if(passage.size === type.cssClass){
+        _.each(passageEditor.getAvailableTypes(), function(type){
+            if(passage.type === type.cssClass){
                 type.selected = true;
             }
             data.types.push(type);
         });
-
+        
         if(passage.type !== 'passage-simple'){
             data.hasSize = true;
             data.sizes = [];
-            _.each(_availableSizes, function(size){
+            _.each(passageEditor.getAvailableSizes(), function(size){
                 if(passage.size === size.cssClass){
                     size.selected = true;
                 }
@@ -226,36 +258,6 @@ define([
         //destroy editors
         destroyEditor($container);
     };
-
-    var _availableSizes = [
-        {
-            label : 'small',
-            cssClass : 'passage240'
-        },
-        {
-            label : 'medium',
-            cssClass : 'passage440'
-        },
-        {
-            label : 'large',
-            cssClass : 'passage540'
-        }
-    ];
-
-    var _availableTypes = [
-        {
-            label : 'simple',
-            cssClass : 'passage-simple'
-        },
-        {
-            label : 'scrolling',
-            cssClass : 'passage-scrolling'
-        },
-        {
-            label : 'paging',
-            cssClass : 'passage-paging'
-        }
-    ];
 
     return StateQuestion;
 });

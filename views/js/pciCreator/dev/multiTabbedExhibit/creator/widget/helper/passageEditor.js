@@ -16,6 +16,21 @@ define(['jquery', 'lodash'], function($, _){
             cssClass : 'passage540'
         }
     ];
+    
+    var _availableTypes = [
+        {
+            label : 'simple',
+            cssClass : 'passage-simple'
+        },
+        {
+            label : 'scrolling',
+            cssClass : 'passage-scrolling'
+        },
+        {
+            label : 'paging',
+            cssClass : 'passage-paging'
+        }
+    ];
 
     function getPassagePropertiesFromMarkup($passage){
 
@@ -73,7 +88,7 @@ define(['jquery', 'lodash'], function($, _){
                 $passage.children('.page').each(function(){
                     var $page = $(this);
                     data.pages.push({
-                        uid : $page.attr('page-id'),
+                        uid : $page.data('page-id'),
                         content : $page.html()
                     });
                 });
@@ -226,8 +241,11 @@ define(['jquery', 'lodash'], function($, _){
     }
 
     return {
-        getAvailableSize : function(){
-            return _.clone(_availableSizes);
+        getAvailableSizes : function(){
+            return _.cloneDeep(_availableSizes);
+        },
+        getAvailableTypes : function(){
+            return _.cloneDeep(_availableTypes);
         },
         getPassage : function(interaction, passageId){
             try{

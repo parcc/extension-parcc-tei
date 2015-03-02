@@ -1,2 +1,3 @@
 .item-editor-sidebar .tool-group .panel .panel.passage-form {position : relative; margin : 5px 0px; padding : 8px; border:1px solid #DDD; border-radius:2px;background-color:#EEE;}
-.item-editor-sidebar .tool-group .panel .panel.passage-form .passage-button-delete {position: absolute; top: 12px; right: 10px; cursor: pointer; font-size: 1.3rem;}
+.item-editor-sidebar .tool-group .panel .panel.passage-form .passage-button-delete {position: absolute; top: 8px; right: 8px; cursor: pointer; font-size: 1.3rem;}
+.item-editor-sidebar .tool-group .panel .panel.passage-form .passage-size {display:none;}
