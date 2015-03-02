@@ -31,7 +31,15 @@ define(['jquery', 'lodash'], function($, _){
             cssClass : 'passage-paging'
         }
     ];
-
+    
+    function uniqueId(prefix){
+        var chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        for(var i = 0; i < 8; i++){
+            prefix += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return _.uniqueId(prefix);
+    }
+    
     function getPassagePropertiesFromMarkup($passage){
 
         var type = 'passage-simple',
@@ -125,7 +133,7 @@ define(['jquery', 'lodash'], function($, _){
         }
 
         passage = _.defaults(attributes || {}, {
-            uid : _.uniqueId('passage_'),
+            uid : uniqueId('passage_'),
             title : generatePassageTitle(interaction),
             type : 'passage-simple'
         });
@@ -159,7 +167,7 @@ define(['jquery', 'lodash'], function($, _){
                 delete passage.pages;
             }else if(type === 'passage-paging'){
                 //the new passage has paging : add the content into a page
-                passage.pages = [{content : passage.content, uid : _.uniqueId('page_converted_')}];
+                passage.pages = [{content : passage.content, uid : uniqueId('page_converted_')}];
                 delete passage.content;
             }
             
@@ -190,15 +198,36 @@ define(['jquery', 'lodash'], function($, _){
         }
     }
 
-    function addPage(interaction, passageId){
+    function addPage(interaction, passageId, afterPageId){
         var passage = getPassage(interaction, passageId);
         if(passage.type === 'passage-paging'){
-            var uid = _.uniqueId('page_');
-            passage.pages.push({
-                uid : uid,
+            var newPage = {
+                uid : uniqueId('page_'),
                 content : ''
-            });
-            return uid;
+            };
+            if(afterPageId){
+                
+                //reinit pages object
+                var pages = [];
+                
+                //add to the first one
+                if(afterPageId === '_prepend'){
+                    pages.push(newPage);
+                }
+                
+                //insert to position
+                _.each(passage.pages, function(page){
+                    pages.push(page);
+                    if(page.uid === afterPageId){
+                        pages.push(newPage);
+                    }
+                });
+                
+                passage.pages = pages;
+            }else{
+                passage.pages.push(newPage);
+            }
+            return newPage.uid;
         }else{
             throw 'the passage is not of a paging type';
         }

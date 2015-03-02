@@ -2,12 +2,14 @@
 .item-editor-sidebar .tool-group .panel .panel.passage-form .passage-button-delete {position: absolute; top: 8px; right: 8px; cursor: pointer; font-size: 1.3rem;}
 .item-editor-sidebar .tool-group .panel .panel.passage-form .passage-size {display:none;}
 
-.page-adder {position:absolute; bottom:-8px; width:100%;}
-.page-adder .line{position:absolute; border-top:dashed 1px #266D9C;top:10px;width:100%;}
-.page-adder .circle {
+.page .page-header .page-adder{top:-30px;}
+.page .page-footer .page-adder{bottom:-10px;}
+.page .page-adder {position:absolute; width:100%;opacity:.3}
+.page .page-adder .line{position:absolute; border-top:dashed 1px #266D9C;top:8px;width:100%;}
+.page .page-adder .circle {
     display:block;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     background: #266D9C; 
     -moz-border-radius: 30px; 
     -webkit-border-radius: 30px; 
@@ -15,14 +17,15 @@
     position:absolute;
     margin-left:50%;
     margin-right:50%;
+    cursor:pointer;
 }
-.page-adder .circle span{
+.page .page-adder .circle span{
     font-weight: bold;
-    font-size:14px;
+    font-size:16px;
     color:#E6EEF4;
     position:absolute;
-    top:-1px;
-    left:6px;
+    top:-3px;
+    left:4px;
 }
-.page-adder .circle:hover{opacity:.7; cursor:pointer;}
+.page .page-adder:hover{opacity:.8; }
 

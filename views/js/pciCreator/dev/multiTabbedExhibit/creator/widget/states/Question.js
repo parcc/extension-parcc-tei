@@ -183,9 +183,10 @@ define([
 
     StateQuestion.prototype.initPassagesContentEditors = function(){
 
-        var interaction = this.widget.element,
-            $container = this.widget.$container;
-        var passages = interaction.data('passages');
+        var self = this,
+            interaction = this.widget.element,
+            $container = this.widget.$container,
+            passages = interaction.data('passages');
 
         _.each(passages, function(passage){
 
@@ -199,20 +200,35 @@ define([
                 case 'passage-paging':
                     var $passage = $container.find('.passage-paging[data-passage-id=' + passage.uid + ']');
                     _.each(passage.pages, function(page){
+
                         var $page = $passage.find('.page[data-page-id=' + page.uid + ']');
                         initContentEditor($page.find('.page-content'), page, interaction);
 
                         //init insert page buttons
-                        if($page.is(':first')){
-                            console.log('is first', $page);
-                        }
-                        $page.find('.page-footer').append(pageAdderTpl());
+                        $page.find('.page-footer').append(pageAdderTpl({
+                            passage : passage.uid,
+                            page : page.uid
+                        }));
                     });
+
+                    //init insert page buttons
+                    $passage.find('.page:first .page-header').prepend(pageAdderTpl({
+                        passage : passage.uid,
+                        page : '_prepend'
+                    }));
                     break;
                 default:
                     throw 'unknown type of passage';
             }
 
+        });
+
+        $container.on('click.page-adder', '.page-adder .circle', function(){
+            var $button = $(this);
+            var passage = $button.data('passage');
+            var page = $button.data('page');
+            var newPageId = passageEditor.addPage(interaction, passage, page);
+            self.refreshRendering({page : newPageId});
         });
     };
 
@@ -232,17 +248,15 @@ define([
             data.types.push(type);
         });
 
-        if(passage.type !== 'passage-simple'){
-            data.hasSize = true;
-            data.sizes = [];
-            _.each(passageEditor.getAvailableSizes(), function(size){
-                if(passage.size === size.cssClass){
-                    size.selected = true;
-                }
-                data.sizes.push(size);
-            });
-        }
-
+        data.hasSize = (passage.type !== 'passage-simple');
+        data.sizes = [];
+        _.each(passageEditor.getAvailableSizes(), function(size){
+            if(passage.size === size.cssClass){
+                size.selected = true;
+            }
+            data.sizes.push(size);
+        });
+        
         return tabTpl(data);
     }
 
@@ -250,26 +264,23 @@ define([
         $container.find('.passage-simple, .passage-scrolling .passage-content, .passage-paging .page .page-content').each(function(){
             containerEditor.destroy($(this));
         });
+        $container.off('.page-adder').find('.page-adder').remove();
     }
 
     StateQuestion.prototype.refreshRendering = function(state){
 
         var interaction = this.widget.element,
-            $container = this.widget.$container,
-            state;
+            $container = this.widget.$container;
 
         //update the markup
         interaction.updateMarkup();
-        
-        //get the current edition state
-        state = _.defaults(state || {}, interaction.data('pci').getSerializedState());
-        
-        //reload the pci
-        interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed'), state]);
 
         //destroy editors
         destroyEditor($container);
+
+        //reload the pci
+        interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed'), state]);
     };
-    
+
     return StateQuestion;
 });

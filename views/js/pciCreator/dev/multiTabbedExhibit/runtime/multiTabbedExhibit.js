@@ -370,10 +370,11 @@ define([
                 //reload all widgets
                 init(self);
 
-                console.log(state);
                 //restore state if applicable
-                if(state && state.passage){
-                    self.setSerializedState(state);
+                if(state){
+                    var currentState = self.getSerializedState();
+                    var newState = _.defaults(state, currentState);
+                    self.setSerializedState(newState);
                 }
 
                 //fires event "reloaded"
