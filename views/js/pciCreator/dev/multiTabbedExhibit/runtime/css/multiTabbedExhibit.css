@@ -37,7 +37,7 @@
     position:relative;
 }
 
-.passage {margin : 20px 10px;}
+.passage {margin : 10px 0;}
 
 .passage-paging .frame {background:#EFEFEF;}
 .passage-paging .frame .pages { margin: 0; padding: 10px; list-style: none; border:#CCC;}
