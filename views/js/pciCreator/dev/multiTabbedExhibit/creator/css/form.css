@@ -2,11 +2,11 @@
 .item-editor-sidebar .tool-group .panel .panel.passage-form .passage-button-delete {position: absolute; top: 8px; right: 8px; cursor: pointer; font-size: 1.3rem;}
 .item-editor-sidebar .tool-group .panel .panel.passage-form .passage-size {display:none;}
 
-.widget-box .page .page-header .page-adder{top:-30px;}
-.widget-box .page .page-footer .page-adder{bottom:-10px;}
-.widget-box .page .page-adder {position:absolute; width:100%;opacity:.3}
-.widget-box .page .page-adder .line{position:absolute; border-top:dashed 1px #266D9C;top:8px;width:100%;}
-.widget-box .page .page-adder .circle {
+.widget-box  .multiTabbedExhibit .page .page-header .page-adder{top:-30px;}
+.widget-box  .multiTabbedExhibit .page .page-footer .page-adder{bottom:-10px;}
+.widget-box  .multiTabbedExhibit .page .page-adder {position:absolute; width:100%;opacity:.3}
+.widget-box  .multiTabbedExhibit .page .page-adder .line{position:absolute; border-top:dashed 1px #266D9C;top:8px;width:100%;}
+.widget-box  .multiTabbedExhibit .page .page-adder .circle {
     display:block;
     width: 16px;
     height: 16px;
@@ -19,7 +19,7 @@
     margin-right:50%;
     cursor:pointer;
 }
-.widget-box .page .page-adder .circle span{
+.widget-box  .multiTabbedExhibit .page .page-adder .circle span{
     font-weight: bold;
     font-size:16px;
     color:#E6EEF4;
@@ -27,8 +27,8 @@
     top:-3px;
     left:4px;
 }
-.widget-box .page .page-adder:hover{opacity:.8; }
+.widget-box  .multiTabbedExhibit .page .page-adder:hover{opacity:.8; }
 
-.widget-box .page .page-header .page-number{right:8px;top:2px;}
-.widget-box .page .page-header .page-deleter{position:absolute; top:-12px; right:-8px; color:#3E7DA7;opacity:.8;cursor:pointer;}
-.widget-box .page .page-header .page-deleter:hover{opacity:1;}
+.widget-box  .multiTabbedExhibit .page .page-header .page-number{right:8px;top:2px;}
+.widget-box  .multiTabbedExhibit .page .page-header .page-deleter{position:absolute; top:-12px; right:-8px; color:#3E7DA7;opacity:.8;cursor:pointer;}
+.widget-box  .multiTabbedExhibit .page .page-header .page-deleter:hover{opacity:1;}
