@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd"
+                xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" 
+                identifier="pci005" title="PCI 005" adaptive="false" timeDependent="false">
+    
+    <responseDeclaration identifier="graphNumberLine1" cardinality="single" baseType="integer"/>
+    
+    <!--item specific stylesheets will be added by the item in the method postRender()-->
+    <stylesheet href="multiTabbedExhibit/runtime/css/multiTabbedExhibit" title="" type="text/css" media="all"></stylesheet>
+    
+    <itemBody>
+        
+        <customInteraction responseIdentifier="graphNumberLine1">
+            <pci:portableCustomInteraction customInteractionTypeIdentifier="multiTabbedExhibit" hook="multiTabbedExhibit/runtime/multiTabbedExhibit.js">
+
+                <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
+                
+                <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
+                    <pci:libraries>
+                    </pci:libraries>
+                </pci:resources>
+
+                <pci:properties>
+                    <pci:entry key="tabbed">true</pci:entry>
+                </pci:properties>
+
+                <pci:markup>
+                    <html5:div class="multiTabbedExhibit">
+                        <html5:div class="prompt">
+                            Use the number line to plot the <html5:em>approximate</html5:em> area of a circle with a diamter of 2 units.
+                        </html5:div>
+                        <html5:div class="passages">
+                            <html5:div class="passage" title="Passage 1" data-passage-id="passage1">
+                                <html5:div>
+                                    <html5:table>
+                                        <html5:thead>
+                                            <html5:tr>
+                                                <html5:th>Color<html5:br/>of Dogs</html5:th>
+                                                <html5:th>Number<html5:br/>of Dogs</html5:th>
+                                            </html5:tr>
+                                        </html5:thead>
+                                        <html5:tbody>
+                                            <html5:tr>
+                                                <html5:td>Mixed</html5:td>
+                                                <html5:td>9</html5:td>
+                                            </html5:tr>
+                                            <html5:tr>
+                                                <html5:td>White</html5:td>
+                                                <html5:td>2</html5:td>
+                                            </html5:tr>
+                                            <html5:tr>
+                                                <html5:td>Black</html5:td>
+                                                <html5:td>3</html5:td>
+                                            </html5:tr>
+                                            <html5:tr>
+                                                <html5:td>Other</html5:td>
+                                                <html5:td>6</html5:td>
+                                            </html5:tr>
+                                        </html5:tbody>
+                                    </html5:table>
+                                </html5:div>
+                            </html5:div>
+                            <html5:div class="passage passage-paging passage540" title="Passage 2" data-passage-id="passage2">
+                                <html5:div class="page" data-page-id="page1">
+                                    <html5:h4>Gone With the Wind By Margaret Mitchell</html5:h4>
+                                    <html5:p>Part One Chapter I</html5:p>
+                                    <html5:p>Scarlett O'Hara was not beautiful, but men seldom
+                                        realized it when caught by her charm as the Tarleton
+                                        twins were. In her face were too sharply blended the
+                                        delicate features of her mother, a Coast aristocrat of
+                                        French descent, and the heavy ones of her florid Irish
+                                        father. But it was an arresting face, pointed of chin,
+                                        square of jaw. Her eyes were pale green without a touch
+                                        of hazel, starred with bristly black lashes and
+                                        slightly tilted at the ends.</html5:p>
+                                    <html5:p>Above them, her thick black brows slanted upward,
+                                        cutting a startling oblique line in her magnolia-white
+                                        skin-- that skin so prized by Southern
+                                        women and so carefully guarded with bonnets,
+                                        veils and mittens against hot Georgia suns. Seated with
+                                        Stuart and Brent Tarleton in the cool shade of the
+                                        porch of Tara, her father's plantation, that bright
+                                        April afternoon of 1861, she made a pretty picture.</html5:p>
+                                </html5:div>
+                                <html5:div class="page" data-page-id="page2">
+                                    <html5:p>Her new green flowered-muslin dress spread its
+                                    twelve yards of billowing material over herhoops and
+                                    exactly matched the flat-heeled green morocco slippers
+                                    her father had recently brought her from Atlanta. The
+                                    dress set off to perfection the seventeen-inch waist,
+                                    the smallest in three counties, and the tightly fitting
+                                    basque showed breasts well matured for her sixteen
+                                    years. But for all the modesty of her spreading skirts,
+                                    the demureness of hair netted smoothly into a chignon
+                                    and the quietness of small white hands folded in her
+                                    lap, her true self was poorly
+                                    concealed.</html5:p>
+                                <html5:p>The green eyes in the carefully sweet face were
+                                    turbulent, willful, lusty with life, distinctly at
+                                    variance with her decorous demeanor. Her manners had
+                                    been imposed upon her by her mother's gentle
+                                    admonitions and the sterner discipline of her mammy;
+                                    her eyes were her own.</html5:p>
+                                </html5:div>
+                                <html5:div class="page" data-page-id="page3">
+                                    <html5:p>On either side of her, the twins lounged easily in
+                                    their chairs, squinting at the sunlight through tall
+                                    mint-garnished glasses as they laughed and talked,
+                                    their long legs, booted to the knee and thick with
+                                    saddle muscles, crossed negligently. Nineteen years
+                                    old, six feet two inches tall, long of bone and hard of
+                                    muscle, with sunburned faces and deep auburn hair, their
+                                    eyes merry and arrogant, their bodies clothed in
+                                    identical blue coats and mustard-colored
+                                    breeches, were as much alike as two bolls of
+                                    cotton.</html5:p>
+                                <html5:p>Outside, the late afternoon sun slanted down in the
+                                    yard, throwing into gleaming brightness the dogwood
+                                    trees that were solid masses of white blossoms against
+                                    the background of new green. The twins' horses were
+                                    hitched in the driveway, big animals, red as their
+                                    masters' hair; and around the horses' legs quarreled
+                                    the pack of lean, nervous possum hounds that
+                                    accompanied Stuart and Brent wherever they went.</html5:p>
+                                <html5:p>On either side of her, the twins lounged easily in
+                                    their chairs, squinting at the sunlight through tall
+                                    mint-garnished glasses as they laughed and talked,
+                                    their long legs, booted to the knee and thick with
+                                    saddle muscles, crossed negligently. Nineteen years
+                                    old, six feet two inches tall, long of bone and hard of
+                                    muscle, with sunburned faces and deep auburn hair, their
+                                    eyes merry and arrogant, their bodies clothed in
+                                    identical blue coats and mustard-colored
+                                    breeches, were as much alike as two bolls of
+                                    cotton.</html5:p>
+                                <html5:p>Outside, the late afternoon sun slanted down in the
+                                    yard, throwing into gleaming brightness the dogwood
+                                    trees that were solid masses of white blossoms against
+                                    the background of new green. The twins' horses were
+                                    hitched in the driveway, big animals, red as their
+                                    masters' hair; and around the horses' legs quarreled
+                                    the pack of lean, nervous possum hounds that
+                                    accompanied Stuart and Brent wherever they went.</html5:p>
+                                </html5:div>
+                                <html5:div class="page" data-page-id="page4">
+                                    <html5:p>A little aloof, as became an aristocrat, lay a
+                                    black-spotted carriage dog, muzzle on paws, patiently
+                                    waiting for the boys to go home to supper. Between the
+                                    hounds and the horses and the twins there was a kinship
+                                    deeper than that of their constant companionship. 
+                                    They were all healthy, thoughtless
+                                    young animals, sleek, graceful, high-spirited, the boys
+                                    as mettlesome as the horses they rode, mettlesome and
+                                    dangerous but, withal, sweet-tempered to those who knew
+                                    how to handle them.</html5:p>
+                                <html5:p>Although born to the ease of plantation life, waited
+                                    on hand and foot since infancy, the faces of the three
+                                    on the porch were neither slack nor soft. They had the
+                                    vigor and alertness of country people who have spent
+                                    all their lives in the open and troubled their heads
+                                    very little with dull things in books. Life in the
+                                    north Georgia county of Clayton was still new and,
+                                    according to the standards of Augusta, Savannah and
+                                    Charleston, a little crude. The more sedate and older
+                                    sections of the South looked down their noses at the
+                                    up-country</html5:p>
+                                </html5:div>
+                            </html5:div>
+                            <html5:div class="passage passage-scrolling passage240" title="Passage 3" data-passage-id="passage3">
+                                <html5:h4>Gone With the Wind By Margaret Mitchell</html5:h4>
+                                <html5:p>Part One Chapter I</html5:p>
+                                <html5:p>Scarlett O'Hara was not beautiful, but men seldom
+                                    realized it when caught by her charm as the Tarleton
+                                    twins were. In her face were too sharply blended the
+                                    delicate features of her mother, a Coast aristocrat of
+                                    French descent, and the heavy ones of her florid Irish
+                                    father. But it was an arresting face, pointed of chin,
+                                    square of jaw. Her eyes were pale green without a touch
+                                    of hazel, starred with bristly black lashes and
+                                    slightly tilted at the ends.</html5:p>
+                                <html5:p>Above them, her thick black brows slanted upward,
+                                    cutting a startling oblique line in her magnolia-white
+                                    skin--that skin so prized by Southern
+                                    women and so carefully guarded with bonnets,
+                                    veils and mittens against hot Georgia suns. Seated with
+                                    Stuart and Brent Tarleton in the cool shade of the
+                                    porch of Tara, her father's plantation, that bright
+                                    April afternoon of 1861, she made a pretty picture.</html5:p>
+                                <html5:p>Her new green flowered-muslin dress spread its
+                                    twelve yards of billowing material over her hoops and
+                                    exactly matched the flat-heeled green morocco slippers
+                                    her father had recently brought her from Atlanta. The
+                                    dress set off to perfection the seventeen-inch waist,
+                                    the smallest in three counties, and the tightly fitting
+                                    basque showed breasts well matured for her sixteen
+                                    years. But for all the modesty of her spreading skirts,
+                                    the demureness of hair netted smoothly into a chignon
+                                    and the quietness of small white hands folded in her
+                                    lap,her true self was poorly concealed.
+                                </html5:p>
+                                <html5:p>Scarlett O'Hara was not beautiful, but men seldom
+                                    realized it when caught by her charm as the Tarleton
+                                    twins were. In her face were too sharply blended the
+                                    delicate features of her mother, a Coast aristocrat of
+                                    French descent, and the heavy ones of her florid Irish
+                                    father. But it was an arresting face, pointed of chin,
+                                    square of jaw. Her eyes were pale green without a touch
+                                    of hazel, starred with bristly black lashes and
+                                    slightly tilted at the ends.</html5:p>
+                                <html5:p>Above them, her thick black brows slanted upward,
+                                    cutting a startling oblique line in her magnolia-white
+                                    skin--that skin so prized by Southern
+                                    women and so carefully guarded with bonnets,
+                                    veils and mittens against hot Georgia suns. Seated with
+                                    Stuart and Brent Tarleton in the cool shade of the
+                                    porch of Tara, her father's plantation, that bright
+                                    April afternoon of 1861, she made a pretty picture.</html5:p>
+                                <html5:p>Her new green flowered-muslin dress spread its
+                                    twelve yards of billowing material over her hoops and
+                                    exactly matched the flat-heeled green morocco slippers
+                                    her father had recently brought her from Atlanta. The
+                                    dress set off to perfection the seventeen-inch waist,
+                                    the smallest in three counties, and the tightly fitting
+                                    basque showed breasts well matured for her sixteen
+                                    years. But for all the modesty of her spreading skirts,
+                                    the demureness of hair netted smoothly into a chignon
+                                    and the quietness of small white hands folded in her
+                                    lap,her true self was poorly concealed.
+                                </html5:p>
+                            </html5:div>
+                        </html5:div>
+                        <html5:div class="templates">
+                            
+                            <html5:script class="tab-navigation" type="text/x-handlebars-template">
+                                <html5:ul class="passages-tab-navigation">
+                                    {{#each passages}}
+                                    <html5:li>
+                                        <html5:a href="#" class="passages-tab-active">{{title}}</html5:a>
+                                    </html5:li>
+                                    {{/each}}
+                                </html5:ul>
+                            </html5:script>
+                             
+                            <html5:script class="scrolling" type="text/x-handlebars-template">
+                                <html5:div class="frame">
+                                    <html5:div class="slidee">
+                                        {{{content}}}
+                                    </html5:div>
+                                </html5:div>
+                                <html5:div class="scrollbar">
+                                    <html5:div class="handle">
+                                        <html5:div class="cursor"></html5:div>
+                                    </html5:div>
+                                </html5:div>
+                            </html5:script>
+                            
+                            <html5:script class="simple" type="text/x-handlebars-template">
+                                <html5:div class="passage-content">{{{content}}}</html5:div>
+                            </html5:script>
+
+                            <html5:script class="pages" type="text/x-handlebars-template">
+                                <html5:ul class="pages">
+                                    {{#each pages}}
+                                    <html5:li class="page shadowed">
+                                        <html5:div class="page-header">
+                                            <html5:span class="page-number"></html5:span>
+                                        </html5:div>
+                                        <html5:div class="page-content">
+                                            {{{content}}}
+                                        </html5:div>
+                                        <html5:div class="page-footer"></html5:div>
+                                    </html5:li>
+                                    {{/each}}
+                                </html5:ul>
+                            </html5:script>
+                            
+                            <html5:script class="pager" type="text/x-handlebars-template">
+                                <html5:div class="passage-pager">
+                                    <html5:div class="passage-pager-previous">
+                                        <html5:button name="previous" value="previous" class="btn btn-info small" type="button">Page Up</html5:button>
+                                    </html5:div>
+                                    <html5:div class="passage-pager-counter">
+                                        Page<html5:span class="counter-current"></html5:span>of<html5:span class="counter-total"></html5:span>
+                                    </html5:div>
+                                    <html5:div class="passage-pager-next">
+                                        <html5:button name="next" value="next" class="btn btn-info small" type="button">Page Down</html5:button>
+                                    </html5:div>
+                                </html5:div>
+                            </html5:script>
+                            
+                        </html5:div>
+                    </html5:div>
+                </pci:markup>
+
+            </pci:portableCustomInteraction>
+        </customInteraction>
+
+    </itemBody>
+    
+</assessmentItem>

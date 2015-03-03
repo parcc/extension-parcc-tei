@@ -1,0 +1,28 @@
+{
+    "typeIdentifier": "multiTabbedExhibit",
+    "label": "Multi Tabbed Exhibit",
+    "short": "Exhibit",
+    "description": "Multi Tabbed Exhibit",
+    "version": "0.1",
+    "author": "Sam Sipasseuth",
+    "email": "sam@taotesting.com",
+    "libraries": [
+        "IMSGlobal/jquery_2_1_1",
+        "OAT/util/event",
+        "OAT/lodash",
+        "OAT/handlebars",
+        "./runtime/lib/sly.min"
+    ],
+    "css": [
+        "runtime/css/multiTabbedExhibit.css"
+    ],
+    "entryPoint": "runtime/multiTabbedExhibit.js",
+    "tags": [
+    ],
+    "icon": "creator/img/icon.svg",
+    "response": {
+        "baseType": "boolean",
+        "cardinality": "single"
+    },
+    "debug": false
+}
