@@ -7,6 +7,7 @@ define([
     'tpl!multiTabbedExhibit/creator/tpl/propertiesForm',
     'tpl!multiTabbedExhibit/creator/tpl/tabForm',
     'tpl!multiTabbedExhibit/creator/tpl/page-adder',
+    'tpl!multiTabbedExhibit/creator/tpl/page-deleter',
     'lodash',
     'jquery'
 ], function(
@@ -18,6 +19,7 @@ define([
     formTpl,
     tabTpl,
     pageAdderTpl,
+    pageDeleterTpl,
     _,
     $){
 
@@ -204,6 +206,15 @@ define([
                         var $page = $passage.find('.page[data-page-id=' + page.uid + ']');
                         initContentEditor($page.find('.page-content'), page, interaction);
 
+                        //init delete button
+                        if(passage.pages.length > 1){
+                            //need to keep at least one page!
+                            $page.find('.page-header').prepend(pageDeleterTpl({
+                                passage : passage.uid,
+                                page : page.uid
+                            }));
+                        }
+
                         //init insert page buttons
                         $page.find('.page-footer').append(pageAdderTpl({
                             passage : passage.uid,
@@ -229,6 +240,13 @@ define([
             var page = $button.data('page');
             var newPageId = passageEditor.addPage(interaction, passage, page);
             self.refreshRendering({page : newPageId});
+        }).on('click.page-adder', '.page-deleter', function(){
+            //delete 
+            var $button = $(this);
+            var passage = $button.data('passage');
+            var page = $button.data('page');
+            passageEditor.removePage(interaction, passage, page);
+            self.refreshRendering();
         });
     };
 
@@ -256,7 +274,7 @@ define([
             }
             data.sizes.push(size);
         });
-        
+
         return tabTpl(data);
     }
 
