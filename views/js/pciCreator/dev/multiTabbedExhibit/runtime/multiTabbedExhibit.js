@@ -392,9 +392,7 @@ define([
 
                 //restore state if applicable
                 if(state){
-                    var currentState = self.getSerializedState();
-                    var newState = _.defaults(state, currentState);
-                    self.setSerializedState(newState);
+                    self.setSerializedState(state);
                 }
 
                 //fires event "reloaded"

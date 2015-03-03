@@ -39,7 +39,7 @@ define([
         });
 
     }, function(){
-        
+
         this.destroyEditor();
     });
 
@@ -164,7 +164,7 @@ define([
 
             //the container has been resized
             interaction.triggerPci('resize');
-            
+
         }).on('keyup', 'input[name=name]', _.throttle(function(){
 
             var $input = $(this);
@@ -179,7 +179,7 @@ define([
 
             //directly affect the dom
             $container.find('.passages-tab-navigation a[data-passage-id=' + id + ']').html(name);
-            
+
         }, 400));
 
     };
@@ -306,7 +306,9 @@ define([
     StateQuestion.prototype.refreshRendering = function(state){
 
         var interaction = this.widget.element;
-
+        var currentState = interaction.data('pci').getSerializedState();
+        var newState = _.defaults(state || {}, currentState);
+        
         //update the markup
         interaction.updateMarkup();
 
@@ -314,7 +316,7 @@ define([
         this.destroyEditor();
 
         //reload the pci
-        interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed'), state]);
+        interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed'), newState]);
     };
 
     return StateQuestion;
