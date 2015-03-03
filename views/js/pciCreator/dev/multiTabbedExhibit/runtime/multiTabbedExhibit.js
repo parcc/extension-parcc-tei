@@ -32,7 +32,11 @@ define([
         var $current;
         var pages = [];
         var current = 0;//page count starts at zero
-
+        var scrolling = false;
+        
+        /**
+         * Init paging widget
+         */
         function init(){
 
             //reset pages registry
@@ -63,15 +67,17 @@ define([
         }
 
         /**
-         * Set the current page number 
+         * Set the current page number in state
          * 
          * @param {Integer} num - the new page number (the page coutn starts from O)
-         * @param {Boolean} [slideTo] - tells if the frame should be scrolled to position of the page
          * @returns {undefined}
          */
-        function setCurrent(num, slideTo){
-            var page = pages[current];
+        function setCurrent(num){
+            var page;
+            
             current = num;
+            page = pages[current];
+            
             $current = page.$dom;
             $counterCurrent.html(num + 1);
             if(num === 0){
@@ -84,18 +90,27 @@ define([
             }else{
                 $next.removeClass('disabled');
             }
-            if(slideTo){
-                $frame.sly('slideTo', page.top, false);
-            }
         }
-
+        
         /**
-         * The callback to be executed after 
+         * Programatically scroll to a specific page location
          * 
+         * @param {Integer} num - the index of the page to scroll to
+         * @returns {undefined}
+         */
+        function scrollTo(num){
+            var page = pages[num];
+            scrolling = true;
+            $frame.sly('slideTo', page.top, false);
+            setCurrent(num);
+        }
+        
+        /**
+         * The callback to be executed after each move event
          */
         function moveCallback(newPos){
-
-            var threshold = newPos + frameHalfHeight + 80;
+            
+            var threshold = newPos + frameHalfHeight + 20;
             var currentPage = 0;
 
             //check position of the pages
@@ -116,19 +131,23 @@ define([
 
         //bind event listeners to the sly scrollbar
         $frame.sly('on', 'move', _.throttle(function(){
-            moveCallback(this.pos.cur);
+            if(scrolling){
+                scrolling = false;
+            }else{
+                moveCallback(this.pos.cur);
+            }
         }, 600));
         $frame.sly('on', 'load', _.throttle(init, 600));
 
         //init next/previous buttons
         $previous.on('click', function(){
             if(!$previous.hasClass('disabled') && current > 0){
-                setCurrent(current - 1, true);
+                scrollTo(current - 1, true);
             }
         });
         $next.on('click', function(){
             if(!$next.hasClass('disabled') && current < pages.length - 1){
-                setCurrent(current + 1, true);
+                scrollTo(current + 1, true);
             }
         });
 
@@ -143,7 +162,7 @@ define([
             setActive : function(pageId){
                 var page = _.find(pages, {id : pageId});
                 if(page){
-                    setCurrent(page.index, true);
+                    scrollTo(page.index, true);
                 }
             }
         };
