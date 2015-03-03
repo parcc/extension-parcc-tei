@@ -33,7 +33,7 @@
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
-.multiTabbedExhibit .passage-paging, .passage-scrolling {
+.multiTabbedExhibit .passage-paging, .multiTabbedExhibit .passage-scrolling {
     position:relative;
 }
 
@@ -49,7 +49,7 @@
     box-shadow: 0px 0px 5px 2px #aaa;
     filter:progid:DXImageTransform.Microsoft.Shadow(color=#aaa, Direction=NaN, Strength=5);
 }
-.multiTabbedExhibit .passage-paging .page-header, .page-footer {position:relative; min-height:2rem;}
+.multiTabbedExhibit .passage-paging .page-header, .multiTabbedExhibit .passage-paging .page-footer {position:relative; min-height:2rem;}
 .multiTabbedExhibit .passage-paging .page-header {margin-bottom: 12px;}
 .multiTabbedExhibit .passage-paging .page-header .page-number {position:absolute;right:0px;font-weight: bold; font-size:1.8rem;}
 .multiTabbedExhibit .passage-paging .page-content {padding:0 20px; min-height:100px;}
@@ -63,7 +63,7 @@
 .multiTabbedExhibit .passage-paging .passage-pager .passage-pager-counter span {margin:0 3px;}
 .multiTabbedExhibit .passage-paging .disabled {cursor:default !important;}
 
-.multiTabbedExhibit .passage-scrolling, .passage-paging {border:solid 1px #CCC;}
+.multiTabbedExhibit .passage-scrolling, .multiTabbedExhibit .passage-paging {border:solid 1px #CCC;}
 .multiTabbedExhibit .passage-scrolling .passage-content {padding:1rem;}
 
 /*tab style*/
@@ -76,7 +76,7 @@
     list-style: none;
     border-bottom:1px solid #DDD;
 }
-.multiTabbedExhibit ul.passages-tab-navigation:after, ul.passages-tab-navigation:before{ content:""; display:table;}
+.multiTabbedExhibit ul.passages-tab-navigation:after, .multiTabbedExhibit ul.passages-tab-navigation:before{ content:""; display:table;}
 .multiTabbedExhibit ul.passages-tab-navigation:after {clear:both;}
 
 .multiTabbedExhibit ul.passages-tab-navigation li {
