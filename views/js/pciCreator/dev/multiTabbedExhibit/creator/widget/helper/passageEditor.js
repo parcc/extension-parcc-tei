@@ -188,6 +188,12 @@ define(['jquery', 'lodash'], function($, _){
         passage.size = sizeClass;
     }
 
+    function setTitle(interaction, passageId, title){
+
+        var passage = getPassage(interaction, passageId);
+        passage.title = title;
+    }
+
     function getPassage(interaction, passageId){
         var passages = interaction.data('passages');
         var passage = _.find(passages, {uid : passageId});
@@ -288,6 +294,7 @@ define(['jquery', 'lodash'], function($, _){
         addPassage : addPassage,
         setType : setType,
         setSize : setSize,
+        setTitle : setTitle,
         addPage : addPage,
         setPageContent : setPageContent,
         setPassageContent : setPassageContent,

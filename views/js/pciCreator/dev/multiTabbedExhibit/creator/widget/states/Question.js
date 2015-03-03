@@ -39,7 +39,8 @@ define([
         });
 
     }, function(){
-
+        
+        this.destroyEditor();
     });
 
     StateQuestion.prototype.initForm = function(){
@@ -159,11 +160,27 @@ define([
             interaction.updateMarkup();
 
             //directly affect the dom
-            $container.find('[data-passage-id=' + id + ']').removeClass(oldSize.size).addClass(size);
+            $container.find('.passage[data-passage-id=' + id + ']').removeClass(oldSize.size).addClass(size);
 
             //the container has been resized
             interaction.triggerPci('resize');
-        });
+            
+        }).on('keyup', 'input[name=name]', _.throttle(function(){
+
+            var $input = $(this);
+            var name = $input.val();
+            var $form = $input.parents('.passage-form');
+            var id = $form.data('passage-id');
+
+            passageEditor.setTitle(interaction, id, name);
+
+            //save the change in the model
+            interaction.updateMarkup();
+
+            //directly affect the dom
+            $container.find('.passages-tab-navigation a[data-passage-id=' + id + ']').html(name);
+            
+        }, 400));
 
     };
 
@@ -278,23 +295,23 @@ define([
         return tabTpl(data);
     }
 
-    function destroyEditor($container){
+    StateQuestion.prototype.destroyEditor = function(){
+        var $container = this.widget.$container;
         $container.find('.passage-simple, .passage-scrolling .passage-content, .passage-paging .page .page-content').each(function(){
             containerEditor.destroy($(this));
         });
-        $container.off('.page-adder').find('.page-adder').remove();
-    }
+        $container.off('.page-adder').find('.page-adder, .page-deleter').remove();
+    };
 
     StateQuestion.prototype.refreshRendering = function(state){
 
-        var interaction = this.widget.element,
-            $container = this.widget.$container;
+        var interaction = this.widget.element;
 
         //update the markup
         interaction.updateMarkup();
 
         //destroy editors
-        destroyEditor($container);
+        this.destroyEditor();
 
         //reload the pci
         interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed'), state]);
