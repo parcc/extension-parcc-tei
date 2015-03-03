@@ -192,7 +192,8 @@ define([
                     interaction.updateMarkup();
                     interaction.triggerPci('resize');
                 }, 600),
-                markup : passage.content
+                markup : passage.content,
+                related : interaction
             });
         }else{
             //@todo remove me after completion
