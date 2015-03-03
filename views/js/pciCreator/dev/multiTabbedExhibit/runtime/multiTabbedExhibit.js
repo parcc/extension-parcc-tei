@@ -246,6 +246,7 @@ define([
                 active : $passage.hasClass('active'),
                 id : $passage.data('passage-id')
             });
+            $passage.removeAttr('title');
         });
 
         //remove old markup:
