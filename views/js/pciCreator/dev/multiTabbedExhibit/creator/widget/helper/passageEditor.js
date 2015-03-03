@@ -16,7 +16,7 @@ define(['jquery', 'lodash'], function($, _){
             cssClass : 'passage540'
         }
     ];
-    
+
     var _availableTypes = [
         {
             label : 'simple',
@@ -31,7 +31,13 @@ define(['jquery', 'lodash'], function($, _){
             cssClass : 'passage-paging'
         }
     ];
-    
+
+    /**
+     * generate a unique (multi-session safe) identifier for the passages 
+     * 
+     * @param {String} prefix
+     * @returns {String}
+     */
     function uniqueId(prefix){
         var chars = "abcdefghijklmnopqrstuvwxyz0123456789";
         for(var i = 0; i < 8; i++){
@@ -39,7 +45,13 @@ define(['jquery', 'lodash'], function($, _){
         }
         return _.uniqueId(prefix);
     }
-    
+
+    /**
+     * Extract all the useful properties of the passage from its dom representation
+     * 
+     * @param {JQuery} $passage
+     * @returns {Object}
+     */
     function getPassagePropertiesFromMarkup($passage){
 
         var type = 'passage-simple',
@@ -71,23 +83,20 @@ define(['jquery', 'lodash'], function($, _){
         return props;
     }
 
-    function clear(interaction){
-        interaction.removeData('passages');
-    }
-
     /**
      * Load passages data from markup into interaction metaData
      * 
-     * @param {Object} interaction
+     * @param {Object} interaction - standard interaction object
      */
     function loadData(interaction){
 
         var $markup = $('<div>').html(interaction.markup);
 
-        clear(interaction);
+        //to start with, clear all previously generated metaData
+        interaction.removeData('passages');
 
         $markup.find('.passages .passage').each(function(){
-            
+
             var $passage = $(this);
             var data = getPassagePropertiesFromMarkup($passage);
 
@@ -108,6 +117,12 @@ define(['jquery', 'lodash'], function($, _){
         });
     }
 
+    /**
+     * Generate a nice title for a new passage
+     * 
+     * @param {Object} interaction - standard interaction object
+     * @returns {String}
+     */
     function generatePassageTitle(interaction){
 
         var passages = interaction.data('passages');
@@ -121,6 +136,13 @@ define(['jquery', 'lodash'], function($, _){
         return title;
     }
 
+    /**
+     * Add a new passage
+     * 
+     * @param {Object} interaction - standard interaction object
+     * @param {Object} [attributes]
+     * @returns {String} the new passage id
+     */
     function addPassage(interaction, attributes){
 
         var passages = interaction.data('passages');
@@ -147,11 +169,18 @@ define(['jquery', 'lodash'], function($, _){
         return passage.uid;
     }
 
+    /**
+     * Set the type of the passage
+     * 
+     * @param {Object} interaction - standard interaction object
+     * @param {String} passageId
+     * @param {String} type
+     */
     function setType(interaction, passageId, type){
 
         var passage = getPassage(interaction, passageId);
         if(passage.type !== type){
-            
+
             //adapt the content:
             if(passage.type === 'passage-paging'){
                 //the old passage has paging : merge the pages into a single content
@@ -170,30 +199,51 @@ define(['jquery', 'lodash'], function($, _){
                 passage.pages = [{content : passage.content, uid : uniqueId('page_converted_')}];
                 delete passage.content;
             }
-            
+
             //adapt the size
             if(type === 'passage-simple'){
                 delete passage.size;
             }else if(passage.type === 'passage-simple'){
                 passage.size = 'passage240';
             }
-            
+
             passage.type = type;
         }
     }
 
+    /**
+     * Set the size of the passage 
+     * 
+     * @param {Object} interaction - standard interaction object
+     * @param {String} passageId
+     * @param {String} sizeClass
+     */
     function setSize(interaction, passageId, sizeClass){
 
         var passage = getPassage(interaction, passageId);
         passage.size = sizeClass;
     }
 
+    /**
+     * Set the title of the passage 
+     * 
+     * @param {Object} interaction - standard interaction object
+     * @param {String} passageId
+     * @param {String} title
+     */
     function setTitle(interaction, passageId, title){
 
         var passage = getPassage(interaction, passageId);
         passage.title = title;
     }
 
+    /**
+     * Get the passage object by its id
+     * 
+     * @param {Object} interaction - standard interaction object
+     * @param {String} passageId
+     * @throws When the passage does not exist
+     */
     function getPassage(interaction, passageId){
         var passages = interaction.data('passages');
         var passage = _.find(passages, {uid : passageId});
@@ -204,6 +254,13 @@ define(['jquery', 'lodash'], function($, _){
         }
     }
 
+    /**
+     * Add a new page to a passage
+     * 
+     * @param {Object} interaction - standard interaction object
+     * @param {String} passageId
+     * @param {String} [afterPageId] - define the postion of the new page
+     */
     function addPage(interaction, passageId, afterPageId){
         var passage = getPassage(interaction, passageId);
         if(passage.type === 'passage-paging'){
@@ -212,15 +269,15 @@ define(['jquery', 'lodash'], function($, _){
                 content : ''
             };
             if(afterPageId){
-                
+
                 //reinit pages object
                 var pages = [];
-                
+
                 //add to the first one
                 if(afterPageId === '_prepend'){
                     pages.push(newPage);
                 }
-                
+
                 //insert to position
                 _.each(passage.pages, function(page){
                     pages.push(page);
@@ -228,7 +285,7 @@ define(['jquery', 'lodash'], function($, _){
                         pages.push(newPage);
                     }
                 });
-                
+
                 passage.pages = pages;
             }else{
                 passage.pages.push(newPage);
@@ -239,6 +296,14 @@ define(['jquery', 'lodash'], function($, _){
         }
     }
 
+    /**
+     * Set the content of a page
+     * 
+     * @param {Object} interaction - standard interaction object
+     * @param {String} passageId
+     * @param {String} pageId
+     * @param {String} content
+     */
     function setPageContent(interaction, passageId, pageId, content){
         var passage = getPassage(interaction, passageId);
         if(passage.type === 'passage-paging'){
@@ -248,6 +313,13 @@ define(['jquery', 'lodash'], function($, _){
         }
     }
 
+    /**
+     * Set the content of a passage
+     * 
+     * @param {Object} interaction - standard interaction object
+     * @param {String} passageId
+     * @param {String} content
+     */
     function setPassageContent(interaction, passageId, content){
         var passage = getPassage(interaction, passageId);
         if(passage.type !== 'passage-paging'){
@@ -257,6 +329,14 @@ define(['jquery', 'lodash'], function($, _){
         }
     }
 
+    /**
+     * Remove a page from a passage
+     * 
+     * @param {Object} interaction - standard interaction object
+     * @param {String} passageId
+     * @param {String} pageId
+     * @returns {Boolean}
+     */
     function removePage(interaction, passageId, pageId){
         var passage = getPassage(interaction, passageId);
         if(passage.type === 'passage-paging'){
@@ -267,7 +347,14 @@ define(['jquery', 'lodash'], function($, _){
             throw 'the passage is not of a paging type';
         }
     }
-
+    
+    /**
+     * Remove a passage
+     * 
+     * @param {Object} interaction - standard interaction object
+     * @param {type} passageId
+     * @returns {undefined}
+     */
     function removePassage(interaction, passageId){
         var passages = interaction.data('passages');
         _.remove(passages, function(passage){

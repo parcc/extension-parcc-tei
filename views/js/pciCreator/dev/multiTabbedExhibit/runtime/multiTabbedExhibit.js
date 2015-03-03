@@ -14,11 +14,12 @@ define([
     ){
 
     'use strict';
-
-    function buildConfig(config){
-        return config;
-    }
-
+    
+    /**
+     * Init the paging widget to a passage
+     * @param {JQuery} $frameContainer
+     * @return {Object} The paging API to control the paging component
+     */
     function initPaging($frameContainer){
 
         var $frame = $frameContainer.children('.frame');
@@ -93,7 +94,7 @@ define([
         }
         
         /**
-         * Programatically scroll to a specific page location
+         * Programmatically scroll to a specific page location
          * 
          * @param {Integer} num - the index of the page to scroll to
          * @returns {undefined}
@@ -107,6 +108,8 @@ define([
         
         /**
          * The callback to be executed after each move event
+         * 
+         * @param {Integer} newPos - the position.top 
          */
         function moveCallback(newPos){
             
@@ -170,7 +173,13 @@ define([
         $frameContainer.data('paging-api', pagingApi);
         return pagingApi;
     }
-
+    
+    /**
+     * Init scrolling widget
+     * 
+     * @param {Object} pci - the standard pci object
+     * @param {JQuery} $frameContainer
+     */
     function initScrolling(pci, $frameContainer){
 
         var $frame = $frameContainer.children('.frame');
@@ -195,13 +204,27 @@ define([
             $frame.sly('reload');
         });
     }
-
+    
+    /**
+     * Renders a template found in the pci
+     * 
+     * @param {Object} pci - the standard pci object
+     * @param {String} tplName
+     * @param {Object} data
+     * @returns {String} 
+     */
     function renderTemplate(pci, tplName, data){
         var source = pci.$dom.find(".templates ." + tplName).html();
         var template = handlebars.compile(source);
         return template(data || {});
     }
-
+    
+    /**
+     * Prepare the markup for scrolling widget
+     * 
+     * @param {Object} pci - the standard pci object
+     * @param {JQuery} $passage
+     */
     function initScrollingPassageMarkup(pci, $passage){
 
         //prepare content
@@ -213,7 +236,13 @@ define([
             content : passageContent
         }));
     }
-
+    
+    /**
+     * Prepare the markup for paging widget
+     * 
+     * @param {Object} pci - the standard pci object
+     * @param {JQuery} $passage
+     */
     function initPaggingPassageMarkup(pci, $passage){
 
         var tplData = {pages : []};
@@ -233,7 +262,12 @@ define([
         //add pager
         $passage.append(renderTemplate(pci, 'pager'));
     }
-
+    
+    /**
+     * Main passages widgets according to their types
+     * 
+     * @param {Object} pci - the standard pci object
+     */
     function initPassages(pci){
 
         pci.$dom.find('.passage-scrolling').each(function(){
@@ -249,7 +283,12 @@ define([
             initPaging($passage);
         });
     }
-
+    
+    /**
+     * Prepare the markup for tabbing widget
+     * 
+     * @param {Object} pci - the standard pci object
+     */
     function initTabbingMarkup(pci){
 
         var tplData = {
@@ -272,7 +311,13 @@ define([
         $tabContainer.children('.passages-tab-navigation').remove();
         $tabContainer.prepend(renderTemplate(pci, 'tab-navigation', tplData));
     }
-
+    
+    /**
+     * Init tabbing component
+     * 
+     * @param {Object} pci
+     * @returns {Object} - the tabbing api object to control the tabbing component
+     */
     function initTabbing(pci){
 
         //create markup:
@@ -306,7 +351,12 @@ define([
         });
         //activate initial tab:
         activateTab($active);
-
+        
+        /**
+         * Activate a tab identified by its trigger <a>
+         * 
+         * @param {JQuery} $a
+         */
         function activateTab($a){
             var $li = $a.parent();
             var $tab = $a.data('passage-tab');
@@ -339,7 +389,11 @@ define([
         $tabContainer.data('tabbing-api', tabbingApi);
         return tabbingApi;
     }
-
+    
+    /**
+     * The main function to init the ineractivity of the interaction
+     * @param {Object} pci - the standard pci object
+     */
     function init(pci){
 
         //init scrolling on all "scrollable" frame container
@@ -370,7 +424,7 @@ define([
 
             this.id = id;
             this.$dom = $(dom);
-            this.config = buildConfig(config || {});
+            this.config = config || {};
 
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);

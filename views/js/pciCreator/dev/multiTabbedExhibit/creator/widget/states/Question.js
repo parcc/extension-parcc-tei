@@ -31,18 +31,21 @@ define([
             interaction = this.widget.element;
 
         //init passage editors
-        this.initPassagesContentEditors();
+        this.initEditors();
 
         interaction.onPci('passagereload', function(){
             //init passage editors
-            self.initPassagesContentEditors();
+            self.initEditors();
         });
 
     }, function(){
 
-        this.destroyEditor();
+        this.destroyEditors();
     });
-
+    
+    /**
+     * Init the sidebar property forms
+     */
     StateQuestion.prototype.initForm = function(){
 
         //code to init your interaction property form (on the right side bar)
@@ -183,25 +186,43 @@ define([
         }, 400));
 
     };
+    
+    /**
+     * Destroy all the editing widgets, including rich html editors and the page managers
+     */
+    StateQuestion.prototype.destroyEditors = function(){
+        var $container = this.widget.$container;
+        $container.find('.passage-simple, .passage-scrolling .passage-content, .passage-paging .page .page-content').each(function(){
+            containerEditor.destroy($(this));
+        });
+        $container.off('.page-adder').find('.page-adder, .page-deleter').remove();
+    };
+    
+    /**
+     * Refresh completely the rendering of the passages with the possibility to define the state upon refresh
+     * 
+     * @param {object} [state]
+     */
+    StateQuestion.prototype.refreshRendering = function(state){
 
-    function initContentEditor($editable, passage, interaction){
-        if($editable.length){
-            containerEditor.create($editable, {
-                change : _.throttle(function(text){
-                    passage.content = text;
-                    interaction.updateMarkup();
-                    interaction.triggerPci('resize');
-                }, 600),
-                markup : passage.content,
-                related : interaction
-            });
-        }else{
-            //@todo remove me after completion
-            debugger;
-        }
-    }
+        var interaction = this.widget.element;
+        var currentState = interaction.data('pci').getSerializedState();
+        var newState = _.defaults(state || {}, currentState);
+        
+        //update the markup
+        interaction.updateMarkup();
 
-    StateQuestion.prototype.initPassagesContentEditors = function(){
+        //destroy editors
+        this.destroyEditors();
+
+        //reload the pci
+        interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed'), newState]);
+    };
+    
+    /**
+     * Init the passage editing widgets, including html rich editor and page managers
+     */
+    StateQuestion.prototype.initEditors = function(){
 
         var self = this,
             interaction = this.widget.element,
@@ -267,7 +288,37 @@ define([
             self.refreshRendering();
         });
     };
-
+    
+    /**
+     * Init the html roch editor
+     * 
+     * @param {JQuery} $editable - the editable passage content
+     * @param {Object} passage - the passage object
+     * @param {Object} interaction - the standard interaction object
+     * @throws Will throw an exception if the Jquery element is empty (not found)
+     */
+    function initContentEditor($editable, passage, interaction){
+        if($editable.length){
+            containerEditor.create($editable, {
+                change : _.throttle(function(text){
+                    passage.content = text;
+                    interaction.updateMarkup();
+                    interaction.triggerPci('resize');
+                }, 600),
+                markup : passage.content,
+                related : interaction
+            });
+        }else{
+            throw 'the editable content has not been found'
+        }
+    }
+    
+    /**
+     * Render the form html of a passage object
+     * 
+     * @param {Object} passage - the passage object
+     * @returns {String} - the rendered html
+     */
     function renderPassageForm(passage){
 
         var data = {
@@ -295,30 +346,6 @@ define([
 
         return tabTpl(data);
     }
-
-    StateQuestion.prototype.destroyEditor = function(){
-        var $container = this.widget.$container;
-        $container.find('.passage-simple, .passage-scrolling .passage-content, .passage-paging .page .page-content').each(function(){
-            containerEditor.destroy($(this));
-        });
-        $container.off('.page-adder').find('.page-adder, .page-deleter').remove();
-    };
-
-    StateQuestion.prototype.refreshRendering = function(state){
-
-        var interaction = this.widget.element;
-        var currentState = interaction.data('pci').getSerializedState();
-        var newState = _.defaults(state || {}, currentState);
-        
-        //update the markup
-        interaction.updateMarkup();
-
-        //destroy editors
-        this.destroyEditor();
-
-        //reload the pci
-        interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed'), newState]);
-    };
 
     return StateQuestion;
 });
