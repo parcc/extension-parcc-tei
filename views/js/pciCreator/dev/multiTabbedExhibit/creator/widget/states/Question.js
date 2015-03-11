@@ -35,6 +35,7 @@ define([
 
         interaction.onPci('passagereload', function(){
             //init passage editors
+            self.destroyEditors();
             self.initEditors();
         });
 
