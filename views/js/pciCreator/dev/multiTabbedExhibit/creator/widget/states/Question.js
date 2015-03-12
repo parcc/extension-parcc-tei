@@ -300,6 +300,7 @@ define([
      */
     function initContentEditor($editable, passage, interaction){
         if($editable.length){
+            var $passage = $editable.parents('.passage');
             containerEditor.create($editable, {
                 change : _.throttle(function(text){
                     passage.content = text;
@@ -307,7 +308,10 @@ define([
                     interaction.triggerPci('resize');
                 }, 600),
                 markup : passage.content,
-                related : interaction
+                related : interaction,
+                placeholder : $passage.hasClass('passage-paging') ? 'your page content ...' : 'enter your passage content here ...',
+                $toolbarLocation : $passage,
+                hideTriggerOnBlur : true
             });
         }else{
             throw 'the editable content has not been found'
