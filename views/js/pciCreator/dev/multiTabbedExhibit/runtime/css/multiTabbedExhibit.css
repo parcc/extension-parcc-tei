@@ -10,7 +10,7 @@
 
 .multiTabbedExhibit .templates {display:none;}
 
-.multiTabbedExhibit .passage {min-height: 100px;}
+.multiTabbedExhibit .passage {position:relative; min-height: 100px;}
 .multiTabbedExhibit .passage240 .frame, .multiTabbedExhibit .passage240 .scrollbar {height:240px;}
 .multiTabbedExhibit .passage440 .frame, .multiTabbedExhibit .passage440 .scrollbar  {height:440px;}
 .multiTabbedExhibit .passage540 .frame, .multiTabbedExhibit .passage540 .scrollbar  {height:540px;}
@@ -52,7 +52,7 @@
 .multiTabbedExhibit .passage-paging .page-header, .multiTabbedExhibit .passage-paging .page-footer {position:relative; min-height:2rem;}
 .multiTabbedExhibit .passage-paging .page-header {margin-bottom: 12px;}
 .multiTabbedExhibit .passage-paging .page-header .page-number {position:absolute;right:0px;font-weight: bold; font-size:1.8rem;}
-.multiTabbedExhibit .passage-paging .page-content {padding:0 20px; min-height:100px;}
+.multiTabbedExhibit .passage-paging .page-content {position: relative; padding:0 20px; min-height:100px;}
 
 .multiTabbedExhibit .passage-paging .passage-pager {position:relative; border:solid 0 #CCC; border-top-width: 1px;}
 .multiTabbedExhibit .passage-paging .passage-pager:after {clear:both; content:""; display:table;}
@@ -64,7 +64,7 @@
 .multiTabbedExhibit .passage-paging .disabled {cursor:default !important;}
 
 .multiTabbedExhibit .passage-scrolling, .multiTabbedExhibit .passage-paging {border:solid 1px #CCC;}
-.multiTabbedExhibit .passage-scrolling .passage-content {padding:1rem;}
+.multiTabbedExhibit .passage-scrolling .passage-content {position: relative; padding:1rem;}
 
 /*tab style*/
 .multiTabbedExhibit ul.passages-tab-navigation {

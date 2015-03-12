@@ -471,10 +471,8 @@ define([
          * @returns {Object}
          */
         getResponse : function(){
-
-            var value = 0;
-
-            return {base : {integer : value}};
+            //for consistency with the response processing declaration, returns always true
+            return {base : {boolean : true}};
         },
         /**
          * Remove the current response set in the interaction
@@ -507,13 +505,17 @@ define([
 
             if(state.passage){
                 var $tabs = this.$dom.find('.passages-tabs');
-                var tabApi = $tabs.data('tabbing-api');
-                tabApi.activate(state.passage);
-                if(state.page){
-                    var $passage = tabApi.getActive();
-                    if($passage && $passage.hasClass('passage-paging')){
-                        var pagingApi = $passage.data('paging-api');
-                        pagingApi.setActive(state.page);
+                
+                //restoring a state only when the passage has tabs
+                if($tabs.length){
+                    var tabApi = $tabs.data('tabbing-api');
+                    tabApi.activate(state.passage);
+                    if (state.page) {
+                        var $passage = tabApi.getActive();
+                        if ($passage && $passage.hasClass('passage-paging')) {
+                            var pagingApi = $passage.data('paging-api');
+                            pagingApi.setActive(state.page);
+                        }
                     }
                 }
             }
