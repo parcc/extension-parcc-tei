@@ -471,10 +471,8 @@ define([
          * @returns {Object}
          */
         getResponse : function(){
-
-            var value = 0;
-
-            return {base : {integer : value}};
+            //for consistency with the response processing declaration, returns always true
+            return {base : {boolean : true}};
         },
         /**
          * Remove the current response set in the interaction
