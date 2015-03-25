@@ -1,14 +1,12 @@
 define([
     'lodash',
-    'jquery',
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
-    'tpl!fractionModelInteraction/creator/tpl/propertiesForm',
-    'taoQtiItem/qtiCreator/editor/styleEditor/farbtastic/farbtastic'
-], function(_, $, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl){
+    'tpl!fractionModelInteraction/creator/tpl/propertiesForm'
+], function(_, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl){
 
     'use strict';
     
