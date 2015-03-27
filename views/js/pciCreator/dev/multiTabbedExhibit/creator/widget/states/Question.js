@@ -311,7 +311,27 @@ define([
                 related : interaction,
                 placeholder : $passage.hasClass('passage-paging') ? 'your page content ...' : 'enter your passage content here ...',
                 $toolbarLocation : $passage,
-                hideTriggerOnBlur : true
+                hideTriggerOnBlur : true,
+                toolbar : [{
+                    name : 'basicstyles',
+                    items : ['Bold', 'Italic', 'Subscript', 'Superscript']
+                }, {
+                    name : 'insert',
+                    items : ['Image', 'SpecialChar']
+                },
+                {
+                    name : 'links',
+                    items : ['Link']
+                },
+                {
+                    name : 'paragraph',
+                    items : ['NumberedList', 'BulletedList', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
+                },
+                '/',
+                {
+                    name : 'styles',
+                    items : ['Format', 'TextColor', 'Font', 'FontSize']
+                }]
             });
         }else{
             throw 'the editable content has not been found'
