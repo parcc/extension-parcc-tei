@@ -1,8 +1,8 @@
 {
     "typeIdentifier": "multiTabbedExhibit",
-    "label": "Multi Tabbed Exhibit",
-    "short": "Exhibit",
-    "description": "Multi Tabbed Exhibit",
+    "label": "Interactive Passage",
+    "short": "iPassage",
+    "description": "Interactive Passage",
     "version": "0.1",
     "author": "Sam Sipasseuth",
     "email": "sam@taotesting.com",

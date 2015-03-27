@@ -16,6 +16,6 @@
     </div>
     
     <div class="tab-form-add">
-        <button class="btn btn-info small">Add Tab</button>
+        <button class="btn btn-info small">Add Passage</button>
     </div>
 </div>
