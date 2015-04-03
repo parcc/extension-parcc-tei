@@ -28,22 +28,25 @@ define([
     var StateQuestion = stateFactory.extend(Question, function(){
 
         var self = this,
-            interaction = this.widget.element;
-
+            interaction = this.widget.element,
+            passages = interaction.data('passages');
+        
+        _.each(passages, function(passage){
+            self.initEditor(passage.uid);
+        });
+            
         //init passage editors
-        this.initEditors();
-
         interaction.onPci('passagereload', function(){
-            //init passage editors
             self.destroyEditors();
-            self.initEditors();
+        }).onPci('activate', function(passageId){
+            self.initEditor(passageId);
         });
 
     }, function(){
 
         this.destroyEditors();
     });
-    
+
     /**
      * Init the sidebar property forms
      */
@@ -187,7 +190,7 @@ define([
         }, 400));
 
     };
-    
+
     /**
      * Destroy all the editing widgets, including rich html editors and the page managers
      */
@@ -198,7 +201,7 @@ define([
         });
         $container.off('.page-adder').find('.page-adder, .page-deleter').remove();
     };
-    
+
     /**
      * Refresh completely the rendering of the passages with the possibility to define the state upon refresh
      * 
@@ -209,7 +212,7 @@ define([
         var interaction = this.widget.element;
         var currentState = interaction.data('pci').getSerializedState();
         var newState = _.defaults(state || {}, currentState);
-        
+
         //update the markup
         interaction.updateMarkup();
 
@@ -219,19 +222,16 @@ define([
         //reload the pci
         interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed'), newState]);
     };
-    
-    /**
-     * Init the passage editing widgets, including html rich editor and page managers
-     */
-    StateQuestion.prototype.initEditors = function(){
+
+    StateQuestion.prototype.initEditor = function(passageId){
 
         var self = this,
             interaction = this.widget.element,
             $container = this.widget.$container,
             passages = interaction.data('passages');
 
-        _.each(passages, function(passage){
-
+        var passage = _.find(passages, {uid : passageId});
+        if(passage){
             switch(passage.type){
                 case 'passage-simple':
                     initContentEditor($container.find('.passage-simple[data-passage-id=' + passage.uid + ']'), passage, interaction);
@@ -271,25 +271,11 @@ define([
                 default:
                     throw 'unknown type of passage';
             }
-
-        });
-
-        $container.on('click.page-adder', '.page-adder .circle', function(){
-            var $button = $(this);
-            var passage = $button.data('passage');
-            var page = $button.data('page');
-            var newPageId = passageEditor.addPage(interaction, passage, page);
-            self.refreshRendering({page : newPageId});
-        }).on('click.page-adder', '.page-deleter', function(){
-            //delete 
-            var $button = $(this);
-            var passage = $button.data('passage');
-            var page = $button.data('page');
-            passageEditor.removePage(interaction, passage, page);
-            self.refreshRendering();
-        });
+        }else{
+            throw 'passage not found';
+        }
     };
-    
+
     /**
      * Init the html roch editor
      * 
@@ -300,44 +286,53 @@ define([
      */
     function initContentEditor($editable, passage, interaction){
         if($editable.length){
+            
             var $passage = $editable.parents('.passage');
-            containerEditor.create($editable, {
-                change : _.throttle(function(text){
-                    passage.content = text;
-                    interaction.updateMarkup();
-                    interaction.triggerPci('resize');
-                }, 600),
-                markup : passage.content,
-                related : interaction,
-                placeholder : $passage.hasClass('passage-paging') ? 'your page content ...' : 'enter your passage content here ...',
-                $toolbarLocation : $passage,
-                hideTriggerOnBlur : true,
-                toolbar : [{
-                    name : 'basicstyles',
-                    items : ['Bold', 'Italic', 'Subscript', 'Superscript']
-                }, {
-                    name : 'insert',
-                    items : ['Image', 'SpecialChar']
-                },
-                {
-                    name : 'links',
-                    items : ['Link']
-                },
-                {
-                    name : 'paragraph',
-                    items : ['NumberedList', 'BulletedList', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
-                },
-                '/',
-                {
-                    name : 'styles',
-                    items : ['Format', 'TextColor', 'Font', 'FontSize']
-                }]
-            });
+            
+            if(!$passage.hasClass('editor-ready')){
+                
+                //once only
+                $passage.addClass('editor-ready');
+                
+                containerEditor.create($editable, {
+                    change : _.throttle(function(text){
+                        passage.content = text;
+                        interaction.updateMarkup();
+                        interaction.triggerPci('resize');
+                    }, 600),
+                    markup : passage.content,
+                    related : interaction,
+                    placeholder : $passage.hasClass('passage-paging') ? 'your page content ...' : 'enter your passage content here ...',
+                    $toolbarLocation : $passage,
+                    hideTriggerOnBlur : true,
+                    toolbar : [{
+                            name : 'basicstyles',
+                            items : ['Bold', 'Italic', 'Subscript', 'Superscript']
+                        }, {
+                            name : 'insert',
+                            items : ['Image', 'SpecialChar']
+                        },
+                        {
+                            name : 'links',
+                            items : ['Link']
+                        },
+                        {
+                            name : 'paragraph',
+                            items : ['NumberedList', 'BulletedList', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
+                        },
+                        '/',
+                        {
+                            name : 'styles',
+                            items : ['Format', 'TextColor', 'Font', 'FontSize']
+                        }]
+                });
+            }
+
         }else{
-            throw 'the editable content has not been found'
+            throw 'the editable content has not been found';
         }
     }
-    
+
     /**
      * Render the form html of a passage object
      * 
