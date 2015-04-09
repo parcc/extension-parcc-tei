@@ -2,8 +2,8 @@ define(['OAT/lodash'], function(_){
 
     function createZoomable(axis){
 
-        var clickables = {};//reset the snapping step array
-
+        var clickables = [];//reset the snapping step array
+        
         var paper = axis.getCanvas(),
             config = axis.getConfig(),
             clickableSet = paper.set(),
@@ -11,7 +11,7 @@ define(['OAT/lodash'], function(_){
             subDivisionIncrement = 1 / config.unitSubDivision,
             left = config.left,
             top = config.top - config.divisionWidth;
-
+        
         function addRectangle(position, coord){
 
             var rect = paper.rect(position, top, subDivisionSize, config.divisionWidth * 2);
@@ -29,11 +29,12 @@ define(['OAT/lodash'], function(_){
             clickableSet.push(rect);
             
             //identify each rectangle by its position
-            clickables[position] = {
+            clickables.push({
+                position : position,
                 rect : rect,
                 coord : coord,
                 active : false
-            };
+            });
         }
 
         for(var i = config.min; i < config.max; i++){
@@ -57,7 +58,6 @@ define(['OAT/lodash'], function(_){
         }
 
         clickableSet.insertBefore(axis.getSet());
-
         return clickables;
     }
 

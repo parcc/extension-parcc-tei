@@ -23,6 +23,12 @@
                 </pci:resources>
 
                 <pci:properties>
+                    <pci:entry key="color">#266d9c</pci:entry>
+                    <pci:entry key="min">0</pci:entry>
+                    <pci:entry key="max">10</pci:entry>
+                    <pci:entry key="unitSubDivision">5</pci:entry>
+                    <pci:entry key="increment">1</pci:entry>
+                    <pci:entry key="snapTo">1</pci:entry>
                 </pci:properties>
 
                 <pci:markup>

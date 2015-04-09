@@ -32,7 +32,7 @@ define([
                 color : '#266d9c'
             }
         };
-        return _.merge(_default,{
+        return _.merge(_default, {
             min : (rawConfig.min === undefined) ? undefined : parseInt(rawConfig.min),
             max : (rawConfig.max === undefined) ? undefined : parseInt(rawConfig.max),
             unitSubDivision : (rawConfig.unitSubDivision === undefined) ? undefined : parseInt(rawConfig.unitSubDivision),
@@ -40,6 +40,30 @@ define([
                 color : rawConfig.graphColor
             }
         });
+    }
+
+    /**
+     * Round a float to 3 digits
+     * @param {Number} num
+     * @returns {Number}
+     */
+    function _format(num){
+        
+        var str = num + '';
+        if(str.length > 5){
+            if(str.match(/99999\d$/)){
+                str = Math.round(num* 10000) / 10000;
+            }else{
+                //cut : 
+                str = Math.floor(num * 1000) / 1000;
+                str = str.toString();
+                if(str.match(/^\d+\.\d{3,}$/)){
+                    //ellipsis
+                    str += '...';
+                }
+            }
+        }
+        return str;
     }
 
     var graphZoomNumberLineInteraction = {
@@ -77,17 +101,16 @@ define([
             function findRect(rects, position){
 
                 var ret;
-                var positions = _.keys(rects);
+                var positions = _.pluck(rects, 'position');
                 var stepWidth = positions[1] - positions[0];
 
-                _.forIn(rects, function(rect, pos){
-                    pos = parseInt(pos);
+                _.each(rects, function(rect){
+                    var pos = parseInt(rect.position);
                     if(pos < position && position < pos + stepWidth){
                         ret = rect;
                         return false;
                     }
                 });
-
                 return ret;
             }
 
@@ -148,14 +171,17 @@ define([
             }
 
             function getZoomPointCoordinate(){
-                return selectedRect.coord + zoomPoint.getCartesianCoord().x / 2;
+                return selectedRect.coord + zoomPoint.getCartesianCoord().x / _this.axisConfig.unitSubDivision;
             }
 
             function getSelectedPointPositionLeft(){
                 if(selectedCoord){
                     var zoomAxisConfig = zoomAxis.getConfig();
-                    var left = 2 * (selectedCoord - selectedRect.coord + .05) * zoomAxisConfig.unitSize;
-                    if(zoomAxisConfig.left <= left && left <= zoomAxisConfig.left + zoomAxisConfig.unitSize){
+                    var offset = 1 / (10 * _this.axisConfig.unitSubDivision);//needed an offset to compensate for js calculation imprecision
+                    var left = (selectedCoord - selectedRect.coord + offset) * zoomAxisConfig.unitSize * _this.axisConfig.unitSubDivision;
+                    left = parseInt(_format(left));
+                    console.log('aaaa', zoomAxisConfig.left, left, zoomAxisConfig.left + zoomAxisConfig.unitSize, offset);
+                    if(zoomAxisConfig.left <= left + offset && left - offset <= zoomAxisConfig.left + zoomAxisConfig.unitSize){
                         return left;
                     }
                 }
@@ -171,6 +197,7 @@ define([
             function initAxis($container, axisConfig){
 
                 //create paper
+                var subDivisionIncrement = 1 / axisConfig.unitSubDivision;
                 paper = createCanvas($container, axisConfig);
                 axis = new axisFactory(paper, axisConfig);
 
@@ -213,10 +240,10 @@ define([
                         selectedRect.rect.show();
 
                         //update the zoom axis label
-                        zoomAxis.setConfig('labels', [selectedRect.coord, selectedRect.coord + .5]);
+                        zoomAxis.setConfig('labels', [_format(selectedRect.coord), _format(selectedRect.coord + subDivisionIncrement)]);
                         zoomAxis.render();
 
-                        //draw container box here, befor esetting the point
+                        //draw container box here, before setting the point
                         var containerBox = zoomAxis.buildContainerBox({shadow : true});
 
                         //set the previously selected point
@@ -274,7 +301,7 @@ define([
                 initAxis($container, _this.axisConfig);
                 reset();
             }
-            this.on('axischange',setAxis);
+            this.on('axischange', setAxis);
 
         },
         /**
