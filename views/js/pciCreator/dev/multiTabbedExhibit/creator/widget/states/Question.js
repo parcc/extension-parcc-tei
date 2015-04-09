@@ -29,16 +29,20 @@ define([
 
         var self = this,
             interaction = this.widget.element,
-            passages = interaction.data('passages');
+            $currentPassage = this.widget.$container.find('.passage:visible');
         
-        _.each(passages, function(passage){
-            self.initEditor(passage.uid);
-        });
-            
+        //init only the currently visible one    
+        this.initEditor($currentPassage.data('passage-id'));
+
         //init passage editors
-        interaction.onPci('passagereload', function(){
+        interaction.onPci('passagereload', function(state){
             self.destroyEditors();
+            //init the curent one only
+            if(state.passage){
+                self.initEditor(state.passage);
+            }
         }).onPci('activate', function(passageId){
+            //activate the editing of the current passage
             self.initEditor(passageId);
         });
 
@@ -200,6 +204,7 @@ define([
             containerEditor.destroy($(this));
         });
         $container.off('.page-adder').find('.page-adder, .page-deleter').remove();
+        $container.find('.editor-ready').removeClass('editor-ready');
     };
 
     /**
@@ -240,6 +245,7 @@ define([
                     initContentEditor($container.find('.passage-scrolling[data-passage-id=' + passage.uid + '] .passage-content'), passage, interaction);
                     break;
                 case 'passage-paging':
+
                     var $passage = $container.find('.passage-paging[data-passage-id=' + passage.uid + ']');
                     _.each(passage.pages, function(page){
 
@@ -260,6 +266,7 @@ define([
                             passage : passage.uid,
                             page : page.uid
                         }));
+
                     });
 
                     //init insert page buttons
@@ -267,6 +274,24 @@ define([
                         passage : passage.uid,
                         page : '_prepend'
                     }));
+
+                    //init page adder:
+                    $passage.off('.page-adder').on('click.page-adder', '.page-adder .circle', function(){
+                        //add new page
+                        var $button = $(this);
+                        var passage = $button.data('passage');
+                        var page = $button.data('page');
+                        var newPageId = passageEditor.addPage(interaction, passage, page);
+                        self.refreshRendering({page : newPageId});
+                    }).on('click.page-adder', '.page-deleter', function(){
+                        //delete 
+                        var $button = $(this);
+                        var passage = $button.data('passage');
+                        var page = $button.data('page');
+                        passageEditor.removePage(interaction, passage, page);
+                        self.refreshRendering();
+                    });
+
                     break;
                 default:
                     throw 'unknown type of passage';
@@ -286,14 +311,14 @@ define([
      */
     function initContentEditor($editable, passage, interaction){
         if($editable.length){
-            
-            var $passage = $editable.parents('.passage');
-            
-            if(!$passage.hasClass('editor-ready')){
-                
-                //once only
-                $passage.addClass('editor-ready');
-                
+
+            var $passage = $editable.hasClass('passage') ? $editable : $editable.parents('.passage');
+
+            if(!$editable.hasClass('editor-ready')){
+
+                //init once only
+                $editable.addClass('editor-ready');
+
                 containerEditor.create($editable, {
                     change : _.throttle(function(text){
                         passage.content = text;

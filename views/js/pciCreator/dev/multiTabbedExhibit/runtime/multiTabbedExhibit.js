@@ -437,7 +437,7 @@ define([
 
             //load all widgets
             init(this);
-
+            
             this.on('passagechange', function(markup, tabbed, state){
 
                 var $newMarkup = $(markup);
@@ -456,7 +456,7 @@ define([
                 }
 
                 //fires event "reloaded"
-                self.trigger('passagereload');
+                self.trigger('passagereload', [state]);
             });
         },
         /**
