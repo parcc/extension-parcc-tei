@@ -21,5 +21,5 @@
         "baseType": "integer",
         "cardinality": "single"
     },
-    "debug" : true
+    "debug" : false
 }
