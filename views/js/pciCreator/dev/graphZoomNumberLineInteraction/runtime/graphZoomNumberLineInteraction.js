@@ -353,7 +353,12 @@ define([
             this.reset = function(){
                 reset();
             };
-
+            
+            //expose the getRawResponse() method
+            this.getRawResponse = function(){
+                return selectedCoord;
+            };
+            
             //init rendering
             this.axisConfig = buildAxisConfig(this.config);
             initAxis($container, this.axisConfig);
@@ -380,9 +385,13 @@ define([
          */
         getResponse : function(){
 
-            var value = 0;
-
-            return {base : {integer : value}};
+            var value = this.getRawResponse();
+            if(value){
+                return {base : {float : value}};
+            }else{
+                return {base : null};
+            }
+            
         },
         /**
          * Remove the current response set in the interaction
