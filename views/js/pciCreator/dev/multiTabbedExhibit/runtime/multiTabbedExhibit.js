@@ -351,6 +351,10 @@ define([
         });
         //activate initial tab:
         activateTab($active);
+        //event
+        $tabContainer.on('activate.tab', function(e, id){
+            pci.trigger('activate', [id]);
+        });
         
         /**
          * Activate a tab identified by its trigger <a>
@@ -369,6 +373,8 @@ define([
                 $tab.find('.frame').sly('reload');
                 //update active element:
                 $active = $a;
+                //event
+                $tab.trigger('activate.tab', [$tab.data('passage-id')]);
             }
         }
 
@@ -431,7 +437,7 @@ define([
 
             //load all widgets
             init(this);
-
+            
             this.on('passagechange', function(markup, tabbed, state){
 
                 var $newMarkup = $(markup);
@@ -450,7 +456,7 @@ define([
                 }
 
                 //fires event "reloaded"
-                self.trigger('passagereload');
+                self.trigger('passagereload', [state]);
             });
         },
         /**
