@@ -28,22 +28,29 @@ define([
     var StateQuestion = stateFactory.extend(Question, function(){
 
         var self = this,
-            interaction = this.widget.element;
+            interaction = this.widget.element,
+            $currentPassage = this.widget.$container.find('.passage:visible');
+        
+        //init only the currently visible one    
+        this.initEditor($currentPassage.data('passage-id'));
 
         //init passage editors
-        this.initEditors();
-
-        interaction.onPci('passagereload', function(){
-            //init passage editors
+        interaction.onPci('passagereload', function(state){
             self.destroyEditors();
-            self.initEditors();
+            //init the curent one only
+            if(state.passage){
+                self.initEditor(state.passage);
+            }
+        }).onPci('activate', function(passageId){
+            //activate the editing of the current passage
+            self.initEditor(passageId);
         });
 
     }, function(){
 
         this.destroyEditors();
     });
-    
+
     /**
      * Init the sidebar property forms
      */
@@ -187,7 +194,7 @@ define([
         }, 400));
 
     };
-    
+
     /**
      * Destroy all the editing widgets, including rich html editors and the page managers
      */
@@ -197,8 +204,9 @@ define([
             containerEditor.destroy($(this));
         });
         $container.off('.page-adder').find('.page-adder, .page-deleter').remove();
+        $container.find('.editor-ready').removeClass('editor-ready');
     };
-    
+
     /**
      * Refresh completely the rendering of the passages with the possibility to define the state upon refresh
      * 
@@ -209,7 +217,7 @@ define([
         var interaction = this.widget.element;
         var currentState = interaction.data('pci').getSerializedState();
         var newState = _.defaults(state || {}, currentState);
-        
+
         //update the markup
         interaction.updateMarkup();
 
@@ -219,19 +227,16 @@ define([
         //reload the pci
         interaction.triggerPci('passagechange', [interaction.markup, interaction.prop('tabbed'), newState]);
     };
-    
-    /**
-     * Init the passage editing widgets, including html rich editor and page managers
-     */
-    StateQuestion.prototype.initEditors = function(){
+
+    StateQuestion.prototype.initEditor = function(passageId){
 
         var self = this,
             interaction = this.widget.element,
             $container = this.widget.$container,
             passages = interaction.data('passages');
 
-        _.each(passages, function(passage){
-
+        var passage = _.find(passages, {uid : passageId});
+        if(passage){
             switch(passage.type){
                 case 'passage-simple':
                     initContentEditor($container.find('.passage-simple[data-passage-id=' + passage.uid + ']'), passage, interaction);
@@ -240,6 +245,7 @@ define([
                     initContentEditor($container.find('.passage-scrolling[data-passage-id=' + passage.uid + '] .passage-content'), passage, interaction);
                     break;
                 case 'passage-paging':
+
                     var $passage = $container.find('.passage-paging[data-passage-id=' + passage.uid + ']');
                     _.each(passage.pages, function(page){
 
@@ -260,6 +266,7 @@ define([
                             passage : passage.uid,
                             page : page.uid
                         }));
+
                     });
 
                     //init insert page buttons
@@ -267,29 +274,33 @@ define([
                         passage : passage.uid,
                         page : '_prepend'
                     }));
+
+                    //init page adder:
+                    $passage.off('.page-adder').on('click.page-adder', '.page-adder .circle', function(){
+                        //add new page
+                        var $button = $(this);
+                        var passage = $button.data('passage');
+                        var page = $button.data('page');
+                        var newPageId = passageEditor.addPage(interaction, passage, page);
+                        self.refreshRendering({page : newPageId});
+                    }).on('click.page-adder', '.page-deleter', function(){
+                        //delete 
+                        var $button = $(this);
+                        var passage = $button.data('passage');
+                        var page = $button.data('page');
+                        passageEditor.removePage(interaction, passage, page);
+                        self.refreshRendering();
+                    });
+
                     break;
                 default:
                     throw 'unknown type of passage';
             }
-
-        });
-
-        $container.on('click.page-adder', '.page-adder .circle', function(){
-            var $button = $(this);
-            var passage = $button.data('passage');
-            var page = $button.data('page');
-            var newPageId = passageEditor.addPage(interaction, passage, page);
-            self.refreshRendering({page : newPageId});
-        }).on('click.page-adder', '.page-deleter', function(){
-            //delete 
-            var $button = $(this);
-            var passage = $button.data('passage');
-            var page = $button.data('page');
-            passageEditor.removePage(interaction, passage, page);
-            self.refreshRendering();
-        });
+        }else{
+            throw 'passage not found';
+        }
     };
-    
+
     /**
      * Init the html roch editor
      * 
@@ -300,44 +311,53 @@ define([
      */
     function initContentEditor($editable, passage, interaction){
         if($editable.length){
-            var $passage = $editable.parents('.passage');
-            containerEditor.create($editable, {
-                change : _.throttle(function(text){
-                    passage.content = text;
-                    interaction.updateMarkup();
-                    interaction.triggerPci('resize');
-                }, 600),
-                markup : passage.content,
-                related : interaction,
-                placeholder : $passage.hasClass('passage-paging') ? 'your page content ...' : 'enter your passage content here ...',
-                $toolbarLocation : $passage,
-                hideTriggerOnBlur : true,
-                toolbar : [{
-                    name : 'basicstyles',
-                    items : ['Bold', 'Italic', 'Subscript', 'Superscript']
-                }, {
-                    name : 'insert',
-                    items : ['Image', 'SpecialChar']
-                },
-                {
-                    name : 'links',
-                    items : ['Link']
-                },
-                {
-                    name : 'paragraph',
-                    items : ['NumberedList', 'BulletedList', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
-                },
-                '/',
-                {
-                    name : 'styles',
-                    items : ['Format', 'TextColor', 'Font', 'FontSize']
-                }]
-            });
+
+            var $passage = $editable.hasClass('passage') ? $editable : $editable.parents('.passage');
+
+            if(!$editable.hasClass('editor-ready')){
+
+                //init once only
+                $editable.addClass('editor-ready');
+
+                containerEditor.create($editable, {
+                    change : _.throttle(function(text){
+                        passage.content = text;
+                        interaction.updateMarkup();
+                        interaction.triggerPci('resize');
+                    }, 600),
+                    markup : passage.content,
+                    related : interaction,
+                    placeholder : $passage.hasClass('passage-paging') ? 'your page content ...' : 'enter your passage content here ...',
+                    $toolbarLocation : $passage,
+                    hideTriggerOnBlur : true,
+                    toolbar : [{
+                            name : 'basicstyles',
+                            items : ['Bold', 'Italic', 'Subscript', 'Superscript']
+                        }, {
+                            name : 'insert',
+                            items : ['Image', 'SpecialChar']
+                        },
+                        {
+                            name : 'links',
+                            items : ['Link']
+                        },
+                        {
+                            name : 'paragraph',
+                            items : ['NumberedList', 'BulletedList', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
+                        },
+                        '/',
+                        {
+                            name : 'styles',
+                            items : ['Format', 'TextColor', 'Font', 'FontSize']
+                        }]
+                });
+            }
+
         }else{
-            throw 'the editable content has not been found'
+            throw 'the editable content has not been found';
         }
     }
-    
+
     /**
      * Render the form html of a passage object
      * 
