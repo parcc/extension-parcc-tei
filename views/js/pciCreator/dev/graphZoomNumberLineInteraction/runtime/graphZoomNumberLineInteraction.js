@@ -8,7 +8,14 @@ define([
     'PARCC/axisFactory',
     'graphZoomNumberLineInteraction/runtime/libs/axisZoom'
 ], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, axisZoom){
-
+    
+    /**
+     * Create the raphael canvas
+     * 
+     * @param {JQuery} $container
+     * @param {Object} config
+     * @returns {Object}
+     */
     function createCanvas($container, config){
 
         var padding = 2;
@@ -17,7 +24,13 @@ define([
 
         return paper;
     }
-
+    
+    /**
+     * Build the axis config
+     * 
+     * @param {Object} rawConfig
+     * @returns {Object}
+     */
     function buildAxisConfig(rawConfig){
 
         var _default = {
@@ -32,7 +45,7 @@ define([
                 color : '#266d9c'
             }
         };
-        return _.merge(_default,{
+        return _.merge(_default, {
             min : (rawConfig.min === undefined) ? undefined : parseInt(rawConfig.min),
             max : (rawConfig.max === undefined) ? undefined : parseInt(rawConfig.max),
             unitSubDivision : (rawConfig.unitSubDivision === undefined) ? undefined : parseInt(rawConfig.unitSubDivision),
@@ -40,6 +53,31 @@ define([
                 color : rawConfig.graphColor
             }
         });
+    }
+
+    /**
+     * Format a float into a string maximum of 3 digits
+     * 
+     * @param {Number} num
+     * @returns {String}
+     */
+    function _format(num){
+        
+        var str = num + '';
+        if(str.length > 5){
+            if(str.match(/99999\d$/)){
+                str = Math.round(num* 10000) / 10000;
+            }else{
+                //cut : 
+                str = Math.floor(num * 1000) / 1000;
+                str = str.toString();
+                if(str.match(/^\d+\.\d{3,}$/)){
+                    //ellipsis
+                    str += '...';
+                }
+            }
+        }
+        return str;
     }
 
     var graphZoomNumberLineInteraction = {
@@ -73,24 +111,36 @@ define([
                 selectedCoord,
                 axisPoint,
                 zoomPoint;
-
+            
+            /**
+             * Found the selected rectangle representing the area of the axis to be zommed
+             * 
+             * @param {Array} rects
+             * @param {Number} position
+             * @returns {Object} the rectangle object
+             */
             function findRect(rects, position){
 
                 var ret;
-                var positions = _.keys(rects);
+                var positions = _.pluck(rects, 'position');
                 var stepWidth = positions[1] - positions[0];
 
-                _.forIn(rects, function(rect, pos){
-                    pos = parseInt(pos);
+                _.each(rects, function(rect){
+                    var pos = parseInt(rect.position);
                     if(pos < position && position < pos + stepWidth){
                         ret = rect;
                         return false;
                     }
                 });
-
                 return ret;
             }
-
+            
+            /**
+             * Draw the point on the "normal" axis
+             * 
+             * @param {Number} coord
+             * @returns {Object} the point object
+             */
             function drawAxisPoint(coord){
 
                 if(axisPoint){
@@ -115,7 +165,13 @@ define([
 
                 return axisPoint;
             }
-
+            
+            /**
+             * Draw the point on the zoom axis
+             * 
+             * @param {Number} left - the position.left of the point relative to the the zomm axis
+             * @returns {Object} the point object
+             */
             function drawZoomAxisPoint(left){
 
                 if(zoomPoint){
@@ -146,31 +202,53 @@ define([
 
                 return zoomPoint;
             }
-
+            
+            /**
+             * Get the cartesian coordinate of the point selected in the zommed axis
+             * 
+             * @returns {Number}
+             */
             function getZoomPointCoordinate(){
-                return selectedRect.coord + zoomPoint.getCartesianCoord().x / 2;
+                return selectedRect.coord + zoomPoint.getCartesianCoord().x / _this.axisConfig.unitSubDivision;
             }
-
+            
+            /**
+             * Return the postion.left of the selected point relative to the zoomed axis
+             * 
+             * @returns {Number}
+             */
             function getSelectedPointPositionLeft(){
                 if(selectedCoord){
                     var zoomAxisConfig = zoomAxis.getConfig();
-                    var left = 2 * (selectedCoord - selectedRect.coord + .05) * zoomAxisConfig.unitSize;
-                    if(zoomAxisConfig.left <= left && left <= zoomAxisConfig.left + zoomAxisConfig.unitSize){
+                    var offset = zoomAxisConfig.unitSize * _this.axisConfig.unitSubDivision / (10 * _this.axisConfig.unitSubDivision);//needed an offset to compensate for js calculation imprecision
+                    var left = (selectedCoord - selectedRect.coord) * zoomAxisConfig.unitSize * _this.axisConfig.unitSubDivision + offset;
+                    left = parseInt(_format(left));
+                    if(zoomAxisConfig.left <= left + offset && left - offset <= zoomAxisConfig.left + zoomAxisConfig.unitSize){
                         return left;
                     }
                 }
             }
-
+            
+            /**
+             * Update and store the currently selected coord in a private variable
+             */
             function updateAxisPoint(){
                 //updated the selected coord
                 selectedCoord = getZoomPointCoordinate();
                 //draw to axis point
                 drawAxisPoint(selectedCoord);
             }
-
+            
+            /**
+             * Init the axis
+             * 
+             * @param {JQuery} $container
+             * @param {Object} axisConfig
+             */
             function initAxis($container, axisConfig){
 
                 //create paper
+                var subDivisionIncrement = 1 / axisConfig.unitSubDivision;
                 paper = createCanvas($container, axisConfig);
                 axis = new axisFactory(paper, axisConfig);
 
@@ -213,10 +291,10 @@ define([
                         selectedRect.rect.show();
 
                         //update the zoom axis label
-                        zoomAxis.setConfig('labels', [selectedRect.coord, selectedRect.coord + .5]);
+                        zoomAxis.setConfig('labels', [_format(selectedRect.coord), _format(selectedRect.coord + subDivisionIncrement)]);
                         zoomAxis.render();
 
-                        //draw container box here, befor esetting the point
+                        //draw container box here, before setting the point
                         var containerBox = zoomAxis.buildContainerBox({shadow : true});
 
                         //set the previously selected point
@@ -236,7 +314,10 @@ define([
                 });
 
             }
-
+            
+            /**
+             * Reset drawn elements
+             */
             function reset(){
                 //clear previous drawn elements
                 if(selectedRect){
@@ -256,26 +337,29 @@ define([
                 }
                 selectedCoord = undefined;
             }
-
-            //expose the reset() method
-            this.reset = function(){
-                reset();
-            };
-
+            
             /**
-             * init rendering:
+             * Set new config to the axis
+             * 
+             * @param {Object} axisConfig
              */
-            this.axisConfig = buildAxisConfig(this.config);
-            initAxis($container, this.axisConfig);
-
-
             function setAxis(axisConfig){
                 _this.axisConfig = buildAxisConfig(_.merge(_this.config, _this.axisConfig, axisConfig));
                 initAxis($container, _this.axisConfig);
                 reset();
             }
-            this.on('axischange',setAxis);
+            
+            //expose the reset() method
+            this.reset = function(){
+                reset();
+            };
 
+            //init rendering
+            this.axisConfig = buildAxisConfig(this.config);
+            initAxis($container, this.axisConfig);
+            
+            //init event
+            this.on('axischange', setAxis);
         },
         /**
          * Programmatically set the response following the json schema described in
