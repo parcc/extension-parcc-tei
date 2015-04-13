@@ -8,7 +8,28 @@ define([
     'PARCC/axisFactory',
     'graphZoomNumberLineInteraction/runtime/libs/axisZoom'
 ], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, axisZoom){
-    
+
+    function resizePaper(paper, options){
+        
+        options = options || {};
+        var $container = $(paper.canvas);
+        var $body = $container.closest('.qti-itemBody');
+        var maxWidth = $body.width();
+        var width = options.width || $container.innerWidth();
+        var height = options.height || $container.innerHeight();
+        var containerWidth = $container.innerWidth();
+
+        //responsive:
+        var factor;
+        if(containerWidth > maxWidth){
+            containerWidth = maxWidth;
+            factor = containerWidth / width;
+            paper.changeSize(containerWidth, height * factor, false, false);
+            paper.scaleAll(factor);
+        }
+
+    }
+
     /**
      * Create the raphael canvas
      * 
@@ -21,10 +42,13 @@ define([
         var padding = 2;
         var width = 2 * padding + config.unitSize * (2 + config.max - config.min);
         var paper = scaleRaphael($('.shape-container', $container)[0], width, 260);
-
+        setInterval(function(){
+            resizePaper(paper);
+        }, 1000);
+        
         return paper;
     }
-    
+
     /**
      * Build the axis config
      * 
@@ -62,11 +86,11 @@ define([
      * @returns {String}
      */
     function _format(num){
-        
+
         var str = num + '';
         if(str.length > 5){
             if(str.match(/99999\d$/)){
-                str = Math.round(num* 10000) / 10000;
+                str = Math.round(num * 10000) / 10000;
             }else{
                 //cut : 
                 str = Math.floor(num * 1000) / 1000;
@@ -111,7 +135,7 @@ define([
                 selectedCoord,
                 axisPoint,
                 zoomPoint;
-            
+
             /**
              * Found the selected rectangle representing the area of the axis to be zommed
              * 
@@ -134,7 +158,7 @@ define([
                 });
                 return ret;
             }
-            
+
             /**
              * Draw the point on the "normal" axis
              * 
@@ -165,7 +189,7 @@ define([
 
                 return axisPoint;
             }
-            
+
             /**
              * Draw the point on the zoom axis
              * 
@@ -202,7 +226,7 @@ define([
 
                 return zoomPoint;
             }
-            
+
             /**
              * Get the cartesian coordinate of the point selected in the zommed axis
              * 
@@ -211,7 +235,7 @@ define([
             function getZoomPointCoordinate(){
                 return selectedRect.coord + zoomPoint.getCartesianCoord().x / _this.axisConfig.unitSubDivision;
             }
-            
+
             /**
              * Return the postion.left of the selected point relative to the zoomed axis
              * 
@@ -228,7 +252,7 @@ define([
                     }
                 }
             }
-            
+
             /**
              * Update and store the currently selected coord in a private variable
              */
@@ -238,7 +262,7 @@ define([
                 //draw to axis point
                 drawAxisPoint(selectedCoord);
             }
-            
+
             /**
              * Init the axis
              * 
@@ -314,7 +338,7 @@ define([
                 });
 
             }
-            
+
             /**
              * Reset drawn elements
              */
@@ -337,7 +361,7 @@ define([
                 }
                 selectedCoord = undefined;
             }
-            
+
             /**
              * Set new config to the axis
              * 
@@ -348,21 +372,21 @@ define([
                 initAxis($container, _this.axisConfig);
                 reset();
             }
-            
+
             //expose the reset() method
             this.reset = function(){
                 reset();
             };
-            
+
             //expose the getRawResponse() method
             this.getRawResponse = function(){
                 return selectedCoord;
             };
-            
+
             //init rendering
             this.axisConfig = buildAxisConfig(this.config);
             initAxis($container, this.axisConfig);
-            
+
             //init event
             this.on('axischange', setAxis);
         },
@@ -391,7 +415,7 @@ define([
             }else{
                 return {base : null};
             }
-            
+
         },
         /**
          * Remove the current response set in the interaction
