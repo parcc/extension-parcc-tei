@@ -14,12 +14,12 @@
         "./runtime/lib/sly.min"
     ],
     "css": [
-        "runtime/css/multiTabbedExhibit.css"
+        "./runtime/css/multiTabbedExhibit.css"
     ],
-    "entryPoint": "runtime/multiTabbedExhibit.js",
+    "entryPoint": "./runtime/multiTabbedExhibit.js",
     "tags": [
     ],
-    "icon": "creator/img/icon.svg",
+    "icon": "./creator/img/icon.svg",
     "response": {
         "baseType": "boolean",
         "cardinality": "single"

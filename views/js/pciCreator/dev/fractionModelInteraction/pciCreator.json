@@ -13,9 +13,9 @@
     "css": [
         "./runtime/css/fractionModelInteraction.css"
     ],
-    "entryPoint": "runtime/fractionModelInteraction.js",
+    "entryPoint": "./runtime/fractionModelInteraction.js",
     "tags": [],
-    "icon": "creator/img/icon.svg",
+    "icon": "./creator/img/icon.svg",
     "response": {
         "baseType": "integer",
         "cardinality": "single"
