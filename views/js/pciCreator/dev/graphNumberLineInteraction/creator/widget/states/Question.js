@@ -7,7 +7,9 @@ define([
     'lodash',
     'jquery'
 ], function(stateFactory, Question, formElement, containerEditor, formTpl, _, $){
-
+    
+    'use strict';
+    
     var StateQuestion = stateFactory.extend(Question, function(){
 
         var interaction = this.widget.element,

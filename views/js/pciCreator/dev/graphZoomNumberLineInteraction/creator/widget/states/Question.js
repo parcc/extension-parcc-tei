@@ -7,7 +7,9 @@ define([
     'lodash',
     'jquery'
 ], function(stateFactory, Question, formElement, containerEditor, formTpl, _, $){
-
+    
+    'use strict';
+    
     var StateQuestion = stateFactory.extend(Question, function(){
 
         var interaction = this.widget.element,
@@ -41,12 +43,6 @@ define([
             interaction = widget.element,
             $form = widget.$form,
             response = interaction.getResponseDeclaration();
-
-        var intervalSet = interaction.prop('intervals');
-        intervalSet = intervalSet ? intervalSet.split(',') : [];
-        _.each(intervalSet, function(type){
-            intervals[type].checked = true;
-        });
 
         //render the form using the form template
         $form.html(formTpl({
