@@ -27,7 +27,10 @@ define([
     }, function(){
 
         containerEditor.destroy(this.widget.$container.find('.prompt'));
-        this.widget.element.data('pci').reset();
+        var pci = this.widget.element.data('pci');
+        if(pci){
+            pci.reset();
+        }
     });
 
     StateQuestion.prototype.initForm = function(){
