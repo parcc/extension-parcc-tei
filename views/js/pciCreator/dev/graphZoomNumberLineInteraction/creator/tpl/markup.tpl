@@ -1,8 +1,8 @@
-<html5:div class="graphZoomNumberLineInteraction">
-    <html5:div class="prompt">
+<div class="graphZoomNumberLineInteraction">
+    <div class="prompt">
         {{{prompt}}}
-    </html5:div>
-    <html5:div class="shape-panel">
-        <html5:div class="shape-container"></html5:div>
-    </html5:div>
-</html5:div>
+    </div>
+    <div class="shape-panel">
+        <div class="shape-container"></div>
+    </div>
+</div>
