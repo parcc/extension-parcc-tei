@@ -353,8 +353,6 @@ define([
                 });
             }
 
-        }else{
-            throw 'the editable content has not been found';
         }
     }
 
