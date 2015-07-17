@@ -14,7 +14,7 @@ define([
     ){
 
     'use strict';
-    
+
     /**
      * Init the paging widget to a passage
      * @param {JQuery} $frameContainer
@@ -185,16 +185,19 @@ define([
         var $frame = $frameContainer.children('.frame');
         var $scrollbar = $frameContainer.children('.scrollbar');
 
-        //init the sly scrollbar
-        $frame.sly({
-            scrollBar : $scrollbar,
-            scrollBy : 20,
-            scrollTrap : true,
-            dynamicHandle : true,
-            clickBar : true,
-            dragHandle : true,
-            mouseDragging : false
-        });
+        _.delay(function () { //delay to prevent rendering issue in chrome
+            //init the sly scrollbar
+            $frame.sly({
+                scrollBar: $scrollbar,
+                scrollBy: 20,
+                scrollTrap: true,
+                dynamicHandle: true,
+                clickBar: true,
+                dragHandle: true,
+                mouseDragging: false
+            });
+        }, 60);
+
 
         //reload slider setting because the container might have been resized
         $(window).on('resize.multiTabbedExhibit.' + pci.id, function(){
@@ -437,7 +440,7 @@ define([
 
             //load all widgets
             init(this);
-            
+
             this.on('passagechange', function(markup, tabbed, state){
 
                 var $newMarkup = $(markup);
