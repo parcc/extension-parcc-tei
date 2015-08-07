@@ -4,6 +4,7 @@ define([
     'OAT/util/event',
     'OAT/lodash',
     'OAT/handlebars',
+    'OAT/waitForMedia',
     'multiTabbedExhibit/runtime/lib/sly.min'
 ], function(
     $,
@@ -34,7 +35,7 @@ define([
         var pages = [];
         var current = 0;//page count starts at zero
         var scrolling = false;
-        
+
         /**
          * Init paging widget
          */
@@ -69,16 +70,16 @@ define([
 
         /**
          * Set the current page number in state
-         * 
+         *
          * @param {Integer} num - the new page number (the page coutn starts from O)
          * @returns {undefined}
          */
         function setCurrent(num){
             var page;
-            
+
             current = num;
             page = pages[current];
-            
+
             $current = page.$dom;
             $counterCurrent.html(num + 1);
             if(num === 0){
@@ -92,10 +93,10 @@ define([
                 $next.removeClass('disabled');
             }
         }
-        
+
         /**
          * Programmatically scroll to a specific page location
-         * 
+         *
          * @param {Integer} num - the index of the page to scroll to
          * @returns {undefined}
          */
@@ -105,14 +106,14 @@ define([
             $frame.sly('slideTo', page.top, false);
             setCurrent(num);
         }
-        
+
         /**
          * The callback to be executed after each move event
-         * 
-         * @param {Integer} newPos - the position.top 
+         *
+         * @param {Integer} newPos - the position.top
          */
         function moveCallback(newPos){
-            
+
             var threshold = newPos + frameHalfHeight + 20;
             var currentPage = 0;
 
@@ -145,12 +146,12 @@ define([
         //init next/previous buttons
         $previous.on('click', function(){
             if(!$previous.hasClass('disabled') && current > 0){
-                scrollTo(current - 1, true);
+                scrollTo(current - 1);
             }
         });
         $next.on('click', function(){
             if(!$next.hasClass('disabled') && current < pages.length - 1){
-                scrollTo(current + 1, true);
+                scrollTo(current + 1);
             }
         });
 
@@ -165,7 +166,7 @@ define([
             setActive : function(pageId){
                 var page = _.find(pages, {id : pageId});
                 if(page){
-                    scrollTo(page.index, true);
+                    scrollTo(page.index);
                 }
             }
         };
@@ -173,10 +174,10 @@ define([
         $frameContainer.data('paging-api', pagingApi);
         return pagingApi;
     }
-    
+
     /**
      * Init scrolling widget
-     * 
+     *
      * @param {Object} pci - the standard pci object
      * @param {JQuery} $frameContainer
      */
@@ -184,9 +185,8 @@ define([
 
         var $frame = $frameContainer.children('.frame');
         var $scrollbar = $frameContainer.children('.scrollbar');
-
-        _.delay(function () { //delay to prevent rendering issue in chrome
-            //init the sly scrollbar
+        //init the sly scrollbar
+        $frame.waitForMedia(function(){
             $frame.sly({
                 scrollBar: $scrollbar,
                 scrollBy: 20,
@@ -196,7 +196,7 @@ define([
                 dragHandle: true,
                 mouseDragging: false
             });
-        }, 60);
+        });
 
 
         //reload slider setting because the container might have been resized
@@ -207,24 +207,24 @@ define([
             $frame.sly('reload');
         });
     }
-    
+
     /**
      * Renders a template found in the pci
-     * 
+     *
      * @param {Object} pci - the standard pci object
      * @param {String} tplName
      * @param {Object} data
-     * @returns {String} 
+     * @returns {String}
      */
     function renderTemplate(pci, tplName, data){
         var source = pci.$dom.find(".templates ." + tplName).html();
         var template = handlebars.compile(source);
         return template(data || {});
     }
-    
+
     /**
      * Prepare the markup for scrolling widget
-     * 
+     *
      * @param {Object} pci - the standard pci object
      * @param {JQuery} $passage
      */
@@ -239,10 +239,10 @@ define([
             content : passageContent
         }));
     }
-    
+
     /**
      * Prepare the markup for paging widget
-     * 
+     *
      * @param {Object} pci - the standard pci object
      * @param {JQuery} $passage
      */
@@ -265,10 +265,10 @@ define([
         //add pager
         $passage.append(renderTemplate(pci, 'pager'));
     }
-    
+
     /**
      * Main passages widgets according to their types
-     * 
+     *
      * @param {Object} pci - the standard pci object
      */
     function initPassages(pci){
@@ -286,10 +286,10 @@ define([
             initPaging($passage);
         });
     }
-    
+
     /**
      * Prepare the markup for tabbing widget
-     * 
+     *
      * @param {Object} pci - the standard pci object
      */
     function initTabbingMarkup(pci){
@@ -314,10 +314,10 @@ define([
         $tabContainer.children('.passages-tab-navigation').remove();
         $tabContainer.prepend(renderTemplate(pci, 'tab-navigation', tplData));
     }
-    
+
     /**
      * Init tabbing component
-     * 
+     *
      * @param {Object} pci
      * @returns {Object} - the tabbing api object to control the tabbing component
      */
@@ -358,10 +358,10 @@ define([
         $tabContainer.on('activate.tab', function(e, id){
             pci.trigger('activate', [id]);
         });
-        
+
         /**
          * Activate a tab identified by its trigger <a>
-         * 
+         *
          * @param {JQuery} $a
          */
         function activateTab($a){
@@ -398,7 +398,7 @@ define([
         $tabContainer.data('tabbing-api', tabbingApi);
         return tabbingApi;
     }
-    
+
     /**
      * The main function to init the ineractivity of the interaction
      * @param {Object} pci - the standard pci object
@@ -409,7 +409,7 @@ define([
         initPassages(pci);
 
         //init tabbing
-        var tabbed = pci.config['tabbed'];
+        var tabbed = pci.config.tabbed;
         if(tabbed && tabbed !== 'false'){
             initTabbing(pci);
         }
@@ -466,7 +466,6 @@ define([
          * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
          *
-         * @param {Object} interaction
          * @param {Object} response
          */
         setResponse : function(response){
@@ -476,7 +475,6 @@ define([
          * Get the response in the json format described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
          *
-         * @param {Object} interaction
          * @returns {Object}
          */
         getResponse : function(){
@@ -487,7 +485,6 @@ define([
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
          *
-         * @param {Object} interaction
          */
         resetResponse : function(){
 
@@ -497,7 +494,6 @@ define([
          * After this function is executed, only the inital naked markup remains
          * Event listeners are removed and the state and the response are reset
          *
-         * @param {Object} interaction
          */
         destroy : function(){
 
@@ -507,14 +503,13 @@ define([
         /**
          * Restore the state of the interaction from the serializedState.
          *
-         * @param {Object} interaction
-         * @param {Object} serializedState - json format
+         * @param {Object} state
          */
         setSerializedState : function(state){
 
             if(state.passage){
                 var $tabs = this.$dom.find('.passages-tabs');
-                
+
                 //restoring a state only when the passage has tabs
                 if($tabs.length){
                     var tabApi = $tabs.data('tabbing-api');
@@ -534,7 +529,6 @@ define([
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
          *
-         * @param {Object} interaction
          * @returns {Object} json format
          */
         getSerializedState : function(){
