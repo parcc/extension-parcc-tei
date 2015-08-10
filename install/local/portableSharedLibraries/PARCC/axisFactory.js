@@ -77,6 +77,19 @@ define(['OAT/lodash'], function(_){
         });
     }
 
+    /**
+     * Add a css class to the node of a Raphaël object
+     * IE currently doesn't support the usage of element.classList in SVG
+     *
+     * @param raphaelObj
+     * @param {string} newClass
+     */
+    function addCssClass(raphaelObj, newClass) {
+        var pattern = new RegExp('\\b' + newClass + '\\b');
+        var oldClass = raphaelObj.node.getAttribute('class') || '';
+        raphaelObj.node.setAttribute('class', pattern.test(oldClass) ? oldClass : oldClass + ' ' + newClass);
+    }
+
     function getLabel(i, config){
         if(config && _.isArray(config.labels) && config.labels[i] !== undefined && config.labels[i] !== false){
             return config.labels[i];
@@ -137,6 +150,7 @@ define(['OAT/lodash'], function(_){
                     label.attr({
                         'font-size' : config.fontSize
                     });
+                    addCssClass(label, 'scene scene-text');
                     set.push(label);
 
                     if(i < config.max){
@@ -166,6 +180,7 @@ define(['OAT/lodash'], function(_){
                 }
 
                 var pathObj = paper.path(path);
+                addCssClass(pathObj, 'scene scene-grid');
                 _applyStyle(pathObj, config);
                 set.push(pathObj);
             },
@@ -237,6 +252,7 @@ define(['OAT/lodash'], function(_){
             buildArrow : function(orientation){
                 var pathStr = getArrowsPath(orientation, config);
                 var arrow = paper.path(pathStr);
+                addCssClass(arrow, 'scene scene-grid');
                 _applyStyle(arrow, config);
                 set.push(arrow);
                 return arrow;
@@ -284,7 +300,8 @@ define(['OAT/lodash'], function(_){
                 }
 
                 return box;
-            }
+            },
+            addCssClass: addCssClass
         };
 
         obj.render();

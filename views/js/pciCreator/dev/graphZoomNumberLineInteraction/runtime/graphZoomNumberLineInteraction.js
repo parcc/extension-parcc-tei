@@ -288,6 +288,8 @@ define([
 
                         //updated selected rectangle and show it
                         selectedRect = rect;
+                        zoomAxis.addCssClass(selectedRect.rect, 'scene scene-selected-rectangle');
+
                         selectedRect.rect.show();
 
                         //update the zoom axis label
@@ -296,6 +298,7 @@ define([
 
                         //draw container box here, before setting the point
                         var containerBox = zoomAxis.buildContainerBox({shadow : true});
+                        zoomAxis.addCssClass(containerBox, 'scene scene-zoom-popup');
 
                         //set the previously selected point
                         var left = getSelectedPointPositionLeft();
@@ -309,6 +312,7 @@ define([
 
                         //add zoom effect
                         zoomEffect = axisZoom.drawZoomEffect(paper, selectedRect.rect, containerBox);
+                        zoomAxis.addCssClass(zoomEffect, 'scene scene-zoom-effect');
                     }
 
                 });
