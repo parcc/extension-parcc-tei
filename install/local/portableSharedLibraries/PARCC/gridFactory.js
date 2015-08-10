@@ -1,4 +1,5 @@
-define(['OAT/lodash'], function( _){
+define(['OAT/lodash'], function( _ ){
+
     'use strict';
 
     function gridFactory(paper,options){
@@ -10,15 +11,34 @@ define(['OAT/lodash'], function( _){
         if ( (options.x.start >= options.x.end) || (options.y.start >= options.y.end) ) {
             throw 'end must be greater than start';
         }
+
+
+        /**
+         * Add a css class to the node of a Raphaël object
+         * IE currently doesn't support the usage of element.classList in SVG
+         *
+         * @param raphaelObj
+         * @param {string} newClass
+         */
+        function addCssClass(raphaelObj, newClass) {
+            var pattern = new RegExp('\\b' + newClass + '\\b');
+            var oldClass = raphaelObj.node.getAttribute('class') || '';
+            raphaelObj.node.setAttribute('class', pattern.test(oldClass) ? oldClass : oldClass + ' ' + newClass);
+        }
+
         
         function drawLine(start, end, style){
             var padding = options.padding;
-            return paper.path('M'+(padding+start[0])+' '+(padding+start[1])+'L'+(padding+end[0])+' '+(padding+end[1])).attr(style);
+            var path = paper.path('M'+(padding+start[0])+' '+(padding+start[1])+'L'+(padding+end[0])+' '+(padding+end[1])).attr(style);
+            addCssClass(path, 'scene scene-grid');
+            return path;
         }
+
+        var lineColor = '#222';
         
         options = _.merge({},{
-            color : '#222',
-            weigth : 1,
+            color : lineColor,
+            weight : 1,
             padding : 20,
             x : {
                 start : -10,
@@ -26,7 +46,7 @@ define(['OAT/lodash'], function( _){
                 label : null,
                 step : 1,
                 unit : 10,
-                color : '#000',
+                color : lineColor,
                 weight : 3
             },
             y : {
@@ -35,7 +55,7 @@ define(['OAT/lodash'], function( _){
                 label : null,
                 step : 1,
                 unit : 10,
-                color : '#000',
+                color : lineColor,
                 weight : 3
             }
         },options);
@@ -76,7 +96,8 @@ define(['OAT/lodash'], function( _){
                 var padding = options.padding, 
                     position = 0,
                     fontSize = 10,
-                    textTop;
+                    textTop,
+                    text;
                 
                 if(config.labelOnTop){
                     textTop = top + padding - fontSize/2;
@@ -85,9 +106,10 @@ define(['OAT/lodash'], function( _){
                 }
                 
                 for(var i = _x.start; i <= _x.end ; i++){
-                    paper.text(padding + position, textTop, i).attr({
+                    text = paper.text(padding + position, textTop, i).attr({
                         'font-size' : fontSize
                     });
+                    addCssClass(text, 'scene scene-text');
                     position += _x.unit;
                 }
                 
@@ -103,7 +125,8 @@ define(['OAT/lodash'], function( _){
                 var padding = options.padding, 
                     position = 0,
                     fontSize = 10,
-                    textLeft;
+                    textLeft,
+                    text;
                 
                 if(config.labelOnRight){
                     textLeft = left + padding + fontSize/2;
@@ -112,9 +135,10 @@ define(['OAT/lodash'], function( _){
                 }
                 
                 for(var i = _y.start; i <= _y.end ; i++){
-                    paper.text(textLeft, padding + position, -i).attr({
+                    text = paper.text(textLeft, padding + position, -i).attr({
                         'font-size' : fontSize
                     });
+                    addCssClass(text, 'scene scene-text');
                     position += _y.unit;
                 }
                 
@@ -254,8 +278,8 @@ define(['OAT/lodash'], function( _){
                 var unitSizes = this.getUnits();
                 return {
                     left : origin.left + unitSizes.x * x,
-                top : origin.top - unitSizes.y * y
-                }
+                    top : origin.top - unitSizes.y * y
+                };
             },
             /**
              * The the upper and lower bounds fof the grid on both axis
@@ -272,7 +296,7 @@ define(['OAT/lodash'], function( _){
                         start : _y.start,
                         end : _y.end
                     }
-                }
+                };
             },
             /**
              * Rendering function
@@ -284,7 +308,7 @@ define(['OAT/lodash'], function( _){
             /**
              * Return a callback function to determine for a value the corrected value according grid snapping
              * @param {Number} x coordinate x to convert to snapped value
-             * @parem {Number} y  coordinate y to convert to snapped value
+             * @param {Number} y  coordinate y to convert to snapped value
              * @return {Array} snapped values x,y
              */
             snap : function(x,y){
