@@ -86,7 +86,7 @@ class Updater extends \common_ext_ExtensionUpdater
         }
 
         //migrate from 0.1.4 to 0.1.5
-        if($currentVersion == '0.1.3'){
+        if($currentVersion == '0.1.4'){
 
             $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
             $registry->registerFromFile('PARCC/axisFactory', $installBasePath.'/PARCC/axisFactory.js');
