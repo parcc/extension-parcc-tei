@@ -81,7 +81,7 @@ define([
             this.id = id;
             this.dom = dom;
             this.config = config || {};
-
+            
             var $container = $(dom);
             var mathFunctions = config.graphs.split(',');
             var $shapeControls = $container.find('.shape-controls');
@@ -212,8 +212,9 @@ define([
 
                 if(point1 && point2){
                     clearPlot();
-                    if(mathFunction){
+                    if(mathFunction && plotFactory[mathFunction]){
                         path = plotFactory[mathFunction](point1, point2);
+                        console.log('responseChange', getRawResponse());
                     }
                 }
             }
@@ -300,7 +301,21 @@ define([
                     plot();
                 }
             }
-
+            
+            function getRawResponse(){
+                
+                var point1 = points[0],
+                    point2 = points[1];
+                
+                if(point1 && point2 && mathFunction){
+                    return {
+                        point1 : point1.getCartesianCoord(1),
+                        point2 : point2.getCartesianCoord(1),
+                        mathFunction : mathFunction
+                    };
+                }
+            }
+            
             /**
              * init rendering:
              */
