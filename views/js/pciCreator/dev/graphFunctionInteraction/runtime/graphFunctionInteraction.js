@@ -210,11 +210,10 @@ define([
                 var point1 = points[0],
                     point2 = points[1];
 
-                if(point1 && point2){
+                if(point1 && point2 && mathFunction && plotFactory[mathFunction]){
                     clearPlot();
-                    if(mathFunction && plotFactory[mathFunction]){
-                        path = plotFactory[mathFunction](point1, point2);
-                    }
+                    path = plotFactory[mathFunction](point1, point2);
+                    _this.trigger('responseChange', [_this.getResponse()]);
                 }
             }
 
