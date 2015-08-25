@@ -214,7 +214,6 @@ define([
                     clearPlot();
                     if(mathFunction && plotFactory[mathFunction]){
                         path = plotFactory[mathFunction](point1, point2);
-                        console.log('responseChange', getRawResponse());
                     }
                 }
             }
@@ -302,6 +301,12 @@ define([
                 }
             }
             
+            /**
+             * Get the raw response of the interaction.
+             * If no graph is drawn, returns null
+             * 
+             * @returns {object}
+             */
             function getRawResponse(){
                 
                 var point1 = points[0],
@@ -315,6 +320,9 @@ define([
                     };
                 }
             }
+            
+            //expose the getRawResponse function
+            this.getRawResponse = getRawResponse;
             
             /**
              * init rendering:
@@ -374,9 +382,27 @@ define([
          */
         getResponse : function(){
 
-            var value = 0;
-
-            return {base : {integer : value}};
+            var raw = this.getRawResponse();
+            if(raw){
+                return {
+                    record : [
+                        {
+                            name: 'functionGraphType',
+                            base : {'string' : raw.mathFunction}
+                        },
+                        {
+                            name : 'points',
+                            list : {
+                                point : [
+                                    [raw.point1.x, raw.point1.y],
+                                    [raw.point2.x, raw.point2.y]
+                                ]
+                            }
+                        }
+                    ]
+                };
+            }
+            return {base : null};
         },
         /**
          * Remove the current response set in the interaction
