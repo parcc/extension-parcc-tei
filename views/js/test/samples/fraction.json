@@ -1,0 +1,184 @@
+{
+    "identifier": "i14399049126620265",
+    "serial": "item_55d335dc07943950208728",
+    "qtiClass": "assessmentItem",
+    "attributes": {
+        "identifier": "i14399049126620265",
+        "title": "Fraction",
+        "label": "",
+        "adaptive": false,
+        "timeDependent": false,
+        "toolName": "TAO",
+        "toolVersion": "3.1.0-sprint04"
+    },
+    "body": {
+        "serial": "container_containeritembody_55d335dc07920801518324",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_55d335dc09320426692022}}\n      <\/div>\n    <\/div>\n  ",
+        "elements": {
+            "interaction_portablecustominteraction_55d335dc09320426692022": {
+                "serial": "interaction_portablecustominteraction_55d335dc09320426692022",
+                "qtiClass": "customInteraction",
+                "attributes": {
+                    "responseIdentifier": "RESPONSE"
+                },
+                "debug": {
+                    "relatedItem": "item_55d335dc07943950208728"
+                },
+                "choices": {},
+                "typeIdentifier": "fractionModelInteraction",
+                "markup": "\n              <div class=\"fractionModelInteraction\">\n                <div class=\"prompt\">\n                  <p>Reprensent the given fraction: <math><semantics><mstyle displaystyle=\"true\" scriptlevel=\"0\"><mrow class=\"MJX-TeXAtom-ORD\"><mfrac><mn>3<\/mn><mn>5<\/mn><\/mfrac><\/mrow><\/mstyle><annotation encoding=\"latex\">\\frac{3}{5}<\/annotation><\/semantics><\/math><\/p>\n                <\/div>\n                <div class=\"shape-panel\">\n                  <h3 class=\"shape-title\">Fraction Model<\/h3>\n                  <div class=\"shape-container\"><\/div>\n                  <div class=\"shape-controls\">\n                    <button value=\"fewer\" class=\"fewer btn btn-info\" type=\"button\">Fewer<\/button>\n                    <button value=\"more\" class=\"more btn btn-info\" type=\"button\">More<\/button>\n                    <button value=\"reset\" class=\"reset btn btn-info\" type=\"button\">Reset<\/button>\n                  <\/div>\n                <\/div>\n              <\/div>\n            ",
+                "libraries": [],
+                "properties": {
+                    "title": "Fraction Model",
+                    "radius": "100",
+                    "selectedPartitionsColor": "#ff0000",
+                    "partitionColor": "#ffffff",
+                    "outlineColor": "#000000",
+                    "outlineThickness": "1",
+                    "partitionMax": "12",
+                    "partitionMin": "1",
+                    "partitionInit": "2",
+                    "selectedPartitionsInit": "0",
+                    "selectedPartitions": "[]"
+                },
+                "entryPoint": "fractionModelInteraction\/runtime\/fractionModelInteraction.js"
+            }
+        },
+        "debug": {
+            "relatedItem": "item_55d335dc07943950208728"
+        }
+    },
+    "debug": {
+        "relatedItem": "item_55d335dc07943950208728"
+    },
+    "namespaces": {
+        "xml": "http:\/\/www.w3.org\/XML\/1998\/namespace",
+        "html5": "html5",
+        "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
+        "m": "http:\/\/www.w3.org\/1998\/Math\/MathML",
+        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance",
+        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1"
+    },
+    "stylesheets": {
+        "stylesheet_55d335dc083ab093818599": {
+            "serial": "stylesheet_55d335dc083ab093818599",
+            "qtiClass": "stylesheet",
+            "attributes": {
+                "href": "fractionModelInteraction\/runtime\/css\/fractionModelInteraction.css",
+                "type": "text\/css",
+                "media": "all",
+                "title": ""
+            },
+            "debug": {
+                "relatedItem": "item_55d335dc07943950208728"
+            }
+        }
+    },
+    "outcomes": {
+        "outcomedeclaration_55d335dc08a4d022758132": {
+            "identifier": "SCORE",
+            "serial": "outcomedeclaration_55d335dc08a4d022758132",
+            "qtiClass": "outcomeDeclaration",
+            "attributes": {
+                "identifier": "SCORE",
+                "cardinality": "single",
+                "baseType": "float"
+            },
+            "debug": {
+                "relatedItem": "item_55d335dc07943950208728"
+            },
+            "defaultValue": null
+        }
+    },
+    "responses": {
+        "responsedeclaration_55d335dc0874a209424066": {
+            "identifier": "RESPONSE",
+            "serial": "responsedeclaration_55d335dc0874a209424066",
+            "qtiClass": "responseDeclaration",
+            "attributes": {
+                "identifier": "RESPONSE",
+                "cardinality": "single",
+                "baseType": "integer"
+            },
+            "debug": {
+                "relatedItem": "item_55d335dc07943950208728"
+            },
+            "correctResponses": [],
+            "mapping": [],
+            "areaMapping": [],
+            "howMatch": "http:\/\/www.imsglobal.org\/question\/qti_v2p1\/rptemplates\/match_correct",
+            "mappingAttributes": {
+                "defaultValue": 0
+            },
+            "feedbackRules": {}
+        }
+    },
+    "feedbacks": {},
+    "responseProcessing": {
+        "serial": "response_templatesdriven_55d335dc09c5a449566031",
+        "qtiClass": "responseProcessing",
+        "attributes": [],
+        "debug": {
+            "relatedItem": "item_55d335dc07943950208728"
+        },
+        "processingType": "templateDriven",
+        "responseRules": [
+            {
+                "qtiClass": "responseCondition",
+                "responseIf": {
+                    "qtiClass": "responseIf",
+                    "expression": {
+                        "qtiClass": "match",
+                        "expressions": [
+                            {
+                                "qtiClass": "variable",
+                                "attributes": {
+                                    "identifier": "RESPONSE"
+                                }
+                            },
+                            {
+                                "qtiClass": "correct",
+                                "attributes": {
+                                    "identifier": "RESPONSE"
+                                }
+                            }
+                        ]
+                    },
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "baseValue",
+                                "attributes": {
+                                    "baseType": "float"
+                                },
+                                "value": "1"
+                            }
+                        }
+                    ]
+                },
+                "responseElse": {
+                    "qtiClass": "responseElse",
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "baseValue",
+                                "attributes": {
+                                    "baseType": "float"
+                                },
+                                "value": "0"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
