@@ -307,7 +307,7 @@ define([
              * 
              * @returns {object}
              */
-            function getRawResponse(){
+            this.getRawResponse = function getRawResponse(){
                 
                 var point1 = points[0],
                     point2 = points[1];
@@ -319,10 +319,28 @@ define([
                         mathFunction : mathFunction
                     };
                 }
-            }
+            };
             
-            //expose the getRawResponse function
-            this.getRawResponse = getRawResponse;
+            /**
+             * Set the raw response to the interaction
+             * 
+             * @param {string} mathFn
+             * @param {object} point1
+             * @param {number} point1.x
+             * @param {number} point1.y
+             * @param {object} point2
+             * @param {number} point2.x
+             * @param {number} point2.y
+             * @returns {undefined}
+             */
+            this.setRawResponse = function setRawResponse(mathFn, point1, point2){
+                clearPoint();
+                clearPlot();
+                mathFunction = mathFn;
+                addPoint(point1.x, point1.y, true);
+                addPoint(point2.x, point2.y, true);
+                plot();
+            };
             
             /**
              * init rendering:
@@ -362,6 +380,31 @@ define([
                 initGrid($container, _this.gridConfig);
                 plotDefault();
             });
+            
+            //test
+            _.delay(function(){
+                _this.setRawResponse('plotLogarithmic', {x:3,y:3}, {x:8,y:3.5});
+                
+                _.delay(function(){
+                    _this.setResponse({
+                        record : [
+                            {
+                                name: 'functionGraphType',
+                                base : {'string' : 'plotLinear'}
+                            },
+                            {
+                                name : 'points',
+                                list : {
+                                    point : [
+                                        [-2, -8],
+                                        [6, -1]
+                                    ]
+                                }
+                            }
+                        ]
+                    });
+                },1000);
+            },2000);
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -371,7 +414,30 @@ define([
          * @param {Object} response
          */
         setResponse : function(response){
-
+            
+            if(response &&
+                _.isArray(response.record) &&
+                response.record[0] &&
+                response.record[1] &&
+                response.record[0].name === 'functionGraphType' &&
+                response.record[0].base &&
+                response.record[0].base.string &&
+                response.record[1].name === 'points' &&
+                response.record[1].list &&
+                response.record[1].list &&
+                _.isArray(response.record[1].list.point)){
+                
+                var point1 = response.record[1].list.point[0];
+                var point2 = response.record[1].list.point[1];
+                
+                this.setRawResponse(response.record[0].base.string, {
+                    x : point1[0],
+                    y : point1[1]
+                },{
+                    x : point2[0],
+                    y : point2[1]
+                });
+            }
         },
         /**
          * Get the response in the json format described in
