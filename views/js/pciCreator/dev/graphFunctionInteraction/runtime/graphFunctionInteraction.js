@@ -477,7 +477,7 @@ define([
          * @param {Object} interaction
          */
         resetResponse : function(){
-
+            
         },
         /**
          * Reverse operation performed by render()
@@ -498,7 +498,8 @@ define([
          * @param {Object} serializedState - json format
          */
         setSerializedState : function(state){
-
+            //state == response
+            this.setResponse(state);
         },
         /**
          * Get the current state of the interaction as a string.
@@ -508,8 +509,8 @@ define([
          * @returns {Object} json format
          */
         getSerializedState : function(){
-
-            return {};
+            //state == response
+            this.getResponse();
         }
     };
 
