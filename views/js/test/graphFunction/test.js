@@ -4,12 +4,11 @@ define([
     'taoQtiItem/runner/qtiItemRunner',
     'json!parccTei/test/samples/graphFunction.json'
 ], function ($, _, qtiItemRunner, fractionData){
+    
     'use strict';
-
 
     var runner;
     var fixtureContainerId = 'item-container';
-    var outsideContainerId = 'outside-container';
 
     //override asset loading in order to resolve it from the runtime location
     var strategies = [{
@@ -34,7 +33,7 @@ define([
         }
     });
 
-    QUnit.asyncTest('renders', function (assert){
+    QUnit.asyncTest('rendering', function (assert){
 
         var $container = $('#' + fixtureContainerId);
         assert.equal($container.length, 1, 'the item container exists');
