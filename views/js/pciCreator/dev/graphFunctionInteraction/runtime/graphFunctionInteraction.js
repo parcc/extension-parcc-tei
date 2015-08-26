@@ -379,31 +379,6 @@ define([
                 initGrid($container, _this.gridConfig);
                 plotDefault();
             });
-            
-            //test
-            _.delay(function(){
-                _this.setRawResponse('plotLogarithmic', {x:3,y:3}, {x:8,y:3.5});
-                
-                _.delay(function(){
-                    _this.setResponse({
-                        record : [
-                            {
-                                name: 'functionGraphType',
-                                base : {'string' : 'plotLinear'}
-                            },
-                            {
-                                name : 'points',
-                                list : {
-                                    point : [
-                                        [-2, -8],
-                                        [6, -1]
-                                    ]
-                                }
-                            }
-                        ]
-                    });
-                },1000);
-            },2000);
         },
         /**
          * Programmatically set the response following the json schema described in
