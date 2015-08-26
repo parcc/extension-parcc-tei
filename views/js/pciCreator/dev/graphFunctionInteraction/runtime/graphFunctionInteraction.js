@@ -451,7 +451,7 @@ define([
          * @param {Object} interaction
          */
         resetResponse : function(){
-            
+            //not implemented
         },
         /**
          * Reverse operation performed by render()
@@ -484,7 +484,7 @@ define([
          */
         getSerializedState : function(){
             //state == response
-            this.getResponse();
+            return this.getResponse();
         }
     };
 
