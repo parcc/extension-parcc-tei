@@ -3,7 +3,7 @@ define([
     'lodash',
     'taoQtiItem/runner/qtiItemRunner',
     'json!parccTei/test/samples/graphFunction.json'
-], function($, _, qtiItemRunner, fractionData){
+], function ($, _, qtiItemRunner, fractionData){
     'use strict';
 
 
@@ -13,36 +13,36 @@ define([
 
     //override asset loading in order to resolve it from the runtime location
     var strategies = [{
-        name : 'portableElementLocation',
-        handle : function handlePortableElementLocation(url){
-            if(/graphFunctionInteraction/.test(url.toString())){
-                return '../../../parccTei/views/js/pciCreator/dev/' + url.toString();
+            name : 'portableElementLocation',
+            handle : function handlePortableElementLocation(url){
+                if(/graphFunctionInteraction/.test(url.toString())){
+                    return '../../../parccTei/views/js/pciCreator/dev/' + url.toString();
+                }
             }
-        }
-    }, {
-        name : 'default',
-        handle : function defaultStrategy(url){
-            return url.toString();
-        }
-    }];
+        }, {
+            name : 'default',
+            handle : function defaultStrategy(url){
+                return url.toString();
+            }
+        }];
 
     module('Graph Function Interaction', {
-        teardown : function(){
+        teardown : function (){
             if(runner){
                 runner.clear();
             }
         }
     });
 
-    QUnit.asyncTest('renders', function(assert){
-        var $container = $('#' + fixtureContainerId);
+    QUnit.asyncTest('renders', function (assert){
 
+        var $container = $('#' + fixtureContainerId);
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
-        console.log(fractionData);
+
         runner = qtiItemRunner('qti', fractionData)
-            .on('render', function(){
-                
+            .on('render', function (){
+
                 assert.equal($container.children().length, 1, 'the container a elements');
                 assert.equal($container.children('.qti-item').length, 1, 'the container contains a the root element .qti-item');
                 assert.equal($container.find('.qti-interaction').length, 1, 'the container contains an interaction .qti-interaction');
@@ -55,6 +55,55 @@ define([
             .assets(strategies)
             .init()
             .render($container);
+    });
+
+    QUnit.asyncTest('response', function (assert){
+        
+        var response = {
+            record : [
+                {
+                    name : 'functionGraphType',
+                    base : {'string' : 'plotLinear'}
+                },
+                {
+                    name : 'points',
+                    list : {
+                        point : [
+                            [-2, -8],
+                            [6, -1]
+                        ]
+                    }
+                }
+            ]
+        };
+        var $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        runner = qtiItemRunner('qti', fractionData)
+            .on('render', function (){
+                
+                var interaction, 
+                    interactions = this._item.getInteractions();
+                    
+                assert.equal(_.size(interactions), 1, 'one interaction');
+                interaction = interactions[0];
+                
+                //set the response
+                interaction.setResponse(response);
+            })
+            .on('responsechange', function (res){
+                
+                QUnit.start();
+            
+                assert.ok(_.isPlainObject(res), 'response changed');
+                assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
+                assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
+            })
+            .assets(strategies)
+            .init()
+            .render($container);
+
     });
 });
 
