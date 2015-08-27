@@ -1,0 +1,185 @@
+{
+    "identifier": "i1440662017636060",
+    "serial": "item_55dec456ede2f169312612",
+    "qtiClass": "assessmentItem",
+    "attributes": {
+        "identifier": "i1440662017636060",
+        "title": "Item 12",
+        "label": "",
+        "adaptive": false,
+        "timeDependent": false,
+        "toolName": "TAO",
+        "toolVersion": "3.1.0-sprint05"
+    },
+    "body": {
+        "serial": "container_containeritembody_55dec456ede13299371974",
+        "body": "\n        \n        <div class=\"grid-row\">\n            <div class=\"col-12\">\n                {{interaction_portablecustominteraction_55dec456ef801365179890}}\n            <\/div>\n        <\/div>\n        \n    ",
+        "elements": {
+            "interaction_portablecustominteraction_55dec456ef801365179890": {
+                "serial": "interaction_portablecustominteraction_55dec456ef801365179890",
+                "qtiClass": "customInteraction",
+                "attributes": {
+                    "responseIdentifier": "RESPONSE"
+                },
+                "debug": {
+                    "relatedItem": "item_55dec456ede2f169312612"
+                },
+                "choices": {},
+                "typeIdentifier": "graphNumberLineInteraction",
+                "markup": "\n                            <div class=\"graphNumberLineInteraction\">\n                                <div class=\"prompt\">\n                                    <p>select intervals<\/p>\n\n                                <\/div>\n                                <div class=\"shape-panel\">\n                                    <div class=\"shape-container\"><\/div>\n                                    <div class=\"shape-controls clearfix\">\n                                        <div class=\"intervals-available\">\n                                            <div class=\"intervals-row\">\n                                                <button name=\"closed-closed\" value=\"closed-closed\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/close-close.svg\"><\/img>\n                                                <\/button>\n                                                <button name=\"closed-open\" value=\"closed-open\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/close-open.svg\"><\/img>\n                                                <\/button>\n                                                <button name=\"open-closed\" value=\"open-closed\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/open-close.svg\"><\/img>\n                                                <\/button>\n                                                <button name=\"open-open\" value=\"open-open\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/open-open.svg\"><\/img>\n                                                <\/button>\n                                            <\/div>\n                                            <div class=\"intervals-row\">\n                                                <button name=\"arrow-open\" value=\"arrow-open\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/arrow-open.svg\"><\/img>\n                                                <\/button>\n                                                <button name=\"arrow-closed\" value=\"arrow-closed\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/arrow-close.svg\"><\/img>\n                                                <\/button>\n                                                <button name=\"open-arrow\" value=\"open-arrow\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/open-arrow.svg\"><\/img>\n                                                <\/button>\n                                                <button name=\"closed-arrow\" value=\"closed-arrow\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/close-arrow.svg\"><\/img>\n                                                <\/button>\n                                            <\/div>\n                                            <div class=\"intervals-overlay\"><\/div>\n                                        <\/div>\n                                        <div class=\"intervals-selected clearfix\"><\/div>\n                                        <div class=\"intervals-template\">\n                                            <div class=\"interval\" data-uid=\"\">\n                                                <!--<div class=\"interval-delete icon icon-bin\"><\/div>-->\n                                                <button class=\"btn btn-info\" type=\"button\"><\/button>\n                                                <a class=\"deleter\" title=\"delete the interval\" href=\"#\">delete<\/a>\n                                            <\/div>\n                                        <\/div>\n                                    <\/div>\n                                <\/div>\n                            <\/div>\n                        ",
+                "libraries": [
+                ],
+                "properties": {
+                    "intervals": "closed-closed,closed-open,open-closed,open-open,arrow-open,arrow-closed,open-arrow,closed-arrow",
+                    "color": "#266d9c",
+                    "min": "-5",
+                    "max": "5",
+                    "unitSubDivision": "2",
+                    "increment": "1",
+                    "snapTo": "1"
+                },
+                "entryPoint": "graphNumberLineInteraction\/runtime\/graphNumberLineInteraction.js"
+            }
+        },
+        "debug": {
+            "relatedItem": "item_55dec456ede2f169312612"
+        }
+    },
+    "debug": {
+        "relatedItem": "item_55dec456ede2f169312612"
+    },
+    "namespaces": {
+        "xml": "http:\/\/www.w3.org\/XML\/1998\/namespace",
+        "html5": "html5",
+        "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
+        "m": "http:\/\/www.w3.org\/1998\/Math\/MathML",
+        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance",
+        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1"
+    },
+    "stylesheets": {
+        "stylesheet_55dec456ee542282015282": {
+            "serial": "stylesheet_55dec456ee542282015282",
+            "qtiClass": "stylesheet",
+            "attributes": {
+                "href": "graphNumberLineInteraction\/runtime\/css\/graphNumberLineInteraction.css",
+                "type": "text\/css",
+                "media": "all",
+                "title": ""
+            },
+            "debug": {
+                "relatedItem": "item_55dec456ede2f169312612"
+            }
+        }
+    },
+    "outcomes": {
+        "outcomedeclaration_55dec456eee1a493614118": {
+            "identifier": "SCORE",
+            "serial": "outcomedeclaration_55dec456eee1a493614118",
+            "qtiClass": "outcomeDeclaration",
+            "attributes": {
+                "identifier": "SCORE",
+                "cardinality": "single",
+                "baseType": "float"
+            },
+            "debug": {
+                "relatedItem": "item_55dec456ede2f169312612"
+            },
+            "defaultValue": null
+        }
+    },
+    "responses": {
+        "responsedeclaration_55dec456eea3f741205341": {
+            "identifier": "RESPONSE",
+            "serial": "responsedeclaration_55dec456eea3f741205341",
+            "qtiClass": "responseDeclaration",
+            "attributes": {
+                "identifier": "RESPONSE",
+                "cardinality": "single",
+                "baseType": "integer"
+            },
+            "debug": {
+                "relatedItem": "item_55dec456ede2f169312612"
+            },
+            "correctResponses": [
+            ],
+            "mapping": [
+            ],
+            "areaMapping": [
+            ],
+            "howMatch": "http:\/\/www.imsglobal.org\/question\/qti_v2p1\/rptemplates\/match_correct",
+            "mappingAttributes": {
+                "defaultValue": 0
+            },
+            "feedbackRules": {}
+        }
+    },
+    "feedbacks": {},
+    "responseProcessing": {
+        "serial": "response_templatesdriven_55dec456eff22282898886",
+        "qtiClass": "responseProcessing",
+        "attributes": [
+        ],
+        "debug": {
+            "relatedItem": "item_55dec456ede2f169312612"
+        },
+        "processingType": "templateDriven",
+        "responseRules": [
+            {
+                "qtiClass": "responseCondition",
+                "responseIf": {
+                    "qtiClass": "responseIf",
+                    "expression": {
+                        "qtiClass": "match",
+                        "expressions": [
+                            {
+                                "qtiClass": "variable",
+                                "attributes": {
+                                    "identifier": "RESPONSE"
+                                }
+                            },
+                            {
+                                "qtiClass": "correct",
+                                "attributes": {
+                                    "identifier": "RESPONSE"
+                                }
+                            }
+                        ]
+                    },
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "baseValue",
+                                "attributes": {
+                                    "baseType": "float"
+                                },
+                                "value": "1"
+                            }
+                        }
+                    ]
+                },
+                "responseElse": {
+                    "qtiClass": "responseElse",
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "baseValue",
+                                "attributes": {
+                                    "baseType": "float"
+                                },
+                                "value": "0"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
