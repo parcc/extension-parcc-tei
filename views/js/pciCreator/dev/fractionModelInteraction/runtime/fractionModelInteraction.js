@@ -14,9 +14,9 @@ define([
         padding : 10,
         outlineThickness : 1
     };
-    
+
     var _ns = '.fraction';
-    
+
     function createCanvas($container, config){
 
         config = _.defaults(config, _defaults);
@@ -55,7 +55,7 @@ define([
 
             /**
              * Set the new fraction model
-             * 
+             *
              * @param {Integer} num
              * @param {Integer} den
              * @returns {undefined}
@@ -67,7 +67,7 @@ define([
 
             /**
              * Get the current fraction model
-             * 
+             *
              * @returns {Object}
              */
             this.getFractionModel = function getFractionModel(){
@@ -82,7 +82,7 @@ define([
              * The fraction model state is the interaction state
              * If the stateData is considered empty : empty string or array,
              * it generates a valid one from the value of the denominator
-             *  
+             *
              * @param {String|Array} stateData
              * @returns {undefined}
              */
@@ -106,7 +106,7 @@ define([
             };
 
             /**
-             * 
+             *
              * Return the state of the interaction
              * The fraction model state is the interaction state
              * @returns {Array}
@@ -159,7 +159,8 @@ define([
                 canvas.pieChart(_this.getState(), _this.config, $container);
 
                 //communicate the response change to the interaction
-                _this.trigger('responsechange', [_this.getResponse()]);
+                _this.trigger('changepartition', [_this.getResponse()]);
+                _this.trigger('responseChange');
 
             }).on('select_slice.pieChart unselect_slice.pieChart', function(e, selectedPartitions, totalSelected){
 
@@ -171,6 +172,7 @@ define([
 
                 //communicate the state change to the interaction
                 _this.trigger('selectedpartition', [selectedPartitions]);
+                _this.trigger('responseChange');
             });
 
             //listening to dynamic configuration change
@@ -193,8 +195,9 @@ define([
          * @param {Object} response
          */
         setResponse : function(response){
-            if(response && response.directedPair){
-                this.setFractionModel(response.pair[0], response.pair[1]);
+            var i, selected;
+            if(response && _.isArray(response.list)){
+                this.setState(response.list);
                 $(this.dom).trigger('changeResponse.fraction');
             }
         },
@@ -206,9 +209,9 @@ define([
          * @returns {Object}
          */
         getResponse : function(){
-            //@todo to be correct to the correct baseType once the response processing story has been clarified
-            var fractionModel = this.getFractionModel();
-            return {base : {directedPair : [fractionModel.numerator.toString(), fractionModel.denominator.toString()]}};
+            return {
+                list : _.values(this.getState())
+            };
         },
         /**
          * Remove the current response set in the interaction
