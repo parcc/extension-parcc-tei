@@ -1,4 +1,4 @@
-define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
+define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function($, _, pointFactory){
 
     var _defaults = {
         color : '#00f',
@@ -11,7 +11,8 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
         var config = _.defaults(config || {}, _defaults);
         var paper = axis.getCanvas();
         var set = paper.set();
-
+        var $canvas = $(paper.canvas);
+        
         function _applyStyle(path){
             path.attr({
                 stroke : config.color,
@@ -20,14 +21,16 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
         }
 
         function getPosition(x, cartesian){
+            var position;
             if(cartesian){
-                return axis.coordinateToPosition(x);
+                position =  axis.coordinateToPosition(x);
             }else{
-                return {
+                position =  {
                     top : axis.getOriginPosition().top,
                     left : x
                 };
             }
+            return position;
         }
 
         function drawLine(position1, position2){
@@ -95,7 +98,18 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
             var set = paper.set(),
                 active = false,
                 line;
-
+            //the coord var stores the currently selected interval in the cartesian coord
+            var coord = {
+                start : min.coord,
+                end : max.coord
+            };
+            var _interval =  {
+                enable : enable,
+                disable : disable,
+                destroy : destroy,
+                getCoordinates : getCoordinates
+            };
+            
             function _drawLine(){
                 if(line){
                     line.remove();
@@ -111,6 +125,10 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
                 start.left = x;
                 _drawLine();
                 pointMax.setOption('xMin', x + .5 * axis.getUnits().x);
+                
+                //responseChange
+                coord.start = this.getCartesianCoord().x;
+                $canvas.trigger('change.interval', [_interval]);
             });
             pointMin.setOption('xMin', getPosition(axis.getMin(), true).left);
             pointMin.setOption('xMax', getPosition(max.coord - .5, true).left);
@@ -120,9 +138,14 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
                 end.left += dx;
                 _drawLine();
             }, function(x){
+                
                 end.left = x;
                 _drawLine();
                 pointMin.setOption('xMax', x - .5 * axis.getUnits().x);
+                
+                //responseChange
+                coord.end = this.getCartesianCoord().x;
+                $canvas.trigger('change.interval', [_interval]);
             });
             pointMax.setOption('xMin', getPosition(min.coord + .5, true).left);
             pointMax.setOption('xMax', getPosition(axis.getMax(), true).left);
@@ -164,12 +187,12 @@ define(['OAT/lodash', 'PARCC/pointFactory'], function(_, pointFactory){
             function destroy(){
                 set.remove().clear();
             }
-
-            return {
-                enable : enable,
-                disable : disable,
-                destroy : destroy
-            };
+            
+            function getCoordinates(){
+                return _.clone(coord);
+            }
+            
+            return _interval;
 
         }
 

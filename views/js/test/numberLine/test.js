@@ -8,7 +8,7 @@ define([
     'use strict';
 
     var runner;
-    var fixtureContainerId = 'item-container';
+    var fixtureContainerId = 'outside-container';
 
     //override asset loading in order to resolve it from the runtime location
     var strategies = [{
@@ -27,6 +27,7 @@ define([
 
     module('Number Line Interaction', {
         teardown : function (){
+            return;
             if(runner){
                 runner.clear();
             }
@@ -50,6 +51,9 @@ define([
                 assert.equal($container.find('.qti-customInteraction .prompt').length, 1, 'the interaction contains a prompt');
 
                 QUnit.start();
+            })
+            .on('responsechange', function(){
+                console.log(arguments);
             })
             .assets(strategies)
             .init()

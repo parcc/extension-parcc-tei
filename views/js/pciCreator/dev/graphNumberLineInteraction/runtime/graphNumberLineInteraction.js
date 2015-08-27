@@ -189,7 +189,10 @@ define([
 
                     //active the button & interval editing
                     activate(uid);
-
+                    
+                    //response change here
+                    console.log(intervals);
+                    
                     if(_.size(intervals) === selectionMax){
                         //deactivate the whole panel
                         $intervalsOverlay.show();
@@ -220,10 +223,26 @@ define([
                     $intervalsOverlay.hide();
                 }
 
+            }).on('change.interval', function(){
+               _this.trigger('responseChange', [_this.getRawResponse()]); 
             });
-
+            
+            //_this.trigger('responseChange', [_this.getResponse()]);
             this.on('intervalschange', setAvailableIntervals);
             this.on('axischange',setAxis);
+            
+            this.getRawResponse = function getRawResponse(){
+                var response = [];
+                _.each(intervals, function(interval){
+                    var coords = interval.obj.getCoordinates();
+                    response.push({
+                        type : interval.type,
+                        start : coords.start,
+                        end : coords.end
+                    });
+                });
+                return response;
+            };
         },
         /**
          * Programmatically set the response following the json schema described in
