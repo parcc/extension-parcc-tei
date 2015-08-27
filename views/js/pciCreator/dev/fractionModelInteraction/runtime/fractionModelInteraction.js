@@ -196,8 +196,8 @@ define([
          */
         setResponse : function(response){
             var i, selected;
-            if(response && _.isArray(response.list)){
-                this.setState(response.list);
+            if(response && response.list && _.isArray(response.list.boolean)){
+                this.setState(response.list.boolean);
                 $(this.dom).trigger('changeResponse.fraction');
             }
         },
@@ -210,7 +210,9 @@ define([
          */
         getResponse : function(){
             return {
-                list : _.values(this.getState())
+                list : {
+                    'boolean' : _.values(this.getState())
+                }
             };
         },
         /**
