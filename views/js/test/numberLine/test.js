@@ -52,8 +52,8 @@ define([
 
                 QUnit.start();
             })
-            .on('responsechange', function(){
-                console.log(arguments);
+            .on('responsechange', function(response){
+                console.log(response.RESPONSE);
             })
             .assets(strategies)
             .init()

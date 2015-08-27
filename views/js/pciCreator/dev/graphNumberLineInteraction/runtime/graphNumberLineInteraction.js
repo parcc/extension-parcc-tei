@@ -37,13 +37,13 @@ define([
                 radius : 10
             }
         };
-        return _.merge(_default,{
+        return _.merge(_default, {
             min : (rawConfig.min === undefined) ? undefined : parseInt(rawConfig.min),
             max : (rawConfig.max === undefined) ? undefined : parseInt(rawConfig.max),
             unitSubDivision : (rawConfig.unitSubDivision === undefined) ? undefined : parseInt(rawConfig.unitSubDivision),
             plot : {
                 color : rawConfig.graphColor,
-                thickness : (rawConfig.graphWidth === undefined ) ? undefined : parseInt(rawConfig.graphWidth)
+                thickness : (rawConfig.graphWidth === undefined) ? undefined : parseInt(rawConfig.graphWidth)
             },
             point : {
                 color : rawConfig.graphColor,
@@ -189,10 +189,10 @@ define([
 
                     //active the button & interval editing
                     activate(uid);
-                    
-                    //response change here
-                    console.log(intervals);
-                    
+
+                    //response change
+                    _this.trigger('responseChange', [_this.getRawResponse()]);
+
                     if(_.size(intervals) === selectionMax){
                         //deactivate the whole panel
                         $intervalsOverlay.show();
@@ -224,13 +224,13 @@ define([
                 }
 
             }).on('change.interval', function(){
-               _this.trigger('responseChange', [_this.getRawResponse()]); 
+                _this.trigger('responseChange', [_this.getRawResponse()]);
             });
-            
+
             //_this.trigger('responseChange', [_this.getResponse()]);
             this.on('intervalschange', setAvailableIntervals);
-            this.on('axischange',setAxis);
-            
+            this.on('axischange', setAxis);
+
             this.getRawResponse = function getRawResponse(){
                 var response = [];
                 _.each(intervals, function(interval){
@@ -262,10 +262,38 @@ define([
          * @returns {Object}
          */
         getResponse : function(){
-
-            var value = 0;
-
-            return {base : {integer : value}};
+            
+            var types = [];
+            var values = [];
+            var rawResponse = this.getRawResponse();
+            if(_.isArray(rawResponse) && _.size(rawResponse)){
+                _.each(rawResponse, function(interval){
+                    types.push(interval.type);
+                    values.push([interval.start, interval.end]);
+                });
+                return {
+                    record : [
+                        {
+                            name : 'lineTypes',
+                            base : {
+                                list : {
+                                    'string' : types
+                                }
+                            }
+                        },
+                        {
+                            name : 'values',
+                            base : {
+                                list : {
+                                    pair : values
+                                }
+                            }
+                        }
+                    ]
+                };
+            }else{
+                return {base : null};
+            }
         },
         /**
          * Remove the current response set in the interaction
