@@ -198,32 +198,6 @@ define([
                 }
             }
 
-            _.delay(function(){
-                _this.setResponse({
-                    record : [
-                        {
-                            name : 'lineTypes',
-                            base : {
-                                list : {
-                                    'string' : ['open-closed', 'closed-open']
-                                }
-                            }
-                        },
-                        {
-                            name : 'values',
-                            base : {
-                                list : {
-                                    pair : [
-                                        [-5, -2],
-                                        [1, 3]
-                                    ]
-                                }
-                            }
-                        }
-                    ]
-                });
-            }, 2000);
-
             var availableIntervals = this.config.intervals ? this.config.intervals.split(',') : getAuthorizedIntervals();
             setAvailableIntervals(availableIntervals);
 
