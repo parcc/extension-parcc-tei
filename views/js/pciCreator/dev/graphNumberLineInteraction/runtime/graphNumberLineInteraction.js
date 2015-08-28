@@ -322,7 +322,7 @@ define([
                 for(i = 0; i < lineTypes.length; i++){
                     point = values[i];
                     rawResponse.push({
-                        type : lineTypes[0],
+                        type : lineTypes[i],
                         start : point[0],
                         end : point[1]
                     });

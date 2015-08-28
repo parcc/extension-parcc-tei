@@ -3,12 +3,12 @@ define([
     'lodash',
     'taoQtiItem/runner/qtiItemRunner',
     'json!parccTei/test/samples/numberLine.json'
-], function ($, _, qtiItemRunner, itemData){
-    
+], function($, _, qtiItemRunner, itemData){
+
     'use strict';
 
     var runner;
-    var fixtureContainerId = 'outside-container';
+    var fixtureContainerId = 'item-container';
 
     //override asset loading in order to resolve it from the runtime location
     var strategies = [{
@@ -26,22 +26,21 @@ define([
         }];
 
     module('Number Line Interaction', {
-        teardown : function (){
-            return;
+        teardown : function(){
             if(runner){
                 runner.clear();
             }
         }
     });
 
-    QUnit.asyncTest('rendering', function (assert){
+    QUnit.asyncTest('rendering', function(assert){
 
         var $container = $('#' + fixtureContainerId);
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
 
         runner = qtiItemRunner('qti', itemData)
-            .on('render', function (){
+            .on('render', function(){
 
                 assert.equal($container.children().length, 1, 'the container a elements');
                 assert.equal($container.children('.qti-item').length, 1, 'the container contains a the root element .qti-item');
@@ -58,102 +57,110 @@ define([
             .assets(strategies)
             .init()
             .render($container);
-        
+
     });
-/*
-    QUnit.asyncTest('response', function (assert){
-        
+
+    QUnit.asyncTest('response', function(assert){
+
         var response = {
             record : [
                 {
-                    name : 'functionGraphType',
-                    base : {'string' : 'plotLinear'}
+                    name : 'lineTypes',
+                    base : {
+                        list : {
+                            'string' : ['open-closed', 'closed-open']
+                        }
+                    }
                 },
                 {
-                    name : 'points',
-                    list : {
-                        point : [
-                            [-2, -8],
-                            [6, -1]
-                        ]
+                    name : 'values',
+                    base : {
+                        list : {
+                            pair : [
+                                [-5, -2],
+                                [1, 3]
+                            ]
+                        }
                     }
                 }
             ]
         };
         var $container = $('#' + fixtureContainerId);
+        var i = 0;
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
 
-        runner = qtiItemRunner('qti', fractionData)
-            .on('render', function (){
-                
-                var interaction, 
+        runner = qtiItemRunner('qti', itemData)
+            .on('render', function(){
+
+                var interaction,
                     interactions = this._item.getInteractions();
-                    
+
                 assert.equal(_.size(interactions), 1, 'one interaction');
                 interaction = interactions[0];
-                
+
                 //set the response
                 interaction.setResponse(response);
             })
-            .on('responsechange', function (res){
-                
-                QUnit.start();
-            
-                assert.ok(_.isPlainObject(res), 'response changed');
-                assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
-                assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
-            })
-            .assets(strategies)
-            .init()
-            .render($container);
+            .on('responsechange', function(res){
 
-    });
-    
-    QUnit.asyncTest('state', function (assert){
-        
-        var response = {
-            record : [
-                {
-                    name : 'functionGraphType',
-                    base : {'string' : 'plotLinear'}
-                },
-                {
-                    name : 'points',
-                    list : {
-                        point : [
-                            [-2, -8],
-                            [6, -1]
-                        ]
-                    }
+                if(++i == 2){
+                    QUnit.start();
+                    assert.ok(_.isPlainObject(res), 'response changed');
+                    assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
+                    assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
                 }
-            ]
-        };
-        var state = {RESPONSE : response};
-        var $container = $('#' + fixtureContainerId);
-        assert.equal($container.length, 1, 'the item container exists');
-        assert.equal($container.children().length, 0, 'the container has no children');
-
-        runner = qtiItemRunner('qti', fractionData)
-            .on('render', function (){
-                
-                this.setState(state);
-                assert.deepEqual(this.getState(), state, 'state set/get ok');
-            })
-            .on('responsechange', function (res){
-                
-                QUnit.start();
-                
-                //if the state has been set, the response should have changed
-                assert.ok(_.isPlainObject(res), 'response changed');
-                assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
-                assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
             })
             .assets(strategies)
             .init()
             .render($container);
 
     });
-    */
+    /*   
+     QUnit.asyncTest('state', function (assert){
+     
+     var response = {
+     record : [
+     {
+     name : 'functionGraphType',
+     base : {'string' : 'plotLinear'}
+     },
+     {
+     name : 'points',
+     list : {
+     point : [
+     [-2, -8],
+     [6, -1]
+     ]
+     }
+     }
+     ]
+     };
+     var state = {RESPONSE : response};
+     var $container = $('#' + fixtureContainerId);
+     assert.equal($container.length, 1, 'the item container exists');
+     assert.equal($container.children().length, 0, 'the container has no children');
+     
+     runner = qtiItemRunner('qti', fractionData)
+     .on('render', function (){
+     
+     this.setState(state);
+     assert.deepEqual(this.getState(), state, 'state set/get ok');
+     })
+     .on('responsechange', function (res){
+     
+     QUnit.start();
+     
+     //if the state has been set, the response should have changed
+     assert.ok(_.isPlainObject(res), 'response changed');
+     assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
+     assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
+     })
+     .assets(strategies)
+     .init()
+     .render($container);
+     
+     });
+     */
 });
 
