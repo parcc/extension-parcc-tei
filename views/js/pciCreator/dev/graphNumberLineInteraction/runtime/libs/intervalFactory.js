@@ -13,13 +13,25 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
         var set = paper.set();
         var $canvas = $(paper.canvas);
         
+        /**
+         * Apply the configured style to the path
+         * 
+         * @param {object} path - raphael path object
+         */
         function _applyStyle(path){
             path.attr({
                 stroke : config.color,
                 'stroke-width' : config.thickness
             });
         }
-
+        
+        /**
+         * Get the position object {top, left} in pixels 
+         * 
+         * @param {integer} x
+         * @param {boolean} cartesian
+         * @returns {object}
+         */
         function getPosition(x, cartesian){
             var position;
             if(cartesian){
@@ -32,7 +44,14 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
             }
             return position;
         }
-
+        
+        /**
+         * Draw the line that goes through two points
+         * 
+         * @param {object} position1
+         * @param {object} position2
+         * @returns {object}
+         */
         function drawLine(position1, position2){
 
             var startPosition, endPosition;
@@ -55,7 +74,13 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
             return path;
 
         }
-
+        
+        /**
+         * Draw the orientation
+         * 
+         * @param {string} orientation
+         * @returns {unresolved}
+         */
         function drawArrow(orientation){
 
             var arrow = axis.buildArrow(orientation);
@@ -64,7 +89,16 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
 
             return arrow;
         }
-
+        
+        /**
+         * Build a point
+         * 
+         * @param {integer} position - in cartesian unit
+         * @param {string} fill - color code
+         * @param {function} [drag] - callback function on drag
+         * @param {function} [dragStop] - callback function on drag stop
+         * @returns {object} point object
+         */
         function buildPoint(position, fill, drag, dragStop){
 
             var top = axis.getOriginPosition().top;
@@ -90,7 +124,14 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
             set.push(point.children);
             return point;
         }
-
+        
+        /**
+         * Build an interval limited by its min and max value
+         * 
+         * @param {string} min - lowerbound in cartesian unit
+         * @param {string} max - upperbound in cartesian unit
+         * @returns {object}
+         */
         function buildFiniteInterval(min, max){
 
             var start = getPosition(min.coord, true);
@@ -146,6 +187,9 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
             _drawLine();
             enable();
             
+            /**
+             * draw the line between the two tips of the segment 
+             */
             function _drawLine(){
                 if(line){
                     line.remove();
@@ -154,6 +198,9 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                 set.push(line);
             }
             
+            /**
+             * activate the interval
+             */
             function enable(){
                 if(!active){
                     //set active style
@@ -168,7 +215,10 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                     active = true;
                 }
             }
-
+            
+            /**
+             * disable the interval
+             */
             function disable(){
                 if(active){
                     //set unactive style
@@ -183,19 +233,33 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                     active = false;
                 }
             }
-
+            
+            /**
+             * destroy and remove the interval
+             */
             function destroy(){
                 set.remove().clear();
             }
             
+            /**
+             * Get start and end of the segment (in cartesian unit)
+             * 
+             * @returns {object}
+             */
             function getCoordinates(){
                 return _.clone(coord);
             }
             
             return _interval;
-
         }
-
+        
+        /**
+         * Build an interval limited by its tip position and its arrow orientation
+         * 
+         * @param {integer} pt - the tip in cartesian unit
+         * @param {string} orientation - the arrow orientation
+         * @returns {object}
+         */
         function buildInfiniteInterval(pt, orientation){
 
             var pos = getPosition(pt.coord, true);
@@ -231,6 +295,9 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
             _drawLine();
             enable();
             
+            /**
+             * draw the line betwen the tip and arrow
+             */
             function _drawLine(){
                 if(line){
                     line.remove();
@@ -238,7 +305,10 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                 line = drawLine(pos, tip);
                 set.push(line);
             }
-
+            
+            /**
+             * activate the interval
+             */
             function enable(){
                 if(!active){
                     //set active style
@@ -251,7 +321,10 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                     active = true;
                 }
             }
-
+            
+            /**
+             * disable the interval
+             */
             function disable(){
                 if(active){
                     //set unactive style
@@ -264,11 +337,19 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                     active = false;
                 }
             }
-
+            
+            /**
+             * destroy and remove the interval
+             */
             function destroy(){
                 set.remove().clear();
             }
             
+            /**
+             * Get start and end of the segment (in cartesian unit)
+             * The arrow is represented by the "null" value
+             * @returns {object}
+             */
             function getCoordinates(){
                 return {
                     start : right ? coord : null,
@@ -341,12 +422,23 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                 }, 'right');
             }
         };
-
-        this.plot = function(intervalType, min, max){
+        
+        /**
+         * Create and draw an interval
+         * 
+         * @param {string} intervalType
+         * @param {integer} min
+         * @param {integer} max
+         * @returns {object} the interval object
+         */
+        this.plot = function plot(intervalType, min, max){
             return plots[intervalType](min, max);
         };
-
-        this.clear = function(){
+        
+        /**
+         * remove ALL intervals create by the factory
+         */
+        this.clear = function clear(){
             if(set.length > 0){
                 set.remove().clear();
             }

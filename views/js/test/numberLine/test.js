@@ -8,7 +8,7 @@ define([
     'use strict';
 
     var runner;
-    var fixtureContainerId = 'outside-container';
+    var fixtureContainerId = 'item-container';
 
     //override asset loading in order to resolve it from the runtime location
     var strategies = [{
