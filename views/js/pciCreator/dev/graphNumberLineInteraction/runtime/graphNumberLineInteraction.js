@@ -400,7 +400,7 @@ define([
          * @param {Object} serializedState - json format
          */
         setSerializedState : function(state){
-
+            this.setResponse(state);
         },
         /**
          * Get the current state of the interaction as a string.
@@ -410,8 +410,7 @@ define([
          * @returns {Object} json format
          */
         getSerializedState : function(){
-
-            return {};
+            return this.resetResponse(state);
         }
     };
 
