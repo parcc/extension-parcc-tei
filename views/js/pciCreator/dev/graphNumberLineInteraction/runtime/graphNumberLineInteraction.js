@@ -8,7 +8,9 @@ define([
     'PARCC/axisFactory',
     'graphNumberLineInteraction/runtime/libs/intervalFactory'
 ], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, IntervalFactory){
-
+    
+    'use strict';
+    
     function createCanvas($container, config){
 
         var padding = 2;
@@ -91,7 +93,14 @@ define([
                 axis,
                 intervalFactory,
                 _this = this;
-
+            
+            /**
+             * Init the axis
+             * 
+             * @param {JQuery} $container
+             * @param {object} axisConfig - the set of configuration available as in setAxis()
+             * @returns {undefined}
+             */
             function initAxis($container, axisConfig){
 
                 //create paper
@@ -99,7 +108,12 @@ define([
                 axis = new axisFactory(paper, axisConfig);
                 intervalFactory = new IntervalFactory(axis, axisConfig.plot);
             }
-
+            
+            /**
+             * Activate an interval defined by its id
+             * 
+             * @param {string} uid
+             */
             function activate(uid){
 
                 _.forIn(intervals, function(interval, id){
@@ -113,7 +127,10 @@ define([
                 });
 
             }
-
+            
+            /**
+             * Reset the interaction to an empty axis
+             */
             function reset(){
                 _.each(intervals, function(interval){
                     interval.obj.destroy();
@@ -124,9 +141,7 @@ define([
             }
 
             //expose the reset() method
-            this.reset = function(){
-                reset();
-            };
+            this.reset = reset;
 
             /**
              * init rendering:
@@ -140,7 +155,13 @@ define([
             var $intervalTemplate = $container.find('.intervals-template .interval');
             var selectionMax = 2;
             var intervals = {};
-
+            
+            /**
+             * Set the list of available interval types
+             * 
+             * @param {Array} availableIntervals
+             * @returns {undefined}
+             */
             function setAvailableIntervals(availableIntervals){
                 $intervalsAvailable.find('.interval-available').each(function(){
                     var $this = $(this);
@@ -153,13 +174,41 @@ define([
                 //need to reset all
                 reset();
             }
-
+    
+            /**
+             * Set the config of the axis
+             * 
+             * @param {array} axisConfig
+             * @param {integer} [axisConfig.top] - the position top of the axis
+             * @param {integer} [axisConfig.left] - the position left of the axis
+             * @param {integer} [axisConfig.min] - the lowerbound of the axis
+             * @param {integer} [axisConfig.max] - the upperbound of the axis
+             * @param {boolean} [axisConfig.label] - defines if the label should be displayed for the acxis or not
+             * @param {integer} [axisConfig.thickness] - the thickness of the strokes
+             * @param {string} [axisConfig.color] - color of the axis
+             * @param {integer} [axisConfig.divisionWidth] - the width (px) of the unit division
+             * @param {integer} [axisConfig.subDivisionWidth] - the width (px) of one sub-unit
+             * @param {integer} [axisConfig.unitSubDivision] - number of sub divisions
+             * @param {integer} [axisConfig.unitSize] - the size (px) of one unit 
+             * @param {integer} [axisConfig.fontSize] - the font size (px) of the labels if applicable
+             * @param {boolean} [axisConfig.arrows] - defines if the arrow tips should be visible or not
+             * @param {boolean} [axisConfig.opacity]
+             * @returns {undefined}
+             */
             function setAxis(axisConfig){
                 _this.axisConfig = buildAxisConfig(_.merge(_this.config, _this.axisConfig, axisConfig));
                 initAxis($container, _this.axisConfig);
                 reset();
             }
-
+            
+            /**
+             * Create an interval and add it to the interval list of the interaction and activate it
+             * 
+             * @param {string} intervalType
+             * @param {integer} start
+             * @param {integer} end
+             * @returns {object}
+             */
             function createInterval(intervalType, start, end){
 
                 var $button, uid, $img, $tpl, interval;
@@ -195,6 +244,8 @@ define([
                         //deactivate the whole panel
                         $intervalsOverlay.show();
                     }
+                    
+                    return interval;
                 }
             }
 
@@ -242,7 +293,13 @@ define([
             //_this.trigger('responseChange', [_this.getResponse()]);
             this.on('intervalschange', setAvailableIntervals);
             this.on('axischange', setAxis);
-
+            
+            /**
+             * Get the raw response of the interaction
+             * It returns an array of interval object, defined by its type, start and end
+             * 
+             * @returns {Array}
+             */
             this.getRawResponse = function getRawResponse(){
                 var response = [];
                 _.each(intervals, function(interval){
@@ -255,7 +312,12 @@ define([
                 });
                 return response;
             };
-
+            
+           /**
+            * Set the raw response to the interaction
+            * 
+            * @param {Array} intervals
+            */
             this.setRawResponse = function(intervals){
                 if(_.isArray(intervals)){
                     _.each(intervals, function(interval){
