@@ -321,7 +321,15 @@ define([
             this.setRawResponse = function(intervals){
                 if(_.isArray(intervals)){
                     _.each(intervals, function(interval){
-                        createInterval(interval.type, interval.start, interval.end);
+                        
+                        var start = interval.start,
+                            end = interval.end;
+                        
+                        //case where type == arrow-open or arrow-closed
+                        if(start === null){
+                            start = end;
+                        }
+                        createInterval(interval.type, start, end);
                     });
                 }
             };

@@ -109,14 +109,6 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                 destroy : destroy,
                 getCoordinates : getCoordinates
             };
-            
-            function _drawLine(){
-                if(line){
-                    line.remove();
-                }
-                line = drawLine(start, end);
-                set.push(line);
-            }
 
             var pointMin = buildPoint(min.coord, !min.open, function(dx){
                 start.left += dx;
@@ -153,7 +145,15 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
 
             _drawLine();
             enable();
-
+            
+            function _drawLine(){
+                if(line){
+                    line.remove();
+                }
+                line = drawLine(start, end);
+                set.push(line);
+            }
+            
             function enable(){
                 if(!active){
                     //set active style
@@ -201,23 +201,36 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
             var pos = getPosition(pt.coord, true);
             var right = (orientation === 'right');
             var tip = getPosition(right ? axis.getMax() + .5 : axis.getMin() - .5, true);
-
+            //the coord var stores the currently selected interval in the cartesian coord
+            var coord = pt.coord;
+            var _interval =  {
+                enable : enable,
+                disable : disable,
+                destroy : destroy,
+                getCoordinates : getCoordinates
+            };
             var set = paper.set(),
                 active = false,
                 line;
-
             var arrow = drawArrow(right ? 'right' : 'left');
-            set.push(arrow);
-
             var point = buildPoint(pt.coord, !pt.open, function(dx){
                 pos.left += dx;
                 _drawLine();
             }, function(x){
                 pos.left = x;
                 _drawLine();
+                
+                //response change
+                coord = this.getCartesianCoord().x;
+                $canvas.trigger('change.interval', [_interval]);
             });
+            
+            set.push(arrow);
             set.push(point.children);
-
+            
+            _drawLine();
+            enable();
+            
             function _drawLine(){
                 if(line){
                     line.remove();
@@ -225,9 +238,6 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                 line = drawLine(pos, tip);
                 set.push(line);
             }
-
-            _drawLine();
-            enable();
 
             function enable(){
                 if(!active){
@@ -258,13 +268,15 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
             function destroy(){
                 set.remove().clear();
             }
+            
+            function getCoordinates(){
+                return {
+                    start : right ? coord : null,
+                    end : !right ? coord : null
+                };
+            }
 
-            return {
-                enable : enable,
-                disable : disable,
-                destroy : destroy
-            };
-
+            return _interval;
         }
 
         var plots = {

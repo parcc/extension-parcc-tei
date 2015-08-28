@@ -8,7 +8,7 @@ define([
     'use strict';
 
     var runner;
-    var fixtureContainerId = 'item-container';
+    var fixtureContainerId = 'outside-container';
 
     //override asset loading in order to resolve it from the runtime location
     var strategies = [{
@@ -68,7 +68,7 @@ define([
                     name : 'lineTypes',
                     base : {
                         list : {
-                            'string' : ['open-closed', 'closed-open']
+                            'string' : ['open-closed', 'open-arrow']
                         }
                     }
                 },
@@ -78,7 +78,7 @@ define([
                         list : {
                             pair : [
                                 [-5, -2],
-                                [1, 3]
+                                [3.5, null]
                             ]
                         }
                     }
@@ -125,7 +125,7 @@ define([
                     name : 'lineTypes',
                     base : {
                         list : {
-                            'string' : ['open-closed', 'closed-open']
+                            'string' : ['open-closed', 'open-arrow']
                         }
                     }
                 },
@@ -135,7 +135,7 @@ define([
                         list : {
                             pair : [
                                 [-5, -2],
-                                [1, 3]
+                                [3.5, null]
                             ]
                         }
                     }
