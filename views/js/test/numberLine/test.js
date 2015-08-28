@@ -58,6 +58,7 @@ define([
             .assets(strategies)
             .init()
             .render($container);
+        
     });
 /*
     QUnit.asyncTest('response', function (assert){

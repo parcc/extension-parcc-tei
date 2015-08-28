@@ -160,26 +160,24 @@ define([
                 reset();
             }
 
-            var availableIntervals = this.config.intervals ? this.config.intervals.split(',') : getAuthorizedIntervals();
-            setAvailableIntervals(availableIntervals);
+            function createInterval(intervalType, start, end){
 
-            $container.on('click', '.intervals-available .btn-info', function(){
+                var $button, uid, $img, $tpl, interval;
 
                 if(_.size(intervals) < selectionMax){
 
-                    var $button = $(this),
-                        intervalType = $button.val(),
-                        uid = _.uniqueId('interval_'),
-                        $img = $button.find('img').clone();
+                    uid = _.uniqueId('interval_');
+                    $button = $intervalsAvailable.find('button[value=' + intervalType + ']');
+                    $img = $button.find('img').clone();
 
                     //append button
-                    var $tpl = $intervalTemplate.clone();
+                    $tpl = $intervalTemplate.clone();
                     $tpl.find('.btn').append($img);
                     $tpl.attr('data-uid', uid);
                     $intervalsSelected.append($tpl);
 
                     //draw initial interval
-                    var interval = intervalFactory.plot(intervalType, 0, 1);
+                    interval = intervalFactory.plot(intervalType, start, end);
 
                     intervals[uid] = {
                         type : intervalType,
@@ -198,6 +196,41 @@ define([
                         $intervalsOverlay.show();
                     }
                 }
+            }
+
+            _.delay(function(){
+                _this.setResponse({
+                    record : [
+                        {
+                            name : 'lineTypes',
+                            base : {
+                                list : {
+                                    'string' : ['open-closed', 'closed-open']
+                                }
+                            }
+                        },
+                        {
+                            name : 'values',
+                            base : {
+                                list : {
+                                    pair : [
+                                        [-5, -2],
+                                        [1, 3]
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                });
+            }, 2000);
+
+            var availableIntervals = this.config.intervals ? this.config.intervals.split(',') : getAuthorizedIntervals();
+            setAvailableIntervals(availableIntervals);
+
+            $container.on('click', '.intervals-available .btn-info', function(){
+
+                //default interval value between 0 and 1
+                createInterval($(this).val(), 0, 1);
 
             }).on('click', '.intervals-selected .btn-info', function(){
 
@@ -223,7 +256,12 @@ define([
                     $intervalsOverlay.hide();
                 }
 
+                //response change event
+                _this.trigger('responseChange', [_this.getRawResponse()]);
+
             }).on('change.interval', function(){
+
+                //response change event
                 _this.trigger('responseChange', [_this.getRawResponse()]);
             });
 
@@ -243,6 +281,14 @@ define([
                 });
                 return response;
             };
+
+            this.setRawResponse = function(intervals){
+                if(_.isArray(intervals)){
+                    _.each(intervals, function(interval){
+                        createInterval(interval.type, interval.start, interval.end);
+                    });
+                }
+            };
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -253,6 +299,37 @@ define([
          */
         setResponse : function(response){
 
+            var i, point, lineTypes, values, rawResponse = [];
+
+            if(response &&
+                _.isArray(response.record) &&
+                response.record[0] &&
+                response.record[1] &&
+                response.record[0].name === 'lineTypes' &&
+                response.record[0].base &&
+                response.record[0].base.list &&
+                _.isArray(response.record[0].base.list.string) &&
+                response.record[1].name === 'values' &&
+                response.record[1].base &&
+                response.record[1].base.list &&
+                _.isArray(response.record[1].base.list.pair) &&
+                response.record[0].base.list.length === response.record[1].base.list.length
+                ){
+
+                lineTypes = response.record[0].base.list.string;
+                values = response.record[1].base.list.pair;
+
+                for(i = 0; i < lineTypes.length; i++){
+                    point = values[i];
+                    rawResponse.push({
+                        type : lineTypes[0],
+                        start : point[0],
+                        end : point[1]
+                    });
+                }
+
+                this.setRawResponse(rawResponse);
+            }
         },
         /**
          * Get the response in the json format described in
@@ -262,7 +339,7 @@ define([
          * @returns {Object}
          */
         getResponse : function(){
-            
+
             var types = [];
             var values = [];
             var rawResponse = this.getRawResponse();
