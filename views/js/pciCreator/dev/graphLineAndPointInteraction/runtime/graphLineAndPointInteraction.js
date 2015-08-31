@@ -440,82 +440,6 @@ define([
                 });
             };
 
-            _.delay(function(){
-                return ; 
-                self.setResponse({
-                    record : [
-                        {
-                                
-                            base : {
-                                
-                                list : {
-                                    point : [[5, -1]]
-                                }
-                            }
-                        },
-                        {
-                            base : {
-                                name : 'setPoints_3',
-                                list : {
-                                    point : [[6, 2], [2, -2], [-5, -7]]
-                                }
-                            }
-                        },
-                        {
-                            base : {
-                                name : 'segments_4',
-                                list : {
-                                    point : [[-7, 7], [7, 9]]
-                                }
-                            }
-                        },
-                        {
-                            base : {
-                                name : 'lines_6',
-                                list : {
-                                    point : [[-7, 3], [2, -8]]
-                                }
-                            }
-                        },
-                        {
-                            base : {
-                                name : 'solutionSet_8',
-                                list : {
-                                    point : [[-10, 6.67], [3.64, -10], [-10, -10]]
-                                }
-                            }
-                        }
-                    ]
-                });
-                return;
-
-                self.setRawResponse([
-                    {
-                        id : 'points_1',
-                        points : [{x : 5, y : -1}]
-                    },
-                    {
-                        id : 'setPoints_3',
-                        points : [{x : 6, y : 2}, {x : 2, y : -2}, {x : -5, y : -7}]
-                    },
-                    {
-                        id : 'lines_6',
-                        points : [{x : -7, y : 3}, {x : 2, y : -8}]
-                    },
-                    {
-                        id : 'segments_4',
-                        points : [{x : -7, y : 7}, {x : 7, y : 9}]
-                    },
-                    {
-                        id : 'solutionSet_8',
-                        type : 'solutionSet',
-                        selections : [[{x : -10, y : 6.67}, {x : 3.64, y : -10}, {x : -10, y : -10}]]
-                    }
-                ]);
-
-
-            }, 1000);
-
             grid = initGrid($container, this.config);
             initInteraction(grid, $container, this.config);
 
@@ -584,8 +508,6 @@ define([
                         selections : solutionSetSelections
                     });
                 }
-                
-                console.log(rawResponse);
                 
                 this.setRawResponse(rawResponse);
             }
