@@ -389,6 +389,7 @@ define([
             this.getRawResponse = function getRawResponse(){
 
                 var response = [];
+                var states = [];
                 _.each(elements, function(element, id){
                     var res = {
                         id : id,
@@ -402,10 +403,55 @@ define([
                     }
 
                     response.push(res);
+                    states.push(element.getState());
                 });
+
                 return response;
             };
 
+            this.setRawResponse = function setRawResponse(response){
+                _.each(response, function(res){
+                    var state = {},
+                        element = elements[res.id];
+                    if(element){
+                        if(res.type === 'solutionSet'){
+                            element.createSolutionSet(elements);
+                            state.selections = res.selections;
+                        }else{
+                            state.points = res.points;
+                        }
+                        element.setState(state);
+                    }
+                });
+            };
+            
+            _.delay(function(){
+                
+                self.setRawResponse([
+                    {   
+                        id:'points_1',
+                        points : [{x:5, y:-1}]
+                    },
+                    {   
+                        id:'setPoints_3',
+                        points : [{x:6, y:2}, {x:2, y:-2}, {x:-5, y:-7}]
+                    },
+                    {   
+                        id:'lines_6',
+                        points : [{x:-7, y:3}, {x:2, y:-8}]
+                    },
+                    {   
+                        id:'segments_4',
+                        points : [{x:-7, y:7}, {x:7, y:9}]
+                    },
+                    {
+                        id :'solutionSet_8',
+                        type : 'solutionSet',
+                        selections : [[{x:-10, y:6.67}, {x:3.64, y:-10}, {x:-10, y:-10}]]
+                    }
+                ]);
+            },1000);
+            
             grid = initGrid($container, this.config);
             initInteraction(grid, $container, this.config);
 
@@ -450,7 +496,6 @@ define([
             _.each(rawResponse, function(element){
                 if(element.type === 'solutionSet'){
                     _.each(element.selections, function(selection){
-                        debugger;
                         response.record.push(formatResponseElement(element.id, selection));
                     });
                 }else{
