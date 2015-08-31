@@ -253,7 +253,7 @@ define([
 
     function convertPath(grid, pathArray){
 
-        var positionArray = []
+        var positionArray = [];
         _.each(pathArray, function(coord){
             var pos = grid.getPostionFromCartesian(coord[0], coord[1]);
             positionArray.push([pos.left, pos.top]);
@@ -302,19 +302,23 @@ define([
 
         //calculate all shape coord
         _.each(intersections, function(intersection){
-            var closedPath = getClosedPath(intersection);
+            
+            var convertedPath,
+                closedPath = getClosedPath(intersection);
+                
             if(closedPath.length){
 
                 //format and transform path
-                closedPath = convertPath(grid, closedPath);
-                closedPath = zipPath(closedPath);
+                convertedPath = convertPath(grid, closedPath);
+                convertedPath = zipPath(convertedPath);
 
                 //draw shape from path
-                var area = paper.path(closedPath).attr({
+                var area = paper.path(convertedPath).attr({
                     fill : config.color,
                     opacity : _style.opacityDefault
                 });
                 area.selected = false;
+                area.closedPath = closedPath;
                 
                 if(_debug){
                     area.attr({stroke : '#222'});
@@ -386,7 +390,7 @@ define([
         $paperCanvas.on('drawn.lines removed.lines activated.lines', clearSolutionSet);
         
         var linesWrapper = {
-            type : 'line',
+            type : 'solutionSet',
             getId : function(){
                 return uid;
             },
@@ -417,8 +421,14 @@ define([
 
             },
             getState : function(){
-
+                var selections = [];
+                _.each(areas, function(area){
+                    if(area.selected){
+                        selections.push(area.closedPath);
+                    }
+                });
                 return {
+                    selections : selections,
                     config : _.cloneDeep(config)
                 };
             },

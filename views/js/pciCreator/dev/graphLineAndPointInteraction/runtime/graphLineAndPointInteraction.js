@@ -98,7 +98,7 @@ define([
             opacity : config.opacity || 1
         });
     }
-    
+
     /**
      * List of events to listen to in order to detect a response change
      * @type Array
@@ -284,7 +284,7 @@ define([
                 });
                 $container.on(responseChangeEvents.join(' '), _.debounce(function(){
                     //response change
-                    console.log('response change', elements);
+                    self.trigger('responseChange', [self.getResponse()]);
                 }, 100));
 
                 if(grid){
@@ -381,6 +381,31 @@ define([
                 }
             }
 
+            /**
+             * Get the raw response of the interaction
+             * 
+             * @returns {array}
+             */
+            this.getRawResponse = function getRawResponse(){
+
+                var response = [];
+                _.each(elements, function(element, id){
+                    var res = {
+                        id : id,
+                        type : element.type
+                    };
+
+                    if(element.type === 'solutionSet'){
+                        res.selections = element.getState().selections;
+                    }else{
+                        res.points = element.getState().points;
+                    }
+
+                    response.push(res);
+                });
+                return response;
+            };
+
             grid = initGrid($container, this.config);
             initInteraction(grid, $container, this.config);
 
@@ -419,9 +444,22 @@ define([
          */
         getResponse : function(){
 
-            var value = 0;
+            var rawResponse = this.getRawResponse();
+            var response = {record : []};
 
-            return {base : {integer : value}};
+            _.each(rawResponse, function(element){
+                if(element.type === 'solutionSet'){
+                    _.each(element.selections, function(selection){
+                        debugger;
+                        response.record.push(formatResponseElement(element.id, selection));
+                    });
+                }else{
+                    response.record.push(formatResponseElement(element.id, element.points));
+                }
+
+            });
+
+            return response;
         },
         /**
          * Remove the current response set in the interaction
@@ -465,6 +503,20 @@ define([
             return {};
         }
     };
+
+    function formatResponseElement(name, points){
+        if(_.isString(name), _.isArray(points)){
+            var points = _.map(points, function(point){
+                return [point.x, point.y];
+            });
+            return {
+                name : name,
+                base : {list : {point : points}}
+            };
+        }else{
+            throw 'invalid arguments';
+        }
+    }
 
     qtiCustomInteractionContext.register(graphLineAndPointInteraction);
 });

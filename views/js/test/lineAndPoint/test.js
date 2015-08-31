@@ -4,7 +4,7 @@ define([
     'taoQtiItem/runner/qtiItemRunner',
     'json!parccTei/test/samples/lineAndPoint.json'
 ], function($, _, qtiItemRunner, itemData){
-    
+
     'use strict';
 
     var runner;
@@ -13,18 +13,18 @@ define([
 
     //override asset loading in order to resolve it from the runtime location
     var strategies = [{
-        name : 'portableElementLocation',
-        handle : function handlePortableElementLocation(url){
-            if(/graphLineAndPointInteraction/.test(url.toString())){
-                return '../../../parccTei/views/js/pciCreator/dev/' + url.toString();
+            name : 'portableElementLocation',
+            handle : function handlePortableElementLocation(url){
+                if(/graphLineAndPointInteraction/.test(url.toString())){
+                    return '../../../parccTei/views/js/pciCreator/dev/' + url.toString();
+                }
             }
-        }
-    }, {
-        name : 'default',
-        handle : function defaultStrategy(url){
-            return url.toString();
-        }
-    }];
+        }, {
+            name : 'default',
+            handle : function defaultStrategy(url){
+                return url.toString();
+            }
+        }];
 
     module('Graph Line & Point Interaction', {
         teardown : function(){
@@ -52,6 +52,10 @@ define([
                 assert.equal($container.find('.qti-customInteraction .prompt').length, 1, 'the interaction contains a prompt');
 
                 QUnit.start();
+            })
+            .on('responsechange', function(response){
+                
+                console.log('response', response);
             })
             .assets(strategies)
             .init()
