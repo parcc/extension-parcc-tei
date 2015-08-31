@@ -28,7 +28,6 @@ define([
 
     module('Graph Line & Point Interaction', {
         teardown : function(){
-            return;
             if(runner){
                 runner.clear();
             }
@@ -36,7 +35,7 @@ define([
     });
 
     QUnit.asyncTest('renders', function(assert){
-        var $container = $('#' + outsideContainerId);
+        var $container = $('#' + fixtureContainerId);
 
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
@@ -54,12 +53,89 @@ define([
                 QUnit.start();
             })
             .on('responsechange', function(response){
-                
+
                 console.log('response', response);
             })
             .assets(strategies)
             .init()
             .render($container);
     });
+
+    QUnit.asyncTest('response', function(assert){
+        
+        var response = {
+            record : [
+                {
+                    name : 'points_1',
+                    base : {
+                        list : {
+                            point : [[5, -1]]
+                        }
+                    }
+                },
+                {
+                    name : 'setPoints_3',
+                    base : {
+                        list : {
+                            point : [[6, 2], [2, -2], [-5, -7]]
+                        }
+                    }
+                },
+                {
+                    name : 'segments_4',
+                    base : {
+                        list : {
+                            point : [[-7, 7], [7, 9]]
+                        }
+                    }
+                },
+                {
+                    name : 'lines_6',
+                    base : {
+                        list : {
+                            point : [[-7, 3], [2, -8]]
+                        }
+                    }
+                },
+                {
+                    name : 'solutionSet_8',
+                    base : {
+                        list : {
+                            point : [[-10, 6.67], [3.64, -10], [-10, -10]]
+                        }
+                    }
+                }
+            ]
+        };
+
+        var $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        runner = qtiItemRunner('qti', itemData)
+            .on('render', function(){
+
+                var interaction,
+                    interactions = this._item.getInteractions();
+
+                assert.equal(_.size(interactions), 1, 'one interaction');
+                interaction = interactions[0];
+
+                //set the response
+                interaction.setResponse(response);
+            })
+            .on('responsechange', function(res){
+
+                QUnit.start();
+                assert.ok(_.isPlainObject(res), 'response changed');
+                assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
+                assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
+            })
+            .assets(strategies)
+            .init()
+            .render($container);
+
+    });
+
 });
 

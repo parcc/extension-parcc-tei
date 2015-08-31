@@ -52,14 +52,6 @@
                                     "pointRadius": "10",
                                     "max": "1",
                                     "maximumPoints": "1"
-                                },
-                                {
-                                    "label": "Point B",
-                                    "uid": "points_2",
-                                    "pointColor": "#0f0666",
-                                    "pointRadius": "10",
-                                    "max": "1",
-                                    "maximumPoints": "1"
                                 }
                             ]
                         },
@@ -102,16 +94,6 @@
                                     "uid": "lines_6",
                                     "pointColor": "#990724",
                                     "lineColor": "#990724",
-                                    "lineStyle": "",
-                                    "lineStyleToggle": "",
-                                    "lineWeight": "3",
-                                    "pointRadius": "10"
-                                },
-                                {
-                                    "label": "Line B",
-                                    "uid": "lines_7",
-                                    "pointColor": "#b20125",
-                                    "lineColor": "#b20125",
                                     "lineStyle": "",
                                     "lineStyleToggle": "",
                                     "lineWeight": "3",
