@@ -4,9 +4,9 @@ define([
 ], function($, _){
 
     'use strict';
-    
+
     var _debug = false;
-    
+
     var _defaults = {
         color : '#326399',
     };
@@ -302,10 +302,10 @@ define([
 
         //calculate all shape coord
         _.each(intersections, function(intersection){
-            
+
             var convertedPath,
                 closedPath = getClosedPath(intersection);
-                
+
             if(closedPath.length){
 
                 //format and transform path
@@ -313,19 +313,25 @@ define([
                 convertedPath = zipPath(convertedPath);
 
                 //draw shape from path
-                var area = paper.path(convertedPath).attr({
+                var $area,
+                    area = paper.path(convertedPath).attr({
                     fill : config.color,
                     opacity : _style.opacityDefault
                 });
                 area.selected = false;
-                area.closedPath = closedPath;
-                
+                area.closedPath = _.map(closedPath, function(point){
+                    return {
+                        x : point[0],
+                        y : point[1]
+                    };
+                });
+
                 if(_debug){
                     area.attr({stroke : '#222'});
                 }
-                
+
                 //add event listener
-                $(area[0]).on('mouseenter', function(){
+                $area = $(area[0]).on('mouseenter', function(){
                     area.attr({
                         opacity : _style.opacityHover
                     });
@@ -334,23 +340,13 @@ define([
                         opacity : area.selected ? _style.opacitySelected : _style.opacityDefault
                     });
                 }).on('click', function(){
-                    var $area = $(this);
                     //toggle selection:
                     if(area.selected){
-                        area.selected = false;
-                        area.attr({
-                            opacity : _style.opacityDefault
-                        });
-                        $area.trigger('unselected.solutionSet', [area]);
+                        unselectArea(area);
                     }else{
-                        area.selected = true;
-                        area.attr({
-                            opacity : _style.opacitySelected
-                        });
-                        $area.trigger('selected.solutionSet', [area]);
+                        selectArea(area);
                     }
                 });
-
 
                 //push to stack
                 areas.push(area);
@@ -358,6 +354,32 @@ define([
         });
 
         return areas;
+    }
+
+    /**
+     * Select an area
+     * 
+     * @param {object} area - raphael path object
+     */
+    function selectArea(area){
+        area.selected = true;
+        area.attr({
+            opacity : _style.opacitySelected
+        });
+        $(area[0]).trigger('selected.solutionSet', [area]);
+    }
+    
+    /**
+     * Unselect an area
+     * 
+     * @param {object} area - raphael path object
+     */
+    function unselectArea(area){
+        area.selected = false;
+        area.attr({
+            opacity : _style.opacityDefault
+        });
+        $(area[0]).trigger('unselected.solutionSet', [area]);
     }
 
     function initialize(grid, config){
@@ -380,16 +402,16 @@ define([
                 set.push(area);
             });
         }
-        
+
         function clearSolutionSet(){
             set.remove().clear();
         }
-        
+
         setConfig(config);
-        
+
         $paperCanvas.on('drawn.lines removed.lines activated.lines', clearSolutionSet);
-        
-        var linesWrapper = {
+
+        var solutionSetWrapper = {
             type : 'solutionSet',
             getId : function(){
                 return uid;
@@ -437,10 +459,26 @@ define([
                 if(state.config){
                     setConfig(state.config);
                 }
+                if(state.selections && _.isArray(state.selections)){
+                    _.each(state.selections, function(selection){
+                        //try find the selection by coords:
+                        _.each(areas, function(area){
+                            if(_.isEqual(selection, area.closedPath)){
+                                //mark the area as selected
+                                selectArea(area);
+                                return false;
+                            }
+                        });
+                    });
+                }
+            },
+            createSolutionSet : function(elements){
+                clearSolutionSet();
+                createSolutionSet(elements);
             }
         };
 
-        return linesWrapper;
+        return solutionSetWrapper;
     }
 
     return {
