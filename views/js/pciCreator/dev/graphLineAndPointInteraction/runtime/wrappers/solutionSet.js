@@ -232,7 +232,7 @@ define([
                 previous : previous,
                 next : next
             };
-        }
+        };
 
         return intersectingLine;
     }
@@ -241,9 +241,9 @@ define([
         var pathStr = '';
         _.forIn(pathArray, function(coords, i){
             if(i == 0){
-                pathStr += 'M'
+                pathStr += 'M';
             }else{
-                pathStr += 'L'
+                pathStr += 'L';
             }
             pathStr += coords[0] + ',' + coords[1];
         });
@@ -330,17 +330,20 @@ define([
                         opacity : area.selected ? _style.opacitySelected : _style.opacityDefault
                     });
                 }).on('click', function(){
+                    var $area = $(this);
                     //toggle selection:
                     if(area.selected){
                         area.selected = false;
                         area.attr({
                             opacity : _style.opacityDefault
                         });
+                        $area.trigger('unselected.solutionSet', [area]);
                     }else{
                         area.selected = true;
                         area.attr({
                             opacity : _style.opacitySelected
                         });
+                        $area.trigger('selected.solutionSet', [area]);
                     }
                 });
 

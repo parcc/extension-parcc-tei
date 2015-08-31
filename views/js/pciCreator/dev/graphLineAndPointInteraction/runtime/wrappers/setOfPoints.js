@@ -21,20 +21,20 @@ define([
             active = false,
             max = config.max || 1,
             uid = config.uid,
-            paper = grid.getCanvas();
+            paper = grid.getCanvas(),
+            $canvas = $(paper.canvas);
 
         function setConfig(cfg){
             config = _.defaults(cfg, _defaults);
         }
 
         function unbindEvents(){
-            var paper = grid.getCanvas();
-            $(paper.canvas).off('.' + uid);
+            $canvas.off('.' + uid);
         }
 
         function bindEvents(){
 
-            $(paper.canvas).on('click_grid.' + uid, function(event, coord){
+            $canvas.on('click_grid.' + uid, function(event, coord){
 
                 if(points.length < config.maximumPoints){
 
@@ -51,6 +51,8 @@ define([
                     oldPoint.drag();
                     // Add it back to the list
                     points.push(oldPoint);
+                    // trigger event
+                    $canvas.trigger('moved.pointSet', [oldPoint]);
                 }
 
             }).on('removed.point.' + uid, function(event, removedPoint){
@@ -85,7 +87,9 @@ define([
             newPoint.drag();
             // Add it to the list of points
             points.push(newPoint);
-
+            //trigger event
+            $canvas.trigger('added.pointSet', [newPoint]);
+            
             return newPoint;
         }
 

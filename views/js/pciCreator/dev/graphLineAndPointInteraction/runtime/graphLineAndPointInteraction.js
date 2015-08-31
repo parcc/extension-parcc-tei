@@ -98,6 +98,20 @@ define([
             opacity : config.opacity || 1
         });
     }
+    
+    /**
+     * List of events to listen to in order to detect a response change
+     * @type Array
+     */
+    var responseChangeEvents = [
+        'drawn.lines',
+        'moved.point',
+        'removed.point',
+        'added.pointSet',
+        'moved.pointSet',
+        'unselected.solutionSet',
+        'selected.solutionSet'
+    ];
 
     var graphLineAndPointInteraction = {
         id : -1,
@@ -268,6 +282,10 @@ define([
                         element.highlightOff();
                     }
                 });
+                $container.on(responseChangeEvents.join(' '), _.debounce(function(){
+                    //response change
+                    console.log('response change', elements);
+                }, 100));
 
                 if(grid){
                     //check if solution set should be active or not

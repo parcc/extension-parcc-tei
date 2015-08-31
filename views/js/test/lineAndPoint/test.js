@@ -28,6 +28,7 @@ define([
 
     module('Graph Line & Point Interaction', {
         teardown : function(){
+            return;
             if(runner){
                 runner.clear();
             }
@@ -35,7 +36,7 @@ define([
     });
 
     QUnit.asyncTest('renders', function(assert){
-        var $container = $('#' + fixtureContainerId);
+        var $container = $('#' + outsideContainerId);
 
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
