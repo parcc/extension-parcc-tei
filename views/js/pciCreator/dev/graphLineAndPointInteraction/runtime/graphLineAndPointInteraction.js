@@ -86,7 +86,7 @@ define([
     function getWrapper(type){
         return _wrappers[type];
     }
-
+    
     function drawLineStyle(dom, config){
         var w = 57, h = 20;
         var lineStylePaper = new Raphael(dom, w, h);
@@ -113,7 +113,29 @@ define([
             entry.base.list &&
             _.isArray(entry.base.list.point));
     }
-
+    
+    /**
+     * Format the response element
+     * 
+     * @param {string} name
+     * @param {array} points
+     * @returns {object}
+     */
+    function formatResponseElement(name, points){
+        if(_.isString(name), _.isArray(points)){
+            //map the array of point to the object format {x, y}
+            points = _.map(points, function(point){
+                return [point.x, point.y];
+            });
+            return {
+                name : name,
+                base : {list : {point : points}}
+            };
+        }else{
+            throw 'invalid arguments';
+        }
+    }
+    
     /**
      * List of events to listen to in order to detect a response change
      * @type Array
@@ -423,7 +445,12 @@ define([
 
                 return response;
             };
-
+            
+            /**
+             * Set the raw response
+             * 
+             * @param {object} response
+             */
             this.setRawResponse = function setRawResponse(response){
                 _.each(response, function(res){
                     var state = {},
@@ -578,20 +605,6 @@ define([
             return this.getResponse();
         }
     };
-
-    function formatResponseElement(name, points){
-        if(_.isString(name), _.isArray(points)){
-            var points = _.map(points, function(point){
-                return [point.x, point.y];
-            });
-            return {
-                name : name,
-                base : {list : {point : points}}
-            };
-        }else{
-            throw 'invalid arguments';
-        }
-    }
 
     qtiCustomInteractionContext.register(graphLineAndPointInteraction);
 });
