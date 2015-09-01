@@ -132,6 +132,77 @@ define([
             .render($container);
 
     });
+    
+    QUnit.asyncTest('state', function(assert){
 
+        var response = {
+            record : [
+                {
+                    name : 'points_1',
+                    base : {
+                        list : {
+                            point : [[5, -1]]
+                        }
+                    }
+                },
+                {
+                    name : 'setPoints_3',
+                    base : {
+                        list : {
+                            point : [[6, 2], [2, -2], [-5, -7]]
+                        }
+                    }
+                },
+                {
+                    name : 'segments_4',
+                    base : {
+                        list : {
+                            point : [[-7, 7], [7, 9]]
+                        }
+                    }
+                },
+                {
+                    name : 'lines_6',
+                    base : {
+                        list : {
+                            point : [[-7, 3], [2, -8]]
+                        }
+                    }
+                },
+                {
+                    name : 'solutionSet_8',
+                    base : {
+                        list : {
+                            point : [[-10, 6.67], [3.64, -10], [-10, -10]]
+                        }
+                    }
+                }
+            ]
+        };
+        var state = {RESPONSE : response};
+        var $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        runner = qtiItemRunner('qti', itemData)
+            .on('render', function(){
+                
+                this.setState(state);
+                assert.deepEqual(this.getState(), state, 'state set/get ok');
+            })
+            .on('responsechange', function(res){
+
+                QUnit.start();
+
+                //if the state has been set, the response should have changed
+                assert.ok(_.isPlainObject(res), 'response changed');
+                assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
+                assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
+            })
+            .assets(strategies)
+            .init()
+            .render($container);
+
+    });
 });
 

@@ -565,18 +565,17 @@ define([
          * @param {Object} serializedState - json format
          */
         setSerializedState : function(state){
-
+            this.setResponse(state);
         },
         /**
-         * Get the current state of the interaction as a string.
+         * Get the current state of the interaction as a json.
          * It enables saving the state for later usage.
          *
          * @param {Object} interaction
          * @returns {Object} json format
          */
         getSerializedState : function(){
-
-            return {};
+            return this.getResponse();
         }
     };
 
