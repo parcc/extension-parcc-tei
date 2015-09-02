@@ -18,7 +18,28 @@
 
             //load the config
             require(['/tao/ClientConfig/config'], function(){
-
+                
+                require.config({
+                   paths : {
+                        'IMSGlobal/jquery_2_1_1':   '../../../taoQtiItem/views/js/portableSharedLibraries/IMSGlobal/jquery_2_1_1',
+                        'OAT/lodash':               '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/lodash',
+                        'OAT/async':                '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/async',
+                        'OAT/raphael':              '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/raphael',
+                        'OAT/scale.raphael':        '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/scale.raphael',
+                        'OAT/util/xml':             '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/util/xml',
+                        'OAT/util/math':            '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/util/math',
+                        'OAT/util/html':            '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/util/html',
+                        'OAT/util/EventMgr':        '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/util/EventMgr',
+                        'OAT/util/event':           '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/util/event',
+                        'qtiCustomInteractionContext':    '../../../taoQtiItem/views/js/runtime/qtiCustomInteractionContext',
+                        'PARCC/axisFactory' :        '../../../taoQtiItem/views/js/portableSharedLibraries/PARCC/axisFactory',
+                        'PARCC/gridFactory' :        '../../../taoQtiItem/views/js/portableSharedLibraries/PARCC/gridFactory',
+                        'PARCC/pointFactory' :        '../../../taoQtiItem/views/js/portableSharedLibraries/PARCC/pointFactory',
+                        'PARCC/plotFactory' :        '../../../taoQtiItem/views/js/portableSharedLibraries/PARCC/plotFactory',
+                        'PARCC/graphFunction' :        '../../../taoQtiItem/views/js/portableSharedLibraries/PARCC/graphFunction'
+                    }
+                });
+                
                 //load the test
                 require(['parccTei/test/graphFunction/test'], function(){
 
