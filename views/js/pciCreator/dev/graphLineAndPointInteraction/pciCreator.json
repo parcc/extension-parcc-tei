@@ -3,7 +3,7 @@
     "label": "Graphing Line And Point",
     "short": "Line & Point",
     "description": "Graphing Line And Point",
-    "version": "0.1",
+    "version": "0.1.1",
     "author": "Thibault Milan, Sam Sipasseuth",
     "email": "contact@taotesting.com",
     "libraries": [
@@ -25,7 +25,6 @@
     "tags": [],
     "icon": "./creator/img/icon.svg",
     "response": {
-        "baseType": "integer",
-        "cardinality": "single"
+        "cardinality": "record"
     }
 }
