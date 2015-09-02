@@ -3,7 +3,7 @@
     "label": "Fraction Model",
     "short": "Fractions",
     "description": "Select one or more fraction",
-    "version": "0.1",
+    "version": "0.1.1",
     "author": "Thibault Milan",
     "email": "contact@taotesting.com",
     "libraries": [
@@ -17,7 +17,7 @@
     "tags": [],
     "icon": "./creator/img/icon.svg",
     "response": {
-        "baseType": "integer",
-        "cardinality": "single"
+        "baseType": "boolean",
+        "cardinality": "multiple"
     }
 }

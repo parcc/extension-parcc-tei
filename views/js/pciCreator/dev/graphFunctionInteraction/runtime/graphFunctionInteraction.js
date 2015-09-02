@@ -81,7 +81,7 @@ define([
             this.id = id;
             this.dom = dom;
             this.config = config || {};
-
+            
             var $container = $(dom);
             var mathFunctions = config.graphs.split(',');
             var $shapeControls = $container.find('.shape-controls');
@@ -210,11 +210,10 @@ define([
                 var point1 = points[0],
                     point2 = points[1];
 
-                if(point1 && point2){
+                if(point1 && point2 && mathFunction && plotFactory[mathFunction]){
                     clearPlot();
-                    if(mathFunction){
-                        path = plotFactory[mathFunction](point1, point2);
-                    }
+                    path = plotFactory[mathFunction](point1, point2);
+                    _this.trigger('responseChange', [_this.getResponse()]);
                 }
             }
 
@@ -300,7 +299,48 @@ define([
                     plot();
                 }
             }
-
+            
+            /**
+             * Get the raw response of the interaction.
+             * If no graph is drawn, returns null
+             * 
+             * @returns {object}
+             */
+            this.getRawResponse = function getRawResponse(){
+                
+                var point1 = points[0],
+                    point2 = points[1];
+                
+                if(point1 && point2 && mathFunction){
+                    return {
+                        point1 : point1.getCartesianCoord(1),
+                        point2 : point2.getCartesianCoord(1),
+                        mathFunction : mathFunction
+                    };
+                }
+            };
+            
+            /**
+             * Set the raw response to the interaction
+             * 
+             * @param {string} mathFn
+             * @param {object} point1
+             * @param {number} point1.x
+             * @param {number} point1.y
+             * @param {object} point2
+             * @param {number} point2.x
+             * @param {number} point2.y
+             * @returns {undefined}
+             */
+            this.setRawResponse = function setRawResponse(mathFn, point1, point2){
+                clearPoint();
+                clearPlot();
+                mathFunction = mathFn;
+                addPoint(point1.x, point1.y, true);
+                addPoint(point2.x, point2.y, true);
+                plot();
+            };
+            
             /**
              * init rendering:
              */
@@ -348,7 +388,30 @@ define([
          * @param {Object} response
          */
         setResponse : function(response){
-
+            
+            if(response &&
+                _.isArray(response.record) &&
+                response.record[0] &&
+                response.record[1] &&
+                response.record[0].name === 'functionGraphType' &&
+                response.record[0].base &&
+                response.record[0].base.string &&
+                response.record[1].name === 'points' &&
+                response.record[1].list &&
+                response.record[1].list &&
+                _.isArray(response.record[1].list.point)){
+                
+                var point1 = response.record[1].list.point[0];
+                var point2 = response.record[1].list.point[1];
+                
+                this.setRawResponse(response.record[0].base.string, {
+                    x : point1[0],
+                    y : point1[1]
+                },{
+                    x : point2[0],
+                    y : point2[1]
+                });
+            }
         },
         /**
          * Get the response in the json format described in
@@ -359,9 +422,27 @@ define([
          */
         getResponse : function(){
 
-            var value = 0;
-
-            return {base : {integer : value}};
+            var raw = this.getRawResponse();
+            if(raw){
+                return {
+                    record : [
+                        {
+                            name: 'functionGraphType',
+                            base : {'string' : raw.mathFunction}
+                        },
+                        {
+                            name : 'points',
+                            list : {
+                                point : [
+                                    [raw.point1.x, raw.point1.y],
+                                    [raw.point2.x, raw.point2.y]
+                                ]
+                            }
+                        }
+                    ]
+                };
+            }
+            return {base : null};
         },
         /**
          * Remove the current response set in the interaction
@@ -370,7 +451,7 @@ define([
          * @param {Object} interaction
          */
         resetResponse : function(){
-
+            //not implemented
         },
         /**
          * Reverse operation performed by render()
@@ -391,7 +472,8 @@ define([
          * @param {Object} serializedState - json format
          */
         setSerializedState : function(state){
-
+            //state == response
+            this.setResponse(state);
         },
         /**
          * Get the current state of the interaction as a string.
@@ -401,8 +483,8 @@ define([
          * @returns {Object} json format
          */
         getSerializedState : function(){
-
-            return {};
+            //state == response
+            return this.getResponse();
         }
     };
 
