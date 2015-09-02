@@ -69,8 +69,6 @@ define([
             return _.defaults(defaultData, {
                 prompt : pci.data('prompt')
             });
-
-            return defaultData;
         }
     };
 
