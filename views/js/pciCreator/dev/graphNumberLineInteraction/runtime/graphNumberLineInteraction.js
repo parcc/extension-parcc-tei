@@ -454,7 +454,7 @@ define([
          * @returns {Object} json format
          */
         getSerializedState : function(){
-            return this.resetResponse(state);
+            return this.getResponse();
         }
     };
 
