@@ -4,9 +4,9 @@ define([
 ], function($, _){
 
     'use strict';
-    
+
     var _debug = false;
-    
+
     var _defaults = {
         color : '#326399',
     };
@@ -232,7 +232,7 @@ define([
                 previous : previous,
                 next : next
             };
-        }
+        };
 
         return intersectingLine;
     }
@@ -241,9 +241,9 @@ define([
         var pathStr = '';
         _.forIn(pathArray, function(coords, i){
             if(i == 0){
-                pathStr += 'M'
+                pathStr += 'M';
             }else{
-                pathStr += 'L'
+                pathStr += 'L';
             }
             pathStr += coords[0] + ',' + coords[1];
         });
@@ -253,7 +253,7 @@ define([
 
     function convertPath(grid, pathArray){
 
-        var positionArray = []
+        var positionArray = [];
         _.each(pathArray, function(coord){
             var pos = grid.getPostionFromCartesian(coord[0], coord[1]);
             positionArray.push([pos.left, pos.top]);
@@ -302,26 +302,36 @@ define([
 
         //calculate all shape coord
         _.each(intersections, function(intersection){
-            var closedPath = getClosedPath(intersection);
+
+            var convertedPath,
+                closedPath = getClosedPath(intersection);
+
             if(closedPath.length){
 
                 //format and transform path
-                closedPath = convertPath(grid, closedPath);
-                closedPath = zipPath(closedPath);
+                convertedPath = convertPath(grid, closedPath);
+                convertedPath = zipPath(convertedPath);
 
                 //draw shape from path
-                var area = paper.path(closedPath).attr({
+                var $area,
+                    area = paper.path(convertedPath).attr({
                     fill : config.color,
                     opacity : _style.opacityDefault
                 });
                 area.selected = false;
-                
+                area.closedPath = _.map(closedPath, function(point){
+                    return {
+                        x : point[0],
+                        y : point[1]
+                    };
+                });
+
                 if(_debug){
                     area.attr({stroke : '#222'});
                 }
-                
+
                 //add event listener
-                $(area[0]).on('mouseenter', function(){
+                $area = $(area[0]).on('mouseenter', function(){
                     area.attr({
                         opacity : _style.opacityHover
                     });
@@ -332,18 +342,11 @@ define([
                 }).on('click', function(){
                     //toggle selection:
                     if(area.selected){
-                        area.selected = false;
-                        area.attr({
-                            opacity : _style.opacityDefault
-                        });
+                        unselectArea(area);
                     }else{
-                        area.selected = true;
-                        area.attr({
-                            opacity : _style.opacitySelected
-                        });
+                        selectArea(area);
                     }
                 });
-
 
                 //push to stack
                 areas.push(area);
@@ -351,6 +354,32 @@ define([
         });
 
         return areas;
+    }
+
+    /**
+     * Select an area
+     * 
+     * @param {object} area - raphael path object
+     */
+    function selectArea(area){
+        area.selected = true;
+        area.attr({
+            opacity : _style.opacitySelected
+        });
+        $(area[0]).trigger('selected.solutionSet', [area]);
+    }
+    
+    /**
+     * Unselect an area
+     * 
+     * @param {object} area - raphael path object
+     */
+    function unselectArea(area){
+        area.selected = false;
+        area.attr({
+            opacity : _style.opacityDefault
+        });
+        $(area[0]).trigger('unselected.solutionSet', [area]);
     }
 
     function initialize(grid, config){
@@ -373,17 +402,17 @@ define([
                 set.push(area);
             });
         }
-        
+
         function clearSolutionSet(){
             set.remove().clear();
         }
-        
+
         setConfig(config);
-        
+
         $paperCanvas.on('drawn.lines removed.lines activated.lines', clearSolutionSet);
-        
-        var linesWrapper = {
-            type : 'line',
+
+        var solutionSetWrapper = {
+            type : 'solutionSet',
             getId : function(){
                 return uid;
             },
@@ -414,8 +443,14 @@ define([
 
             },
             getState : function(){
-
+                var selections = [];
+                _.each(areas, function(area){
+                    if(area.selected){
+                        selections.push(area.closedPath);
+                    }
+                });
                 return {
+                    selections : selections,
                     config : _.cloneDeep(config)
                 };
             },
@@ -424,10 +459,26 @@ define([
                 if(state.config){
                     setConfig(state.config);
                 }
+                if(state.selections && _.isArray(state.selections)){
+                    _.each(state.selections, function(selection){
+                        //try find the selection by coords:
+                        _.each(areas, function(area){
+                            if(_.isEqual(selection, area.closedPath)){
+                                //mark the area as selected
+                                selectArea(area);
+                                return false;
+                            }
+                        });
+                    });
+                }
+            },
+            createSolutionSet : function(elements){
+                clearSolutionSet();
+                createSolutionSet(elements);
             }
         };
 
-        return linesWrapper;
+        return solutionSetWrapper;
     }
 
     return {

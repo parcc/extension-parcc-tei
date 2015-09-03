@@ -1,0 +1,265 @@
+{
+    "identifier": "i14407749316416174",
+    "serial": "item_55e07bbc52f5f491019567",
+    "qtiClass": "assessmentItem",
+    "attributes": {
+        "identifier": "i14407749316416174",
+        "title": "Item 12",
+        "label": "",
+        "adaptive": false,
+        "timeDependent": false,
+        "toolName": "TAO",
+        "toolVersion": "3.1.0-sprint05"
+    },
+    "body": {
+        "serial": "container_containeritembody_55e07bbc52f43366119321",
+        "body": "\n        \n        <div class=\"grid-row\">\n            <div class=\"col-12\">\n                {{interaction_portablecustominteraction_55e07bbc546b4740016302}}\n            <\/div>\n        <\/div>\n        \n    ",
+        "elements": {
+            "interaction_portablecustominteraction_55e07bbc546b4740016302": {
+                "serial": "interaction_portablecustominteraction_55e07bbc546b4740016302",
+                "qtiClass": "customInteraction",
+                "attributes": {
+                    "responseIdentifier": "RESPONSE"
+                },
+                "debug": {
+                    "relatedItem": "item_55e07bbc52f5f491019567"
+                },
+                "choices": {},
+                "typeIdentifier": "graphLineAndPointInteraction",
+                "markup": "\n                            <div class=\"pointAndLineFunctionInteraction\">\n                                <div class=\"prompt\"><\/div>\n                                <div class=\"shape-panel\">\n                                    <div class=\"shape-controls\">\n                                        <!-- Controls will be inserted here -->\n                                    <\/div>\n                                    <div class=\"templates\">\n                                        <div class=\"template-lines\">\n                                            <div class=\"button-container clearfix\">\n                                                <button class=\"btn btn-info\" name=\"line\"><\/button>\n                                                <div class=\"triangle\"><\/div>\n                                                <ul class=\"plain line-styles\">\n                                                    <li>\n                                                        <label>\n                                                            <input name=\"line-style\" type=\"radio\" value=\"\"><\/input>\n                                                            <span class=\"icon-radio\"><\/span>\n                                                            <span class=\"line-style line-style-plain\"><\/span>\n                                                        <\/label>\n                                                    <\/li>\n                                                    <li>\n                                                        <label>\n                                                            <input name=\"line-style\" type=\"radio\" value=\"-\"><\/input>\n                                                            <span class=\"icon-radio\"><\/span>\n                                                            <span class=\"line-style line-style-dashed\"><\/span>\n                                                        <\/label>\n                                                    <\/li>\n                                                <\/ul>\n                                            <\/div>\n                                        <\/div>\n                                        <div class=\"template-points\">\n                                            <div class=\"button-container clearfix\">\n                                                <button class=\"btn btn-info\" name=\"point\"><\/button>\n                                                <div class=\"triangle\"><\/div>\n                                            <\/div>\n                                        <\/div>\n                                        <div class=\"template-segments\">\n                                            <div class=\"button-container clearfix\">\n                                                <button class=\"btn btn-info\" name=\"segment\"><\/button>\n                                                <div class=\"triangle\"><\/div>\n                                                <ul class=\"plain line-styles\">\n                                                    <li>\n                                                        <label>\n                                                            <input name=\"line-style\" type=\"radio\" value=\"\"><\/input>\n                                                            <span class=\"icon-radio\"><\/span>\n                                                            <span class=\"line-style line-style-plain\"><\/span>\n                                                        <\/label>\n                                                    <\/li>\n                                                    <li>\n                                                        <label>\n                                                            <input name=\"line-style\" type=\"radio\" value=\"-\"><\/input>\n                                                            <span class=\"icon-radio\"><\/span>\n                                                            <span class=\"line-style line-style-dashed\"><\/span>\n                                                        <\/label>\n                                                    <\/li>\n                                                <\/ul>\n                                            <\/div>\n                                        <\/div>\n                                        <div class=\"template-solutionSet\">\n                                            <div class=\"button-container clearfix graph-solutionSet deactivated\">\n                                                <button class=\"btn btn-info\" name=\"solutionSet\"><\/button>\n                                                <div class=\"triangle\"><\/div>\n                                            <\/div>\n                                        <\/div>\n                                        <div class=\"template-setPoints\">\n                                            <div class=\"button-container clearfix\">\n                                                <button class=\"btn btn-info\" name=\"setPoints\"><\/button>\n                                                <div class=\"triangle\"><\/div>\n                                            <\/div>\n                                        <\/div>\n                                    <\/div>\n                                    <div class=\"shape-container\"><\/div>\n                                <\/div>\n                            <\/div>\n                        ",
+                "libraries": [
+                    "IMSGlobal\/jquery_2_1_1",
+                    "PARCC\/graphFunction",
+                    "PARCC\/gridFactory",
+                    "PARCC\/pointFactory",
+                    "PARCC\/plotFactory",
+                    "graphLineAndPointInteraction\/runtime\/wrappers\/setOfPoints",
+                    "graphLineAndPointInteraction\/runtime\/wrappers\/points",
+                    "graphLineAndPointInteraction\/runtime\/wrappers\/lines",
+                    "graphLineAndPointInteraction\/runtime\/wrappers\/segments",
+                    "graphLineAndPointInteraction\/runtime\/wrappers\/solutionSet"
+                ],
+                "properties": {
+                    "graphs": {
+                        "points": {
+                            "label": "Points",
+                            "count": "2",
+                            "elements": [
+                                {
+                                    "label": "Point A",
+                                    "uid": "points_1",
+                                    "pointColor": "#093a8e",
+                                    "pointRadius": "10",
+                                    "max": "1",
+                                    "maximumPoints": "1"
+                                }
+                            ]
+                        },
+                        "setPoints": {
+                            "label": "Sets of Points",
+                            "count": "1",
+                            "elements": [
+                                {
+                                    "label": "Point Set A",
+                                    "uid": "setPoints_3",
+                                    "pointColor": "#187000",
+                                    "maximumPoints": "5",
+                                    "pointRadius": "10"
+                                }
+                            ]
+                        },
+                        "segments": {
+                            "label": "Segments",
+                            "count": "1",
+                            "elements": [
+                                {
+                                    "label": "Segment A",
+                                    "uid": "segments_4",
+                                    "pointColor": "#e0be00",
+                                    "lineColor": "#e0be00",
+                                    "lineStyle": "",
+                                    "lineStyleToggle": "",
+                                    "lineWeight": "3",
+                                    "pointRadius": "10",
+                                    "segment": "true"
+                                }
+                            ]
+                        },
+                        "lines": {
+                            "label": "Lines",
+                            "count": "2",
+                            "elements": [
+                                {
+                                    "label": "Line A",
+                                    "uid": "lines_6",
+                                    "pointColor": "#990724",
+                                    "lineColor": "#990724",
+                                    "lineStyle": "",
+                                    "lineStyleToggle": "",
+                                    "lineWeight": "3",
+                                    "pointRadius": "10"
+                                }
+                            ]
+                        },
+                        "solutionSet": {
+                            "label": "Solution Sets",
+                            "count": "1",
+                            "elements": [
+                                {
+                                    "label": "Solution Set",
+                                    "uid": "solutionSet_8",
+                                    "color": "#326399"
+                                }
+                            ]
+                        }
+                    },
+                    "xMin": "-10",
+                    "xMax": "10",
+                    "yMin": "-10",
+                    "yMax": "10"
+                },
+                "entryPoint": "graphLineAndPointInteraction\/runtime\/graphLineAndPointInteraction.js"
+            }
+        },
+        "debug": {
+            "relatedItem": "item_55e07bbc52f5f491019567"
+        }
+    },
+    "debug": {
+        "relatedItem": "item_55e07bbc52f5f491019567"
+    },
+    "namespaces": {
+        "xml": "http:\/\/www.w3.org\/XML\/1998\/namespace",
+        "html5": "html5",
+        "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
+        "m": "http:\/\/www.w3.org\/1998\/Math\/MathML",
+        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance",
+        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1"
+    },
+    "stylesheets": {
+        "stylesheet_55e07bbc536b5903646080": {
+            "serial": "stylesheet_55e07bbc536b5903646080",
+            "qtiClass": "stylesheet",
+            "attributes": {
+                "href": "graphLineAndPointInteraction\/runtime\/css\/graphLineAndPointInteraction.css",
+                "type": "text\/css",
+                "media": "all",
+                "title": ""
+            },
+            "debug": {
+                "relatedItem": "item_55e07bbc52f5f491019567"
+            }
+        }
+    },
+    "outcomes": {
+        "outcomedeclaration_55e07bbc53dfb894093945": {
+            "identifier": "SCORE",
+            "serial": "outcomedeclaration_55e07bbc53dfb894093945",
+            "qtiClass": "outcomeDeclaration",
+            "attributes": {
+                "identifier": "SCORE",
+                "cardinality": "single",
+                "baseType": "float"
+            },
+            "debug": {
+                "relatedItem": "item_55e07bbc52f5f491019567"
+            },
+            "defaultValue": null
+        }
+    },
+    "responses": {
+        "responsedeclaration_55e07bbc53b63688529567": {
+            "identifier": "RESPONSE",
+            "serial": "responsedeclaration_55e07bbc53b63688529567",
+            "qtiClass": "responseDeclaration",
+            "attributes": {
+                "identifier": "RESPONSE",
+                "cardinality": "single",
+                "baseType": "integer"
+            },
+            "debug": {
+                "relatedItem": "item_55e07bbc52f5f491019567"
+            },
+            "correctResponses": [
+            ],
+            "mapping": [
+            ],
+            "areaMapping": [
+            ],
+            "howMatch": "http:\/\/www.imsglobal.org\/question\/qti_v2p1\/rptemplates\/match_correct",
+            "mappingAttributes": {
+                "defaultValue": 0
+            },
+            "feedbackRules": {}
+        }
+    },
+    "feedbacks": {},
+    "responseProcessing": {
+        "serial": "response_templatesdriven_55e07bbc54f0c939424020",
+        "qtiClass": "responseProcessing",
+        "attributes": [
+        ],
+        "debug": {
+            "relatedItem": "item_55e07bbc52f5f491019567"
+        },
+        "processingType": "templateDriven",
+        "responseRules": [
+            {
+                "qtiClass": "responseCondition",
+                "responseIf": {
+                    "qtiClass": "responseIf",
+                    "expression": {
+                        "qtiClass": "match",
+                        "expressions": [
+                            {
+                                "qtiClass": "variable",
+                                "attributes": {
+                                    "identifier": "RESPONSE"
+                                }
+                            },
+                            {
+                                "qtiClass": "correct",
+                                "attributes": {
+                                    "identifier": "RESPONSE"
+                                }
+                            }
+                        ]
+                    },
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "baseValue",
+                                "attributes": {
+                                    "baseType": "float"
+                                },
+                                "value": "1"
+                            }
+                        }
+                    ]
+                },
+                "responseElse": {
+                    "qtiClass": "responseElse",
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "baseValue",
+                                "attributes": {
+                                    "baseType": "float"
+                                },
+                                "value": "0"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

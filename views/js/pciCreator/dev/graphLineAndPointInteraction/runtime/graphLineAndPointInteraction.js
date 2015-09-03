@@ -86,7 +86,7 @@ define([
     function getWrapper(type){
         return _wrappers[type];
     }
-
+    
     function drawLineStyle(dom, config){
         var w = 57, h = 20;
         var lineStylePaper = new Raphael(dom, w, h);
@@ -98,6 +98,57 @@ define([
             opacity : config.opacity || 1
         });
     }
+
+    /**
+     * Validate the record entry format (used in setResponse)
+     * 
+     * @param {object} entry
+     * @returns {boolean}
+     */
+    function isValidRecordEntry(entry){
+        return (
+            _.isPlainObject(entry) &&
+            _.isString(entry.name) &&
+            entry.base &&
+            entry.base.list &&
+            _.isArray(entry.base.list.point));
+    }
+    
+    /**
+     * Format the response element
+     * 
+     * @param {string} name
+     * @param {array} points
+     * @returns {object}
+     */
+    function formatResponseElement(name, points){
+        if(_.isString(name), _.isArray(points)){
+            //map the array of point to the object format {x, y}
+            points = _.map(points, function(point){
+                return [point.x, point.y];
+            });
+            return {
+                name : name,
+                base : {list : {point : points}}
+            };
+        }else{
+            throw 'invalid arguments';
+        }
+    }
+    
+    /**
+     * List of events to listen to in order to detect a response change
+     * @type Array
+     */
+    var responseChangeEvents = [
+        'drawn.lines',
+        'moved.point',
+        'removed.point',
+        'added.pointSet',
+        'moved.pointSet',
+        'unselected.solutionSet',
+        'selected.solutionSet'
+    ];
 
     var graphLineAndPointInteraction = {
         id : -1,
@@ -268,6 +319,10 @@ define([
                         element.highlightOff();
                     }
                 });
+                $container.on(responseChangeEvents.join(' '), _.debounce(function(){
+                    //response change
+                    self.trigger('responseChange', [self.getResponse()]);
+                }, 100));
 
                 if(grid){
                     //check if solution set should be active or not
@@ -363,6 +418,55 @@ define([
                 }
             }
 
+            /**
+             * Get the raw response of the interaction
+             * 
+             * @returns {array}
+             */
+            this.getRawResponse = function getRawResponse(){
+
+                var response = [];
+                var states = [];
+                _.each(elements, function(element, id){
+                    var res = {
+                        id : id,
+                        type : element.type
+                    };
+
+                    if(element.type === 'solutionSet'){
+                        res.selections = element.getState().selections;
+                    }else{
+                        res.points = element.getState().points;
+                    }
+
+                    response.push(res);
+                    states.push(element.getState());
+                });
+
+                return response;
+            };
+            
+            /**
+             * Set the raw response
+             * 
+             * @param {object} response
+             */
+            this.setRawResponse = function setRawResponse(response){
+                _.each(response, function(res){
+                    var state = {},
+                        element = elements[res.id];
+                    if(element){
+                        if(res.type === 'solutionSet'){
+                            element.createSolutionSet(elements);
+                            state.selections = res.selections;
+                        }else{
+                            state.points = res.points;
+                        }
+                        element.setState(state);
+                    }
+                });
+            };
+
             grid = initGrid($container, this.config);
             initInteraction(grid, $container, this.config);
 
@@ -391,6 +495,49 @@ define([
          */
         setResponse : function(response){
 
+            var rawResponse = [];
+            var solutionSetSelections = [];
+            var solutionSetId = '';
+
+            if(response && _.isArray(response.record)){
+
+                _.each(response.record, function(entry){
+                    var points, id;
+                    
+                    if(isValidRecordEntry(entry)){
+
+                        id = entry.name;
+
+                        points = _.map(entry.base.list.point, function(point){
+                            return {
+                                x : point[0],
+                                y : point[1]
+                            };
+                        });
+
+                        //special case for solutionSet
+                        if(id.match(/^solutionSet/)){
+                            solutionSetId = id;
+                            solutionSetSelections.push(points);
+                        }else{
+                            rawResponse.push({
+                                id : id,
+                                points : points
+                            });
+                        }
+                    }
+                });
+
+                if(solutionSetId && solutionSetSelections.length){
+                    rawResponse.push({
+                        id : solutionSetId,
+                        type : 'solutionSet',
+                        selections : solutionSetSelections
+                    });
+                }
+                
+                this.setRawResponse(rawResponse);
+            }
         },
         /**
          * Get the response in the json format described in
@@ -401,9 +548,21 @@ define([
          */
         getResponse : function(){
 
-            var value = 0;
+            var rawResponse = this.getRawResponse();
+            var response = {record : []};
 
-            return {base : {integer : value}};
+            _.each(rawResponse, function(element){
+                if(element.type === 'solutionSet'){
+                    _.each(element.selections, function(selection){
+                        response.record.push(formatResponseElement(element.id, selection));
+                    });
+                }else{
+                    response.record.push(formatResponseElement(element.id, element.points));
+                }
+
+            });
+
+            return response;
         },
         /**
          * Remove the current response set in the interaction
@@ -433,18 +592,17 @@ define([
          * @param {Object} serializedState - json format
          */
         setSerializedState : function(state){
-
+            this.setResponse(state);
         },
         /**
-         * Get the current state of the interaction as a string.
+         * Get the current state of the interaction as a json.
          * It enables saving the state for later usage.
          *
          * @param {Object} interaction
          * @returns {Object} json format
          */
         getSerializedState : function(){
-
-            return {};
+            return this.getResponse();
         }
     };
 
