@@ -1,7 +1,7 @@
 <div class="multiTabbedExhibit">
     <div class="passages">
         {{#each passages}}
-        <div class="passage {{type}} {{#if size}}{{size}}{{/if}}" title="{{title}}" data-passage-id="{{uid}}">
+        <div tabindex="0" class="passage {{type}} {{#if size}}{{size}}{{/if}}" title="{{title}}" data-passage-id="{{uid}}">
             {{#if pages}}
             {{#each pages}}
             <div class="page" data-page-id="{{uid}}">
