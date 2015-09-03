@@ -8,7 +8,9 @@ define([
     'PARCC/axisFactory',
     'graphNumberLineInteraction/runtime/libs/intervalFactory'
 ], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, IntervalFactory){
-
+    
+    'use strict';
+    
     function createCanvas($container, config){
 
         var padding = 2;
@@ -37,13 +39,13 @@ define([
                 radius : 10
             }
         };
-        return _.merge(_default,{
+        return _.merge(_default, {
             min : (rawConfig.min === undefined) ? undefined : parseInt(rawConfig.min),
             max : (rawConfig.max === undefined) ? undefined : parseInt(rawConfig.max),
             unitSubDivision : (rawConfig.unitSubDivision === undefined) ? undefined : parseInt(rawConfig.unitSubDivision),
             plot : {
                 color : rawConfig.graphColor,
-                thickness : (rawConfig.graphWidth === undefined ) ? undefined : parseInt(rawConfig.graphWidth)
+                thickness : (rawConfig.graphWidth === undefined) ? undefined : parseInt(rawConfig.graphWidth)
             },
             point : {
                 color : rawConfig.graphColor,
@@ -91,7 +93,14 @@ define([
                 axis,
                 intervalFactory,
                 _this = this;
-
+            
+            /**
+             * Init the axis
+             * 
+             * @param {JQuery} $container
+             * @param {object} axisConfig - the set of configuration available as in setAxis()
+             * @returns {undefined}
+             */
             function initAxis($container, axisConfig){
 
                 //create paper
@@ -99,7 +108,12 @@ define([
                 axis = new axisFactory(paper, axisConfig);
                 intervalFactory = new IntervalFactory(axis, axisConfig.plot);
             }
-
+            
+            /**
+             * Activate an interval defined by its id
+             * 
+             * @param {string} uid
+             */
             function activate(uid){
 
                 _.forIn(intervals, function(interval, id){
@@ -113,7 +127,10 @@ define([
                 });
 
             }
-
+            
+            /**
+             * Reset the interaction to an empty axis
+             */
             function reset(){
                 _.each(intervals, function(interval){
                     interval.obj.destroy();
@@ -124,9 +141,7 @@ define([
             }
 
             //expose the reset() method
-            this.reset = function(){
-                reset();
-            };
+            this.reset = reset;
 
             /**
              * init rendering:
@@ -140,7 +155,13 @@ define([
             var $intervalTemplate = $container.find('.intervals-template .interval');
             var selectionMax = 2;
             var intervals = {};
-
+            
+            /**
+             * Set the list of available interval types
+             * 
+             * @param {Array} availableIntervals
+             * @returns {undefined}
+             */
             function setAvailableIntervals(availableIntervals){
                 $intervalsAvailable.find('.interval-available').each(function(){
                     var $this = $(this);
@@ -153,33 +174,59 @@ define([
                 //need to reset all
                 reset();
             }
-
+    
+            /**
+             * Set the config of the axis
+             * 
+             * @param {array} axisConfig
+             * @param {integer} [axisConfig.top] - the position top of the axis
+             * @param {integer} [axisConfig.left] - the position left of the axis
+             * @param {integer} [axisConfig.min] - the lowerbound of the axis
+             * @param {integer} [axisConfig.max] - the upperbound of the axis
+             * @param {boolean} [axisConfig.label] - defines if the label should be displayed for the acxis or not
+             * @param {integer} [axisConfig.thickness] - the thickness of the strokes
+             * @param {string} [axisConfig.color] - color of the axis
+             * @param {integer} [axisConfig.divisionWidth] - the width (px) of the unit division
+             * @param {integer} [axisConfig.subDivisionWidth] - the width (px) of one sub-unit
+             * @param {integer} [axisConfig.unitSubDivision] - number of sub divisions
+             * @param {integer} [axisConfig.unitSize] - the size (px) of one unit 
+             * @param {integer} [axisConfig.fontSize] - the font size (px) of the labels if applicable
+             * @param {boolean} [axisConfig.arrows] - defines if the arrow tips should be visible or not
+             * @param {boolean} [axisConfig.opacity]
+             * @returns {undefined}
+             */
             function setAxis(axisConfig){
                 _this.axisConfig = buildAxisConfig(_.merge(_this.config, _this.axisConfig, axisConfig));
                 initAxis($container, _this.axisConfig);
                 reset();
             }
+            
+            /**
+             * Create an interval and add it to the interval list of the interaction and activate it
+             * 
+             * @param {string} intervalType
+             * @param {integer} start
+             * @param {integer} end
+             * @returns {object}
+             */
+            function createInterval(intervalType, start, end){
 
-            var availableIntervals = this.config.intervals ? this.config.intervals.split(',') : getAuthorizedIntervals();
-            setAvailableIntervals(availableIntervals);
-
-            $container.on('click', '.intervals-available .btn-info', function(){
+                var $button, uid, $img, $tpl, interval;
 
                 if(_.size(intervals) < selectionMax){
 
-                    var $button = $(this),
-                        intervalType = $button.val(),
-                        uid = _.uniqueId('interval_'),
-                        $img = $button.find('img').clone();
+                    uid = _.uniqueId('interval_');
+                    $button = $intervalsAvailable.find('button[value=' + intervalType + ']');
+                    $img = $button.find('img').clone();
 
                     //append button
-                    var $tpl = $intervalTemplate.clone();
+                    $tpl = $intervalTemplate.clone();
                     $tpl.find('.btn').append($img);
                     $tpl.attr('data-uid', uid);
                     $intervalsSelected.append($tpl);
 
                     //draw initial interval
-                    var interval = intervalFactory.plot(intervalType, 0, 1);
+                    interval = intervalFactory.plot(intervalType, start, end);
 
                     intervals[uid] = {
                         type : intervalType,
@@ -190,11 +237,25 @@ define([
                     //active the button & interval editing
                     activate(uid);
 
+                    //response change
+                    _this.trigger('responseChange', [_this.getRawResponse()]);
+
                     if(_.size(intervals) === selectionMax){
                         //deactivate the whole panel
                         $intervalsOverlay.show();
                     }
+                    
+                    return interval;
                 }
+            }
+
+            var availableIntervals = this.config.intervals ? this.config.intervals.split(',') : getAuthorizedIntervals();
+            setAvailableIntervals(availableIntervals);
+
+            $container.on('click', '.intervals-available .btn-info', function(){
+
+                //default interval value between 0 and 1
+                createInterval($(this).val(), 0, 1);
 
             }).on('click', '.intervals-selected .btn-info', function(){
 
@@ -220,10 +281,58 @@ define([
                     $intervalsOverlay.hide();
                 }
 
+                //response change event
+                _this.trigger('responseChange', [_this.getRawResponse()]);
+
+            }).on('change.interval', function(){
+
+                //response change event
+                _this.trigger('responseChange', [_this.getRawResponse()]);
             });
 
+            //_this.trigger('responseChange', [_this.getResponse()]);
             this.on('intervalschange', setAvailableIntervals);
-            this.on('axischange',setAxis);
+            this.on('axischange', setAxis);
+            
+            /**
+             * Get the raw response of the interaction
+             * It returns an array of interval object, defined by its type, start and end
+             * 
+             * @returns {Array}
+             */
+            this.getRawResponse = function getRawResponse(){
+                var response = [];
+                _.each(intervals, function(interval){
+                    var coords = interval.obj.getCoordinates();
+                    response.push({
+                        type : interval.type,
+                        start : coords.start,
+                        end : coords.end
+                    });
+                });
+                return response;
+            };
+            
+           /**
+            * Set the raw response to the interaction
+            * 
+            * @param {Array} intervals
+            */
+            this.setRawResponse = function(intervals){
+                if(_.isArray(intervals)){
+                    _.each(intervals, function(interval){
+                        
+                        var start = interval.start,
+                            end = interval.end;
+                        
+                        //case where type == arrow-open or arrow-closed
+                        if(start === null){
+                            start = end;
+                        }
+                        createInterval(interval.type, start, end);
+                    });
+                }
+            };
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -234,6 +343,37 @@ define([
          */
         setResponse : function(response){
 
+            var i, point, lineTypes, values, rawResponse = [];
+
+            if(response &&
+                _.isArray(response.record) &&
+                response.record[0] &&
+                response.record[1] &&
+                response.record[0].name === 'lineTypes' &&
+                response.record[0].base &&
+                response.record[0].base.list &&
+                _.isArray(response.record[0].base.list.string) &&
+                response.record[1].name === 'values' &&
+                response.record[1].base &&
+                response.record[1].base.list &&
+                _.isArray(response.record[1].base.list.pair) &&
+                response.record[0].base.list.length === response.record[1].base.list.length
+                ){
+
+                lineTypes = response.record[0].base.list.string;
+                values = response.record[1].base.list.pair;
+
+                for(i = 0; i < lineTypes.length; i++){
+                    point = values[i];
+                    rawResponse.push({
+                        type : lineTypes[i],
+                        start : point[0],
+                        end : point[1]
+                    });
+                }
+
+                this.setRawResponse(rawResponse);
+            }
         },
         /**
          * Get the response in the json format described in
@@ -244,9 +384,37 @@ define([
          */
         getResponse : function(){
 
-            var value = 0;
-
-            return {base : {integer : value}};
+            var types = [];
+            var values = [];
+            var rawResponse = this.getRawResponse();
+            if(_.isArray(rawResponse) && _.size(rawResponse)){
+                _.each(rawResponse, function(interval){
+                    types.push(interval.type);
+                    values.push([interval.start, interval.end]);
+                });
+                return {
+                    record : [
+                        {
+                            name : 'lineTypes',
+                            base : {
+                                list : {
+                                    'string' : types
+                                }
+                            }
+                        },
+                        {
+                            name : 'values',
+                            base : {
+                                list : {
+                                    pair : values
+                                }
+                            }
+                        }
+                    ]
+                };
+            }else{
+                return {base : null};
+            }
         },
         /**
          * Remove the current response set in the interaction
@@ -276,7 +444,7 @@ define([
          * @param {Object} serializedState - json format
          */
         setSerializedState : function(state){
-
+            this.setResponse(state);
         },
         /**
          * Get the current state of the interaction as a string.
@@ -286,8 +454,7 @@ define([
          * @returns {Object} json format
          */
         getSerializedState : function(){
-
-            return {};
+            return this.getResponse();
         }
     };
 
