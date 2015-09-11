@@ -359,7 +359,8 @@ define([
             }
             i++;
         });
-        $nav.on('click', 'a', function(){
+        $nav.on('click', 'a', function(e){
+            e.preventDefault();
             activateTab($(this));
         });
         //activate initial tab:
