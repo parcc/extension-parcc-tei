@@ -102,7 +102,11 @@
     cursor:pointer;
     outline: 0px none;
 }
-
+.multiTabbedExhibit ul.passages-tab-navigation li a:focus {
+    border-color: #DDD;
+    border-style: dashed;
+    color: #0B5F90 !important;
+}
 .multiTabbedExhibit ul.passages-tab-navigation li:not(.passages-tab-active) a:hover {
     border-color: #DDD;
     background: #F1F1F1;

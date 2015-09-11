@@ -197,8 +197,18 @@ define([
                 mouseDragging: false
             });
         });
-
-
+        
+        //scroll by press up and down buttons
+        $frame.closest('.passage').on('keyup', function (e) {
+            if (e.keyCode === 40) {
+                $frame.sly('nextPage');
+            }
+            if (e.keyCode === 38) {
+                $frame.sly('prevPage');
+            }
+            return false;
+        });
+        
         //reload slider setting because the container might have been resized
         $(window).on('resize.multiTabbedExhibit.' + pci.id, function(){
             $frame.sly('reload');
