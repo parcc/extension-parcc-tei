@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><assessmentItem xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" adaptive="false" identifier="VF643134" timeDependent="false" title="Composite" toolName="IBIS Export" toolVersion="1.0" xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiextv2p1_v1p0.xsd">
+    <responseDeclaration baseType="string" cardinality="multiple" identifier="RESPONSE_B">
+        <correctResponse>
+            <value>50 25</value>
+            <value>100 50</value>
+        </correctResponse>
+    </responseDeclaration>
+    <outcomeDeclaration baseType="float" cardinality="single" identifier="SCORE" normalMaximum="2" normalMinimum="0">
+        <defaultValue>
+            <value>0</value>
+        </defaultValue>
+    </outcomeDeclaration>
+    <templateDeclaration baseType="string" cardinality="single" identifier="EQUATION">
+        <defaultValue>
+            <value>y=x/2</value>
+        </defaultValue>
+    </templateDeclaration>
+    <templateDeclaration baseType="integer" cardinality="single" identifier="NumberofPointsRequired">
+        <defaultValue>
+            <value>2</value>
+        </defaultValue>
+    </templateDeclaration>
+    <itemBody>
+        <customInteraction class="tei-pointgraph-line" responseIdentifier="RESPONSE_B">
+            <prcqti:functiongraphInteraction xmlns:prcqti="prcqti">
+                <customOption><![CDATA[
+                    
+                    {
+                'div': 'graph',
+                'width':500,
+                'height': 500,
+                'graphType': 'line',
+                'gridType': 'oneQuadrant',
+                'vLines': 11,
+                'hLines': 13,
+                'segmentMode': false,
+                'outerLineWeight': 3,
+                'innerLineWeight': 1,
+                'plotLineWeight': 6,
+                'plotLineColor': '#0000FF',
+                'pointRadius': 8,
+                'pointHalo': true,
+                'pointColor': '#0000FF',
+                'splitScreen': true,
+                'pointRules': {
+                  'maximumPoints': 2,
+                  'allowOuterH': true,
+                  'allowOuterV': true,
+                  'xSubIncrement': 1,
+                  'ySubIncrement': 1,
+                  'draggable': true
+                },
+                'xAxis': {
+                  'startPoint':0,
+                  'increment': 25,
+                  'label': 'Height of Drop (in inches)',
+                axisLabel:'x'
+                },
+                'yAxis': {
+                  'startPoint': 0,
+                  'increment': 25,
+                  'label': 'Height of Bounce (in inches)',
+                axisLabel:'y'
+                },
+                'graphTitle': ''
+              }
+        ]]></customOption>
+    </prcqti:functiongraphInteraction>
+</customInteraction>
+    </itemBody>
+    <responseProcessing>
+        <responseCondition>
+            <responseIf>
+                <gte>
+                    <customOperator class="qti.customOperators.math.graph.CountPointsThatSatisfyEquation">
+                        <variable identifier="RESPONSE_B"/>
+                        <variable identifier="EQUATION"/>
+                    </customOperator>
+                    <default identifier="NumberofPointsRequired"/>
+                </gte>
+                <setOutcomeValue identifier="SCORE">
+                    <sum>
+                        <variable identifier="SCORE"/>
+                        <baseValue baseType="float">1</baseValue>
+                    </sum>
+                </setOutcomeValue>
+            </responseIf>
+        </responseCondition>
+    </responseProcessing>
+    <apip:apipAccessibility xmlns:apip="http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0"/>
+</assessmentItem>

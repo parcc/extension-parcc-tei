@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><assessmentItem xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" adaptive="false" identifier="VH001116" timeDependent="false" title="Composite" toolName="IBIS Export" toolVersion="1.0" xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd">
+    <responseDeclaration baseType="string" cardinality="multiple" identifier="RESPONSE_C">
+        <correctResponse>
+            <value>10 4</value>
+            <value>20 8</value>
+            <value>0 0</value>
+            <value>2.5 1</value>
+            <value>5 2</value>
+            <value>7.5 3</value>
+            <value>12.5 5</value>
+            <value>15 6</value>
+            <value>17.5 7</value>
+            <value>22.5 9</value>
+            <value>25 10</value>
+            <value>27.5 11</value>
+            <value>30 12</value>
+            <value>32.5 13</value>
+            <value>35 14</value>
+            <value>37.5 15</value>
+            <value>40 16</value>
+        </correctResponse>
+        <mapping>
+            <mapEntry mapKey="10 4" mappedValue="1"/>
+            <mapEntry mapKey="20 8" mappedValue="1"/>
+            <mapEntry mapKey="0 0" mappedValue="1"/>
+            <mapEntry mapKey="2.5 1" mappedValue="1"/>
+            <mapEntry mapKey="5 2" mappedValue="1"/>
+            <mapEntry mapKey="7.5 3" mappedValue="1"/>
+            <mapEntry mapKey="12.5 5" mappedValue="1"/>
+            <mapEntry mapKey="15 6" mappedValue="1"/>
+            <mapEntry mapKey="17.5 7" mappedValue="1"/>
+            <mapEntry mapKey="22.5 9" mappedValue="1"/>
+            <mapEntry mapKey="25 10" mappedValue="1"/>
+            <mapEntry mapKey="27.5 11" mappedValue="1"/>
+            <mapEntry mapKey="30 12" mappedValue="1"/>
+            <mapEntry mapKey="32.5 13" mappedValue="1"/>
+            <mapEntry mapKey="35 14" mappedValue="1"/>
+            <mapEntry mapKey="37.5 15" mappedValue="1"/>
+            <mapEntry mapKey="40 16" mappedValue="1"/>
+        </mapping>
+    </responseDeclaration>
+    <outcomeDeclaration baseType="float" cardinality="single" identifier="SCORE" normalMaximum="4" normalMinimum="0">
+        <defaultValue>
+            <value>0</value>
+        </defaultValue>
+    </outcomeDeclaration>
+    <outcomeDeclaration baseType="float" cardinality="single" identifier="SCORE_C" normalMaximum="1" normalMinimum="0"/>
+    <templateDeclaration baseType="string" cardinality="single" identifier="EQUATION">
+        <defaultValue>
+            <value>y=2/5*x</value>
+        </defaultValue>
+    </templateDeclaration>
+    <templateDeclaration baseType="integer" cardinality="single" identifier="NumberofPointsRequired">
+        <defaultValue>
+            <value>2</value>
+        </defaultValue>
+    </templateDeclaration>
+    <itemBody>
+        <customInteraction class="tei-pointgraph-line" responseIdentifier="RESPONSE_C">
+            <prcqti:linegraphInteraction xmlns:prcqti="prcqti">
+                <customOption><![CDATA[
+              {
+                'div': 'RESPONSE',
+                'width': 300,
+                'height': 340,
+                'graphType': 'line',
+                'gridType': 'oneQuadrant',
+                'vLines': 9,
+                'hLines': 9,
+                'segmentMode': false,
+                'outerLineWeight': 3,
+                'innerLineWeight': 1,
+                'plotLineWeight': 6,
+                'plotLineColor': '#0000FF',
+                'pointRadius': 8,
+                'pointHalo': true,
+                'pointColor': '#0000FF',
+                'splitScreen': true,
+                'pointRules': {
+                  'maximumPoints': 2,
+                  'allowOuterH': true,
+                  'allowOuterV': true,
+                  'xSubIncrement': 2,
+                  'ySubIncrement': 2,
+                  'draggable': true
+                },
+                'xAxis': {
+                  'startPoint': 0,
+                  'increment': 5,
+                  'title': 'Number of Days'
+                },
+                'yAxis': {
+                  'startPoint': 0,
+                  'increment': 2,
+                  'title': 'Height (inches)'
+                }
+              }
+            
+            ]]></customOption>
+            </prcqti:linegraphInteraction>
+        </customInteraction>
+    </itemBody>
+    <responseProcessing>
+        <responseCondition>
+            <responseIf>
+                <gte>
+                    <customOperator class="qti.customOperators.math.graph.CountPointsThatSatisfyEquation">
+                        <variable identifier="RESPONSE_C"/>
+                        <variable identifier="EQUATION"/>
+                    </customOperator>
+                    <default identifier="NumberofPointsRequired"/>
+                </gte>
+                <setOutcomeValue identifier="SCORE_C">
+                    <baseValue baseType="float">1</baseValue>
+                </setOutcomeValue>
+            </responseIf>
+            <responseElse>
+                <setOutcomeValue identifier="SCORE_C">
+                    <baseValue baseType="float">0</baseValue>
+                </setOutcomeValue>
+            </responseElse>
+        </responseCondition>
+        <setOutcomeValue identifier="SCORE">
+            <sum>
+                <variable identifier="SCORE_C"/>
+            </sum>
+        </setOutcomeValue>
+    </responseProcessing>
+    <apipAccessibility xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0"/>
+</assessmentItem>

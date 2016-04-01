@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><assessmentItem xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" adaptive="false" identifier="VF643560" timeDependent="false" title="Graph" toolName="IBIS Export" toolVersion="1.0" xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd">
+    <responseDeclaration baseType="string" cardinality="multiple" identifier="RESPONSE"/>
+    <outcomeDeclaration baseType="float" cardinality="single" identifier="SCORE" normalMaximum="1" normalMinimum="0"/>
+    <templateDeclaration baseType="string" cardinality="single" identifier="EQUATION">
+        <defaultValue>
+            <value>y=(1/2)*x</value>
+        </defaultValue>
+    </templateDeclaration>
+    <itemBody>
+        <customInteraction class="tei-pointgraph-line" responseIdentifier="RESPONSE">
+            <prcqti:linegraphInteraction xmlns:prcqti="prcqti">
+                <customOption><![CDATA[{
+                            'div': 'graph1',
+                            'width': 500,
+                            'height': 500,
+                            'graphType': 'line',
+                            'gridType': 'coordinate',
+                            'vLines': 14,
+                            'hLines': 14,
+                            'segmentMode': false,
+                            'outerLineWeight': 3,
+                            'innerLineWeight': 1,
+                            'plotLineWeight': 6,
+                            'plotLineColor': '#0000FF',
+                            'pointRadius': 8,
+                            'pointHalo': true,
+                            'pointColor': '#0000FF',
+                            'splitScreen': true,
+                            'pointRules': {
+                          'maximumPoints': 2,
+                          'allowOuterH': true,
+                          'allowOuterV': true,
+                          'xSubIncrement': 1,
+                          'ySubIncrement': 1,
+                          'draggable': true
+                            },
+                            'xAxis': {
+                            'startPoint': -6,
+                            'increment': 1,
+                            'axisLabel':'x',
+                            'title': ''
+                            },
+                            'yAxis': {
+                                'startPoint': -6,
+                                'increment': 1,
+                                'axisLabel':'y',
+                                'title': ''
+                            },
+                            'graphTitle': { 
+                                'type': 'string', 
+                                'description': 'Title for Graph.', 
+                                'required': false 
+                            }
+          }]]></customOption>
+            </prcqti:linegraphInteraction>
+        </customInteraction>
+    </itemBody>
+    <responseProcessing>
+        <responseCondition>
+            <responseIf>
+                <equal toleranceMode="exact">
+                    <customOperator class="qti.customOperators.math.graph.CountPointsThatSatisfyEquation">
+                        <variable identifier="RESPONSE"/>
+                        <default identifier="EQUATION"/>
+                    </customOperator>
+                    <baseValue baseType="integer">2</baseValue>
+                </equal>
+                <setOutcomeValue identifier="SCORE">
+                    <baseValue baseType="float">1</baseValue>
+                </setOutcomeValue>
+            </responseIf>
+            <responseElse>
+                <setOutcomeValue identifier="SCORE">
+                    <baseValue baseType="float">0</baseValue>
+                </setOutcomeValue>
+            </responseElse>
+        </responseCondition>
+    </responseProcessing>
+    <apipAccessibility xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0"/>
+</assessmentItem>

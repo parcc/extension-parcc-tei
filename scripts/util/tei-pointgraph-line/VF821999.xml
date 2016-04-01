@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><assessmentItem xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" adaptive="false" identifier="VF821999" timeDependent="false" title="CompositeCR" toolName="IBIS Export" toolVersion="1.0" xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd">
+    <responseDeclaration baseType="string" cardinality="multiple" identifier="RESPONSE_A">
+        <correctResponse>
+            <value>0 0</value>
+            <value>6 90</value>
+        </correctResponse>
+    </responseDeclaration>
+    <outcomeDeclaration baseType="float" cardinality="single" identifier="SCORE" normalMaximum="3" normalMinimum="0">
+        <defaultValue>
+            <value>0</value>
+        </defaultValue>
+    </outcomeDeclaration>
+    <outcomeDeclaration baseType="float" cardinality="single" identifier="SCORE_A" normalMaximum="1" normalMinimum="0"/>
+    <templateDeclaration baseType="string" cardinality="single" identifier="EQUATION">
+        <defaultValue>
+            <value>y=15*x</value>
+        </defaultValue>
+    </templateDeclaration>
+    <itemBody>
+        <customInteraction class="tei-pointgraph-line" responseIdentifier="RESPONSE_A">
+            <prcqti:graphInteraction xmlns:prcqti="prcqti">
+                <customOption><![CDATA[
+              {
+                'div': 'graph1',
+                'width': 400,
+                'height': 400,
+                'graphType': 'line',
+                'gridType': 'oneQuadrant',
+                'vLines': 15,
+                'hLines': 15,
+                'segmentMode': false,
+                'outerLineWeight': 3,
+                'innerLineWeight': 1,
+                'plotLineWeight': 6,
+                'plotLineColor': '#0000FF',
+                'pointRadius': 8,
+                'pointHalo': true,
+                'pointColor': '#0000FF',
+                'splitScreen': true,
+                'pointRules': {
+                  'maximumPoints': 2,
+                  'allowOuterH': true,
+                  'allowOuterV': true,
+                  'xSubIncrement': 2,
+                  'ySubIncrement': 2,
+                  'draggable': true
+                },
+                'xAxis': {
+                  'startPoint': 0,
+                  'increment': 1,
+                  'axisLabel':'x',
+                  'title': 'Number of Weeks'
+                },
+                'yAxis': {
+                  'startPoint': 0,
+                  'increment': 10,
+                  'axisLabel':'y',
+                  'title': 'Number of Dollars Saved'
+                }
+              }
+            ]]></customOption>
+            </prcqti:graphInteraction>
+        </customInteraction>
+    </itemBody>
+    <responseProcessing>
+        <responseCondition>
+            <responseIf>
+                <equal toleranceMode="exact">
+                    <customOperator class="qti.customOperators.math.graph.CountPointsThatSatisfyEquation">
+                        <variable identifier="RESPONSE_A"/>
+                        <default identifier="EQUATION"/>
+                    </customOperator>
+                    <baseValue baseType="integer">2</baseValue>
+                </equal>
+                <setOutcomeValue identifier="SCORE_A">
+                    <baseValue baseType="float">1</baseValue>
+                </setOutcomeValue>
+            </responseIf>
+            <responseElse>
+                <setOutcomeValue identifier="SCORE_A">
+                    <baseValue baseType="float">0</baseValue>
+                </setOutcomeValue>
+            </responseElse>
+        </responseCondition>
+        <setOutcomeValue identifier="SCORE">
+            <sum>
+                <variable identifier="SCORE_A"/>
+            </sum>
+        </setOutcomeValue>
+    </responseProcessing>
+    <apip:apipAccessibility xmlns:apip="http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0"/>
+</assessmentItem>

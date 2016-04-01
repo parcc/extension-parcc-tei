@@ -1,0 +1,67 @@
+{
+    "div": "RESPONSE",
+    "width": 600,
+    "height": 450,
+    "graphType": "polygon",
+    "gridType": "coordinate",
+    "closeShape": {
+        "button": "min",
+        "buttonHAlignment": "center",
+        "buttonVPadding": 10
+    },
+    "segmentMode": false,
+    "vLines": 32,
+    "hLines": 22,
+    "outerLineWeight": 3,
+    "innerLineWeight": 1,
+    "plotLineWeight": 6,
+    "plotLineColor": "#0000FF",
+    "pointRadius": 8,
+    "pointHalo": true,
+    "pointColor": "#0000FF",
+    "arrowHead": true,
+    "pointRules": {
+        "maximumPoints": 4,
+        "allowOuterH": true,
+        "allowOuterV": true,
+        "xSubIncrement": 2,
+        "ySubIncrement": 2,
+        "draggable": true
+    },
+    "staticPoints": {
+        "pointColor": "#AA00AA",
+        "lineColor": "#AA00AA",
+        "showLine": true,
+        "displayPoints": true,
+        "points": [
+            {
+                "x": 0,
+                "y": 0,
+                "label": "A"
+            },
+            {
+                "x": 2,
+                "y": 4,
+                "label": "B"
+            },
+            {
+                "x": 5,
+                "y": 4,
+                "label": "C"
+            },
+            {
+                "x": 8,
+                "y": 0,
+                "label": "D"
+            }
+        ]
+    },
+    "xAxis": {
+        "startPoint": 0,
+        "increment": 1
+    },
+    "yAxis": {
+        "startPoint": 0,
+        "increment": 1
+    }
+}

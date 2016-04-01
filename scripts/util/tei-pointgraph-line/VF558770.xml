@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><assessmentItem xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" adaptive="false" identifier="VF558770" timeDependent="false" title="Graph" toolName="IBIS Export" toolVersion="1.0" xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd">
+    <responseDeclaration baseType="string" cardinality="multiple" identifier="RESPONSE">
+        <correctResponse>
+            <value>4 3</value>
+            <value>7 5</value>
+            <value>3 1</value>
+        </correctResponse>
+    </responseDeclaration>
+    <outcomeDeclaration baseType="float" cardinality="single" identifier="SCORE" normalMaximum="1" normalMinimum="0">
+        <defaultValue>
+            <value>0</value>
+        </defaultValue>
+    </outcomeDeclaration>
+    <itemBody>
+        <customInteraction class="tei-pointgraph-line" responseIdentifier="RESPONSE">
+            <prcqti:functiongraphInteraction xmlns:prcqti="prcqti">
+                <customOption><![CDATA[
+          {
+            'div': 'GRAPH',
+								'width':500,
+								'height': 500,
+								'graphType': 'scatterPlot',
+								'gridType': 'oneQuadrant',
+								'vLines': 8,
+								'hLines': 8,
+								'segmentMode': false,
+								'outerLineWeight': 3,
+								'innerLineWeight': 1,
+								'plotLineWeight': 6,
+								'plotLineColor': '#0000FF',
+								'pointRadius': 8,
+								'pointHalo': true,
+								'pointColor': '#0000FF',
+								'splitScreen': true,
+								'pointRules': {
+								  'maximumPoints': 3,
+								  'allowOuterH': false,
+								  'allowOuterV': false,
+								  'xSubIncrement': 1,
+								  'ySubIncrement': 1,
+								  'draggable': true
+								},
+								'xAxis': {
+								  'startPoint':0,
+								  'increment': 1
+								},
+								'yAxis': {
+								  'startPoint': 0,
+								  'increment': 1
+								},
+								}]]></customOption>
+            </prcqti:functiongraphInteraction>
+        </customInteraction>
+    </itemBody>
+    <responseProcessing>
+        <responseCondition>
+            <responseIf>
+                <isNull>
+                    <variable identifier="RESPONSE"/>
+                </isNull>
+                <setOutcomeValue identifier="SCORE">
+                    <baseValue baseType="float">0.00</baseValue>
+                </setOutcomeValue>
+            </responseIf>
+            <responseElseIf>
+                <match>
+                    <variable identifier="RESPONSE"/>
+                    <correct identifier="RESPONSE"/>
+                </match>
+                <setOutcomeValue identifier="SCORE">
+                    <sum>
+                        <variable identifier="SCORE"/>
+                        <baseValue baseType="float">1</baseValue>
+                    </sum>
+                </setOutcomeValue>
+            </responseElseIf>
+            <responseElse>
+                <setOutcomeValue identifier="SCORE">
+                    <baseValue baseType="float">0.00</baseValue>
+                </setOutcomeValue>
+            </responseElse>
+        </responseCondition>
+    </responseProcessing>
+    <apip:apipAccessibility xmlns:apip="http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0"/>
+</assessmentItem>
