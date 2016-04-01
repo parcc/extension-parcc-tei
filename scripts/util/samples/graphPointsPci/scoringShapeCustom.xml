@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<assessmentItem 
+    xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/imsqti_v2p1.xsd"
+    adaptive="false" timeDependent="false"
+    identifier="customInteraction-pointgraph-line" title="Graph Julian's Data - Pointgraph - line">
+    <!-- inconsistent with the baseType of the customerOperator input, but switching to point causes issue with Pearson item interoperabilities-->
+    <!--Even the cardinality single does not correspond to the <multiple> expected in the customeOperator-->
+    <responseDeclaration cardinality="record" identifier="RESPONSE">
+        <correctResponse>
+            <value fieldIdentifier="points" baseType="string" >0 3,-5 6,-5 0,0 0</value>
+            <value fieldIdentifier="shapeClosed" baseType="boolean" >true</value>
+        </correctResponse>
+    </responseDeclaration>
+    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="integer" />
+    <itemBody>
+        <div class="row">
+            <div class="span6">
+                <p>
+                    In a research laboratory, Julian grew 2 populations of the same species of bacteria in 
+                    2 different types of liquid culture media in a growth chamber that sustains aeration 
+                    and recycles nutrients. Both cultures were grown at 37°C. He sampled the bacterial 
+                    cultures each hour to determine the size of each bacterial population. His data are 
+                    presented in the following table.
+                </p>
+            </div>
+            <div class="span6">
+                <div class="well">
+
+                    <p style="margin-bottom: 18px;">
+                        Using the Table to the left, record the Culture 2 experiment results by plotting 
+                        data points on the graph below.  Using your mouse or touch (iPad), click the grid 
+                        to add a point.
+                    </p>
+                    <h4 style="text-align:center;">
+                        Culture 2 Data
+                    </h4>
+          
+                    <div id="RESPONSE" />
+                    <customInteraction class="tei-pointgraph-line" responseIdentifier="RESPONSE"></customInteraction>
+                </div>
+            </div>
+        </div>
+    </itemBody>
+    <responseProcessing>
+        <responseIf>
+            <equal toleranceMode="exact">
+                <customOperator class="qti.customOperators.CountPointsThatSatisfyEquation">
+                    <multiple>
+                        <baseValue baseType="point">0 0</baseValue>
+                        <baseValue baseType="point">2 1</baseValue>
+                        <baseValue baseType="point">-2 -1</baseValue>
+                        <baseValue baseType="point">4 2</baseValue>
+                        <baseValue baseType="point">-4 -2</baseValue>
+                    </multiple>
+                    <baseValue baseType="string">y=1/2*x</baseValue>
+                </customOperator>
+                <baseValue baseType="integer">5</baseValue>
+            </equal>
+            <setOutcomeValue identifier="SCORE">
+                <baseValue baseType="integer">1</baseValue>
+            </setOutcomeValue>
+        </responseIf>
+    </responseProcessing>
+</assessmentItem>

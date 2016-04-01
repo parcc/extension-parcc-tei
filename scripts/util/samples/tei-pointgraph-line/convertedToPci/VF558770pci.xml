@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><assessmentItem xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" adaptive="false" identifier="VF558770" timeDependent="false" title="Graph" toolName="IBIS Export" toolVersion="1.0" xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd">
+    <responseDeclaration baseType="string" cardinality="multiple" identifier="RESPONSE">
+        <correctResponse>
+            <value>4 3</value>
+            <value>7 5</value>
+            <value>3 1</value>
+        </correctResponse>
+    </responseDeclaration>
+    <outcomeDeclaration baseType="float" cardinality="single" identifier="SCORE" normalMaximum="1" normalMinimum="0">
+        <defaultValue>
+            <value>0</value>
+        </defaultValue>
+    </outcomeDeclaration>
+    <itemBody>
+        <customInteraction responseIdentifier="RESPONSE">
+            <pci:portableCustomInteraction customInteractionTypeIdentifier="pointGraphInteraction" hook="pointGraphInteraction/runtime/pointGraphInteraction.js">
+                <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
+                <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
+                    <pci:libraries>
+                        <pci:lib id="IMSGlobal/jquery_2_1_1"/>
+                        <pci:lib id="PARCC/graphFunction"/>
+                        <pci:lib id="PARCC/gridFactory"/>
+                        <pci:lib id="PARCC/pointFactory"/>
+                        <pci:lib id="PARCC/lineFactory"/>
+                    </pci:libraries>
+                </pci:resources>
+                <pci:properties><!-- list of properties to be define accordance to required ones -->
+                    <pci:entry key="subclass">line</pci:entry><!-- subclass of pointGraphInteraction, possible values : line,scatter,polygon -->
+                    <pci:entry key="xMin">-10</pci:entry>
+                    <pci:entry key="xMax">10</pci:entry>
+                    <pci:entry key="yMin">-10</pci:entry>
+                    <pci:entry key="yMax">10</pci:entry>
+                    <pci:entry key="graphColor">#bb1a2a</pci:entry>
+                    <pci:entry key="graphWidth">3</pci:entry>
+                </pci:properties>
+                <pci:markup>
+                    <html5:div class="pointGraphInteraction">
+                        <html5:div class="prompt"></html5:div>
+                        <html5:div class="shape-panel">
+                            <html5:div class="shape-controls"></html5:div>
+                            <html5:div class="shape-container"></html5:div>
+                        </html5:div>
+                    </html5:div>
+                </pci:markup>
+            </pci:portableCustomInteraction>
+        </customInteraction>
+    </itemBody>
+    <responseProcessing>
+        <responseCondition>
+            <responseIf>
+                <isNull>
+                    <variable identifier="RESPONSE"/>
+                </isNull>
+                <setOutcomeValue identifier="SCORE">
+                    <baseValue baseType="float">0.00</baseValue>
+                </setOutcomeValue>
+            </responseIf>
+            <responseElseIf>
+                <match>
+                    <variable identifier="RESPONSE"/>
+                    <correct identifier="RESPONSE"/>
+                </match>
+                <setOutcomeValue identifier="SCORE">
+                    <sum>
+                        <variable identifier="SCORE"/>
+                        <baseValue baseType="float">1</baseValue>
+                    </sum>
+                </setOutcomeValue>
+            </responseElseIf>
+            <responseElse>
+                <setOutcomeValue identifier="SCORE">
+                    <baseValue baseType="float">0.00</baseValue>
+                </setOutcomeValue>
+            </responseElse>
+        </responseCondition>
+    </responseProcessing>
+    <apip:apipAccessibility xmlns:apip="http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0"/>
+</assessmentItem>
