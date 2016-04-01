@@ -34,7 +34,7 @@ define([
                 //the y-axis is reversed
                 start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
                 end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
-                unit : 20
+                unit : 5
             },
             plot : {
                 color : _color,
@@ -82,11 +82,12 @@ define([
             this.dom = dom;
             this.config = config || {};
 
-            console.log("initialisation !!!");
-            debugger;
+            // console.log("initialisation !!!");
+            // /debugger;
 
             var $container = $(dom);
-            var mathFunctions = config.graphs.split(',');
+
+            // var mathFunctions = config.graphs.split(',');
             var $shapeControls = $container.find('.shape-controls');
             var _this = this,
                 paper,
@@ -166,6 +167,7 @@ define([
                 return grid;
             }
 
+            /*
             function showControl(graphs){
 
                 //change conrtol buttons' classes
@@ -177,6 +179,7 @@ define([
                 //activate the first one
                 activateButton($shapeControls.children('.available:first'));
             }
+            */
 
             function activateButton($button){
 
@@ -351,19 +354,19 @@ define([
 
             initGrid($container, this.gridConfig);
 
-            showControl(mathFunctions);
+            //showControl(mathFunctions);
 
             plotDefault();
 
-            $shapeControls.on('click', 'button', function(){
-                activateButton($(this));
-            });
+            // $shapeControls.on('click', 'button', function(){
+            //     activateButton($(this));
+            // });
 
             /**
-             * Add event listening fo rdynamic configuration change
+             * Add event listening for dynamic configuration change
              */
 
-
+            /*
             _this.on('functionschange', function(graphs){
 
                 //reset selected graph
@@ -374,6 +377,7 @@ define([
                 showControl(mathFunctions);
                 plotDefault();
             });
+            */
 
             _this.on('gridchange', function(config){
                 //the configuration of the gird, point or line have changed:

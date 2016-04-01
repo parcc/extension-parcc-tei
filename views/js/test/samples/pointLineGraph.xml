@@ -35,10 +35,10 @@
                 </pci:resources>
                 <pci:properties><!-- list of properties to be define accordance to required ones -->
                     <pci:entry key="subclass">line</pci:entry><!-- subclass of pointGraphInteraction, possible values : line,scatter,polygon -->
-                    <pci:entry key="xMin">-10</pci:entry>
+                    <pci:entry key="xMin">0</pci:entry>
                     <pci:entry key="xMax">10</pci:entry>
-                    <pci:entry key="yMin">-10</pci:entry>
-                    <pci:entry key="yMax">10</pci:entry>
+                    <pci:entry key="yMin">0</pci:entry>
+                    <pci:entry key="yMax">100</pci:entry>
                     <pci:entry key="graphColor">#bb1a2a</pci:entry>
                     <pci:entry key="graphWidth">3</pci:entry>
                 </pci:properties>
@@ -46,7 +46,6 @@
                     <html5:div class="pointGraphInteraction">
                         <html5:div class="prompt"></html5:div>
                         <html5:div class="shape-panel">
-                            <html5:div class="shape-controls"></html5:div>
                             <html5:div class="shape-container"></html5:div>
                         </html5:div>
                     </html5:div>
