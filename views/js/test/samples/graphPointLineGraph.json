@@ -1,0 +1,185 @@
+{
+    "identifier": "i1440585855838854",
+    "serial": "item_55dd9c4a53a5e494689465",
+    "qtiClass": "assessmentItem",
+    "attributes": {
+        "identifier": "i1440585855838854",
+        "title": "graph function A",
+        "label": "",
+        "adaptive": false,
+        "timeDependent": false,
+        "toolName": "TAO",
+        "toolVersion": "3.1.0-sprint05"
+    },
+    "body": {
+        "serial": "container_containeritembody_55dd9c4a53a3f408295767",
+        "body": "\n        \n        <div class=\"grid-row\">\n            <div class=\"col-12\">\n                {{interaction_portablecustominteraction_55dd9c4a54f7f349021280}}\n            <\/div>\n        <\/div>\n        \n    ",
+        "elements": {
+            "interaction_portablecustominteraction_55dd9c4a54f7f349021280": {
+                "serial": "interaction_portablecustominteraction_55dd9c4a54f7f349021280",
+                "qtiClass": "customInteraction",
+                "attributes": {
+                    "responseIdentifier": "RESPONSE"
+                },
+                "debug": {
+                    "relatedItem": "item_55dd9c4a53a5e494689465"
+                },
+                "choices": {},
+                "typeIdentifier": "graphPointLineGraphInteraction",
+                "markup": "\n                            <div class=\"graphPointLineGraphInteraction\">\n                                <div class=\"prompt\">\n        \n                                <\/div>\n                                <div class=\"shape-panel\">\n                                    <div class=\"shape-controls\">\n                                        <button name=\"linear\" value=\"linear\" class=\"btn btn-info\" type=\"button\">Linear<\/button>\n                                        <button name=\"absolute\" value=\"absolute\" class=\"btn btn-info\" type=\"button\">Absolute Value<\/button>\n                                        <button name=\"quadratic\" value=\"quadratic\" class=\"btn btn-info\" type=\"button\">Quadratic<\/button>\n                                        <button name=\"exponential\" value=\"exponential\" class=\"btn btn-info\" type=\"button\">Exponential<\/button>\n                                        <button name=\"logarithmic\" value=\"logarithmic\" class=\"btn btn-info\" type=\"button\">Logarithmic<\/button>\n                                        <button name=\"cosine\" value=\"cosine\" class=\"btn btn-info\" type=\"button\">Sin\/Cos<\/button>\n                                        <button name=\"tangent\" value=\"tangent\" class=\"btn btn-info\" type=\"button\">Tan\/Cotan<\/button>\n                                    <\/div>\n                                    <div class=\"shape-container\"><\/div>\n                                <\/div>\n                            <\/div>\n                        ",
+                "libraries": [
+                ],
+                "properties": {
+                    "graphs": "linear,absolute,quadratic,exponential,logarithmic,cosine,tangent",
+                    "xMin": "-10",
+                    "xMax": "10",
+                    "yMin": "-10",
+                    "yMax": "10",
+                    "graphColor": "#bb1a2a",
+                    "graphWidth": "3"
+                },
+                "entryPoint": "graphPointLineGraphInteraction\/runtime\/graphPointLineGraphInteraction.js"
+            }
+        },
+        "debug": {
+            "relatedItem": "item_55dd9c4a53a5e494689465"
+        }
+    },
+    "debug": {
+        "relatedItem": "item_55dd9c4a53a5e494689465"
+    },
+    "namespaces": {
+        "xml": "http:\/\/www.w3.org\/XML\/1998\/namespace",
+        "html5": "html5",
+        "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
+        "m": "http:\/\/www.w3.org\/1998\/Math\/MathML",
+        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance",
+        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1"
+    },
+    "stylesheets": {
+        "stylesheet_55dd9c4a540ff968457768": {
+            "serial": "stylesheet_55dd9c4a540ff968457768",
+            "qtiClass": "stylesheet",
+            "attributes": {
+                "href": "graphPointLineGraphInteraction\/runtime\/css\/graphPointLineGraphInteraction.css",
+                "type": "text\/css",
+                "media": "all",
+                "title": ""
+            },
+            "debug": {
+                "relatedItem": "item_55dd9c4a53a5e494689465"
+            }
+        }
+    },
+    "outcomes": {
+        "outcomedeclaration_55dd9c4a54856884877449": {
+            "identifier": "SCORE",
+            "serial": "outcomedeclaration_55dd9c4a54856884877449",
+            "qtiClass": "outcomeDeclaration",
+            "attributes": {
+                "identifier": "SCORE",
+                "cardinality": "single",
+                "baseType": "float"
+            },
+            "debug": {
+                "relatedItem": "item_55dd9c4a53a5e494689465"
+            },
+            "defaultValue": null
+        }
+    },
+    "responses": {
+        "responsedeclaration_55dd9c4a545cd880460366": {
+            "identifier": "RESPONSE",
+            "serial": "responsedeclaration_55dd9c4a545cd880460366",
+            "qtiClass": "responseDeclaration",
+            "attributes": {
+                "identifier": "RESPONSE",
+                "cardinality": "single",
+                "baseType": "integer"
+            },
+            "debug": {
+                "relatedItem": "item_55dd9c4a53a5e494689465"
+            },
+            "correctResponses": [
+            ],
+            "mapping": [
+            ],
+            "areaMapping": [
+            ],
+            "howMatch": "http:\/\/www.imsglobal.org\/question\/qti_v2p1\/rptemplates\/match_correct",
+            "mappingAttributes": {
+                "defaultValue": 0
+            },
+            "feedbackRules": {}
+        }
+    },
+    "feedbacks": {},
+    "responseProcessing": {
+        "serial": "response_templatesdriven_55dd9c4a559af909901071",
+        "qtiClass": "responseProcessing",
+        "attributes": [
+        ],
+        "debug": {
+            "relatedItem": "item_55dd9c4a53a5e494689465"
+        },
+        "processingType": "templateDriven",
+        "responseRules": [
+            {
+                "qtiClass": "responseCondition",
+                "responseIf": {
+                    "qtiClass": "responseIf",
+                    "expression": {
+                        "qtiClass": "match",
+                        "expressions": [
+                            {
+                                "qtiClass": "variable",
+                                "attributes": {
+                                    "identifier": "RESPONSE"
+                                }
+                            },
+                            {
+                                "qtiClass": "correct",
+                                "attributes": {
+                                    "identifier": "RESPONSE"
+                                }
+                            }
+                        ]
+                    },
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "baseValue",
+                                "attributes": {
+                                    "baseType": "float"
+                                },
+                                "value": "1"
+                            }
+                        }
+                    ]
+                },
+                "responseElse": {
+                    "qtiClass": "responseElse",
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "baseValue",
+                                "attributes": {
+                                    "baseType": "float"
+                                },
+                                "value": "0"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

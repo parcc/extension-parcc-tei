@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd"
+                xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction"
+                identifier="pci002" title="PCI 002" adaptive="false" timeDependent="false">
+
+    <responseDeclaration identifier="graphFunction1" cardinality="single" baseType="integer"/>
+
+    <!--item specific stylesheets will be added by the item in the method postRender()-->
+    <stylesheet href="graphPointLineGraphInteraction/runtime/css/graphPointLineGraphInteraction.css" title="" type="text/css" media="all"></stylesheet>
+
+    <itemBody>
+
+        <customInteraction responseIdentifier="graphFunction1">
+            <pci:portableCustomInteraction customInteractionTypeIdentifier="graphPointLineGraphInteraction" hook="graphPointLineGraphInteraction/runtime/graphPointLineGraphInteraction.js">
+
+                <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
+
+                <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
+                    <pci:libraries>
+                        <pci:lib id="IMSGlobal/jquery_2_1_1"></pci:lib>
+                    </pci:libraries>
+                </pci:resources>
+
+                <pci:properties>
+                    <!--all graphs : linear,absolute,quadratic,exponential,logarithmic,cosine,tangent-->
+                    <pci:entry key="graphs">linear,absolute,quadratic,exponential,logarithmic,cosine,tangent</pci:entry>
+                    <pci:entry key="xMin">2</pci:entry>
+                    <pci:entry key="xMax">12</pci:entry>
+                    <pci:entry key="yMin">-4</pci:entry>
+                    <pci:entry key="yMax">16</pci:entry>
+                </pci:properties>
+
+                <pci:markup>
+                    <html5:div class="graphPointLineGraphInteraction">
+                        <html5:div class="prompt">
+                            Below, you should see a coordinate plane. <html5:strong>Choose a Function Type</html5:strong> by clicking one of the buttons on the left side of the coordinate plane, then manipulate the points of the function.
+                        </html5:div>
+                        <html5:div class="shape-panel">
+                            <html5:div class="shape-controls">
+                                <html5:button name="linear" value="linear" class="btn btn-info" type="button">Linear</html5:button>
+                                <html5:button name="absolute" value="absolute" class="btn btn-info" type="button">Absolute Value</html5:button>
+                                <html5:button name="quadratic" value="quadratic" class="btn btn-info" type="button">Quadratic</html5:button>
+                                <html5:button name="exponential" value="exponential" class="btn btn-info" type="button">Exponential</html5:button>
+                                <html5:button name="logarithmic" value="logarithmic" class="btn btn-info" type="button">Logarithmic</html5:button>
+                                <html5:button name="cosine" value="cosine" class="btn btn-info" type="button">Sin/Cos</html5:button>
+                                <html5:button name="tangent" value="tangent" class="btn btn-info" type="button">Tan/Cotan</html5:button>
+                            </html5:div>
+                            <html5:div class="shape-container"></html5:div>
+                        </html5:div>
+                    </html5:div>
+                </pci:markup>
+
+            </pci:portableCustomInteraction>
+        </customInteraction>
+
+    </itemBody>
+
+</assessmentItem>
