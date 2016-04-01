@@ -31,7 +31,7 @@ define([
                 unit : 20
             },
             y : {
-                //the y-axis is reversed 
+                //the y-axis is reversed
                 start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
                 end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
                 unit : 20
@@ -68,7 +68,7 @@ define([
             return 'graphPointLineGraphInteraction';
         },
         /**
-         * Render the PCI : 
+         * Render the PCI :
          * @param {String} id
          * @param {Node} dom
          * @param {Object} config - json
@@ -81,7 +81,10 @@ define([
             this.id = id;
             this.dom = dom;
             this.config = config || {};
-            
+
+            console.log("initialisation !!!");
+            debugger;
+
             var $container = $(dom);
             var mathFunctions = config.graphs.split(',');
             var $shapeControls = $container.find('.shape-controls');
@@ -108,7 +111,7 @@ define([
                     gridConfig.x.start < gridConfig.x.end &&
                     gridConfig.y.start < gridConfig.y.end
                     ){
-                    
+
                     grid = gridFactory(paper, gridConfig);
                     grid.clickable();
 
@@ -121,7 +124,7 @@ define([
                             fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
                             fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
-                        // Create the first point or the second or replace the second according the rules defined by the client                  
+                        // Create the first point or the second or replace the second according the rules defined by the client
                         if(points.length < 2){
                             addPoint(fx, fy);
                             if(points.length === 2){
@@ -159,7 +162,7 @@ define([
                         }
                     });
                 }
-                
+
                 return grid;
             }
 
@@ -218,11 +221,11 @@ define([
             }
 
             function addPoint(fx, fy, cartesian){
-                
+
                  var gridBBox, newPoint, pointConfig;
-                 
+
                 if(grid){
-                    
+
                     gridBBox = grid.getBBox();
 
                     pointConfig = _.defaults({
@@ -246,7 +249,7 @@ define([
                     newPoint.drag();
                     points.push(newPoint);
                 }
-                
+
 
                 return newPoint;
             }
@@ -299,18 +302,18 @@ define([
                     plot();
                 }
             }
-            
+
             /**
              * Get the raw response of the interaction.
              * If no graph is drawn, returns null
-             * 
+             *
              * @returns {object}
              */
             this.getRawResponse = function getRawResponse(){
-                
+
                 var point1 = points[0],
                     point2 = points[1];
-                
+
                 if(point1 && point2 && mathFunction){
                     return {
                         point1 : point1.getCartesianCoord(1),
@@ -319,10 +322,10 @@ define([
                     };
                 }
             };
-            
+
             /**
              * Set the raw response to the interaction
-             * 
+             *
              * @param {string} mathFn
              * @param {object} point1
              * @param {number} point1.x
@@ -340,7 +343,7 @@ define([
                 addPoint(point2.x, point2.y, true);
                 plot();
             };
-            
+
             /**
              * init rendering:
              */
@@ -383,12 +386,12 @@ define([
         /**
          * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         * 
+         *
          * @param {Object} interaction
          * @param {Object} response
          */
         setResponse : function(response){
-            
+
             if(response &&
                 _.isArray(response.record) &&
                 response.record[0] &&
@@ -400,10 +403,10 @@ define([
                 response.record[1].list &&
                 response.record[1].list &&
                 _.isArray(response.record[1].list.point)){
-                
+
                 var point1 = response.record[1].list.point[0];
                 var point2 = response.record[1].list.point[1];
-                
+
                 this.setRawResponse(response.record[0].base.string, {
                     x : point1[0],
                     y : point1[1]
@@ -416,7 +419,7 @@ define([
         /**
          * Get the response in the json format described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         * 
+         *
          * @param {Object} interaction
          * @returns {Object}
          */
@@ -447,7 +450,7 @@ define([
         /**
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
-         * 
+         *
          * @param {Object} interaction
          */
         resetResponse : function(){
@@ -455,9 +458,9 @@ define([
         },
         /**
          * Reverse operation performed by render()
-         * After this function is executed, only the inital naked markup remains 
+         * After this function is executed, only the inital naked markup remains
          * Event listeners are removed and the state and the response are reset
-         * 
+         *
          * @param {Object} interaction
          */
         destroy : function(){
@@ -467,7 +470,7 @@ define([
         },
         /**
          * Restore the state of the interaction from the serializedState.
-         * 
+         *
          * @param {Object} interaction
          * @param {Object} serializedState - json format
          */
@@ -478,7 +481,7 @@ define([
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
-         * 
+         *
          * @param {Object} interaction
          * @returns {Object} json format
          */
