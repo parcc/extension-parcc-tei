@@ -196,17 +196,4 @@ define([
         return JSON.stringify(json, undefined, 2);
     }
 
-    function test(testName, gridConfig){
-
-        var $container = $('<div class="test"><h3 class="title">' + testName + '</h2><pre class="grid-config"></pre><div class="shape-container"></div></div>');
-        $container.find('.grid-config').append(formatJson(gridConfig));
-        var grid = initGrid($container, gridConfig);
-
-        $('#paper').append($container);
-    }
-
-    return {
-        test : test
-    };
-
 });
