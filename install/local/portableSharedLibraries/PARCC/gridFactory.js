@@ -3,11 +3,13 @@ define(['OAT/lodash'], function( _ ){
     'use strict';
 
     function gridFactory(paper,options){
-        
-        if (typeof options.x !== 'object' && typeof options.y !== 'object'){ 
+
+        console.log("constructing grid !");
+
+        if (typeof options.x !== 'object' && typeof options.y !== 'object'){
             throw 'I need x and y axis';
         }
-        
+
         if ( (options.x.start >= options.x.end) || (options.y.start >= options.y.end) ) {
             throw 'end must be greater than start';
         }
@@ -26,7 +28,7 @@ define(['OAT/lodash'], function( _ ){
             raphaelObj.node.setAttribute('class', pattern.test(oldClass) ? oldClass : oldClass + ' ' + newClass);
         }
 
-        
+
         function drawLine(start, end, style){
             var padding = options.padding;
             var path = paper.path('M'+(padding+start[0])+' '+(padding+start[1])+'L'+(padding+end[0])+' '+(padding+end[1])).attr(style);
@@ -35,11 +37,13 @@ define(['OAT/lodash'], function( _ ){
         }
 
         var lineColor = '#222';
-        
+
         options = _.merge({},{
             color : lineColor,
             weight : 1,
             padding : 20,
+            height: 0,
+            width: 0,
             x : {
                 start : -10,
                 end :  10,
@@ -59,6 +63,18 @@ define(['OAT/lodash'], function( _ ){
                 weight : 3
             }
         },options);
+
+        // compute dimensions
+        if (options.width !== 0 && options.height !== 0) {
+            options.x.unit = options.width / options.x.step;
+            options.y.unit = options.height / options.y.step;
+            console.log('options.x.unit = ' + options.x.unit);
+            console.log('options.y.unit = ' + options.y.unit);
+        } else {
+            options.width = (Math.abs(options.x.end - options.x.start) * options.x.unit);
+            options.height = (Math.abs(options.y.end - options.y.start) * options.y.unit);
+        }
+
         /** @type {String} Color of the grid's lines */
         var _color = options.color,
         /** @type {Number} line weight of grid */
@@ -73,10 +89,7 @@ define(['OAT/lodash'], function( _ ){
          * Draw Axis on the paper according the configuration of the grid
          */
         _drawAxis = function (){
-            
-            var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit);
-            
+
             var xStyle = {
                 'stroke' :  _x.color,
                 'stroke-width': _x.weight
@@ -86,25 +99,25 @@ define(['OAT/lodash'], function( _ ){
                 'stroke' :  _y.color,
                 'stroke-width': _y.weight
             };
-            
+
             function drawXaxis(top, config){
-                
+
                 config = config || {};
-                
-                var line =  drawLine([0, top], [width, top], config.style);
-                
-                var padding = options.padding, 
+
+                var line =  drawLine([0, top], [options.width, top], config.style);
+
+                var padding = options.padding,
                     position = 0,
                     fontSize = 10,
                     textTop,
                     text;
-                
+
                 if(config.labelOnTop){
                     textTop = top + padding - fontSize/2;
                 }else{
                     textTop = top + padding + fontSize;
                 }
-                
+
                 for(var i = _x.start; i <= _x.end ; i++){
                     text = paper.text(padding + position, textTop, i).attr({
                         'font-size' : fontSize
@@ -112,28 +125,28 @@ define(['OAT/lodash'], function( _ ){
                     addCssClass(text, 'scene scene-text');
                     position += _x.unit;
                 }
-                
+
                 return line;
             }
-            
+
             function drawYaxis(left, config){
-                
+
                 config = config || {};
-                
-                var line =  drawLine([left, height], [left, 0], config.style);
-                
-                var padding = options.padding, 
+
+                var line =  drawLine([left, options.height], [left, 0], config.style);
+
+                var padding = options.padding,
                     position = 0,
                     fontSize = 10,
                     textLeft,
                     text;
-                
+
                 if(config.labelOnRight){
                     textLeft = left + padding + fontSize/2;
                 }else{
                     textLeft = left + padding - fontSize;
                 }
-                
+
                 for(var i = _y.start; i <= _y.end ; i++){
                     text = paper.text(textLeft, padding + position, -i).attr({
                         'font-size' : fontSize
@@ -141,20 +154,20 @@ define(['OAT/lodash'], function( _ ){
                     addCssClass(text, 'scene scene-text');
                     position += _y.unit;
                 }
-                
+
                 return line;
             }
-            
+
             if((_y.start < 0) && (_y.end <= 0)){
-                drawXaxis(height, {style : xStyle});
+                drawXaxis(options.height, {style : xStyle});
             }else if((_y.start >= 0) && (_y.end > 0)){
                 drawXaxis(0, {style : xStyle, labelOnTop : true});
             }else{
                 drawXaxis(Math.abs(_y.start) * _y.unit, {style : xStyle});
             }
-            
+
             if((_x.start < 0 ) && (_x.end <= 0)){
-                drawYaxis(width, {style : yStyle, labelOnRight:true});
+                drawYaxis(options.width, {style : yStyle, labelOnRight:true});
             }else if((_x.start >= 0 ) && (_x.end > 0)){
                 drawYaxis(0, {style : yStyle});
             }else{
@@ -162,38 +175,34 @@ define(['OAT/lodash'], function( _ ){
             }
 
         };
-        
+
         function _drawGrid(){
-            
-            var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit),
-                style = {
+
+            var style = {
                     'stroke': _color,
                     'stroke-width' : _weight
                 };
-            
-            for(var y = 0; y <= height; y += _y.step * _y.unit){
-                drawLine([0, y], [width, y], style);
+
+            for(var y = 0; y <= options.height; y += _y.step * _y.unit){
+                drawLine([0, y], [options.width, y], style);
             }
-            for(var x = 0; x <= width; x += _x.step * _x.unit) {
-                drawLine([x, 0], [x, height], style);
+            for(var x = 0; x <= options.width; x += _x.step * _x.unit) {
+                drawLine([x, 0], [x, options.height], style);
             }
         }
-        
+
         function _calculateBBox(){
-            
-            var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit),
-                x = options.padding,
+
+            var x = options.padding,
                 y = options.padding;
-            
+
             _borderBox = {
                 x : x,
                 y : y,
-                width : width,
-                height : height,
-                x2 : x+width,
-                y2 : y+height
+                width : options.width,
+                height : options.height,
+                x2 : x + options.width,
+                y2 : y + options.height
             };
         }
         var obj = {
@@ -256,15 +265,15 @@ define(['OAT/lodash'], function( _ ){
             },
             /**
              * Get the Raphaeljs paper object used for this grid
-             * 
+             *
              * @returns {Object} Raphaeljs paper object
              */
             getCanvas : function(){
-                return paper;  
+                return paper;
             },
             /**
              * Get the position (top/left) of the origin of the cartesian axis relative to the paper
-             * 
+             *
              * @returns {Object}
              */
             getOriginPosition : function(){
@@ -283,7 +292,7 @@ define(['OAT/lodash'], function( _ ){
             },
             /**
              * The the upper and lower bounds fof the grid on both axis
-             * 
+             *
              * @returns {Object}
              */
             getGridBounds : function(){
@@ -304,7 +313,7 @@ define(['OAT/lodash'], function( _ ){
             render : function(){
                 _drawGrid();
                 _drawAxis();
-            },   
+            },
             /**
              * Return a callback function to determine for a value the corrected value according grid snapping
              * @param {Number} x coordinate x to convert to snapped value
@@ -334,7 +343,7 @@ define(['OAT/lodash'], function( _ ){
             },
             /**
              * Take the shape back to the interactive layer
-             * 
+             *
              * @param {Object} shape - a RaphaelJs Element
              */
             toBack : function(shape){
@@ -344,19 +353,19 @@ define(['OAT/lodash'], function( _ ){
             },
             /**
              * Bring the shape in front of the interactive layer
-             * 
+             *
              * @param {Object} shape - a RaphaelJs Element
              */
             toFront : function(shape){
                 shape.toFront();
             }
         };
-        
+
         _calculateBBox();
         obj.render();
-        
+
         return obj;
     }
-    
+
     return gridFactory;
 });

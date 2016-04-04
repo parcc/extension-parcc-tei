@@ -126,18 +126,16 @@ define([
         }, outputContainer: '.test_09' },
 
         { title: 'different scales', input: {
-            // height: 500,
-            // width: 500,
+            height: 500,
+            width: 500,
             x : {
                 start : 0,
                 end : 10,
-                unit: unitSize,
                 step: 10
             },
             y : {
                 start : -100,
                 end : 0,
-                unit: unitSize,
                 step : 10
             }
         }, outputContainer: '.test_10' }
