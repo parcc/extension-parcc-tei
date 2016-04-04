@@ -75,9 +75,9 @@ define([
             height: 500,
             width: 500,
             x : { start : 0, end : 20, lines: 10 },
-            y : { start : -100, end : 0, lines : 10 }
+            y : { start : -100, end : 0, lines : 20 }
         }, output: {
-            width: 500, height: 500, x : { lines : 10, unit : 50 }, y : { lines : 10, unit : 50 }
+            width: 500, height: 500, x : { lines : 10, unit : 50 }, y : { lines : 20, unit : 25 }
         }, outputContainer: '.test_10' }
         /* */
     ];
