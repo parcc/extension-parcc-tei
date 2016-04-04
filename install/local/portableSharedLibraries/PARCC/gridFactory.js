@@ -70,20 +70,16 @@ define(['OAT/lodash'], function( _ ){
         _yRange = Math.abs(options.y.end - options.y.start);
 
         // compute dimensions
-        if (options.width !== 0 && options.height !== 0) {
+        if (options.width !== 0 && options.height !== 0 && options.x.lines !== 0 && options.y.lines !== 0) {
             options.x.unit = options.width / options.x.lines;
             options.y.unit = options.height / options.y.lines;
+            options.x.step = 1;
+            options.y.step = 1;
         } else {
             options.width = _xRange * options.x.unit;
             options.height = _yRange * options.y.unit;
-        }
-
-        if (options.x.lines === 0) {
-            options.x.lines = _xRange / options.x.step; // non !!!
-        }
-
-        if (options.y.lines === 0) {
-            options.y.lines = _yRange / options.y.step; // non !!!
+            options.x.lines = options.width / options.x.unit;
+            options.y.lines = options.height / options.y.unit;
         }
 
         /** @type {String} Color of the grid's lines */
@@ -122,7 +118,7 @@ define(['OAT/lodash'], function( _ ){
                     fontSize = 10,
                     textTop,
                     text,
-                    textStep = _xRange / _x.lines;
+                    increment = _xRange / _x.lines;
 
                 if(config.labelOnTop){
                     textTop = top + padding - fontSize/2;
@@ -130,10 +126,9 @@ define(['OAT/lodash'], function( _ ){
                     textTop = top + padding + fontSize;
                 }
 
-                // for(var i = _x.start; i <= _x.end ; i++){
-                //     text = paper.text(padding + position, textTop, i).attr({
                 for(var i = 0; i <= _x.lines; i++){
-                    text = paper.text(padding + position, textTop, _x.start + i * textStep).attr({                        'font-size' : fontSize
+                    text = paper.text(padding + position, textTop, _x.start + i * increment).attr({
+                        'font-size' : fontSize
                     });
                     addCssClass(text, 'scene scene-text');
                     position += _x.unit;
@@ -153,7 +148,7 @@ define(['OAT/lodash'], function( _ ){
                     fontSize = 10,
                     textLeft,
                     text,
-                    textStep = _yRange / _y.lines;
+                    increment = _yRange / _y.lines;
 
                 if(config.labelOnRight){
                     textLeft = left + padding + fontSize/2;
@@ -161,10 +156,8 @@ define(['OAT/lodash'], function( _ ){
                     textLeft = left + padding - fontSize;
                 }
 
-                // for(var i = _y.start; i <= _y.end ; i++){
-                //     text = paper.text(textLeft, padding + position, -i).attr({
                 for(var i = 0; i <= _y.lines; i++){
-                    text = paper.text(textLeft, padding + position, -_y.start - i * textStep).attr({
+                    text = paper.text(textLeft, padding + position, -_y.start - i * increment).attr({
                         'font-size' : fontSize
                     });
                     addCssClass(text, 'scene scene-text');
@@ -202,12 +195,16 @@ define(['OAT/lodash'], function( _ ){
                 position;
 
             for(i = 0; i <= _y.lines; i++){
-                position = i * _y.unit;
-                drawLine([0, position], [options.width, position], style);
+                if (i % _y.step === 0 || i === _y.lines) {
+                    position = i * _y.unit;
+                    drawLine([0, position], [options.width, position], style);
+                }
             }
             for(i = 0; i <= _x.lines; i++){
-                position = i * _x.unit;
-                drawLine([position, 0], [position, options.height], style);
+                if (i % _x.step === 0 || i === _x.lines) {
+                    position = i * _x.unit;
+                    drawLine([position, 0], [position, options.height], style);
+                }
             }
         }
 

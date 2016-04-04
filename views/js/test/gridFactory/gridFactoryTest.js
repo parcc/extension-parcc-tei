@@ -16,8 +16,8 @@ define([
         }, outputContainer: '.test_01' },
 
         { title: 'x > 0', input: {
-            x : { start : 5, end : 10, unit : 20 },
-            y : { start : -6, end : 10, unit : 20 }
+            x : { start : 5, end : 10, unit : 20, step : 2 },
+            y : { start : -6, end : 10, unit : 20, step : 2 }
         }, output: {
             width: 100, height: 320, x : { lines : 5, unit : 20 }, y : { lines : 16, unit : 20 }
         }, outputContainer: '.test_02' },
