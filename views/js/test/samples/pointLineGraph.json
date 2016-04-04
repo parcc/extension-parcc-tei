@@ -1,6 +1,6 @@
 {
     "identifier": "VF643134",
-    "serial": "item_56fe650c1caca535019622",
+    "serial": "item_570262b638aa9000361989",
     "qtiClass": "assessmentItem",
     "attributes": {
         "identifier": "VF643134",
@@ -13,17 +13,17 @@
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_56fe650c1ca9b668655033",
-        "body": "\n        {{interaction_portablecustominteraction_56fe650c1e6db801114791}}\n    ",
+        "serial": "container_containeritembody_570262b638a7a233961371",
+        "body": "\n        {{interaction_portablecustominteraction_570262b63b340111687876}}\n    ",
         "elements": {
-            "interaction_portablecustominteraction_56fe650c1e6db801114791": {
-                "serial": "interaction_portablecustominteraction_56fe650c1e6db801114791",
+            "interaction_portablecustominteraction_570262b63b340111687876": {
+                "serial": "interaction_portablecustominteraction_570262b63b340111687876",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_56fe650c1caca535019622"
+                    "relatedItem": "item_570262b638aa9000361989"
                 },
                 "choices": {},
                 "typeIdentifier": "graphPointLineGraphInteraction",
@@ -38,9 +38,9 @@
                 "properties": {
                     "subclass": "line",
                     "xMin": "0",
-                    "xMax": "10",
+                    "xMax": "50",
                     "yMin": "0",
-                    "yMax": "100",
+                    "yMax": "50",
                     "graphColor": "#bb1a2a",
                     "graphWidth": "3"
                 },
@@ -48,11 +48,11 @@
             }
         },
         "debug": {
-            "relatedItem": "item_56fe650c1caca535019622"
+            "relatedItem": "item_570262b638aa9000361989"
         }
     },
     "debug": {
-        "relatedItem": "item_56fe650c1caca535019622"
+        "relatedItem": "item_570262b638aa9000361989"
     },
     "namespaces": {
         "": "http:\/\/www.imsglobal.org\/xsd\/apip\/apipv1p0\/qtiitem\/imsqti_v2p1",
@@ -65,9 +65,9 @@
     },
     "stylesheets": {},
     "outcomes": {
-        "outcomedeclaration_56fe650c1dcea705164878": {
+        "outcomedeclaration_570262b63a479472026135": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_56fe650c1dcea705164878",
+            "serial": "outcomedeclaration_570262b63a479472026135",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -77,15 +77,15 @@
                 "normalMinimum": 0
             },
             "debug": {
-                "relatedItem": "item_56fe650c1caca535019622"
+                "relatedItem": "item_570262b638aa9000361989"
             },
             "defaultValue": "0"
         }
     },
     "responses": {
-        "responsedeclaration_56fe650c1d6c7913202663": {
+        "responsedeclaration_570262b63961a134732422": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_56fe650c1d6c7913202663",
+            "serial": "responsedeclaration_570262b63961a134732422",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
@@ -93,7 +93,7 @@
                 "baseType": "string"
             },
             "debug": {
-                "relatedItem": "item_56fe650c1caca535019622"
+                "relatedItem": "item_570262b638aa9000361989"
             },
             "mapping": [],
             "areaMapping": [],
@@ -110,7 +110,7 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_custom_56fe650c1f6be188445848",
+        "serial": "response_custom_570262b63caa1522831608",
         "qtiClass": "responseProcessing",
         "attributes": [],
         "debug": {

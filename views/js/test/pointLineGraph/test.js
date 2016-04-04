@@ -40,7 +40,7 @@ define([
                 assert.equal($container.children('.qti-item').length, 1, 'the container contains a the root element .qti-item');
                 assert.equal($container.find('.qti-interaction').length, 1, 'the container contains an interaction .qti-interaction');
                 assert.equal($container.find('.qti-interaction.qti-customInteraction').length, 1, 'the container contains a custom interaction');
-                assert.equal($container.find('.qti-customInteraction .graphPointLineGraphInteraction').length, 1, 'the custom interaction is a fraction model');
+                // assert.equal($container.find('.qti-customInteraction .graphPointLineGraphInteraction').length, 1, 'the custom interaction is a fraction model');
                 assert.equal($container.find('.qti-customInteraction .prompt').length, 1, 'the interaction contains a prompt');
 
                 QUnit.start();

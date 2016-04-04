@@ -34,7 +34,7 @@ define([
                 //the y-axis is reversed
                 start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
                 end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
-                unit : 5
+                unit : 20
             },
             plot : {
                 color : _color,
@@ -94,8 +94,9 @@ define([
                 grid,
                 points = [],
                 plotFactory,
-                path,
-                mathFunction;
+                paths = [],
+                mathFunction
+                ;
 
             function initGrid($container, gridConfig){
 
@@ -125,11 +126,11 @@ define([
                             fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
                             fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
-                        // Create the first point or the second or replace the second according the rules defined by the client
-                        if(points.length < 2){
+                        var maxPoints = 6;
+
+                        if(points.length < maxPoints){
                             addPoint(fx, fy);
-                            if(points.length === 2){
-                                // pair ready : plot the graph
+                            if(points.length >= 2){
                                 plot();
                             }
                         }else{
@@ -159,7 +160,7 @@ define([
                         if(pointToDelete > -1){
                             //remove it from the model
                             points.splice(pointToDelete, 1);
-                            clearPlot();
+                            plot();
                         }
                     });
                 }
@@ -199,9 +200,11 @@ define([
             }
 
             function clearPlot(){
-                if(path){
+                paths.forEach(function (path) {
+                    // add safety check ???
                     path.remove();
-                }
+                });
+                paths = [];
             }
 
             function clearPoint(){
@@ -213,14 +216,36 @@ define([
 
             function plot(){
 
-                var point1 = points[0],
-                    point2 = points[1];
+                var sortedPoints = points.sort(function(pointA, pointB) {
+                    var ax = pointA.getX(),
+                        ay = pointA.getY(),
+                        bx = pointB.getX(),
+                        by = pointB.getY();
 
-                if(point1 && point2 && mathFunction && plotFactory[mathFunction]){
-                    clearPlot();
-                    path = plotFactory[mathFunction](point1, point2);
+                    if (ax !== bx) {
+                        return ax - bx;
+                    } else {
+                        return ay - by;
+                    }
+                });
+
+                clearPlot();
+
+                sortedPoints.forEach(function (point) {
+                   console.log("point x : y " + point.getX() + " : " + point.getY());
+                });
+
+                sortedPoints.reduce(function (pointA, pointB) {
+                    if (pointA.getX() === pointB.getX()) {
+                        paths.push(plotFactory.plotVertical(pointA, pointB, { segment: true }));
+                    } else {
+                        paths.push(plotFactory.plotLinear(pointA, pointB, { segment: true }));
+                    }
+                    return pointB;
+                });
+/*
                     _this.trigger('responseChange', [_this.getResponse()]);
-                }
+                */
             }
 
             function addPoint(fx, fy, cartesian){
@@ -356,7 +381,7 @@ define([
 
             //showControl(mathFunctions);
 
-            plotDefault();
+            // plotDefault();
 
             // $shapeControls.on('click', 'button', function(){
             //     activateButton($(this));
