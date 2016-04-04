@@ -194,13 +194,17 @@ define(['OAT/lodash'], function( _ ){
             var style = {
                     'stroke': _color,
                     'stroke-width' : _weight
-                };
+                },
+                i,
+                position;
 
-            for(var y = 0; y <= options.height; y += _y.step * _y.unit){
-                drawLine([0, y], [options.width, y], style);
+            for(i = 0; i <= _y.lines; i++){
+                position = i * _y.unit;
+                drawLine([0, position], [options.width, position], style);
             }
-            for(var x = 0; x <= options.width; x += _x.step * _x.unit) {
-                drawLine([x, 0], [x, options.height], style);
+            for(i = 0; i <= _x.lines; i++){
+                position = i * _x.unit;
+                drawLine([position, 0], [position, options.height], style);
             }
         }
 

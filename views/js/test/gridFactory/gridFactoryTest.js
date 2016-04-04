@@ -71,20 +71,13 @@ define([
             width: 100, height: 100, x : { lines : 5, unit : 20 }, y : { lines : 5, unit : 20 }
         }, outputContainer: '.test_09' },
 
-        /*
         { title: 'different scales', input: {
             height: 500,
             width: 500,
-            x : {
-                start : 0,
-                end : 10,
-                lines: 10
-            },
-            y : {
-                start : -100,
-                end : 0,
-                lines : 10
-            }
+            x : { start : 0, end : 20, lines: 10 },
+            y : { start : -100, end : 0, lines : 10 }
+        }, output: {
+            width: 500, height: 500, x : { lines : 10, unit : 50 }, y : { lines : 10, unit : 50 }
         }, outputContainer: '.test_10' }
         /* */
     ];
