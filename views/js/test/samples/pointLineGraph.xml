@@ -43,7 +43,7 @@
                     <pci:entry key="graphWidth">3</pci:entry>
                 </pci:properties>
                 <pci:markup>
-                    <html5:div class="pointGraphInteraction">
+                    <html5:div class="graphPointLineGraphInteraction">
                         <html5:div class="prompt"></html5:div>
                         <html5:div class="shape-panel">
                             <html5:div class="shape-container"></html5:div>

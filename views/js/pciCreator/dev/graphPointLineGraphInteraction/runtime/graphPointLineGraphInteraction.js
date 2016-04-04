@@ -277,7 +277,7 @@ define([
 
                 return newPoint;
             }
-
+/*
             function getGraphOrigin(){
 
                 var _y = _this.gridConfig.y,
@@ -306,7 +306,6 @@ define([
                 };
             }
 
-/*
             function plotDefault(){
 
                 //clear drawn elements:
