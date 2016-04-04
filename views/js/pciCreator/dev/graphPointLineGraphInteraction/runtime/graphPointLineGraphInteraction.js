@@ -88,15 +88,15 @@ define([
             var $container = $(dom);
 
             // var mathFunctions = config.graphs.split(',');
-            var $shapeControls = $container.find('.shape-controls');
+            // var $shapeControls = $container.find('.shape-controls');
             var _this = this,
                 paper,
                 grid,
                 points = [],
                 plotFactory,
-                paths = [],
-                mathFunction
-                ;
+                paths = [];
+
+            var mathFunction; // @todo delete
 
             function initGrid($container, gridConfig){
 
@@ -126,7 +126,7 @@ define([
                             fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
                             fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
-                        var maxPoints = 6;
+                        var maxPoints = 6; //@todo move and get from parameter
 
                         if(points.length < maxPoints){
                             addPoint(fx, fy);
@@ -180,7 +180,6 @@ define([
                 //activate the first one
                 activateButton($shapeControls.children('.available:first'));
             }
-            */
 
             function activateButton($button){
 
@@ -198,6 +197,7 @@ define([
                     plotDefault();
                 }
             }
+            */
 
             function clearPlot(){
                 paths.forEach(function (path) {
@@ -230,10 +230,6 @@ define([
                 });
 
                 clearPlot();
-
-                sortedPoints.forEach(function (point) {
-                   console.log("point x : y " + point.getX() + " : " + point.getY());
-                });
 
                 sortedPoints.reduce(function (pointA, pointB) {
                     if (pointA.getX() === pointB.getX()) {
@@ -310,7 +306,7 @@ define([
                 };
             }
 
-
+/*
             function plotDefault(){
 
                 //clear drawn elements:
@@ -330,7 +326,7 @@ define([
                     plot();
                 }
             }
-
+*/
             /**
              * Get the raw response of the interaction.
              * If no graph is drawn, returns null
@@ -404,12 +400,13 @@ define([
             });
             */
 
+            // @todo useful ??? for editor ???
             _this.on('gridchange', function(config){
                 //the configuration of the gird, point or line have changed:
                 _this.config = config;
                 _this.gridConfig = buildGridConfig(config);
                 initGrid($container, _this.gridConfig);
-                plotDefault();
+                //plotDefault();
             });
         },
         /**
