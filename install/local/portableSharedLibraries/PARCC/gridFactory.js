@@ -4,8 +4,6 @@ define(['OAT/lodash'], function( _ ){
 
     function gridFactory(paper,options){
 
-        console.log("constructing grid !");
-
         if (typeof options.x !== 'object' && typeof options.y !== 'object'){
             throw 'I need x and y axis';
         }
@@ -51,7 +49,8 @@ define(['OAT/lodash'], function( _ ){
                 step : 1,
                 unit : 10,
                 color : lineColor,
-                weight : 3
+                weight : 3,
+                lines : 0
             },
             y : {
                 start : -10,
@@ -60,19 +59,29 @@ define(['OAT/lodash'], function( _ ){
                 step : 1,
                 unit : 10,
                 color : lineColor,
-                weight : 3
+                weight : 3,
+                lines : 0
             }
         },options);
 
+        var xRange = Math.abs(options.x.end - options.x.start);
+        var yRange = Math.abs(options.y.end - options.y.start);
+
         // compute dimensions
         if (options.width !== 0 && options.height !== 0) {
-            options.x.unit = options.width / options.x.step;
-            options.y.unit = options.height / options.y.step;
-            console.log('options.x.unit = ' + options.x.unit);
-            console.log('options.y.unit = ' + options.y.unit);
+            options.x.unit = options.width / options.x.lines;
+            options.y.unit = options.height / options.y.lines;
         } else {
-            options.width = (Math.abs(options.x.end - options.x.start) * options.x.unit);
-            options.height = (Math.abs(options.y.end - options.y.start) * options.y.unit);
+            options.width = xRange * options.x.unit;
+            options.height = yRange * options.y.unit;
+        }
+
+        if (options.x.lines === 0) {
+            options.x.lines = xRange / options.x.step;
+        }
+
+        if (options.y.lines === 0) {
+            options.y.lines = yRange / options.y.step;
         }
 
         /** @type {String} Color of the grid's lines */
@@ -118,11 +127,13 @@ define(['OAT/lodash'], function( _ ){
                     textTop = top + padding + fontSize;
                 }
 
+                // for(var i = _x.start; i <= _x.end ; i = i + _x.step){
                 for(var i = _x.start; i <= _x.end ; i++){
                     text = paper.text(padding + position, textTop, i).attr({
                         'font-size' : fontSize
                     });
                     addCssClass(text, 'scene scene-text');
+                    // position += _x.unit * _x.step;
                     position += _x.unit;
                 }
 
@@ -147,11 +158,13 @@ define(['OAT/lodash'], function( _ ){
                     textLeft = left + padding - fontSize;
                 }
 
+                // for(var i = _y.start; i <= _y.end ; i = i + _y.step){
                 for(var i = _y.start; i <= _y.end ; i++){
                     text = paper.text(textLeft, padding + position, -i).attr({
                         'font-size' : fontSize
                     });
                     addCssClass(text, 'scene scene-text');
+                    // position += _y.unit * _y.step;
                     position += _y.unit;
                 }
 
@@ -262,6 +275,13 @@ define(['OAT/lodash'], function( _ ){
              */
             getUnitSizes : function(){
                 return {x: _borderBox.width/_x.unit , y: _borderBox.height/_y.unit};
+            },
+            /**
+             * Get the number of lines for x,y axis
+             * @return {Object}
+             */
+            getLines : function(){
+                return {x: _x.lines , y: _y.lines};
             },
             /**
              * Get the Raphaeljs paper object used for this grid

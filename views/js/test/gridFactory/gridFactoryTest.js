@@ -6,139 +6,87 @@ define([
 
     QUnit.module('gridFactory');
 
-    var unitSize = 20;
     var gridParameters = [
+        /* */
         { title: 'simple', input: {
-            x : {
-                start : -6,
-                end : 10,
-                unit : unitSize
-            },
-            y : {
-                start : -10,
-                end : 6,
-                unit : unitSize
-            }
+            x : { start : -6, end : 10, unit : 20, weight : 3, step : 1 },
+            y : { start : -10, end : 6, unit : 20, weight : 3, step : 1 }
+        }, output: {
+            width: 320, height: 320, x : { lines : 16, unit : 20 }, y : { lines : 16, unit : 20 }
         }, outputContainer: '.test_01' },
 
         { title: 'x > 0', input: {
-            x : {
-                start : 5,
-                end : 10,
-                unit : unitSize
-            },
-            y : {
-                start : -6,
-                end : 10,
-                unit : unitSize
-            }
+            x : { start : 5, end : 10, unit : 20 },
+            y : { start : -6, end : 10, unit : 20 }
+        }, output: {
+            width: 100, height: 320, x : { lines : 5, unit : 20 }, y : { lines : 16, unit : 20 }
         }, outputContainer: '.test_02' },
 
         { title: 'x < 0', input: {
-            x : {
-                start : -10,
-                end : -2,
-                unit : unitSize
-            },
-            y : {
-                start : -6,
-                end : 10,
-                unit : unitSize
-            }
+            x : { start : -10, end : -2, unit : 30 },
+            y : { start : -6, end : 10, unit : 10 }
+        }, output: {
+            width: 240, height: 160, x : { lines : 8, unit : 30 }, y : { lines : 16, unit : 10 }
         }, outputContainer: '.test_03' },
 
         { title: 'y > 0', input: {
-            x : {
-                start : -6,
-                end : 10,
-                unit : unitSize
-            },
-            y : {
-                start : 2,
-                end : 6,
-                unit : unitSize
-            }
+            x : { start : -6, end : 10, unit : 5 },
+            y : { start : 2, end : 6, unit : 15 }
+        }, output: {
+            width: 80, height: 60, x : { lines : 16, unit : 5 }, y : { lines : 4, unit : 15 }
         }, outputContainer: '.test_04' },
 
         { title: 'y < 0', input: {
-            x : {
-                start : -6,
-                end : 10,
-                unit : unitSize
-            },
-            y : {
-                start : -8,
-                end : -1,
-                unit : unitSize
-            }
+            x : { start : -6, end : 10, unit : 17 },
+            y : { start : -8,  end : -1, unit : 14 }
+        }, output: {
+            width: 272, height: 98, x : { lines : 16, unit : 17 }, y : { lines : 7, unit : 14 }
         }, outputContainer: '.test_05' },
 
         { title: 'x > 0 && y > 0', input: {
-            x : {
-                start : 5,
-                end : 10,
-                unit : unitSize
-            },
-            y : {
-                start : 5,
-                end : 10,
-                unit : unitSize
-            }
+            x : { start : 5, end : 10, unit : 20 },
+            y : { start : 5, end : 10, unit : 20 }
+        }, output: {
+            width: 100, height: 100, x : { lines : 5, unit : 20 }, y : { lines : 5, unit : 20 }
         }, outputContainer: '.test_06' },
 
         { title: 'x > 0 && y < 0', input: {
-            x : {
-                start : 5,
-                end : 10,
-                unit : unitSize
-            },
-            y : {
-                start : -10,
-                end : -5,
-                unit : unitSize
-            }
+            x : { start : 5, end : 10, unit : 20 },
+            y : { start : -10, end : -5, unit : 20 }
+        }, output: {
+            width: 100, height: 100, x : { lines : 5, unit : 20 }, y : { lines : 5, unit : 20 }
         }, outputContainer: '.test_07' },
 
         { title: 'x < 0 && y < 0', input: {
-            x : {
-                start : -10,
-                end : -5,
-                unit : unitSize
-            },
-            y : {
-                start : -10,
-                end : -5,
-                unit : unitSize
-            }
+            x : { start : -10, end : -5, unit : 13 },
+            y : { start : -10, end : -5, unit : 23 }
+        }, output: {
+            width: 65, height: 115, x : { lines : 5, unit : 13 }, y : { lines : 5, unit : 23 }
         }, outputContainer: '.test_08' },
 
         { title: 'x < 0 && y > 0', input: {
-            x : {
-                start : -10,
-                end : -5,
-                unit : unitSize
-            },
-            y : {
-                start : 5,
-                end : 10,
-                unit : unitSize
-            }
+            x : { start : -10, end : -5, unit : 20 },
+            y : { start : 5, end : 10, unit : 20 }
+        }, output: {
+            width: 100, height: 100, x : { lines : 5, unit : 20 }, y : { lines : 5, unit : 20 }
         }, outputContainer: '.test_09' },
 
+        /*
         { title: 'different scales', input: {
             height: 500,
             width: 500,
             x : {
                 start : 0,
                 end : 10,
-                step: 10
+                lines: 10
             },
             y : {
                 start : -100,
                 end : 0,
-                step : 10
+                lines : 10
             }
         }, outputContainer: '.test_10' }
+        /* */
     ];
 
     QUnit
@@ -150,11 +98,19 @@ define([
 
             var grid = initGrid($container, data.input);
 
+            assert.equal(grid.getUnits().x, data.output.x.unit, 'x units ok');
+            assert.equal(grid.getUnits().y, data.output.y.unit, 'y units ok');
+            assert.equal(grid.getWidth(),   data.output.width,  'width units ok');
+            assert.equal(grid.getHeight(),  data.output.height, 'height units ok');
+            assert.equal(grid.getLines().x, data.output.x.lines, 'x lines ok');
+            assert.equal(grid.getLines().y, data.output.y.lines, 'y lines ok');
+
             $('#paper').append($container);
 
             assert.ok(
                 $container.find('.shape-container').html() ===
-                $(data.outputContainer + ' .shape-container').html());
+                $(data.outputContainer + ' .shape-container').html(),
+                'rendered markup ok');
         });
 
     function initGrid($container, gridConfig){
@@ -172,12 +128,15 @@ define([
      */
     function createCanvas($container, config){
 
-        var padding = 20*2;
+        var padding = 20*2,
+            width = config.width || (config.x.end - config.x.start) * config.x.unit,
+            height = config.height || (config.y.end - config.y.start) * config.y.unit;
+
         var paper = scaleRaphael(
             $('.shape-container', $container)[0],
-            (config.x.end - config.x.start) * config.x.unit + padding,
-            (config.y.end - config.y.start) * config.y.unit + padding
-            );
+            width + padding,
+            height + padding
+        );
 
         return paper;
     }
