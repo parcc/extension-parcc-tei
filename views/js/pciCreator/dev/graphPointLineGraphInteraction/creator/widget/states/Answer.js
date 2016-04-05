@@ -8,9 +8,9 @@ define([
     'tpl!graphPointLineGraphInteraction/creator/tpl/equationFormElement',
     'tpl!graphPointLineGraphInteraction/creator/tpl/equationWizard',
     'tpl!graphPointLineGraphInteraction/creator/tpl/equationResponseCondition',
-    'taoQtiItem/qtiCreator/helper/xmlRenderer',
+    'parccTei/pciCreator/helper/responseCondition',
     'ui/dialog'
-], function(_, $, __, stateFactory, Answer, formElement, equationFormElementTpl, equationWizardTpl, equationRcTpl, xmlRenderer, dialog){
+], function(_, $, __, stateFactory, Answer, formElement, equationFormElementTpl, equationWizardTpl, equationRcTpl, responseCondition, dialog){
 
     var StateAnswer = stateFactory.extend(Answer, function(){
 
@@ -39,7 +39,7 @@ define([
                     var interaction = widget.element;
                     
                     //turn into custom rp and substitute the resp cond
-                    replaceResponseCondition(interaction, equationRcTpl({
+                    responseCondition.replace(interaction, equationRcTpl({
                         responseIdentifier : interaction.attr('responseIdentifier'),
                         equation : equation,
                         mumPointsRequired : mumPointsRequired,
@@ -80,32 +80,6 @@ define([
         }
         return dlg;
     };
-    
-    function replaceResponseCondition(interaction, newResponseConditionXml){
-        
-        var item = interaction.getRelatedItem();
-        var rp = item.responseProcessing;
-        var $rpXml = $(rp.render(xmlRenderer.get()));
-        var responseIdentifier = interaction.attr('responseIdentifier');
-        if($rpXml.length){
-            if($rpXml.attr('template')){
-                //simply substitute the whole rp
-                $rpXml.removeAttr('template').append(newResponseConditionXml);
-            }else{
-                //if it is not a standard template, replace its rc with the new one
-                var $respVar = $rpXml.find('variable[identifier="'+responseIdentifier+'"]');
-                if($respVar.length === 1){
-                    var $respCond = $respVar.parents('responseCondition');
-                    $respCond.replaceWith(newResponseConditionXml);
-                }else{
-                    throw 'unexpected number of rc found';
-                }
-            }
-
-            rp.setProcessingType('custom');
-            rp.xml = $('<root>').append($rpXml).html();
-        }
-    }
     
     return StateAnswer;
 });
