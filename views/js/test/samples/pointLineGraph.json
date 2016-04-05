@@ -1,6 +1,6 @@
 {
     "identifier": "VF643134",
-    "serial": "item_57026ffc64f3a005817886",
+    "serial": "item_5703a678e4ee5501923865",
     "qtiClass": "assessmentItem",
     "attributes": {
         "identifier": "VF643134",
@@ -13,17 +13,17 @@
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_57026ffc64f04832923780",
-        "body": "\n        {{interaction_portablecustominteraction_57026ffc67762792772733}}\n    ",
+        "serial": "container_containeritembody_5703a678e4eae562482120",
+        "body": "\n        {{interaction_portablecustominteraction_5703a678e6b5c672404556}}\n    ",
         "elements": {
-            "interaction_portablecustominteraction_57026ffc67762792772733": {
-                "serial": "interaction_portablecustominteraction_57026ffc67762792772733",
+            "interaction_portablecustominteraction_5703a678e6b5c672404556": {
+                "serial": "interaction_portablecustominteraction_5703a678e6b5c672404556",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_57026ffc64f3a005817886"
+                    "relatedItem": "item_5703a678e4ee5501923865"
                 },
                 "choices": {},
                 "typeIdentifier": "graphPointLineGraphInteraction",
@@ -36,23 +36,46 @@
                     "PARCC\/lineFactory"
                 ],
                 "properties": {
-                    "subclass": "line",
+                    "draggable": "true",
+                    "graphTitle": "Culture 2 Data",
+                    "graphTitleRequired": "true",
+                    "graphType": "line",
+                    "maxPoints": "6",
+                    "plotColor": "#0000FF",
+                    "plotSegment": "true",
+                    "plotThickness": "6",
+                    "pointColor": "#0000FF",
+                    "pointGlow": "true",
+                    "pointRadius": "8",
+                    "weight": "1",
+                    "xAllowOuter": "true",
+                    "xIncrement": "1",
+                    "xLabel": "Time (hr)",
+                    "xLines": "7",
+                    "xMax": "7",
                     "xMin": "0",
-                    "xMax": "50",
+                    "xSubIncrement": "2",
+                    "xUnit": "42",
+                    "xWeight": "3",
+                    "yAllowOuter": "true",
+                    "yIncrement": "10",
+                    "yLabel": "Number of Cells (x1,000,000)",
+                    "yLines": "10",
+                    "yMax": "100",
                     "yMin": "0",
-                    "yMax": "50",
-                    "graphColor": "#bb1a2a",
-                    "graphWidth": "3"
+                    "ySubIncrement": "2",
+                    "yUnit": "34",
+                    "yWeight": "3"
                 },
                 "entryPoint": "graphPointLineGraphInteraction\/runtime\/graphPointLineGraphInteraction.js"
             }
         },
         "debug": {
-            "relatedItem": "item_57026ffc64f3a005817886"
+            "relatedItem": "item_5703a678e4ee5501923865"
         }
     },
     "debug": {
-        "relatedItem": "item_57026ffc64f3a005817886"
+        "relatedItem": "item_5703a678e4ee5501923865"
     },
     "namespaces": {
         "": "http:\/\/www.imsglobal.org\/xsd\/apip\/apipv1p0\/qtiitem\/imsqti_v2p1",
@@ -65,9 +88,9 @@
     },
     "stylesheets": {},
     "outcomes": {
-        "outcomedeclaration_57026ffc66768959352511": {
+        "outcomedeclaration_5703a678e6110718957210": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_57026ffc66768959352511",
+            "serial": "outcomedeclaration_5703a678e6110718957210",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -77,15 +100,15 @@
                 "normalMinimum": 0
             },
             "debug": {
-                "relatedItem": "item_57026ffc64f3a005817886"
+                "relatedItem": "item_5703a678e4ee5501923865"
             },
             "defaultValue": "0"
         }
     },
     "responses": {
-        "responsedeclaration_57026ffc65b91817217194": {
+        "responsedeclaration_5703a678e5a17982797614": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_57026ffc65b91817217194",
+            "serial": "responsedeclaration_5703a678e5a17982797614",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
@@ -93,7 +116,7 @@
                 "baseType": "string"
             },
             "debug": {
-                "relatedItem": "item_57026ffc64f3a005817886"
+                "relatedItem": "item_5703a678e4ee5501923865"
             },
             "mapping": [],
             "areaMapping": [],
@@ -110,7 +133,7 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_custom_57026ffc68dae955260266",
+        "serial": "response_custom_5703a678e8080153507424",
         "qtiClass": "responseProcessing",
         "attributes": [],
         "debug": {

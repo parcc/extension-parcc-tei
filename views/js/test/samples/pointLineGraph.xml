@@ -33,14 +33,39 @@
                         <pci:lib id="PARCC/lineFactory"/>
                     </pci:libraries>
                 </pci:resources>
-                <pci:properties><!-- list of properties to be define accordance to required ones -->
-                    <pci:entry key="subclass">line</pci:entry><!-- subclass of pointGraphInteraction, possible values : line,scatter,polygon -->
+                <pci:properties>
+                    <pci:entry key="draggable">true</pci:entry>
+                    <pci:entry key="graphTitle">Culture 2 Data</pci:entry>
+                    <pci:entry key="graphTitleRequired">true</pci:entry>
+                    <pci:entry key="graphType">line</pci:entry>
+                    <pci:entry key="maxPoints">6</pci:entry>
+                    <pci:entry key="plotColor">#0000FF</pci:entry>
+                    <pci:entry key="plotSegment">true</pci:entry>
+                    <pci:entry key="plotThickness">6</pci:entry>
+                    <pci:entry key="pointColor">#0000FF</pci:entry>
+                    <pci:entry key="pointGlow">true</pci:entry>
+                    <pci:entry key="pointRadius">8</pci:entry>
+                    <pci:entry key="weight">1</pci:entry>
+                    <pci:entry key="xAllowOuter">true</pci:entry>
+                    <pci:entry key="xIncrement">1</pci:entry>
+                    <pci:entry key="xLabel">Time (hr)</pci:entry>
+                    <pci:entry key="xLines">7</pci:entry>
+                    <pci:entry key="xMax">7</pci:entry>
                     <pci:entry key="xMin">0</pci:entry>
-                    <pci:entry key="xMax">50</pci:entry>
+                    <pci:entry key="xSubIncrement">2</pci:entry>
+                    <pci:entry key="xUnit">42</pci:entry>
+                    <pci:entry key="xWeight">3</pci:entry>
+                    <pci:entry key="yAllowOuter">true</pci:entry>
+                    <pci:entry key="yIncrement">10</pci:entry>
+                    <pci:entry key="yLabel">Number of Cells (x1,000,000)</pci:entry>
+                    <pci:entry key="yLines">10</pci:entry>
+                    <pci:entry key="yMax">100</pci:entry>
                     <pci:entry key="yMin">0</pci:entry>
-                    <pci:entry key="yMax">50</pci:entry>
-                    <pci:entry key="graphColor">#bb1a2a</pci:entry>
-                    <pci:entry key="graphWidth">3</pci:entry>
+                    <pci:entry key="ySubIncrement">2</pci:entry>
+                    <pci:entry key="yUnit">34</pci:entry>
+                    <pci:entry key="yWeight">3</pci:entry>
+
+
                 </pci:properties>
                 <pci:markup>
                     <html5:div class="graphPointLineGraphInteraction">

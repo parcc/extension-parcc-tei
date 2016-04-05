@@ -20,69 +20,43 @@ define([
 
     'use strict';
 
-    /*
-
-    définir une interface permettant de créer la grid avec des échalles différentes
-
-    # generic
-
-    * div : ?
-    * graphType: ?          line, scatterplot, or polygon
-    * gridType: ?           (oneQuadrant, coordinate)
-    splitScreen: ????? (all true) graph rendered to right of passage?
-
-     # grid sizing properties
-
-    * width:
-    * height:
-    * vLines:
-    * hLines:
-    * yAxis/xAxis.startPoint
-    * yAxis/xAxis.increment
-
-    # text
-    * graphTitle.type
-    graphTitle.description
-    graphTitle.required
-
-    * yAxis/xAxis.label
-    yAxis/xAxis.axisLabel: ????
-    yAxis/xAxis.title: ??? diff with label
-
-    # graph properties
-
-    * segmentMode: ??? false???
-    * pointRules.maximumPoints:
-    * pointRules.allowOuterH:
-    * pointRules.allowOuterV:
-    * pointRules.xSubIncrement:
-    * pointRules.ySubIncrement:
-    draggable: (true partout)
-
-    startSegments
-    maxSegments
-    minSegments
-        => for polygon graph??
-
-    # cosmetic
-
-    * outerLineWeight:
-    * innerLineWeight:
-    * plotLineWeight:
-    plotLineColor:
-    * pointRadius:
-    pointHalo:
-    pointColor:
-    arrowHead: ??????
-
-     */
-
-
     function buildGridConfig(rawConfig){
 
         var _color = rawConfig.graphColor || '#bb1a2a';
 
         return {
+/*
+ "draggable": "true",
+ "graphTitle": "Culture 2 Data",
+ "graphTitleRequired": "true",
+ "graphType": "line",
+ "maxPoints": "6",
+ "plotColor": "#0000FF",
+ "plotSegment": "true",
+ "plotThickness": "6",
+ "pointColor": "#0000FF",
+ "pointGlow": "true",
+ "pointRadius": "8",
+ "weight": "1",
+ "xAllowOuter": "true",
+ "xIncrement": "1",
+ "xLabel": "Time (hr)",
+ "xLines": "7",
+ "xMax": "7",
+ "xMin": "0",
+ "xSubIncrement": "2",
+ "xUnit": "42",
+ "xWeight": "3",
+ "yAllowOuter": "true",
+ "yIncrement": "10",
+ "yLabel": "Number of Cells (x1,000,000)",
+ "yLines": "10",
+ "yMax": "100",
+ "yMin": "0",
+ "ySubIncrement": "2",
+ "yUnit": "34",
+ "yWeight": "3"
+ */
             x : {
                 start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
                 end : rawConfig.xMax === undefined ? 10 : parseInt(rawConfig.xMax),
