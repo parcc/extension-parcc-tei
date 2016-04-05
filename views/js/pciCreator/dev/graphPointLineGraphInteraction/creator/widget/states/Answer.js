@@ -5,12 +5,13 @@ define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Answer',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
+    'taoQtiItem/qtiCreator/widgets/interactions/helpers/answerState',
     'tpl!graphPointLineGraphInteraction/creator/tpl/equationFormElement',
     'tpl!graphPointLineGraphInteraction/creator/tpl/equationWizard',
     'tpl!graphPointLineGraphInteraction/creator/tpl/equationResponseCondition',
     'parccTei/pciCreator/helper/responseCondition',
     'ui/dialog'
-], function(_, $, __, stateFactory, Answer, formElement, equationFormElementTpl, equationWizardTpl, equationRcTpl, responseCondition, dialog){
+], function(_, $, __, stateFactory, Answer, formElement, answerStateHelper, equationFormElementTpl, equationWizardTpl, equationRcTpl, responseCondition, dialog){
 
     var StateAnswer = stateFactory.extend(Answer, function(){
 
@@ -26,17 +27,23 @@ define([
     });
 
     function initEquationBasedScoring(widget){
+        
+        var interaction = widget.element;
+        var item = interaction.getRelatedItem();
+        var rp = item.responseProcessing;
         var $responseForm = widget.$responseForm;
         var $equationFormPanel;
-        if(!$responseForm.find('.panel.equation-scoring').length){
+        
+        if(!$responseForm.find('.panel.equation-scoring').length && rp.processingType !== 'custom'){
+            
             $equationFormPanel = $(equationFormElementTpl());
             $responseForm.find('select[name=template]').parent('.panel').after($equationFormPanel);
             $equationFormPanel.on('change', '[name=equationScoring]', function(){
+                
                 var $checkbox = $(this);
+                
                 //init the prompt box 
                 equationWizard(function(equation, mumPointsRequired){
-                    
-                    var interaction = widget.element;
                     
                     //turn into custom rp and substitute the resp cond
                     responseCondition.replace(interaction, equationRcTpl({
@@ -45,6 +52,9 @@ define([
                         mumPointsRequired : mumPointsRequired,
                         score : 1
                     }));
+                    
+                    //reload
+                    answerStateHelper.initResponseForm(widget);
                     
                 }, function(){
                     $checkbox.prop('checked', false);
