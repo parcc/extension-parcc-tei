@@ -1,13 +1,14 @@
 define([
     'lodash',
     'jquery',
+    'i18n',
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Answer',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'tpl!graphPointLineGraphInteraction/creator/tpl/equationFormElement',
-    'ui/dialog/confirm',
-    'ui/contextualPopup'
-], function(_, $, stateFactory, Answer, formElement, equationFormElementTpl, confirm, contextualPopup){
+    'tpl!graphPointLineGraphInteraction/creator/tpl/equationWizard',
+    'ui/dialog'
+], function(_, $, __, stateFactory, Answer, formElement, equationFormElementTpl, equationWizardTpl, dialog){
 
     var StateAnswer = stateFactory.extend(Answer, function(){
 
@@ -18,16 +19,6 @@ define([
             initEquationBasedScoring(widget);
         });
 
-        return;
-        var $templateSelector = this.widget.$responseForm.find('select[name=template]');
-
-        console.log($templateSelector);
-        var temp = $templateSelector.select2('val');
-        $templateSelector.select2('destroy').append($('<option>', {text : 'Equation', 'name' : 'equation'}));
-
-        formElement.initWidget(this.widget.$responseForm);
-
-        $templateSelector.select2('val', temp);
     }, function(){
 
     });
@@ -39,35 +30,45 @@ define([
             $equationFormPanel = $(equationFormElementTpl());
             $responseForm.find('select[name=template]').parent('.panel').after($equationFormPanel);
             $equationFormPanel.on('change', '[name=equationScoring]', function(){
+                var $checkbox = $(this);
                 //init the prompt box 
-                confirm('Scoring by equation', function(){
-                    
+                equationWizard(function(equation){
+                    //turn into custom rp
+                    console.log('equation', equation);
                 }, function(){
-                    
+                    $checkbox.prop('checked', false);
                 });
-                return;
-                contextualPopup(
-                    $equationFormPanel,
-                    $('#item-editor-wrapper'),
-                    {
-                        content : 'content 1',
-                        controls : {
-                            done : true,
-                            cancel : true
-                        },
-                        callbacks : {
-                            beforeDone : function(){
-                                return true;
-                            },
-                            beforeCancel : function(){
-                                return true;
-                            }
-                        }
-                    }
-                );
             });
         }
     }
-
+    
+    function equationWizard(accept, refuse) {
+        var accepted = false;
+        var dlg = dialog({
+            message: '',//__('Please enter the equation')
+            content: equationWizardTpl(),
+            buttons: 'cancel,ok',
+            autoRender: true,
+            autoDestroy: true,
+            onOkBtn: function() {
+                accepted = true;
+                if (_.isFunction(accept)) {
+                    accept.call(this, dlg.$html.find('input[name=equation]').val());
+                }
+            }
+        });
+        
+        //@todo validate equation during input
+        
+        if (_.isFunction(refuse)) {
+            dlg.on('closed.modal', function() {
+                if (!accepted) {
+                    refuse.call(this);
+                }
+            });
+        }
+        return dlg;
+    };
+    
     return StateAnswer;
 });
