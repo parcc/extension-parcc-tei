@@ -20,6 +20,64 @@ define([
 
     'use strict';
 
+    /*
+
+    définir une interface permettant de créer la grid avec des échalles différentes
+
+    # generic
+
+    * div : ?
+    * graphType: ?          line, scatterplot, or polygon
+    * gridType: ?           (oneQuadrant, coordinate)
+    splitScreen: ????? (all true) graph rendered to right of passage?
+
+     # grid sizing properties
+
+    * width:
+    * height:
+    * vLines:
+    * hLines:
+    * yAxis/xAxis.startPoint
+    * yAxis/xAxis.increment
+
+    # text
+    * graphTitle.type
+    graphTitle.description
+    graphTitle.required
+
+    * yAxis/xAxis.label
+    yAxis/xAxis.axisLabel: ????
+    yAxis/xAxis.title: ??? diff with label
+
+    # graph properties
+
+    * segmentMode: ??? false???
+    * pointRules.maximumPoints:
+    * pointRules.allowOuterH:
+    * pointRules.allowOuterV:
+    * pointRules.xSubIncrement:
+    * pointRules.ySubIncrement:
+    draggable: (true partout)
+
+    startSegments
+    maxSegments
+    minSegments
+        => for polygon graph??
+
+    # cosmetic
+
+    * outerLineWeight:
+    * innerLineWeight:
+    * plotLineWeight:
+    plotLineColor:
+    * pointRadius:
+    pointHalo:
+    pointColor:
+    arrowHead: ??????
+
+     */
+
+
     function buildGridConfig(rawConfig){
 
         var _color = rawConfig.graphColor || '#bb1a2a';
@@ -492,6 +550,8 @@ define([
 
             var $container = $(this.dom);
             $container.off().empty();
+
+            //@todo reset respone ?!!
         },
         /**
          * Restore the state of the interaction from the serializedState.

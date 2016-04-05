@@ -4,6 +4,8 @@ define(['OAT/lodash'], function( _ ){
 
     function gridFactory(paper,options){
 
+        var _xRange, _yRange;
+
         if (typeof options.x !== 'object' && typeof options.y !== 'object'){
             throw 'I need x and y axis';
         }
@@ -40,6 +42,8 @@ define(['OAT/lodash'], function( _ ){
             color : lineColor,
             weight : 1,
             padding : 20,
+            height: 0,
+            width: 0,
             x : {
                 start : -10,
                 end :  10,
@@ -47,7 +51,8 @@ define(['OAT/lodash'], function( _ ){
                 step : 1,
                 unit : 10,
                 color : lineColor,
-                weight : 3
+                weight : 3,
+                lines : 0
             },
             y : {
                 start : -10,
@@ -56,9 +61,27 @@ define(['OAT/lodash'], function( _ ){
                 step : 1,
                 unit : 10,
                 color : lineColor,
-                weight : 3
+                weight : 3,
+                lines : 0
             }
         },options);
+
+        _xRange = Math.abs(options.x.end - options.x.start);
+        _yRange = Math.abs(options.y.end - options.y.start);
+
+        // compute dimensions
+        if (options.width !== 0 && options.height !== 0 && options.x.lines !== 0 && options.y.lines !== 0) {
+            options.x.unit = options.width / options.x.lines;
+            options.y.unit = options.height / options.y.lines;
+            options.x.step = 1;
+            options.y.step = 1;
+        } else {
+            options.width = _xRange * options.x.unit;
+            options.height = _yRange * options.y.unit;
+            options.x.lines = options.width / options.x.unit;
+            options.y.lines = options.height / options.y.unit;
+        }
+
         /** @type {String} Color of the grid's lines */
         var _color = options.color,
         /** @type {Number} line weight of grid */
@@ -74,9 +97,6 @@ define(['OAT/lodash'], function( _ ){
          */
         _drawAxis = function (){
 
-            var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit);
-
             var xStyle = {
                 'stroke' :  _x.color,
                 'stroke-width': _x.weight
@@ -91,13 +111,14 @@ define(['OAT/lodash'], function( _ ){
 
                 config = config || {};
 
-                var line =  drawLine([0, top], [width, top], config.style);
+                var line =  drawLine([0, top], [options.width, top], config.style);
 
                 var padding = options.padding,
                     position = 0,
                     fontSize = 10,
                     textTop,
-                    text;
+                    text,
+                    increment = _xRange / _x.lines;
 
                 if(config.labelOnTop){
                     textTop = top + padding - fontSize/2;
@@ -105,8 +126,8 @@ define(['OAT/lodash'], function( _ ){
                     textTop = top + padding + fontSize;
                 }
 
-                for(var i = _x.start; i <= _x.end ; i++){
-                    text = paper.text(padding + position, textTop, i).attr({
+                for(var i = 0; i <= _x.lines; i++){
+                    text = paper.text(padding + position, textTop, _x.start + i * increment).attr({
                         'font-size' : fontSize
                     });
                     addCssClass(text, 'scene scene-text');
@@ -120,13 +141,14 @@ define(['OAT/lodash'], function( _ ){
 
                 config = config || {};
 
-                var line =  drawLine([left, height], [left, 0], config.style);
+                var line =  drawLine([left, options.height], [left, 0], config.style);
 
                 var padding = options.padding,
                     position = 0,
                     fontSize = 10,
                     textLeft,
-                    text;
+                    text,
+                    increment = _yRange / _y.lines;
 
                 if(config.labelOnRight){
                     textLeft = left + padding + fontSize/2;
@@ -134,8 +156,8 @@ define(['OAT/lodash'], function( _ ){
                     textLeft = left + padding - fontSize;
                 }
 
-                for(var i = _y.start; i <= _y.end ; i++){
-                    text = paper.text(textLeft, padding + position, -i).attr({
+                for(var i = 0; i <= _y.lines; i++){
+                    text = paper.text(textLeft, padding + position, -_y.start - i * increment).attr({
                         'font-size' : fontSize
                     });
                     addCssClass(text, 'scene scene-text');
@@ -146,7 +168,7 @@ define(['OAT/lodash'], function( _ ){
             }
 
             if((_y.start < 0) && (_y.end <= 0)){
-                drawXaxis(height, {style : xStyle});
+                drawXaxis(options.height, {style : xStyle});
             }else if((_y.start >= 0) && (_y.end > 0)){
                 drawXaxis(0, {style : xStyle, labelOnTop : true});
             }else{
@@ -154,7 +176,7 @@ define(['OAT/lodash'], function( _ ){
             }
 
             if((_x.start < 0 ) && (_x.end <= 0)){
-                drawYaxis(width, {style : yStyle, labelOnRight:true});
+                drawYaxis(options.width, {style : yStyle, labelOnRight:true});
             }else if((_x.start >= 0 ) && (_x.end > 0)){
                 drawYaxis(0, {style : yStyle});
             }else{
@@ -165,35 +187,39 @@ define(['OAT/lodash'], function( _ ){
 
         function _drawGrid(){
 
-            var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit),
-                style = {
+            var style = {
                     'stroke': _color,
                     'stroke-width' : _weight
-                };
+                },
+                i,
+                position;
 
-            for(var y = 0; y <= height; y += _y.step * _y.unit){
-                drawLine([0, y], [width, y], style);
+            for(i = 0; i <= _y.lines; i++){
+                if (i % _y.step === 0 || i === _y.lines) {
+                    position = i * _y.unit;
+                    drawLine([0, position], [options.width, position], style);
+                }
             }
-            for(var x = 0; x <= width; x += _x.step * _x.unit) {
-                drawLine([x, 0], [x, height], style);
+            for(i = 0; i <= _x.lines; i++){
+                if (i % _x.step === 0 || i === _x.lines) {
+                    position = i * _x.unit;
+                    drawLine([position, 0], [position, options.height], style);
+                }
             }
         }
 
         function _calculateBBox(){
 
-            var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit),
-                x = options.padding,
+            var x = options.padding,
                 y = options.padding;
 
             _borderBox = {
                 x : x,
                 y : y,
-                width : width,
-                height : height,
-                x2 : x+width,
-                y2 : y+height
+                width : options.width,
+                height : options.height,
+                x2 : x + options.width,
+                y2 : y + options.height
             };
         }
         var obj = {
@@ -253,6 +279,13 @@ define(['OAT/lodash'], function( _ ){
              */
             getUnitSizes : function(){
                 return {x: _borderBox.width/_x.unit , y: _borderBox.height/_y.unit};
+            },
+            /**
+             * Get the number of lines for x,y axis
+             * @return {Object}
+             */
+            getLines : function(){
+                return {x: _x.lines , y: _y.lines};
             },
             /**
              * Get the Raphaeljs paper object used for this grid
