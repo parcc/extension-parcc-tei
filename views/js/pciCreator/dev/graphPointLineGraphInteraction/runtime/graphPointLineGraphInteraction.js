@@ -31,29 +31,29 @@ define([
             graphTitleRequired: (rawConfig.graphTitleRequired === 'true'),
             graphType: rawConfig.graphType,
             maxPoints: parseInt(rawConfig.maxPoints),
-            segment: (rawConfig.plotSegment === 'true'),
+            segment: (rawConfig.segment === 'true'),
 
             // Gridfactory config
             x : {
-                start : parseInt(rawConfig.xMin),
-                end : parseInt(rawConfig.xMax),
+                start : parseInt(rawConfig.xStart),
+                end : parseInt(rawConfig.xEnd),
                 label : rawConfig.xLabel,
                 step: parseInt(rawConfig.xStep),
                 unit : parseInt(rawConfig.xUnit),
                 weight : parseInt(rawConfig.xWeight),
                 allowOuter : (rawConfig.xAllowOuter === 'true'),
-                subStep : parseInt(rawConfig.xSubIncrement)
+                subStep : parseInt(rawConfig.xStep)
             },
             y : {
                 // y-axis is reversed
-                start : -1 * parseInt(rawConfig.yMax),
-                end : -1 * parseInt(rawConfig.yMin),
+                start : -1 * parseInt(rawConfig.yEnd),
+                end : -1 * parseInt(rawConfig.yStart),
                 label : rawConfig.yLabel,
                 step: parseInt(rawConfig.yStep),
                 unit : parseInt(rawConfig.yUnit),
                 weight : parseInt(rawConfig.yWeight),
                 allowOuter : (rawConfig.yAllowOuter === 'true'),
-                subStep : parseInt(rawConfig.ySubIncrement)
+                subStep : parseInt(rawConfig.yStep)
             },
             padding : 20,
             weight: parseInt(rawConfig.weight),
