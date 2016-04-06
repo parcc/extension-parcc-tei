@@ -105,12 +105,12 @@ define(['OAT/lodash'], function( _ ){
                     textTop = top + padding + fontSize;
                 }
 
-                for(var i = _x.start; i <= _x.end ; i++){
+                for(var i = _x.start; i <= _x.end ; i = i + _x.step){
                     text = paper.text(padding + position, textTop, i).attr({
                         'font-size' : fontSize
                     });
                     addCssClass(text, 'scene scene-text');
-                    position += _x.unit;
+                    position += _x.unit * _x.step;
                 }
 
                 return line;
@@ -134,12 +134,12 @@ define(['OAT/lodash'], function( _ ){
                     textLeft = left + padding - fontSize;
                 }
 
-                for(var i = _y.start; i <= _y.end ; i++){
+                for(var i = _y.start; i <= _y.end ; i = i + _y.step){
                     text = paper.text(textLeft, padding + position, -i).attr({
                         'font-size' : fontSize
                     });
                     addCssClass(text, 'scene scene-text');
-                    position += _y.unit;
+                    position += _y.unit * _y.step;
                 }
 
                 return line;
@@ -175,8 +175,16 @@ define(['OAT/lodash'], function( _ ){
             for(var y = 0; y <= height; y += _y.step * _y.unit){
                 drawLine([0, y], [width, y], style);
             }
+            // close the graph if uneven step/y axis
+            if (Math.abs(_y.end - _y.start) % _y.step) {
+                drawLine([0, height], [width, height], style);
+            }
             for(var x = 0; x <= width; x += _x.step * _x.unit) {
                 drawLine([x, 0], [x, height], style);
+            }
+            // close the graph if uneven step/x axis
+            if (Math.abs(_x.end - _x.start) % _x.step) {
+                drawLine([width, 0], [width, height], style);
             }
         }
 
