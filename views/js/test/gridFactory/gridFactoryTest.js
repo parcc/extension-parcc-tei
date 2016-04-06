@@ -71,12 +71,19 @@ define([
             width: 100, height: 100
         }, outputContainer: '.test_09' },
 
-        { title: 'different scales', input: {
+        { title: 'different scales oneQuadrant', input: {
             x : { start : 0, end : 7, unit : 43, step : 1 },
             y : { start : -100, end : 0, unit : 3.4, step : 10 }
         }, output: {
             width: 301, height: 340
-        }, outputContainer: '.test_10' }
+        }, outputContainer: '.test_10' },
+
+        { title: 'different scales coordinates', input: {
+            x : { start : -60, end : 80, unit : 3.6, step : 10 },
+            y : { start : -6, end : 8, unit : 36, step : 1 }
+        }, output: {
+            width: 504, height: 504
+        }, outputContainer: '.test_11' }
         /* */
     ];
 
