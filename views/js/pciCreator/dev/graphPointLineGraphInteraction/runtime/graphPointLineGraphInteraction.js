@@ -26,51 +26,53 @@ define([
 
         return {
 /*
- "draggable": "true",
+ "draggable": true,
  "graphTitle": "Culture 2 Data",
- "graphTitleRequired": "true",
+ "graphTitleRequired": true,
  "graphType": "line",
- "maxPoints": "6",
+ "maxPoints": 6,
  "plotColor": "#0000FF",
- "plotSegment": "true",
- "plotThickness": "6",
+ "plotSegment": true,
+ "plotThickness": 6,
  "pointColor": "#0000FF",
- "pointGlow": "true",
- "pointRadius": "8",
- "weight": "1",
- "xAllowOuter": "true",
- "xIncrement": "1",
+ "pointGlow": true,
+ "pointRadius": 8,
+ "weight": 1,
+
+ "xAllowOuter": true,
+ "xStep": 1,
  "xLabel": "Time (hr)",
- "xLines": "7",
- "xMax": "7",
- "xMin": "0",
- "xSubIncrement": "2",
- "xUnit": "42",
- "xWeight": "3",
- "yAllowOuter": "true",
- "yIncrement": "10",
+ "xMax": 7,
+ "xMin": 0,
+ "xSubIncrement": 2,
+ "xUnit": 42,
+ "xWeight": 3,
+
+ "yAllowOuter": true,
+ "yStep": 10,
  "yLabel": "Number of Cells (x1,000,000)",
- "yLines": "10",
- "yMax": "100",
- "yMin": "0",
- "ySubIncrement": "2",
- "yUnit": "34",
- "yWeight": "3"
+ "yMax": 100,
+ "yMin": 0,
+ "ySubIncrement": 2,
+ "yUnit": 3.4,
+ "yWeight": 3
  */
             x : {
-                start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
-                end : rawConfig.xMax === undefined ? 10 : parseInt(rawConfig.xMax),
-                unit : 20
+                start : parseInt(rawConfig.xMin),
+                end : parseInt(rawConfig.xMax),
+                unit : parseInt(rawConfig.xUnit),
+                step: parseInt(rawConfig.xStep)
             },
             y : {
-                //the y-axis is reversed
-                start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
-                end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
-                unit : 20
+                // y-axis is reversed
+                start : -1 * parseInt(rawConfig.yMax),
+                end : -1 * parseInt(rawConfig.yMin),
+                unit : parseInt(rawConfig.yUnit),
+                step: parseInt(rawConfig.yStep)
             },
             plot : {
                 color : _color,
-                thickness : rawConfig.graphWidth || 3
+                thickness : parseInt(rawConfig.plotThickness)
             },
             point : {
                 color : _color,
@@ -113,9 +115,6 @@ define([
             this.id = id;
             this.dom = dom;
             this.config = config || {};
-
-            // console.log("initialisation !!!");
-            // /debugger;
 
             var $container = $(dom);
 

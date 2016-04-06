@@ -33,38 +33,38 @@ define([
          */
         getDefaultProperties : function(pci){
             return {
-/*
- "draggable": "true",
- "graphTitle": "Culture 2 Data",
- "graphTitleRequired": "true",
- "graphType": "line",
- "maxPoints": "6",
- "plotColor": "#0000FF",
- "plotSegment": "true",
- "plotThickness": "6",
- "pointColor": "#0000FF",
- "pointGlow": "true",
- "pointRadius": "8",
- "weight": "1",
- "xAllowOuter": "true",
- "xIncrement": "1",
- "xLabel": "Time (hr)",
- "xLines": "7",
- "xMax": "7",
- "xMin": "0",
- "xSubIncrement": "2",
- "xUnit": "42",
- "xWeight": "3",
- "yAllowOuter": "true",
- "yIncrement": "10",
- "yLabel": "Number of Cells (x1,000,000)",
- "yLines": "10",
- "yMax": "100",
- "yMin": "0",
- "ySubIncrement": "2",
- "yUnit": "34",
- "yWeight": "3"
- */
+                "draggable": true,
+                "graphTitle": "Culture 2 Data",
+                "graphTitleRequired": true,
+                "graphType": "line",
+                "maxPoints": 6,
+                "plotColor": "#0000FF",
+                "plotSegment": true,
+                "plotThickness": 6,
+                "pointColor": "#0000FF",
+                "pointGlow": true,
+                "pointRadius": 8,
+                "weight": 1,
+
+                "xAllowOuter": true,
+                "xStep": 1,
+                "xLabel": "Time (hr)",
+                "xMax": 7,
+                "xMin": 0,
+                "xSubIncrement": 2,
+                "xUnit": 42,
+                "xWeight": 3,
+
+                "yAllowOuter": true,
+                "yStep": 10,
+                "yLabel": "Number of Cells (x1,000,000)",
+                "yMax": 100,
+                "yMin": 0,
+                "ySubIncrement": 2,
+                "yUnit": 3.4,
+                "yWeight": 3
+
+                /*
                 graphs : 'linear,absolute,quadratic,exponential,logarithmic,cosine,tangent',
                 xMin : -10,
                 xMax : 10,
@@ -72,6 +72,7 @@ define([
                 yMax : 10,
                 graphColor : '#bb1a2a',
                 graphWidth : 3
+                */
             };
         },
         /**

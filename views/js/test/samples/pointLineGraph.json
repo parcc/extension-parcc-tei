@@ -1,6 +1,6 @@
 {
     "identifier": "VF643134",
-    "serial": "item_5703a678e4ee5501923865",
+    "serial": "item_5704c537bd1be066891802",
     "qtiClass": "assessmentItem",
     "attributes": {
         "identifier": "VF643134",
@@ -13,17 +13,17 @@
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_5703a678e4eae562482120",
-        "body": "\n        {{interaction_portablecustominteraction_5703a678e6b5c672404556}}\n    ",
+        "serial": "container_containeritembody_5704c537bd18b637668109",
+        "body": "\n        {{interaction_portablecustominteraction_5704c537bee0c444420422}}\n    ",
         "elements": {
-            "interaction_portablecustominteraction_5703a678e6b5c672404556": {
-                "serial": "interaction_portablecustominteraction_5703a678e6b5c672404556",
+            "interaction_portablecustominteraction_5704c537bee0c444420422": {
+                "serial": "interaction_portablecustominteraction_5704c537bee0c444420422",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_5703a678e4ee5501923865"
+                    "relatedItem": "item_5704c537bd1be066891802"
                 },
                 "choices": {},
                 "typeIdentifier": "graphPointLineGraphInteraction",
@@ -49,33 +49,31 @@
                     "pointRadius": "8",
                     "weight": "1",
                     "xAllowOuter": "true",
-                    "xIncrement": "1",
+                    "xStep": "1",
                     "xLabel": "Time (hr)",
-                    "xLines": "7",
                     "xMax": "7",
                     "xMin": "0",
                     "xSubIncrement": "2",
                     "xUnit": "42",
                     "xWeight": "3",
                     "yAllowOuter": "true",
-                    "yIncrement": "10",
+                    "yStep": "10",
                     "yLabel": "Number of Cells (x1,000,000)",
-                    "yLines": "10",
                     "yMax": "100",
                     "yMin": "0",
                     "ySubIncrement": "2",
-                    "yUnit": "34",
+                    "yUnit": "3.4",
                     "yWeight": "3"
                 },
                 "entryPoint": "graphPointLineGraphInteraction\/runtime\/graphPointLineGraphInteraction.js"
             }
         },
         "debug": {
-            "relatedItem": "item_5703a678e4ee5501923865"
+            "relatedItem": "item_5704c537bd1be066891802"
         }
     },
     "debug": {
-        "relatedItem": "item_5703a678e4ee5501923865"
+        "relatedItem": "item_5704c537bd1be066891802"
     },
     "namespaces": {
         "": "http:\/\/www.imsglobal.org\/xsd\/apip\/apipv1p0\/qtiitem\/imsqti_v2p1",
@@ -88,9 +86,9 @@
     },
     "stylesheets": {},
     "outcomes": {
-        "outcomedeclaration_5703a678e6110718957210": {
+        "outcomedeclaration_5704c537be3e1039656554": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_5703a678e6110718957210",
+            "serial": "outcomedeclaration_5704c537be3e1039656554",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -100,15 +98,15 @@
                 "normalMinimum": 0
             },
             "debug": {
-                "relatedItem": "item_5703a678e4ee5501923865"
+                "relatedItem": "item_5704c537bd1be066891802"
             },
             "defaultValue": "0"
         }
     },
     "responses": {
-        "responsedeclaration_5703a678e5a17982797614": {
+        "responsedeclaration_5704c537bdf1e317761578": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_5703a678e5a17982797614",
+            "serial": "responsedeclaration_5704c537bdf1e317761578",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
@@ -116,7 +114,7 @@
                 "baseType": "string"
             },
             "debug": {
-                "relatedItem": "item_5703a678e4ee5501923865"
+                "relatedItem": "item_5704c537bd1be066891802"
             },
             "mapping": [],
             "areaMapping": [],
@@ -133,7 +131,7 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_custom_5703a678e8080153507424",
+        "serial": "response_custom_5704c537bff52399970569",
         "qtiClass": "responseProcessing",
         "attributes": [],
         "debug": {

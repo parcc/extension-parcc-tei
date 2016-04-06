@@ -47,25 +47,21 @@
                     <pci:entry key="pointRadius">8</pci:entry>
                     <pci:entry key="weight">1</pci:entry>
                     <pci:entry key="xAllowOuter">true</pci:entry>
-                    <pci:entry key="xIncrement">1</pci:entry>
+                    <pci:entry key="xStep">1</pci:entry>
                     <pci:entry key="xLabel">Time (hr)</pci:entry>
-                    <pci:entry key="xLines">7</pci:entry>
                     <pci:entry key="xMax">7</pci:entry>
                     <pci:entry key="xMin">0</pci:entry>
                     <pci:entry key="xSubIncrement">2</pci:entry>
                     <pci:entry key="xUnit">42</pci:entry>
                     <pci:entry key="xWeight">3</pci:entry>
                     <pci:entry key="yAllowOuter">true</pci:entry>
-                    <pci:entry key="yIncrement">10</pci:entry>
+                    <pci:entry key="yStep">10</pci:entry>
                     <pci:entry key="yLabel">Number of Cells (x1,000,000)</pci:entry>
-                    <pci:entry key="yLines">10</pci:entry>
                     <pci:entry key="yMax">100</pci:entry>
                     <pci:entry key="yMin">0</pci:entry>
                     <pci:entry key="ySubIncrement">2</pci:entry>
-                    <pci:entry key="yUnit">34</pci:entry>
+                    <pci:entry key="yUnit">3.4</pci:entry>
                     <pci:entry key="yWeight">3</pci:entry>
-
-
                 </pci:properties>
                 <pci:markup>
                     <html5:div class="graphPointLineGraphInteraction">
