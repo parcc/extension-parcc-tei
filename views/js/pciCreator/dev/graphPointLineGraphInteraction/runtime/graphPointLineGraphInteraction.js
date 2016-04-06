@@ -26,11 +26,12 @@ define([
 
         return {
             // Interaction config
-            draggable: !!rawConfig.draggable,
+            draggable: (rawConfig.draggable === 'true'),
             graphTitle: rawConfig.graphTitle,
-            graphTitleRequired: !!rawConfig.graphTitleRequired,
+            graphTitleRequired: (rawConfig.graphTitleRequired === 'true'),
             graphType: rawConfig.graphType,
             maxPoints: parseInt(rawConfig.maxPoints),
+            segment: (rawConfig.plotSegment === 'true'),
 
             // Gridfactory config
             x : {
@@ -40,7 +41,7 @@ define([
                 step: parseInt(rawConfig.xStep),
                 unit : parseInt(rawConfig.xUnit),
                 weight : parseInt(rawConfig.xWeight),
-                allowOuter : !!rawConfig.xAllowOuter,
+                allowOuter : (rawConfig.xAllowOuter === 'true'),
                 subStep : parseInt(rawConfig.xSubIncrement)
             },
             y : {
@@ -51,7 +52,7 @@ define([
                 step: parseInt(rawConfig.yStep),
                 unit : parseInt(rawConfig.yUnit),
                 weight : parseInt(rawConfig.yWeight),
-                allowOuter : !!rawConfig.yAllowOuter,
+                allowOuter : (rawConfig.yAllowOuter === 'true'),
                 subStep : parseInt(rawConfig.ySubIncrement)
             },
             padding : 20,
@@ -60,14 +61,13 @@ define([
             // PlotFactory config
             plot : {
                 color: rawConfig.plotColor,
-                segment: !!rawConfig.plotSegment,
                 thickness: parseInt(rawConfig.plotThickness)
             },
 
             // PointFactory config
             point : {
                 color: rawConfig.pointColor,
-                glow: !!rawConfig.pointGlow,
+                glow: (rawConfig.pointGlow === 'true'),
                 radius: parseInt(rawConfig.pointRadius)
             }
         };
@@ -134,6 +134,10 @@ define([
                     _.isObject(gridConfig.y) &&
                     gridConfig.x.start < gridConfig.x.end &&
                     gridConfig.y.start < gridConfig.y.end
+
+                    /// @todo CHECK NEW CONFIGS HERE
+                    // graphTypes
+
                     ){
 
                     grid = gridFactory(paper, gridConfig);
@@ -148,9 +152,7 @@ define([
                             fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
                             fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
-                        var maxPoints = 6; //@todo move and get from parameter
-
-                        if(points.length < maxPoints){
+                        if(points.length < _this.gridConfig.maxPoints){
                             addPoint(fx, fy);
                             if(points.length >= 2){
                                 plot();
@@ -163,7 +165,9 @@ define([
                             // Re-draw the point
                             oldPoint.render();
                             // re-enable the drag'n'drop
-                            oldPoint.drag();
+                            if (_this.gridConfig.draggable) {
+                                oldPoint.drag();
+                            }
                             // Add it back to the list
                             points.push(oldPoint);
                             // pair ready : plot the graph
@@ -239,31 +243,37 @@ define([
             function plot(){
 
                 var sortedPoints = points.sort(function(pointA, pointB) {
-                    var ax = pointA.getX(),
-                        ay = pointA.getY(),
-                        bx = pointB.getX(),
-                        by = pointB.getY();
+                        var ax = pointA.getX(),
+                            ay = pointA.getY(),
+                            bx = pointB.getX(),
+                            by = pointB.getY();
 
-                    if (ax !== bx) {
-                        return ax - bx;
-                    } else {
-                        return ay - by;
-                    }
-                });
+                        if (ax !== bx) {
+                            return ax - bx;
+                        } else {
+                            return ay - by;
+                        }
+                    }),
+                    plotConfig = {
+                        segment : _this.gridConfig.segment
+                    };
 
-                clearPlot();
+                if (_this.gridConfig.graphType === 'line') {
+                    clearPlot();
 
-                sortedPoints.reduce(function (pointA, pointB) {
-                    if (pointA.getX() === pointB.getX()) {
-                        paths.push(plotFactory.plotVertical(pointA, pointB, { segment: true }));
-                    } else {
-                        paths.push(plotFactory.plotLinear(pointA, pointB, { segment: true }));
-                    }
-                    return pointB;
-                });
-/*
+                    sortedPoints.reduce(function (pointA, pointB) {
+                        if (pointA.getX() === pointB.getX()) {
+                            paths.push(plotFactory.plotVertical(pointA, pointB, plotConfig));
+                        } else {
+                            paths.push(plotFactory.plotLinear(pointA, pointB, plotConfig));
+                        }
+                        return pointB;
+                    });
+                    /*
+                    @todo Re-activate
                     _this.trigger('responseChange', [_this.getResponse()]);
-                */
+                    */
+                }
             }
 
             function addPoint(fx, fy, cartesian){
@@ -292,7 +302,9 @@ define([
                         newPoint.setCartesianCoord(fx, fy, pointConfig);
                     }
                     newPoint.render();
-                    newPoint.drag();
+                    if (_this.gridConfig.draggable) {
+                        newPoint.drag();
+                    }
                     points.push(newPoint);
                 }
 

@@ -34,8 +34,8 @@ define([
         getDefaultProperties : function(pci){
             return {
                 "draggable": true,
-                "graphTitle": "Culture 2 Data",
-                "graphTitleRequired": true,
+                "graphTitle": null,
+                "graphTitleRequired": false,
                 "graphType": "line",
                 "maxPoints": 6,
                 "plotColor": "#0000FF",
@@ -48,7 +48,7 @@ define([
 
                 "xAllowOuter": true,
                 "xStep": 1,
-                "xLabel": "Time (hr)",
+                "xLabel": null,
                 "xMax": 7,
                 "xMin": 0,
                 "xSubIncrement": 2,
@@ -57,7 +57,7 @@ define([
 
                 "yAllowOuter": true,
                 "yStep": 10,
-                "yLabel": "Number of Cells (x1,000,000)",
+                "yLabel": null,
                 "yMax": 100,
                 "yMin": 0,
                 "ySubIncrement": 2,
