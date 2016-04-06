@@ -56,29 +56,55 @@ define([
  "ySubIncrement": 2,
  "yUnit": 3.4,
  "yWeight": 3
+
+
+GRID
+ color : lineColor,
+ weight : 1,
+ padding : 20,
+ x : {
+     start : -10,
+     end :  10,
+     label : null,
+     step : 1,
+     unit : 10,
+     color : lineColor,
+     weight : 3
+ },
+
  */
+            // Gridfactory config
             x : {
                 start : parseInt(rawConfig.xMin),
                 end : parseInt(rawConfig.xMax),
+                label : rawConfig.xLabel,
+                step: parseInt(rawConfig.xStep),
                 unit : parseInt(rawConfig.xUnit),
-                step: parseInt(rawConfig.xStep)
+                weight : parseInt(rawConfig.xWeight)
             },
             y : {
                 // y-axis is reversed
                 start : -1 * parseInt(rawConfig.yMax),
                 end : -1 * parseInt(rawConfig.yMin),
+                label : rawConfig.yLabel,
+                step: parseInt(rawConfig.yStep),
                 unit : parseInt(rawConfig.yUnit),
-                step: parseInt(rawConfig.yStep)
+                weight : parseInt(rawConfig.yWeight)
             },
+            padding : 20,
+            weight: parseInt(rawConfig.weight),
+
+            // PlotFactory config
             plot : {
                 color : _color,
                 thickness : parseInt(rawConfig.plotThickness)
             },
+
+            // PointtFactory config
             point : {
                 color : _color,
                 radius : 10
             },
-            padding : 20
         };
     }
 
