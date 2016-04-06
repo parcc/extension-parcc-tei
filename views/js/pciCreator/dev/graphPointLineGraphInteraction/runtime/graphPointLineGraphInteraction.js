@@ -25,54 +25,13 @@ define([
         var _color = rawConfig.graphColor || '#bb1a2a';
 
         return {
-/*
- "draggable": true,
- "graphTitle": "Culture 2 Data",
- "graphTitleRequired": true,
- "graphType": "line",
- "maxPoints": 6,
- "plotColor": "#0000FF",
- "plotSegment": true,
- "plotThickness": 6,
- "pointColor": "#0000FF",
- "pointGlow": true,
- "pointRadius": 8,
- "weight": 1,
+            // Interaction config
+            draggable: !!rawConfig.draggable,
+            graphTitle: rawConfig.graphTitle,
+            graphTitleRequired: !!rawConfig.graphTitleRequired,
+            graphType: rawConfig.graphType,
+            maxPoints: parseInt(rawConfig.maxPoints),
 
- "xAllowOuter": true,
- "xStep": 1,
- "xLabel": "Time (hr)",
- "xMax": 7,
- "xMin": 0,
- "xSubIncrement": 2,
- "xUnit": 42,
- "xWeight": 3,
-
- "yAllowOuter": true,
- "yStep": 10,
- "yLabel": "Number of Cells (x1,000,000)",
- "yMax": 100,
- "yMin": 0,
- "ySubIncrement": 2,
- "yUnit": 3.4,
- "yWeight": 3
-
-
-GRID
- color : lineColor,
- weight : 1,
- padding : 20,
- x : {
-     start : -10,
-     end :  10,
-     label : null,
-     step : 1,
-     unit : 10,
-     color : lineColor,
-     weight : 3
- },
-
- */
             // Gridfactory config
             x : {
                 start : parseInt(rawConfig.xMin),
@@ -80,7 +39,9 @@ GRID
                 label : rawConfig.xLabel,
                 step: parseInt(rawConfig.xStep),
                 unit : parseInt(rawConfig.xUnit),
-                weight : parseInt(rawConfig.xWeight)
+                weight : parseInt(rawConfig.xWeight),
+                allowOuter : !!rawConfig.xAllowOuter,
+                subStep : parseInt(rawConfig.xSubIncrement)
             },
             y : {
                 // y-axis is reversed
@@ -89,22 +50,26 @@ GRID
                 label : rawConfig.yLabel,
                 step: parseInt(rawConfig.yStep),
                 unit : parseInt(rawConfig.yUnit),
-                weight : parseInt(rawConfig.yWeight)
+                weight : parseInt(rawConfig.yWeight),
+                allowOuter : !!rawConfig.yAllowOuter,
+                subStep : parseInt(rawConfig.ySubIncrement)
             },
             padding : 20,
             weight: parseInt(rawConfig.weight),
 
             // PlotFactory config
             plot : {
-                color : _color,
-                thickness : parseInt(rawConfig.plotThickness)
+                color: rawConfig.plotColor,
+                segment: !!rawConfig.plotSegment,
+                thickness: parseInt(rawConfig.plotThickness)
             },
 
-            // PointtFactory config
+            // PointFactory config
             point : {
-                color : _color,
-                radius : 10
-            },
+                color: rawConfig.pointColor,
+                glow: !!rawConfig.pointGlow,
+                radius: parseInt(rawConfig.pointRadius)
+            }
         };
     }
 
