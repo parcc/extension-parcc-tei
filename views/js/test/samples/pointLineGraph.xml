@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><assessmentItem xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" adaptive="false" identifier="VF643134" timeDependent="false" title="Composite" toolName="IBIS Export" toolVersion="1.0" xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiextv2p1_v1p0.xsd">
+<?xml version="1.0" encoding="UTF-8"?><assessmentItem xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" adaptive="false" identifier="VF643134" timeDependent="false" title="Composite" toolName="IBIS Export" toolVersion="1.0" xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiextv2p1_v1p0.xsd">
     <responseDeclaration baseType="string" cardinality="multiple" identifier="RESPONSE">
         <correctResponse>
             <value>50 25</value>
@@ -22,7 +22,7 @@
     </templateDeclaration>
     <itemBody>
         <customInteraction responseIdentifier="RESPONSE">
-            <pci:portableCustomInteraction customInteractionTypeIdentifier="graphPointLineGraphInteraction" hook="graphPointLineGraphInteraction/runtime/graphPointLineGraphInteraction.js">
+            <pci:portableCustomInteraction scustomInteractionTypeIdentifier="graphPointLineGraphInteraction" hook="graphPointLineGraphInteraction/runtime/graphPointLineGraphInteraction.js">
                 <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
                 <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
                     <pci:libraries>

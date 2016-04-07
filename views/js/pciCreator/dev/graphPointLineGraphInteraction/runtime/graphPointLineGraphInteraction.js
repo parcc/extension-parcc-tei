@@ -134,7 +134,6 @@ define([
 
                     grid = gridFactory(paper, gridConfig);
                     grid.clickable();
-                    grid.snap();
 
                     //bind click event:
                     grid.children.click(function(event){
@@ -145,28 +144,29 @@ define([
                             fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
                             fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
-                        if(points.length < _this.gridConfig.maxPoints){
-                            addPoint(fx, fy);
-                            if(points.length >= 2){
+                        if (areCoordsValid(fx, fy)) {
+                            if (points.length < _this.gridConfig.maxPoints) {
+                                addPoint(fx, fy);
+                                if (points.length >= 2) {
+                                    plot();
+                                }
+                            } else {
+                                // Get the last point placed
+                                var oldPoint = points.pop();
+                                // Change their coordinates for new ones
+                                oldPoint.setCoord(fx, fy);
+                                // Re-draw the point
+                                oldPoint.render();
+                                // re-enable the drag'n'drop
+                                if (_this.gridConfig.draggable) {
+                                    oldPoint.drag();
+                                }
+                                // Add it back to the list
+                                points.push(oldPoint);
+                                // pair ready : plot the graph
                                 plot();
                             }
-                        }else{
-                            // Get the last point placed
-                            var oldPoint = points.pop();
-                            // Change their coordinates for new ones
-                            oldPoint.setCoord(fx, fy);
-                            // Re-draw the point
-                            oldPoint.render();
-                            // re-enable the drag'n'drop
-                            if (_this.gridConfig.draggable) {
-                                oldPoint.drag();
-                            }
-                            // Add it back to the list
-                            points.push(oldPoint);
-                            // pair ready : plot the graph
-                            plot();
                         }
-
                     });
 
                     //init related plot factory
@@ -235,21 +235,39 @@ define([
                 }
             }
 
+            function areCoordsValid(x, y) {
+                var gridBBox = grid.getBBox(),
+                    snappedPoint = grid.snap(x, y),
+                    xOnOuter = (snappedPoint[0] === gridBBox.x || snappedPoint[0] === gridBBox.x2),
+                    yOnOuter = (snappedPoint[1] === gridBBox.y || snappedPoint[1] === gridBBox.y2);
+                return !
+                    ((_this.gridConfig.x.allowOuter === false && xOnOuter) ||
+                    (_this.gridConfig.y.allowOuter === false && yOnOuter));
+            }
+
             function addPoint(fx, fy, cartesian){
 
-                 var gridBBox, newPoint, pointConfig;
+                var gridBBox, newPoint, pointConfig, draggableArea, subStepSizes;
 
-                if(grid){
+                if(grid && areCoordsValid(fx, fy)){
 
                     gridBBox = grid.getBBox();
+                    subStepSizes = grid.getSubStepSizes();
+
+                    draggableArea = {
+                        xMin: (_this.gridConfig.x.allowOuter) ? gridBBox.x  : gridBBox.x  + subStepSizes.x,
+                        xMax: (_this.gridConfig.x.allowOuter) ? gridBBox.x2 : gridBBox.x2 - subStepSizes.x,
+                        yMin: (_this.gridConfig.y.allowOuter) ? gridBBox.y  : gridBBox.y  + subStepSizes.y,
+                        yMax: (_this.gridConfig.y.allowOuter) ? gridBBox.y2 : gridBBox.y2 - subStepSizes.y
+                    };
 
                     pointConfig = _.defaults({
                         x : fx,
                         y : fy,
-                        xMin : gridBBox.x,
-                        xMax : gridBBox.x2,
-                        yMin : gridBBox.y,
-                        yMax : gridBBox.y2,
+                        xMin : draggableArea.xMin,
+                        xMax : draggableArea.xMax,
+                        yMin : draggableArea.yMin,
+                        yMax : draggableArea.yMax,
                         on : {
                             dragStart : clearPlot,
                             dragStop : plot

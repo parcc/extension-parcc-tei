@@ -276,6 +276,9 @@ define(['OAT/lodash'], function( _ ){
             getUnitSizes : function(){
                 return {x: _borderBox.width/_x.unit , y: _borderBox.height/_y.unit};
             },
+            getSubStepSizes: function(){
+                return {x: _xSubStepSize, y: _ySubStepSize};
+            },
             /**
              * Get the Raphaeljs paper object used for this grid
              *
