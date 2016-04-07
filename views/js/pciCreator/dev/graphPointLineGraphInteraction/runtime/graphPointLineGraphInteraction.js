@@ -22,8 +22,6 @@ define([
 
     function buildGridConfig(rawConfig){
 
-        var _color = rawConfig.graphColor || '#bb1a2a';
-
         return {
             // Interaction config
             draggable: (rawConfig.draggable === 'true'),
@@ -81,8 +79,6 @@ define([
             (config.x.end - config.x.start) * config.x.unit + padding,
             (config.y.end - config.y.start) * config.y.unit + padding
             );
-
-        //@todo make it responsive
 
         return paper;
     }
@@ -320,11 +316,10 @@ define([
 
             // @todo useful ??? for editor ???
             _this.on('gridchange', function(config){
-                //the configuration of the gird, point or line have changed:
+                //the configuration of the grid, point or line have changed:
                 _this.config = config;
                 _this.gridConfig = buildGridConfig(config);
                 initGrid($container, _this.gridConfig);
-                //plotDefault();
             });
         },
         /**
@@ -383,7 +378,7 @@ define([
             var $container = $(this.dom);
             $container.off().empty();
 
-            //@todo reset respone ?!!
+            //@todo reset response ?!!
         },
         /**
          * Restore the state of the interaction from the serializedState.
