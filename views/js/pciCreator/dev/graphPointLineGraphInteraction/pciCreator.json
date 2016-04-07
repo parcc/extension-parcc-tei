@@ -1,8 +1,8 @@
 {
     "typeIdentifier": "graphPointLineGraphInteraction",
-    "label": "Graphing Function",
-    "short": "Graphing f(x)",
-    "description": "Graphing functions",
+    "label": "Graph Point Line",
+    "short": "Graph Point Line",
+    "description": "Graph Point Line",
     "version": "0.1",
     "author": "Sam Sipasseuth",
     "email": "sam@taotesting.com",
