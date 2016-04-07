@@ -16,7 +16,6 @@ define(['OAT/lodash'], function( _ ){
         /**
          * Add a css class to the node of a Raphaël object
          * IE currently doesn't support the usage of element.classList in SVG
-         *
          * @param raphaelObj
          * @param {string} newClass
          */
@@ -59,23 +58,42 @@ define(['OAT/lodash'], function( _ ){
                 weight : 3
             }
         },options);
-        /** @type {String} Color of the grid's lines */
-        var _color = options.color,
-        /** @type {Number} line weight of grid */
-        _weight = options.weight,
-        _x = options.x,
-        _y = options.y,
-        set = paper.set(),
-        clickableArea,
-        /** @type {Object} [description] */
-        _borderBox = {},
+
+        // @todo decide what to do with float units
+
+        var _x = options.x,
+            _y = options.y,
+
+            _width = (Math.abs(_x.end - _x.start) * _x.unit),
+            _height = (Math.abs(_y.end - _y.start) * _y.unit),
+
+            _xSubStepSize = (_width / ((Math.abs(_x.start - _x.end) / _x.step)) / _x.subStep),
+            _ySubStepSize = (_height / ((Math.abs(_y.start - _y.end) / _y.step)) / _y.subStep),
+
+            /** @type {String} Color of the grid's lines */
+            _color = options.color,
+            /** @type {Number} line weight of grid */
+            _weight = options.weight,
+            set = paper.set(),
+            clickableArea,
+            _borderBox = {},
+
+            _xSnapToValues = [],
+            _ySnapToValues = [],
+            i;
+
+        for (i = 0; i <= _width; i += _xSubStepSize) {
+            _xSnapToValues.push(i + options.padding);
+        }
+        for (i = 0; i <= _height; i += _ySubStepSize) {
+            _ySnapToValues.push(i + options.padding);
+        }
+
+
         /**
          * Draw Axis on the paper according the configuration of the grid
          */
-        _drawAxis = function (){
-
-            var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit);
+        function _drawAxis(){
 
             var xStyle = {
                 'stroke' :  _x.color,
@@ -91,7 +109,7 @@ define(['OAT/lodash'], function( _ ){
 
                 config = config || {};
 
-                var line =  drawLine([0, top], [width, top], config.style);
+                var line =  drawLine([0, top], [_width, top], config.style);
 
                 var padding = options.padding,
                     position = 0,
@@ -120,7 +138,7 @@ define(['OAT/lodash'], function( _ ){
 
                 config = config || {};
 
-                var line =  drawLine([left, height], [left, 0], config.style);
+                var line =  drawLine([left, _height], [left, 0], config.style);
 
                 var padding = options.padding,
                     position = 0,
@@ -146,7 +164,7 @@ define(['OAT/lodash'], function( _ ){
             }
 
             if((_y.start < 0) && (_y.end <= 0)){
-                drawXaxis(height, {style : xStyle});
+                drawXaxis(_height, {style : xStyle});
             }else if((_y.start >= 0) && (_y.end > 0)){
                 drawXaxis(0, {style : xStyle, labelOnTop : true});
             }else{
@@ -154,54 +172,51 @@ define(['OAT/lodash'], function( _ ){
             }
 
             if((_x.start < 0 ) && (_x.end <= 0)){
-                drawYaxis(width, {style : yStyle, labelOnRight:true});
+                drawYaxis(_width, {style : yStyle, labelOnRight:true});
             }else if((_x.start >= 0 ) && (_x.end > 0)){
                 drawYaxis(0, {style : yStyle});
             }else{
                 drawYaxis(Math.abs(_x.start) * _x.unit, {style : yStyle});
             }
 
-        };
+        }
 
         function _drawGrid(){
 
-            var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit),
-                style = {
+            var style = {
                     'stroke': _color,
                     'stroke-width' : _weight
                 };
 
-            for(var y = 0; y <= height; y += _y.step * _y.unit){
-                drawLine([0, y], [width, y], style);
+            for(var y = 0; y <= _height; y += _y.step * _y.unit){
+                drawLine([0, y], [_width, y], style);
+                console.log('drawing hLine at y = ' + y);
             }
             // close the graph if uneven step/y axis
             if (Math.abs(_y.end - _y.start) % _y.step) {
-                drawLine([0, height], [width, height], style);
+                drawLine([0, _height], [_width, _height], style);
             }
-            for(var x = 0; x <= width; x += _x.step * _x.unit) {
-                drawLine([x, 0], [x, height], style);
+            for(var x = 0; x <= _width; x += _x.step * _x.unit) {
+                drawLine([x, 0], [x, _height], style);
             }
             // close the graph if uneven step/x axis
             if (Math.abs(_x.end - _x.start) % _x.step) {
-                drawLine([width, 0], [width, height], style);
+                drawLine([_width, 0], [_width, _height], style);
             }
         }
 
         function _calculateBBox(){
 
-            var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit),
-                x = options.padding,
+            var x = options.padding,
                 y = options.padding;
 
             _borderBox = {
                 x : x,
                 y : y,
-                width : width,
-                height : height,
-                x2 : x+width,
-                y2 : y+height
+                width : _width,
+                height : _height,
+                x2 : x+_width,
+                y2 : y+_height
             };
         }
         var obj = {
@@ -314,14 +329,13 @@ define(['OAT/lodash'], function( _ ){
                 _drawAxis();
             },
             /**
-             * Return a callback function to determine for a value the corrected value according grid snapping
              * @param {Number} x coordinate x to convert to snapped value
              * @param {Number} y  coordinate y to convert to snapped value
              * @return {Array} snapped values x,y
              */
             snap : function(x,y){
-                x = paper.raphael.snapTo(_x.unit, x, _x.unit / 2);
-                y = paper.raphael.snapTo(_y.unit, y, _y.unit / 2);
+                x = paper.raphael.snapTo(_xSnapToValues, x, _xSubStepSize / 2);
+                y = paper.raphael.snapTo(_ySnapToValues, y, _ySubStepSize / 2);
                 return [x,y];
             },
             /**

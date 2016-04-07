@@ -1,6 +1,6 @@
 {
     "identifier": "VF643134",
-    "serial": "item_5704e1021424f152582845",
+    "serial": "item_57060ee8cd8d9605436756",
     "qtiClass": "assessmentItem",
     "attributes": {
         "identifier": "VF643134",
@@ -13,17 +13,17 @@
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_5704e10214220979442827",
-        "body": "\n        {{interaction_portablecustominteraction_5704e10215d93773534319}}\n    ",
+        "serial": "container_containeritembody_57060ee8cd8a3393478037",
+        "body": "\n        {{interaction_portablecustominteraction_57060ee8d1627697301636}}\n    ",
         "elements": {
-            "interaction_portablecustominteraction_5704e10215d93773534319": {
-                "serial": "interaction_portablecustominteraction_5704e10215d93773534319",
+            "interaction_portablecustominteraction_57060ee8d1627697301636": {
+                "serial": "interaction_portablecustominteraction_57060ee8d1627697301636",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_5704e1021424f152582845"
+                    "relatedItem": "item_57060ee8cd8d9605436756"
                 },
                 "choices": {},
                 "typeIdentifier": "graphPointLineGraphInteraction",
@@ -69,11 +69,11 @@
             }
         },
         "debug": {
-            "relatedItem": "item_5704e1021424f152582845"
+            "relatedItem": "item_57060ee8cd8d9605436756"
         }
     },
     "debug": {
-        "relatedItem": "item_5704e1021424f152582845"
+        "relatedItem": "item_57060ee8cd8d9605436756"
     },
     "namespaces": {
         "": "http:\/\/www.imsglobal.org\/xsd\/apip\/apipv1p0\/qtiitem\/imsqti_v2p1",
@@ -86,9 +86,9 @@
     },
     "stylesheets": {},
     "outcomes": {
-        "outcomedeclaration_5704e1021537e848578890": {
+        "outcomedeclaration_57060ee8d0149894951448": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_5704e1021537e848578890",
+            "serial": "outcomedeclaration_57060ee8d0149894951448",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -98,15 +98,15 @@
                 "normalMinimum": 0
             },
             "debug": {
-                "relatedItem": "item_5704e1021424f152582845"
+                "relatedItem": "item_57060ee8cd8d9605436756"
             },
             "defaultValue": "0"
         }
     },
     "responses": {
-        "responsedeclaration_5704e10214e92870618172": {
+        "responsedeclaration_57060ee8cf4a1517803233": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_5704e10214e92870618172",
+            "serial": "responsedeclaration_57060ee8cf4a1517803233",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
@@ -114,7 +114,7 @@
                 "baseType": "string"
             },
             "debug": {
-                "relatedItem": "item_5704e1021424f152582845"
+                "relatedItem": "item_57060ee8cd8d9605436756"
             },
             "mapping": [],
             "areaMapping": [],
@@ -131,7 +131,7 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_custom_5704e10216da0815711901",
+        "serial": "response_custom_57060ee8d309b348955543",
         "qtiClass": "responseProcessing",
         "attributes": [],
         "debug": {

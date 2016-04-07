@@ -42,7 +42,7 @@ define([
                 unit : parseInt(rawConfig.xUnit),
                 weight : parseInt(rawConfig.xWeight),
                 allowOuter : (rawConfig.xAllowOuter === 'true'),
-                subStep : parseInt(rawConfig.xStep)
+                subStep : parseInt(rawConfig.xSubStep)
             },
             y : {
                 // y-axis is reversed
@@ -53,7 +53,7 @@ define([
                 unit : parseInt(rawConfig.yUnit),
                 weight : parseInt(rawConfig.yWeight),
                 allowOuter : (rawConfig.yAllowOuter === 'true'),
-                subStep : parseInt(rawConfig.yStep)
+                subStep : parseInt(rawConfig.ySubStep)
             },
             padding : 20,
             weight: parseInt(rawConfig.weight),
@@ -142,6 +142,7 @@ define([
 
                     grid = gridFactory(paper, gridConfig);
                     grid.clickable();
+                    grid.snap();
 
                     //bind click event:
                     grid.children.click(function(event){
