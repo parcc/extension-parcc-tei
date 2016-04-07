@@ -190,7 +190,6 @@ define(['OAT/lodash'], function( _ ){
 
             for(var y = 0; y <= _height; y += _y.step * _y.unit){
                 drawLine([0, y], [_width, y], style);
-                console.log('drawing hLine at y = ' + y);
             }
             // close the graph if uneven step/y axis
             if (Math.abs(_y.end - _y.start) % _y.step) {
