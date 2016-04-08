@@ -54,6 +54,8 @@ define([
                 subStep : parseInt(rawConfig.ySubStep)
             },
             padding : 20,
+            labelPadding : 28,
+            labelSize : 14,
             weight: parseInt(rawConfig.weight),
 
             // PlotFactory config
@@ -73,7 +75,7 @@ define([
 
     function createCanvas($container, config){
 
-        var padding = 2 * config.padding;
+        var padding = config.padding * 2 + config.labelPadding;
         var paper = scaleRaphael(
             $('.shape-container', $container)[0],
             (config.x.end - config.x.start) * config.x.unit + padding,

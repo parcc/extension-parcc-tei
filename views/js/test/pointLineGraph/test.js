@@ -54,6 +54,9 @@ define([
 
                 QUnit.start();
             })
+            .on('responsechange', function (response){
+                $('#response-display').html(JSON.stringify(response, null, 2));
+            })
             .assets(strategies)
             .init()
             .render($container);
