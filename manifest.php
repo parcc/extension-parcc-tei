@@ -24,9 +24,12 @@ return array(
 	'label' => 'PARCC Portable Custom Interaction',
 	'description' => '',
     'license' => 'PARCC',
-    'version' => '0.1.5',
+    'version' => '0.2.0',
 	'author' => 'Open Assessment Technologies',
-	'requires' => array('qtiItemPci' => '>=0.1'),
+	'requires' => array(
+        'qtiItemPci' => '>=0.1',
+        'xmlEditRp' => '>=0.1.0'
+    ),
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#parccTeiManager', array('ext'=>'parccTei')),
     ),

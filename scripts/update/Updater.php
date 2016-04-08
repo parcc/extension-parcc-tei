@@ -94,7 +94,9 @@ class Updater extends \common_ext_ExtensionUpdater
             $currentVersion = '0.1.5';
         }
 
-        return $currentVersion;
+        $this->setVersion($currentVersion);
+        $this->skip('0.1.5', '0.2.0');
+
     }
 
 }
