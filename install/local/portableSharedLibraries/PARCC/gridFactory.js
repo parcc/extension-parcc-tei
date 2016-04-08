@@ -86,8 +86,6 @@ define(['OAT/lodash'], function( _ ){
             _ySnapToValues = [],
 
             _paddingTop = options.padding,
-            _paddingRight = options.padding,
-            _paddingBottom = options.padding,
             _paddingLeft = options.padding,
 
             _xLabelX,
@@ -101,79 +99,67 @@ define(['OAT/lodash'], function( _ ){
             set = paper.set(),
             _borderBox = {};
 
-        // compute margins according to graph type and label
+        // compute margins & label positions
         if (_graphType === "oneQuadrant") {
             if (_x.label) {
+                // x label on bottom
                 if (_y.start < 0) {
-                    _paddingBottom += options.labelPadding; // x label on bottom
+                    _xLabelY = _height + options.labelPadding;
+                // x label on top
                 } else {
-                    _paddingTop += options.labelPadding;    // x label on top
+                    _paddingTop += options.labelPadding;
+                    _xLabelY = -_paddingTop / 2;
                 }
+                _xLabelX = _width / 2;
+                _xLabelAngle = 0;
             }
             if (_y.label) {
+                // y label on left
                 if (_x.start >= 0) {
-                    _paddingLeft += options.labelPadding;   // y label on left
+                    _paddingLeft += options.labelPadding;
+                    _yLabelX = -options.labelPadding;
+                // y label on right
                 } else {
-                    _paddingRight += options.labelPadding;  // y label on right
+                    _yLabelX = _width + options.labelPadding;
                 }
+                _yLabelY = _height / 2;
+                _yLabelAngle = -90;
             }
         } else {
+            // x label on right
             if (_x.label) {
-                _paddingTop += options.labelPadding;        // x label on top
+                var yOrigin;
+                if (_yQuadrants == 2) {
+                    yOrigin = -1 * _y.start * _y.unit;
+                } else {
+                    if (_y.start >= 0) {
+                        yOrigin = 0;
+                    } else {
+                        yOrigin = _height;
+                    }
+                }
+                _xLabelX = _width + options.labelPadding;
+                _xLabelY = yOrigin;
+                _xLabelAngle = -90;
             }
+            // y label on top
             if (_y.label) {
-                _paddingRight += options.labelPadding;      // y label on right
-            }
-        }
+                _paddingTop += options.labelPadding;
 
-        // we cannot compute the following before having all the paddings...
-        if (_graphType === "oneQuadrant") {
-            if (_y.start < 0) {
-                _xLabelY = _paddingTop + _height + _paddingBottom / 2; // x label on bottom
-            } else {
-                _xLabelY = _paddingTop / 2; // x label on top
-            }
-            _xLabelX = _paddingLeft + _width / 2;
-            _xLabelAngle = 0;
-
-            if (_x.start >= 0) {
-                _yLabelX = options.padding; // y label on left
-            } else {
-                _yLabelX = _paddingLeft + _width + _paddingRight / 2; // y label on right
-            }
-            _yLabelY = _paddingTop + _height / 2;
-            _yLabelAngle = -90;
-
-        } else {
-            // coordinates: always on top and on the right
-            var yOrigin;
-            if (_yQuadrants == 2) {
-                yOrigin = -1 * _y.start * _y.unit;
-            } else {
-                if (_y.start >= 0) {
-                    yOrigin = 0;
+                var xOrigin;
+                if (_xQuadrants == 2) {
+                    xOrigin = -1 * _x.start * _x.unit;
                 } else {
-                    yOrigin = _height;
+                    if (_x.start >= 0) {
+                        xOrigin = 0;
+                    } else {
+                        xOrigin = _width;
+                    }
                 }
+                _yLabelX = xOrigin;
+                _yLabelY = -options.labelPadding;
+                _xLabelAngle = 0;
             }
-            _xLabelX = _paddingLeft + _width + _paddingRight / 2;
-            _xLabelY = _paddingTop + yOrigin;
-            _xLabelAngle = -90;
-
-            var xOrigin;
-            if (_xQuadrants == 2) {
-                xOrigin = -1 * _x.start * _x.unit;
-            } else {
-                if (_x.start >= 0) {
-                    xOrigin = 0;
-                } else {
-                    xOrigin = _width;
-                }
-            }
-            _yLabelX = _paddingLeft + xOrigin;
-            _yLabelY = options.padding + options.labelPadding / 2;
-            _xLabelAngle = 0;
-
         }
 
         // compute useful values for rendering
@@ -290,10 +276,10 @@ define(['OAT/lodash'], function( _ ){
             }
 
             if (_x.label) {
-                drawAxisLabel(_xLabelX, _xLabelY, _x.label, _xLabelAngle);
+                drawAxisLabel(_paddingLeft + _xLabelX, _paddingTop + _xLabelY, _x.label, _xLabelAngle);
             }
             if (_y.label) {
-                drawAxisLabel(_yLabelX, _yLabelY, _y.label, _yLabelAngle);
+                drawAxisLabel(_paddingLeft + _yLabelX, _paddingTop + _yLabelY, _y.label, _yLabelAngle);
             }
         }
 
