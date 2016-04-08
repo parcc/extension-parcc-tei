@@ -34,10 +34,22 @@ define(['OAT/lodash'], function( _ ){
             return path;
         }
 
+        function drawTitle(text, style, x, y, angle) {
+            var textElement = paper.text(x, y, text).attr(style);
+
+            if (angle) {
+                textElement.rotate(angle, x, y);
+            }
+        }
+
         var lineColor = '#222';
 
         // @todo describe options
         options = _.merge({},{
+            graphTitle : null,
+            graphTitleRequired : false,
+            graphTitleSize : 24,
+            graphTitlePadding : 36,
             color : lineColor,
             weight : 1,
             labelSize : 14,
@@ -99,6 +111,10 @@ define(['OAT/lodash'], function( _ ){
             set = paper.set(),
             _borderBox = {};
 
+        if (options.graphTitle) {
+            _paddingTop += options.graphTitlePadding;
+        }
+
         // compute margins & label positions
         if (_graphType === "oneQuadrant") {
             if (_x.label) {
@@ -108,7 +124,7 @@ define(['OAT/lodash'], function( _ ){
                 // x label on top
                 } else {
                     _paddingTop += options.labelPadding;
-                    _xLabelY = -_paddingTop / 2;
+                    _xLabelY = -options.labelPadding;
                 }
                 _xLabelX = _width / 2;
                 _xLabelAngle = 0;
@@ -170,10 +186,19 @@ define(['OAT/lodash'], function( _ ){
             _ySnapToValues.push(i + _paddingTop);
         }
 
+        function _drawGraphTitle() {
+            var x = _paddingLeft + _width / 2,
+                y = options.padding + options.graphTitlePadding / 2,
+                style = {
+                    'font-size' : options.graphTitleSize,
+                    'font-weight' : 'bold'
+                };
 
-        /**
-         * Draw Axis on the paper according the configuration of the grid
-         */
+            if (options.graphTitle) {
+                drawTitle(options.graphTitle, style, x, y);
+            }
+        }
+
         function _drawAxis(){
 
             var xStyle = {
@@ -183,19 +208,11 @@ define(['OAT/lodash'], function( _ ){
                 yStyle = {
                     'stroke' :  _y.color,
                     'stroke-width': _y.weight
+                },
+                labelStyle = {
+                    'font-size' : options.labelSize,
+                    'font-weight' : 'bold'
                 };
-
-            function drawAxisLabel(x, y, text, angle) {
-                var style = {
-                        'font-size' : options.labelSize,
-                        'font-weight' : 'bold'
-                    },
-                    textElement = paper.text(x, y, text).attr(style);
-
-                if (angle) {
-                    textElement.rotate(angle, x, y);
-                }
-            }
 
             function drawXaxis(top, config){
 
@@ -276,10 +293,20 @@ define(['OAT/lodash'], function( _ ){
             }
 
             if (_x.label) {
-                drawAxisLabel(_paddingLeft + _xLabelX, _paddingTop + _xLabelY, _x.label, _xLabelAngle);
+                drawTitle(
+                    _x.label,
+                    labelStyle,
+                    _paddingLeft + _xLabelX,
+                    _paddingTop + _xLabelY,
+                    _xLabelAngle);
             }
             if (_y.label) {
-                drawAxisLabel(_paddingLeft + _yLabelX, _paddingTop + _yLabelY, _y.label, _yLabelAngle);
+                drawTitle(
+                    _y.label,
+                    labelStyle,
+                    _paddingLeft + _yLabelX,
+                    _paddingTop + _yLabelY,
+                    _yLabelAngle);
             }
         }
 
@@ -431,6 +458,7 @@ define(['OAT/lodash'], function( _ ){
             render : function(){
                 _drawGrid();
                 _drawAxis();
+                _drawGraphTitle();
             },
             /**
              * @param {Number} x coordinate x to convert to snapped value

@@ -25,8 +25,6 @@ define([
         return {
             // Interaction config
             draggable: (rawConfig.draggable === 'true'),
-            graphTitle: rawConfig.graphTitle,
-            graphTitleRequired: (rawConfig.graphTitleRequired === 'true'),
             graphType: rawConfig.graphType,
             maxPoints: parseInt(rawConfig.maxPoints),
             segment: (rawConfig.segment === 'true'),
@@ -53,10 +51,14 @@ define([
                 allowOuter : (rawConfig.yAllowOuter === 'true'),
                 subStep : parseInt(rawConfig.ySubStep)
             },
-            padding : 20,
-            labelPadding : 28,
-            labelSize : 14,
+            graphTitle: rawConfig.graphTitle,
+            graphTitleSize: 20,
+            graphTitlePadding: 40,
+            graphTitleRequired: (rawConfig.graphTitleRequired === 'true'),
             weight: parseInt(rawConfig.weight),
+            padding: 30,
+            labelPadding: 28,
+            labelSize: 14,
 
             // PlotFactory config
             plot : {
@@ -75,12 +77,24 @@ define([
 
     function createCanvas($container, config){
 
-        var padding = config.padding * 2 + config.labelPadding;
-        var paper = scaleRaphael(
+        var xPadding = config.padding * 2,
+            yPadding = config.padding * 2,
+            paper;
+
+        if (config.x.label) {
+            xPadding += config.labelPadding;
+        }
+        if (config.y.label) {
+            yPadding += config.labelPadding;
+        }
+        if (config.graphTitle) {
+            yPadding += config.graphTitlePadding;
+        }
+        paper = scaleRaphael(
             $('.shape-container', $container)[0],
-            (config.x.end - config.x.start) * config.x.unit + padding,
-            (config.y.end - config.y.start) * config.y.unit + padding
-            );
+            (config.x.end - config.x.start) * config.x.unit + xPadding,
+            (config.y.end - config.y.start) * config.y.unit + yPadding
+        );
 
         return paper;
     }

@@ -81,6 +81,7 @@ define([
     var gridParameters = [
         /* */
         { title: 'simple', input: {
+            graphTitle : 'simple',
             x : { start : -6, end : 10, unit : 20, step : 1, label: 'x' },
             y : { start : -10, end : 6, unit : 20, step : 1, label: 'y' }
         }, output: {
@@ -88,6 +89,7 @@ define([
         }, outputContainer: '.test_01' },
 
         { title: 'x > 0', input: {
+            graphTitle : 'x > 0',
             x : { start : 5, end : 10, unit : 20, step : 2, label: 'x' },
             y : { start : -6, end : 10, unit : 20, step : 2, label: 'y' }
         }, output: {
@@ -95,6 +97,7 @@ define([
         }, outputContainer: '.test_02' },
 
         { title: 'x < 0', input: {
+            graphTitle : 'x < 0',
             x : { start : -10, end : -2, unit : 30, label: 'x' },
             y : { start : -6, end : 10, unit : 10, label: 'y' }
         }, output: {
@@ -102,6 +105,7 @@ define([
         }, outputContainer: '.test_03' },
 
         { title: 'y > 0', input: {
+            graphTitle : 'y > 0',
             x : { start : -6, end : 10, unit : 5, label: 'x' },
             y : { start : 2, end : 6, unit : 15, label: 'y' }
         }, output: {
@@ -109,6 +113,7 @@ define([
         }, outputContainer: '.test_04' },
 
         { title: 'y < 0', input: {
+            graphTitle : 'y < 0',
             x : { start : -6, end : 10, unit : 17, step : 2, label: 'x' },
             y : { start : -8,  end : -1, unit : 14, step : 2, label: 'y' }
         }, output: {
@@ -116,6 +121,7 @@ define([
         }, outputContainer: '.test_05' },
 
         { title: 'x > 0 && y > 0', input: {
+            graphTitle : 'x > 0 && y > 0',
             x : { start : 5, end : 10, unit : 20, label: 'Time (hours)' },
             y : { start : 2, end : 9, unit : 20, step : 3, label: 'Money ($)' }
         }, output: {
@@ -123,6 +129,7 @@ define([
         }, outputContainer: '.test_06' },
 
         { title: 'x > 0 && y < 0', input: {
+            graphTitle : 'x > 0 && y < 0',
             x : { start : 5, end : 10, unit : 20, label: 'Time (hours)' },
             y : { start : -10, end : -5, unit : 20, label: 'Money ($)' }
         }, output: {
@@ -130,6 +137,7 @@ define([
         }, outputContainer: '.test_07' },
 
         { title: 'x < 0 && y < 0', input: {
+            graphTitle : 'x < 0 && y < 0',
             x : { start : -10, end : -5, unit : 13, label: 'Time (hours)' },
             y : { start : -10, end : -5, unit : 23, label: 'Money ($)' }
         }, output: {
@@ -137,6 +145,7 @@ define([
         }, outputContainer: '.test_08' },
 
         { title: 'x < 0 && y > 0', input: {
+            graphTitle : 'x < 0 && y > 0',
             x : { start : -10, end : -5, unit : 20, label: 'Time (hours)' },
             y : { start : 5, end : 10, unit : 20, label: 'Money ($)' }
         }, output: {
@@ -144,6 +153,7 @@ define([
         }, outputContainer: '.test_09' },
 
         { title: 'different scales oneQuadrant', input: {
+            graphTitle : 'different scales oneQuadrant',
             x : { start : 0, end : 7, unit : 43, step : 1, label: 'Time (hours)' },
             y : { start : -100, end : 0, unit : 3.4, step : 10, label: 'Money ($)' }
         }, output: {
@@ -151,6 +161,7 @@ define([
         }, outputContainer: '.test_10' },
 
         { title: 'different scales coordinates', input: {
+            graphTitle : 'different scales coordinates',
             x : { start : -60, end : 80, unit : 3.6, step : 10, label: 'x' },
             y : { start : -6, end : 8, unit : 36, step : 1, label: 'y' }
         }, output: {
@@ -194,14 +205,13 @@ define([
      */
     function createCanvas($container, config){
 
-        var padding = 20*2 + 28,
-            width = (config.x.end - config.x.start) * config.x.unit,
+        var width = (config.x.end - config.x.start) * config.x.unit,
             height= (config.y.end - config.y.start) * config.y.unit;
 
         var paper = scaleRaphael(
             $('.shape-container', $container)[0],
-            width + padding,
-            height + padding
+            width + 20*2 + 28, // we assume a label with default size
+            height + 20*2 + 28 + 40 // we assume a label and a title with default size
         );
 
         return paper;
