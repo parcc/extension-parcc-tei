@@ -14,18 +14,22 @@
 
 <div class="panel creator-graphPointLineGraphInteraction-range">
     <h3>{{__ "X axis"}}</h3>
-    <label for="xMin" class="spinner">from</label>
-    <input name="xMin" value="{{xMin}}" data-increment="1" type="text" />
-    <label for="xMax" class="spinner">to</label>
-    <input name="xMax" value="{{xMax}}" data-increment="1" type="text" />
+    <label for="xStart" class="spinner">{{__ "from"}}</label>
+    <input name="xStart" value="{{xStart}}" data-increment="1" type="text" />
+    <label for="xEnd" class="spinner">{{__ "to"}}</label>
+    <input name="xEnd" value="{{xEnd}}" data-increment="1" type="text" /><br />
+    <label for="xStep" class="spinner">{{__ "step"}}</label>
+    <input name="xStep" value="{{xStep}}" data-increment="1" type="text" /><br />
+    <label for="xSubStep" class="spinner">{{__ "sub step (snapping)"}}</label>
+    <input name="xSubStep" value="{{xSubStep}}" data-increment="1" type="text" /><br />
 </div>
 
 <div class="panel creator-graphPointLineGraphInteraction-range">
     <h3>{{__ "Y axis"}}</h3>
-    <label for="yMin" class="spinner">from</label>
-    <input name="yMin" value="{{yMin}}" data-increment="1" type="text" />
-    <label for="yMax" class="spinner">to</label>
-    <input name="yMax" value="{{yMax}}" data-increment="1" type="text" />
+    <label for="yStart" class="spinner">from</label>
+    <input name="yStart" value="{{yStart}}" data-increment="1" type="text" />
+    <label for="yEnd" class="spinner">to</label>
+    <input name="yEnd" value="{{yEnd}}" data-increment="1" type="text" />
 </div>
 
 <hr/>

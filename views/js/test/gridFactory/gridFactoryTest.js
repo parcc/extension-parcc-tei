@@ -184,10 +184,10 @@ define([
 
             $('#paper').append($container);
 
-            // assert.ok(
-            //     $container.find('.shape-container').html() ===
-            //     $(data.outputContainer + ' .shape-container').html(),
-            //     'rendered markup ok');
+            assert.ok(
+                $container.find('.shape-container').html() ===
+                $(data.outputContainer + ' .shape-container').html(),
+                'rendered markup ok');
         });
 
     function initGrid($container, gridConfig){

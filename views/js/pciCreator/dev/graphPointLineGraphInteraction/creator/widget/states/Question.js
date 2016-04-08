@@ -23,7 +23,7 @@ define([
             markupSelector : '.prompt',
             related : interaction
         });
-        
+
         //custom interaction state extends
         this.initColorPickers();
 
@@ -66,10 +66,10 @@ define([
             serial : response.serial,
             identifier : interaction.attr('responseIdentifier'),
             graphs : graphs,
-            xMin : interaction.prop('xMin'),
-            xMax : interaction.prop('xMax'),
-            yMin : interaction.prop('yMin'),
-            yMax : interaction.prop('yMax'),
+            xStart : interaction.prop('xStart'),
+            xEnd : interaction.prop('xEnd'),
+            yStart : interaction.prop('yStart'),
+            yEnd : interaction.prop('yEnd'),
             graphColor : interaction.prop('graphColor'),
             graphWidth : interaction.prop('graphWidth')
         }));
@@ -88,8 +88,8 @@ define([
         };
 
 
-        var xAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'xMin', 'xMax', options);
-        var yAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'yMin', 'yMax', options);
+        var xAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'xStart', 'xEnd', options);
+        var yAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'yStart', 'yEnd', options);
         var changeCallbacks = {
             identifier : function(i, value){
                 response.id(value);
@@ -102,7 +102,7 @@ define([
 
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, changeCallbacks);
-        
+
         //manually get array of checked graphs
         var $graphs = $form.find('[name=graphs]');
         $graphs.on('change', function(){
