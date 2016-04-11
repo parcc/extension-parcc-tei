@@ -34,9 +34,14 @@ define([
         this.destroyColorPickers();
     });
 
-    function graphPropChangeCallback(interaction, value, name){
+    function graphGridChangeCallback(interaction, value, name){
         interaction.prop(name, value);
-        interaction.triggerPci('gridchange', [interaction.getProperties()]);
+        interaction.triggerPci('gridChange', [interaction.getProperties()]);
+    }
+
+    function graphConfigChangeCallback(interaction, value, name){
+        interaction.prop(name, value);
+        interaction.triggerPci('configChange', [interaction.getProperties()]);
     }
 
     StateQuestion.prototype.initForm = function(){
@@ -107,7 +112,6 @@ define([
             }
         };
 
-
         var xAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'xStart', 'xEnd', options);
         var yAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'yStart', 'yEnd', options);
         var changeCallbacks = {
@@ -115,26 +119,29 @@ define([
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             },
-            graphTitle : graphPropChangeCallback,
-            maxPoints : graphPropChangeCallback,
-            draggable : graphPropChangeCallback,
-            segment : graphPropChangeCallback,
+            // reset state
+            maxPoints : graphGridChangeCallback,
+            xStep : graphGridChangeCallback,
+            xSubStep : graphGridChangeCallback,
+            yStep : graphGridChangeCallback,
+            ySubStep : graphGridChangeCallback,
 
-            xLabel : graphPropChangeCallback,
-            xStep : graphPropChangeCallback,
-            xSubStep : graphPropChangeCallback,
-            xAllowOuter : graphPropChangeCallback,
+            // maintain state
+            graphTitle : graphConfigChangeCallback,
+            draggable : graphConfigChangeCallback,
+            segment : graphConfigChangeCallback,
 
-            yLabel : graphPropChangeCallback,
-            yStep : graphPropChangeCallback,
-            ySubStep : graphPropChangeCallback,
-            yAllowOuter : graphPropChangeCallback,
+            xLabel : graphConfigChangeCallback,
+            xAllowOuter : graphConfigChangeCallback,
 
-            plotColor : graphPropChangeCallback,
-            plotThickness : graphPropChangeCallback,
-            pointRadius : graphPropChangeCallback,
-            pointGlow : graphPropChangeCallback,
-            pointColor : graphPropChangeCallback
+            yLabel : graphConfigChangeCallback,
+            yAllowOuter : graphConfigChangeCallback,
+
+            plotColor : graphConfigChangeCallback,
+            plotThickness : graphConfigChangeCallback,
+            pointRadius : graphConfigChangeCallback,
+            pointGlow : graphConfigChangeCallback,
+            pointColor : graphConfigChangeCallback
         };
         changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks);
 

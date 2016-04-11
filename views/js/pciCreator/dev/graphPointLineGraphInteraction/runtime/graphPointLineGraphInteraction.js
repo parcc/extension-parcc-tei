@@ -44,9 +44,8 @@ define([
                 subStep : parseInt(rawConfig.xSubStep)
             },
             y : {
-                // y-axis is reversed
-                start : -1 * parseInt(rawConfig.yEnd),
-                end : -1 * parseInt(rawConfig.yStart),
+                start : -1 * parseInt(rawConfig.yEnd), // y-axis is reversed
+                end : -1 * parseInt(rawConfig.yStart), // y-axis is reversed
                 label : rawConfig.yLabel,
                 step: parseInt(rawConfig.yStep),
                 unit : parseInt(rawConfig.yUnit),
@@ -145,6 +144,8 @@ define([
                         _.isObject(gridConfig.y) &&
                         gridConfig.x.start < gridConfig.x.end &&
                         gridConfig.y.start < gridConfig.y.end &&
+
+                        // @todo better to assing defaults ? if not wrong entry in authoring completely disable rendering
                         gridConfig.x.step >= 1 &&
                         gridConfig.y.step >= 1 &&
                         gridConfig.x.subStep >= 1 &&
@@ -243,9 +244,9 @@ define([
                         segment : _this.gridConfig.segment
                     };
 
-                if (_this.gridConfig.graphType === 'line') {
-                    clearPlot();
+                clearPlot();
 
+                if (_this.gridConfig.graphType === 'line' && sortedPoints.length >= 2) {
                     sortedPoints.reduce(function (pointA, pointB) {
                         if (pointA.getX() === pointB.getX()) {
                             paths.push(plotFactory.plotVertical(pointA, pointB, plotConfig));
@@ -258,11 +259,18 @@ define([
                 }
             }
 
-            function areCoordsValid(x, y) {
-                var gridBBox = grid.getBBox(),
-                    snappedPoint = grid.snap(x, y),
-                    xOnOuter = (snappedPoint[0] === gridBBox.x || snappedPoint[0] === gridBBox.x2),
+            function areCoordsValid(x, y, cartesian) {
+                var gridBBox, snappedPoint, xOnOuter, yOnOuter;
+
+                if (cartesian) {
+                    xOnOuter = (x === _this.gridConfig.x.start || x === _this.gridConfig.x.end);
+                    yOnOuter = (y === _this.gridConfig.y.start || y === _this.gridConfig.y.end);
+                } else {
+                    gridBBox = grid.getBBox();
+                    snappedPoint = grid.snap(x, y);
+                    xOnOuter = (snappedPoint[0] === gridBBox.x || snappedPoint[0] === gridBBox.x2);
                     yOnOuter = (snappedPoint[1] === gridBBox.y || snappedPoint[1] === gridBBox.y2);
+                }
                 return !
                     ((_this.gridConfig.x.allowOuter === false && xOnOuter) ||
                     (_this.gridConfig.y.allowOuter === false && yOnOuter));
@@ -272,7 +280,7 @@ define([
 
                 var gridBBox, newPoint, pointConfig, draggableArea, subStepSizes;
 
-                if(grid && areCoordsValid(fx, fy)){
+                if(grid && areCoordsValid(fx, fy, cartesian)){
 
                     gridBBox = grid.getBBox();
                     subStepSizes = grid.getSubStepSizes();
@@ -315,7 +323,7 @@ define([
              * Get the raw response of the interaction.
              * If no graph is drawn, returns null
              *
-             * @returns {object}
+             * @returns {array}
              */
             this.getRawResponse = function getRawResponse(){
                 if (points.length === 0) {
@@ -336,10 +344,12 @@ define([
                 clearPoint();
                 clearPlot();
 
-                serializedPoints.forEach(function addPoints(pointData) {
-                    var pointCoord = pointData.split(' ');
-                    addPoint(pointCoord[0], pointCoord[1], true);
-                });
+                if (serializedPoints) {
+                    serializedPoints.forEach(function addPoints(pointData) {
+                        var pointCoord = pointData.split(' ');
+                        addPoint(pointCoord[0], pointCoord[1], true);
+                    });
+                }
 
                 plot();
             };
@@ -355,9 +365,18 @@ define([
              * Add event listening for dynamic configuration change
              */
 
-            // @todo useful ??? for editor ???
-            _this.on('gridchange', function(config){
-                //the configuration of the grid, point or line have changed:
+            // this event maintains state...
+            _this.on('configChange', function(config){
+                var state = _this.getRawResponse();
+                _this.config = config;
+                _this.gridConfig = buildGridConfig(config);
+                initGrid($container, _this.gridConfig);
+
+                _this.setRawResponse(state);
+            });
+
+            // ...this one doesn't!
+            _this.on('gridChange', function(config){
                 _this.config = config;
                 _this.gridConfig = buildGridConfig(config);
                 initGrid($container, _this.gridConfig);
