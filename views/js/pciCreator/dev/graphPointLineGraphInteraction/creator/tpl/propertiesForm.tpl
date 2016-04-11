@@ -12,24 +12,64 @@
 
 <hr/>
 
+<div class="panel creator-graphPointLineGraphInteraction-graph">
+    <h3>{{__ "Graph properties"}}</h3>
+    <label for="graphTitle" class="spinner">{{__ "Title"}}</label>
+    <input name="graphTitle" value="{{graphTitle}}" type="text" /><br />
+    <label for="maxPoints" class="spinner">{{__ "Max number of points"}}</label>
+    <input name="maxPoints" value="{{maxPoints}}" data-increment="1" data-min="1" type="text" /><br />
+    <label>
+        <input name="draggable" type="checkbox" {{#if draggable}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "Draggable"}}
+    </label>
+    <label>
+        <input name="segment" type="checkbox" {{#if segment}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "Segment mode"}}
+    </label>
+</div>
+
+<hr/>
+
 <div class="panel creator-graphPointLineGraphInteraction-range">
     <h3>{{__ "X axis"}}</h3>
+    <label for="xLabel" class="spinner">{{__ "label"}}</label>
+    <input name="xLabel" value="{{xLabel}}" type="text" />
     <label for="xStart" class="spinner">{{__ "from"}}</label>
     <input name="xStart" value="{{xStart}}" data-increment="1" type="text" />
     <label for="xEnd" class="spinner">{{__ "to"}}</label>
     <input name="xEnd" value="{{xEnd}}" data-increment="1" type="text" /><br />
     <label for="xStep" class="spinner">{{__ "step"}}</label>
-    <input name="xStep" value="{{xStep}}" data-increment="1" type="text" /><br />
+    <input name="xStep" value="{{xStep}}" data-increment="1" data-min="1" type="text" /><br />
     <label for="xSubStep" class="spinner">{{__ "sub step (snapping)"}}</label>
-    <input name="xSubStep" value="{{xSubStep}}" data-increment="1" type="text" /><br />
+    <input name="xSubStep" value="{{xSubStep}}" data-increment="1" data-min="1" type="text" /><br />
+    <label>
+        <input name="xAllowOuter" type="checkbox" {{#if xAllowOuter}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "allow points on border"}}
+    </label>
 </div>
+
+<hr/>
 
 <div class="panel creator-graphPointLineGraphInteraction-range">
     <h3>{{__ "Y axis"}}</h3>
+    <label for="yLabel" class="spinner">{{__ "label"}}</label>
+    <input name="yLabel" value="{{yLabel}}" type="text" />
     <label for="yStart" class="spinner">from</label>
     <input name="yStart" value="{{yStart}}" data-increment="1" type="text" />
     <label for="yEnd" class="spinner">to</label>
-    <input name="yEnd" value="{{yEnd}}" data-increment="1" type="text" />
+    <input name="yEnd" value="{{yEnd}}" data-increment="1" data-min="1" type="text" />
+    <label for="yStep" class="spinner">{{__ "step"}}</label>
+    <input name="yStep" value="{{yStep}}" data-increment="1" data-min="1" type="text" /><br />
+    <label for="ySubStep" class="spinner">{{__ "sub step (snapping)"}}</label>
+    <input name="ySubStep" value="{{ySubStep}}" data-increment="1" data-min="1" type="text" /><br />
+    <label>
+        <input name="yAllowOuter" type="checkbox" {{#if yAllowOuter}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "allow points on border"}}
+    </label>
 </div>
 
 <hr/>
@@ -42,31 +82,27 @@
         <a class="closer" href="#" data-close="#color-picker-container"></a>
     </div>
     <div class="panel">
-        <label for="graphColor">{{__ "Color"}}</label>
-        <span class="color-trigger" id="graphColor"></span>
-        <input type="hidden" name="graphColor" value="{{graphColor}}"/>
+        <label for="plotColor">{{__ "Graph Color"}}</label>
+        <span class="color-trigger" id="plotColor"></span>
+        <input type="hidden" name="plotColor" value="{{plotColor}}"/>
     </div>
     <div class="panel creator-graphPointLineGraphInteraction-spinner">
-        <label for="graphWidth" class="spinner">{{__ "Thickness"}}</label>
-        <input name="graphWidth" value="{{graphWidth}}" data-increment="1" data-min="1" type="text" class="incrementer">
+        <label for="plotThickness" class="spinner">{{__ "Thickness"}}</label>
+        <input name="plotThickness" value="{{plotThickness}}" data-increment="1" data-min="1" type="text" class="incrementer">
+    </div>
+    <div class="panel creator-graphPointLineGraphInteraction-spinner">
+        <label for="pointRadius" class="spinner">{{__ "Point radius"}}</label>
+        <input name="pointRadius" value="{{pointRadius}}" data-increment="1" data-min="1" type="text" class="incrementer">
+    </div>
+    <label>
+        <input name="pointGlow" type="checkbox" {{#if pointGlow}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ " points Glow"}}
+    </label>
+    <div class="panel">
+        <label for="pointColor">{{__ "Point Color"}}</label>
+        <span class="color-trigger" id="pointColor"></span>
+        <input type="hidden" name="pointColor" value="{{pointColor}}"/>
     </div>
 </div>
 
-<hr/>
-
-<div class="panel" id="creator-graphPointLineGraphInteraction-available-graphs">
-    <label for="" class="has-icon">{{__ "Available Graphs"}}</label>
-    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
-    <div class="tooltip-content">{{__ 'Define which graphs are availabe for the test taker to use.'}}</div>
-    <ul class="plain" data-role="graphs">
-        {{#each graphs}}
-        <li>
-            <label>
-                <input name="graphs" value="{{@key}}" type="checkbox" {{#if checked}}checked="checked"{{/if}}/>
-                       <span class="icon-checkbox"></span>
-                {{label}}
-            </label>
-        </li>
-        {{/each}}
-    </ul>
-</div>

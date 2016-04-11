@@ -22,12 +22,15 @@ define([
 
     function buildGridConfig(rawConfig){
 
+
+        // @todo set default values for 'risky' settings
+
         return {
             // Interaction config
-            draggable: (rawConfig.draggable === 'true'),
+            draggable: !!rawConfig.draggable,
             graphType: rawConfig.graphType,
             maxPoints: parseInt(rawConfig.maxPoints),
-            segment: (rawConfig.segment === 'true'),
+            segment: !!rawConfig.segment,
 
             // Gridfactory config
             x : {
@@ -37,7 +40,7 @@ define([
                 step: parseInt(rawConfig.xStep),
                 unit : parseInt(rawConfig.xUnit),
                 weight : parseInt(rawConfig.xWeight),
-                allowOuter : (rawConfig.xAllowOuter === 'true'),
+                allowOuter : !!rawConfig.xAllowOuter,
                 subStep : parseInt(rawConfig.xSubStep)
             },
             y : {
@@ -48,13 +51,13 @@ define([
                 step: parseInt(rawConfig.yStep),
                 unit : parseInt(rawConfig.yUnit),
                 weight : parseInt(rawConfig.yWeight),
-                allowOuter : (rawConfig.yAllowOuter === 'true'),
+                allowOuter : !!rawConfig.yAllowOuter,
                 subStep : parseInt(rawConfig.ySubStep)
             },
             graphTitle: rawConfig.graphTitle,
             graphTitleSize: 20,
             graphTitlePadding: 40,
-            graphTitleRequired: (rawConfig.graphTitleRequired === 'true'),
+            graphTitleRequired: !!rawConfig.graphTitleRequired,
             weight: parseInt(rawConfig.weight),
             padding: 30,
             labelPadding: 28,
@@ -69,7 +72,7 @@ define([
             // PointFactory config
             point : {
                 color: rawConfig.pointColor,
-                glow: (rawConfig.pointGlow === 'true'),
+                glow: !!rawConfig.pointGlow,
                 radius: parseInt(rawConfig.pointRadius)
             }
         };
@@ -139,9 +142,13 @@ define([
 
                 //intialize the grid only if the configuration is correct
                 if(_.isObject(gridConfig.x) &&
-                    _.isObject(gridConfig.y) &&
-                    gridConfig.x.start < gridConfig.x.end &&
-                    gridConfig.y.start < gridConfig.y.end
+                        _.isObject(gridConfig.y) &&
+                        gridConfig.x.start < gridConfig.x.end &&
+                        gridConfig.y.start < gridConfig.y.end &&
+                        gridConfig.x.step >= 1 &&
+                        gridConfig.y.step >= 1 &&
+                        gridConfig.x.subStep >= 1 &&
+                        gridConfig.y.subStep >= 1
 
                     /// @todo CHECK NEW CONFIGS HERE
                     // graphTypes

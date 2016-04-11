@@ -55,6 +55,8 @@ define([
                 tangent : {label : 'Tan/Cotan'}
             };
 
+
+        // @todo clean this up!
         var graphSet = interaction.prop('graphs');
         graphSet = graphSet ? graphSet.split(',') : [];
         _.each(graphSet, function(graph){
@@ -65,13 +67,31 @@ define([
         $form.html(formTpl({
             serial : response.serial,
             identifier : interaction.attr('responseIdentifier'),
-            graphs : graphs,
+
+            graphTitle : interaction.prop('graphTitle'),
+            maxPoints : interaction.prop('maxPoints'),
+            draggable : !!interaction.prop('draggable'),
+            segment : !!interaction.prop('segment'),
+
+            xLabel : interaction.prop('xLabel'),
             xStart : interaction.prop('xStart'),
             xEnd : interaction.prop('xEnd'),
+            xStep : interaction.prop('xStep'),
+            xSubStep : interaction.prop('xSubStep'),
+            xAllowOuter : !!interaction.prop('xAllowOuter'),
+
+            yLabel : interaction.prop('yLabel'),
             yStart : interaction.prop('yStart'),
             yEnd : interaction.prop('yEnd'),
-            graphColor : interaction.prop('graphColor'),
-            graphWidth : interaction.prop('graphWidth')
+            yStep : interaction.prop('yStep'),
+            ySubStep : interaction.prop('ySubStep'),
+            yAllowOuter : !!interaction.prop('yAllowOuter'),
+
+            plotColor : interaction.prop('plotColor'),
+            plotThickness : interaction.prop('plotThickness'),
+            pointRadius : interaction.prop('pointRadius'),
+            pointGlow : !!interaction.prop('pointGlow'),
+            pointColor : interaction.prop('pointColor')
         }));
 
         //init form javascript
@@ -95,10 +115,28 @@ define([
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             },
-            graphColor : graphPropChangeCallback,
-            graphWidth : graphPropChangeCallback
+            graphTitle : graphPropChangeCallback,
+            maxPoints : graphPropChangeCallback,
+            draggable : graphPropChangeCallback,
+            segment : graphPropChangeCallback,
+
+            xLabel : graphPropChangeCallback,
+            xStep : graphPropChangeCallback,
+            xSubStep : graphPropChangeCallback,
+            xAllowOuter : graphPropChangeCallback,
+
+            yLabel : graphPropChangeCallback,
+            yStep : graphPropChangeCallback,
+            ySubStep : graphPropChangeCallback,
+            yAllowOuter : graphPropChangeCallback,
+
+            plotColor : graphPropChangeCallback,
+            plotThickness : graphPropChangeCallback,
+            pointRadius : graphPropChangeCallback,
+            pointGlow : graphPropChangeCallback,
+            pointColor : graphPropChangeCallback
         };
-        changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks)
+        changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks);
 
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, changeCallbacks);
