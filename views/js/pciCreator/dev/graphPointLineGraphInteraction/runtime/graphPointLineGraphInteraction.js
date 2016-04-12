@@ -192,6 +192,8 @@ define([
                                 plot();
                             }
                         }
+                        _this.trigger('responseChange', [_this.getResponse()]);
+
                     });
 
                     //init related plot factory
@@ -206,6 +208,7 @@ define([
                             points.splice(pointToDelete, 1);
                             plot();
                         }
+                        _this.trigger('responseChange', [_this.getResponse()]);
                     });
                 }
 
@@ -256,7 +259,6 @@ define([
                         }
                         return pointB;
                     });
-                    _this.trigger('responseChange', [_this.getResponse()]);
                 }
             }
 
