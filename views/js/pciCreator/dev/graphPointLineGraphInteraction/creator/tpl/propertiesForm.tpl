@@ -108,6 +108,10 @@
         <input name="plotThickness" value="{{plotThickness}}" data-increment="1" data-min="1" type="text" class="incrementer">
     </div>
     <div class="panel creator-graphPointLineGraphInteraction-spinner">
+        <label for="weight" class="spinner">{{__ "inner line weight"}}</label>
+        <input name="weight" value="{{weight}}" data-increment="1" data-min="1" type="text" />
+    </div>
+    <div class="panel creator-graphPointLineGraphInteraction-spinner">
         <label for="pointRadius" class="spinner">{{__ "Point radius"}}</label>
         <input name="pointRadius" value="{{pointRadius}}" data-increment="1" data-min="1" type="text" class="incrementer">
     </div>

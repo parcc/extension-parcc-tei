@@ -80,6 +80,7 @@ define([
             segment : !!interaction.prop('segment'),
             width : interaction.prop('width'),
             height : interaction.prop('height'),
+            weight : interaction.prop('weight'),
 
             xLabel : interaction.prop('xLabel'),
             xStart : interaction.prop('xStart'),
@@ -95,6 +96,7 @@ define([
             ySubStep : interaction.prop('ySubStep'),
             yAllowOuter : !!interaction.prop('yAllowOuter'),
 
+            innerLineWeight : interaction.prop('innerLineWeight'),
             plotColor : interaction.prop('plotColor'),
             plotThickness : interaction.prop('plotThickness'),
             pointRadius : interaction.prop('pointRadius'),
@@ -138,6 +140,7 @@ define([
             graphType : graphConfigChangeCallback,
             draggable : graphConfigChangeCallback,
             segment : graphConfigChangeCallback,
+            weight : graphConfigChangeCallback,
 
             xLabel : graphConfigChangeCallback,
             yLabel : graphConfigChangeCallback,
@@ -146,7 +149,8 @@ define([
             plotThickness : graphConfigChangeCallback,
             pointRadius : graphConfigChangeCallback,
             pointGlow : graphConfigChangeCallback,
-            pointColor : graphConfigChangeCallback
+            pointColor : graphConfigChangeCallback,
+            innerLineWeight : graphConfigChangeCallback
         };
         changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks);
 
