@@ -20,7 +20,7 @@
     "tags": [],
     "icon": "./creator/img/icon.svg",
     "response": {
-        "baseType": "integer",
+        "baseType": "string",
         "cardinality": "single"
     },
     "debug" : false
