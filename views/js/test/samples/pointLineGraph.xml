@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><assessmentItem xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" adaptive="false" identifier="VF643134" timeDependent="false" title="Composite" toolName="IBIS Export" toolVersion="1.0" xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiextv2p1_v1p0.xsd">
+<?xml version="1.0" encoding="UTF-8"?><assessmentItem xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" adaptive="false" identifier="VF643134" timeDependent="false" title="Composite" toolName="IBIS Export" toolVersion="1.0" xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiextv2p1_v1p0.xsd">
     <responseDeclaration baseType="string" cardinality="multiple" identifier="RESPONSE">
         <correctResponse>
             <value>50 25</value>
@@ -22,7 +22,7 @@
     </templateDeclaration>
     <itemBody>
         <customInteraction responseIdentifier="RESPONSE">
-            <pci:portableCustomInteraction scustomInteractionTypeIdentifier="graphPointLineGraphInteraction" hook="graphPointLineGraphInteraction/runtime/graphPointLineGraphInteraction.js">
+            <pci:portableCustomInteraction customInteractionTypeIdentifier="graphPointLineGraphInteraction" hook="graphPointLineGraphInteraction/runtime/graphPointLineGraphInteraction.js">
                 <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
                 <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
                     <pci:libraries>
@@ -46,13 +46,14 @@
                     <pci:entry key="pointRadius">8</pci:entry>
                     <pci:entry key="segment">true</pci:entry>
                     <pci:entry key="weight">1</pci:entry>
+                    <pci:entry key="width">450</pci:entry>
+                    <pci:entry key="height">300</pci:entry>
                     <pci:entry key="xAllowOuter">true</pci:entry>
                     <pci:entry key="xStep">1</pci:entry>
                     <pci:entry key="xLabel">Time (hr)</pci:entry>
                     <pci:entry key="xEnd">7</pci:entry>
                     <pci:entry key="xStart">0</pci:entry>
                     <pci:entry key="xSubStep">2</pci:entry>
-                    <pci:entry key="xUnit">42</pci:entry>
                     <pci:entry key="xWeight">3</pci:entry>
                     <pci:entry key="yAllowOuter">true</pci:entry>
                     <pci:entry key="yStep">10</pci:entry>
@@ -60,7 +61,6 @@
                     <pci:entry key="yEnd">100</pci:entry>
                     <pci:entry key="yStart">0</pci:entry>
                     <pci:entry key="ySubStep">2</pci:entry>
-                    <pci:entry key="yUnit">3.4</pci:entry>
                     <pci:entry key="yWeight">3</pci:entry>
                 </pci:properties>
                 <pci:markup>

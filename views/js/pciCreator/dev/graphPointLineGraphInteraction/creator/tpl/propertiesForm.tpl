@@ -18,6 +18,10 @@
     <input name="graphTitle" value="{{graphTitle}}" type="text" /><br />
     <label for="maxPoints" class="spinner">{{__ "Max number of points"}}</label>
     <input name="maxPoints" value="{{maxPoints}}" data-increment="1" data-min="1" type="text" /><br />
+    <label for="width" class="spinner">{{__ "width"}}</label>
+    <input name="width" value="{{width}}" data-increment="1" data-min="1" type="text" /><br />
+    <label for="height" class="spinner">{{__ "height"}}</label>
+    <input name="height" value="{{height}}" data-increment="1" data-min="1" type="text" /><br />
     <label>
         <input name="draggable" type="checkbox" {{#if draggable}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>

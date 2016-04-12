@@ -45,6 +45,8 @@ define([
                 "pointRadius": 8,
                 "segment": true,
                 "weight": 1,
+                "width": 450,
+                "height": 300,
 
                 "xAllowOuter": true,
                 "xStep": 1,
@@ -52,7 +54,6 @@ define([
                 "xStart": 0,
                 "xEnd": 7,
                 "xSubStep": 2,
-                "xUnit": 42,
                 "xWeight": 3,
 
                 "yAllowOuter": true,
@@ -61,7 +62,6 @@ define([
                 "yStart": 0,
                 "yEnd": 100,
                 "ySubStep": 2,
-                "yUnit": 3.4,
                 "yWeight": 3
 
                 /*

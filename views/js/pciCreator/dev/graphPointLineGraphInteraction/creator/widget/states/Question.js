@@ -77,6 +77,8 @@ define([
             maxPoints : interaction.prop('maxPoints'),
             draggable : !!interaction.prop('draggable'),
             segment : !!interaction.prop('segment'),
+            width : interaction.prop('width'),
+            height : interaction.prop('height'),
 
             xLabel : interaction.prop('xLabel'),
             xStart : interaction.prop('xStart'),
@@ -108,7 +110,7 @@ define([
             updateCardinality : false,
             attrMethodNames : {set : 'prop', remove : 'removeProp'},
             callback : function(){
-                interaction.triggerPci('gridchange', [interaction.getProperties()]);
+                interaction.triggerPci('gridChange', [interaction.getProperties()]);
             }
         };
 
@@ -120,11 +122,15 @@ define([
                 interaction.attr('responseIdentifier', value);
             },
             // reset state
+            width : graphGridChangeCallback,
+            height : graphGridChangeCallback,
             maxPoints : graphGridChangeCallback,
             xStep : graphGridChangeCallback,
             xSubStep : graphGridChangeCallback,
             yStep : graphGridChangeCallback,
             ySubStep : graphGridChangeCallback,
+            yAllowOuter : graphConfigChangeCallback,
+            xAllowOuter : graphConfigChangeCallback,
 
             // maintain state
             graphTitle : graphConfigChangeCallback,
@@ -132,10 +138,7 @@ define([
             segment : graphConfigChangeCallback,
 
             xLabel : graphConfigChangeCallback,
-            xAllowOuter : graphConfigChangeCallback,
-
             yLabel : graphConfigChangeCallback,
-            yAllowOuter : graphConfigChangeCallback,
 
             plotColor : graphConfigChangeCallback,
             plotThickness : graphConfigChangeCallback,

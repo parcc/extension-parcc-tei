@@ -166,7 +166,25 @@ define([
             y : { start : -6, end : 8, unit : 36, step : 1, label: 'y' }
         }, output: {
             width: 504, height: 504
-        }, outputContainer: '.test_11' }
+        }, outputContainer: '.test_11' },
+
+        { title: 'size in pixels coordinates', input: {
+            graphTitle : 'size in pixels coordinates',
+            width : 450, height : 300,
+            x : { start : -5, end : 5, step : 1, label: 'Time (hours)' },
+            y : { start : -50, end : +50, step : 10, label: 'Money ($)' }
+        }, output: {
+            width: 450, height: 300
+        }, outputContainer: '.test_12' },
+
+        { title: 'size in pixels one quadrant', input: {
+            graphTitle : 'size in pixels one quadrant',
+            width : 450, height : 300,
+            x : { start : 0, end : 15, step : 1, label: 'Time (hours)' },
+            y : { start : -50, end : 0, step : 5, label: 'Money ($)' }
+        }, output: {
+            width: 450, height: 300
+        }, outputContainer: '.test_13' }
         /* */
     ];
 
@@ -205,8 +223,8 @@ define([
      */
     function createCanvas($container, config){
 
-        var width = (config.x.end - config.x.start) * config.x.unit,
-            height= (config.y.end - config.y.start) * config.y.unit;
+        var width = (config.width) ? config.width : (config.x.end - config.x.start) * config.x.unit,
+            height = (config.height) ? config.height : (config.y.end - config.y.start) * config.y.unit;
 
         var paper = scaleRaphael(
             $('.shape-container', $container)[0],

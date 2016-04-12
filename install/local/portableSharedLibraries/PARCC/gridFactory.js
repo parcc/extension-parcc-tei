@@ -2,13 +2,13 @@ define(['OAT/lodash'], function( _ ){
 
     'use strict';
 
-    function gridFactory(paper,options){
+    function gridFactory(paper,rawOptions){
 
-        if (typeof options.x !== 'object' && typeof options.y !== 'object'){
+        if (typeof rawOptions.x !== 'object' && typeof rawOptions.y !== 'object'){
             throw 'I need x and y axis';
         }
 
-        if ( (options.x.start >= options.x.end) || (options.y.start >= options.y.end) ) {
+        if ( (rawOptions.x.start >= rawOptions.x.end) || (rawOptions.y.start >= rawOptions.y.end) ) {
             throw 'end must be greater than start';
         }
 
@@ -42,40 +42,55 @@ define(['OAT/lodash'], function( _ ){
             }
         }
 
-        var lineColor = '#222';
+        function buildOptions(rawOptions) {
+            var lineColor = '#222';
 
-        // @todo describe options
-        options = _.merge({},{
-            graphTitle : null,
-            graphTitleRequired : false,
-            graphTitleSize : 24,
-            graphTitlePadding : 36,
-            color : lineColor,
-            weight : 1,
-            labelSize : 14,
-            labelPadding : 28,
-            padding : 20,
-            x : {
-                start : -10,
-                end :  10,
-                label : null,
-                step : 1,
-                unit : 10,
+            // @todo describe options
+            var options = _.merge({},{
+                graphTitle : null,
+                graphTitleRequired : false,
+                graphTitleSize : 24,
+                graphTitlePadding : 36,
                 color : lineColor,
-                weight : 3
-            },
-            y : {
-                start : -10,
-                end :  10,
-                label : null,
-                step : 1,
-                unit : 10,
-                color : lineColor,
-                weight : 3
+                weight : 1,
+                labelSize : 14,
+                labelPadding : 28,
+                padding : 20,
+                height: null,
+                width: null,
+                x : {
+                    start : -10,
+                    end :  10,
+                    label : null,
+                    step : 1,
+                    unit : 10,
+                    color : lineColor,
+                    weight : 3
+                },
+                y : {
+                    start : -10,
+                    end :  10,
+                    label : null,
+                    step : 1,
+                    unit : 10,
+                    color : lineColor,
+                    weight : 3
+                }
+            },rawOptions);
+
+            // if defined, width and height takes precedence over units
+            if (options.width) {
+                options.x.unit = (options.width / Math.abs(options.x.end - options.x.start)).toPrecision(2);
             }
-        },options);
+            if (options.height) {
+                options.y.unit = (options.height / Math.abs(options.y.end - options.y.start)).toPrecision(2);
+            }
+            return options;
+        }
 
-        var _x = options.x,
+        var options = buildOptions(rawOptions),
+
+            _x = options.x,
             _y = options.y,
 
             _xRange = Math.abs(_x.end - _x.start),
@@ -111,11 +126,11 @@ define(['OAT/lodash'], function( _ ){
             set = paper.set(),
             _borderBox = {};
 
+        // compute margins & label positions
         if (options.graphTitle) {
             _paddingTop += options.graphTitlePadding;
         }
 
-        // compute margins & label positions
         if (_graphType === "oneQuadrant") {
             if (_x.label) {
                 // x label on bottom
@@ -174,7 +189,7 @@ define(['OAT/lodash'], function( _ ){
                 }
                 _yLabelX = xOrigin;
                 _yLabelY = -options.labelPadding;
-                _xLabelAngle = 0;
+                _yLabelAngle = 0;
             }
         }
 

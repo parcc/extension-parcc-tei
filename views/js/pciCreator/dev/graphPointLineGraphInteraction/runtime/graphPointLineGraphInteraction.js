@@ -21,16 +21,14 @@ define([
     'use strict';
 
     function buildGridConfig(rawConfig){
-
-
-        // @todo set default values for 'risky' settings
-
-        return {
+        var gridConfig = {
             // Interaction config
             draggable: !!rawConfig.draggable,
             graphType: rawConfig.graphType,
             maxPoints: parseInt(rawConfig.maxPoints),
             segment: !!rawConfig.segment,
+            width: parseInt(rawConfig.width),
+            height: parseInt(rawConfig.height),
 
             // Gridfactory config
             x : {
@@ -38,7 +36,6 @@ define([
                 end : parseInt(rawConfig.xEnd),
                 label : rawConfig.xLabel,
                 step: parseInt(rawConfig.xStep),
-                unit : parseInt(rawConfig.xUnit),
                 weight : parseInt(rawConfig.xWeight),
                 allowOuter : !!rawConfig.xAllowOuter,
                 subStep : parseInt(rawConfig.xSubStep)
@@ -48,7 +45,6 @@ define([
                 end : -1 * parseInt(rawConfig.yStart), // y-axis is reversed
                 label : rawConfig.yLabel,
                 step: parseInt(rawConfig.yStep),
-                unit : parseInt(rawConfig.yUnit),
                 weight : parseInt(rawConfig.yWeight),
                 allowOuter : !!rawConfig.yAllowOuter,
                 subStep : parseInt(rawConfig.ySubStep)
@@ -75,6 +71,10 @@ define([
                 radius: parseInt(rawConfig.pointRadius)
             }
         };
+
+        // @todo set default values for 'risky' settings
+
+        return gridConfig;
     }
 
     function createCanvas($container, config){
@@ -94,8 +94,8 @@ define([
         }
         paper = scaleRaphael(
             $('.shape-container', $container)[0],
-            (config.x.end - config.x.start) * config.x.unit + xPadding,
-            (config.y.end - config.y.start) * config.y.unit + yPadding
+            config.width + xPadding,
+            config.height + yPadding
         );
 
         return paper;
@@ -146,6 +146,7 @@ define([
                         gridConfig.y.start < gridConfig.y.end &&
 
                         // @todo better to assing defaults ? if not wrong entry in authoring completely disable rendering
+                        // @todo move safety checks to Grid ?
                         gridConfig.x.step >= 1 &&
                         gridConfig.y.step >= 1 &&
                         gridConfig.x.subStep >= 1 &&
@@ -330,6 +331,7 @@ define([
                     return null;
                 }
                 var serializedPoints = points.map(function getPointsData(point) {
+                    // @todo round values ?!! check with sam or jerôme
                     var pointData = point.getCartesianCoord(1);
                     return pointData.x + ' ' + pointData.y;
                 });
