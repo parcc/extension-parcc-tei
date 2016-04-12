@@ -74,6 +74,7 @@ define([
             identifier : interaction.attr('responseIdentifier'),
 
             graphTitle : interaction.prop('graphTitle'),
+            graphType : interaction.prop('graphType'),
             maxPoints : interaction.prop('maxPoints'),
             draggable : !!interaction.prop('draggable'),
             segment : !!interaction.prop('segment'),
@@ -134,6 +135,7 @@ define([
 
             // maintain state
             graphTitle : graphConfigChangeCallback,
+            graphType : graphConfigChangeCallback,
             draggable : graphConfigChangeCallback,
             segment : graphConfigChangeCallback,
 

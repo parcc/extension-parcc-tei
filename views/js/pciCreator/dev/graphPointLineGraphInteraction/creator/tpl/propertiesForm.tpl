@@ -16,6 +16,19 @@
     <h3>{{__ "Graph properties"}}</h3>
     <label for="graphTitle" class="spinner">{{__ "Title"}}</label>
     <input name="graphTitle" value="{{graphTitle}}" type="text" /><br />
+    <div>
+        <label class="smaller-prompt">
+            <input type="radio" name="graphType" value="line" {{#unless scatterplot}}checked{{/unless}} />
+            <span class="icon-radio"></span>
+            {{__ 'Line'}}
+        </label>
+        <br>
+        <label class="smaller-prompt">
+            <input type="radio" name="graphType" value="scatterplot" {{#if scatterplot}}checked{{/if}} />
+            <span class="icon-radio"></span>
+            {{__ 'Scatterplot'}}
+        </label>
+    </div>
     <label for="maxPoints" class="spinner">{{__ "Max number of points"}}</label>
     <input name="maxPoints" value="{{maxPoints}}" data-increment="1" data-min="1" type="text" /><br />
     <label for="width" class="spinner">{{__ "width"}}</label>
