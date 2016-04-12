@@ -262,8 +262,9 @@ define([
                 var gridBBox, snappedPoint, xOnOuter, yOnOuter;
 
                 if (cartesian) {
-                    xOnOuter = (x === _this.gridConfig.x.start || x === _this.gridConfig.x.end);
-                    yOnOuter = (y === _this.gridConfig.y.start || y === _this.gridConfig.y.end);
+                    snappedPoint = grid.snapCartesian(x, y);
+                    xOnOuter = (snappedPoint[0] === _this.gridConfig.x.start || snappedPoint[0] === _this.gridConfig.x.end);
+                    yOnOuter = (snappedPoint[1] === _this.gridConfig.y.start || snappedPoint[1] === _this.gridConfig.y.end);
                 } else {
                     gridBBox = grid.getBBox();
                     snappedPoint = grid.snap(x, y);

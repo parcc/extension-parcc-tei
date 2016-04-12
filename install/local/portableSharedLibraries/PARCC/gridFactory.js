@@ -48,7 +48,7 @@ define(['OAT/lodash'], function( _ ){
             // @todo describe options
             var options = _.merge({},{
                 graphTitle : null,
-                graphTitleRequired : false,
+                graphTitleRequired : false, // unused for now
                 graphTitleSize : 24,
                 graphTitlePadding : 36,
                 color : lineColor,
@@ -99,8 +99,11 @@ define(['OAT/lodash'], function( _ ){
             _width = _xRange * _x.unit,
             _height = _yRange * _y.unit,
 
-            _xSubStepSize = (_width / ((_xRange / _x.step)) / _x.subStep),
-            _ySubStepSize = (_height / ((_yRange / _y.step)) / _y.subStep),
+            _xStepSize = (_width / (_xRange / _x.step)),
+            _yStepSize = (_height / (_yRange / _y.step)),
+
+            _xSubStepSize = (_xStepSize / _x.subStep),
+            _ySubStepSize = (_yStepSize / _y.subStep),
 
             _xQuadrants = (_x.start < 0 && _x.end > 0) ? 2 : 1,
             _yQuadrants = (_y.start < 0 && _y.end > 0) ? 2 : 1,
@@ -194,11 +197,22 @@ define(['OAT/lodash'], function( _ ){
         }
 
         // compute useful values for rendering
-        for (var i = 0; i <= _width; i += _xSubStepSize) {
-            _xSnapToValues.push(i + _paddingLeft);
+        var snapValue;
+        for (var i = 0; i <= _width; i += _xStepSize) {
+            for(var j = 0; j < _xStepSize; j += _xSubStepSize) {
+                snapValue = i + j;
+                if (snapValue <= _width) {
+                    _xSnapToValues.push(snapValue + _paddingLeft);
+                }
+            }
         }
-        for (i = 0; i <= _height; i += _ySubStepSize) {
-            _ySnapToValues.push(i + _paddingTop);
+        for (i = 0; i <= _height; i += _yStepSize) {
+            for(j = 0; j < _yStepSize; j += _ySubStepSize) {
+                snapValue = i + j;
+                if (snapValue <= _height) {
+                    _ySnapToValues.push(snapValue + _paddingTop);
+                }
+            }
         }
 
         function _drawGraphTitle() {

@@ -55,7 +55,7 @@
                     "xLabel": "Time (hr)",
                     "xEnd": "7",
                     "xStart": "0",
-                    "xSubStep": "2",
+                    "xSubStep": "4",
                     "xWeight": "3",
                     "yAllowOuter": "true",
                     "yStep": "10",
