@@ -172,9 +172,7 @@ define([
                         if (areCoordsValid(fx, fy)) {
                             if (points.length < _this.gridConfig.maxPoints) {
                                 addPoint(fx, fy);
-                                if (points.length >= 2) {
-                                    plot();
-                                }
+                                plot();
                             } else {
                                 // Get the last point placed
                                 var oldPoint = points.pop();
@@ -192,8 +190,6 @@ define([
                                 plot();
                             }
                         }
-                        _this.trigger('responseChange', [_this.getResponse()]);
-
                     });
 
                     //init related plot factory
@@ -208,7 +204,6 @@ define([
                             points.splice(pointToDelete, 1);
                             plot();
                         }
-                        _this.trigger('responseChange', [_this.getResponse()]);
                     });
                 }
 
@@ -260,6 +255,7 @@ define([
                         return pointB;
                     });
                 }
+                _this.trigger('responseChange', [_this.getResponse()]);
             }
 
             function areCoordsValid(x, y, cartesian) {
