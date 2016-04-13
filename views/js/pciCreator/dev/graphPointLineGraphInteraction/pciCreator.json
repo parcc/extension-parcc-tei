@@ -1,11 +1,11 @@
 {
     "typeIdentifier": "graphPointLineGraphInteraction",
-    "label": "Graph Point Line",
-    "short": "Graph Point Line",
-    "description": "Graph Point Line",
+    "label": "Point Graph",
+    "short": "Point Graph",
+    "description": "Point Graph Interaction",
     "version": "0.1",
-    "author": "Sam Sipasseuth",
-    "email": "sam@taotesting.com",
+    "author": "Sam Sipasseuth & Christophe Noël",
+    "email": "sam@taotesting.com & christophe@taotesting.com",
     "libraries": [
         "IMSGlobal/jquery_2_1_1",
         "PARCC/graphFunction",
