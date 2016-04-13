@@ -21,12 +21,21 @@ define([
     'use strict';
 
     function buildGridConfig(rawConfig){
+
+        function getBoolean(value, defaultValue) {
+            if (typeof(value) === "undefined") {
+                return defaultValue;
+            } else {
+                return (value === true || value === "true");
+            }
+        }
+
         var gridConfig = {
             // Interaction config
-            draggable: (rawConfig.draggable === true || rawConfig.draggable === "true"),
+            draggable: getBoolean(rawConfig.draggable, true),
             graphType: rawConfig.graphType, // scatterplot (nuage de points) or line
             maxPoints: parseInt(rawConfig.maxPoints),
-            segment: (rawConfig.segment === true || rawConfig.segment === "true"), // draw only segments between points
+            segment: getBoolean(rawConfig.segment, true), // draw only segments between points
 
             // Gridfactory config
             x : {
@@ -36,7 +45,7 @@ define([
                 step: parseInt(rawConfig.xStep),
                 subStep : parseInt(rawConfig.xSubStep),
                 weight : parseInt(rawConfig.xWeight),
-                allowOuter : (rawConfig.xAllowOuter === true || rawConfig.xAllowOuter === "true")
+                allowOuter : getBoolean(rawConfig.xAllowOuter, true)
             },
             y : {
                 start : -1 * parseInt(rawConfig.yEnd), // y-axis is reversed
@@ -45,12 +54,12 @@ define([
                 step: parseInt(rawConfig.yStep),
                 subStep : parseInt(rawConfig.ySubStep),
                 weight : parseInt(rawConfig.yWeight),
-                allowOuter : (rawConfig.yAllowOuter === true || rawConfig.yAllowOuter === "true")
+                allowOuter : getBoolean(rawConfig.yAllowOuter, true)
             },
             graphTitle: rawConfig.graphTitle,
             graphTitleSize: 20,
             graphTitlePadding: 40,
-            graphTitleRequired : (rawConfig.graphTitleRequired === true || rawConfig.graphTitleRequired === "true"), // unused for now
+            graphTitleRequired : getBoolean(rawConfig.graphTitleRequired, true), // unused for now
             weight: parseInt(rawConfig.weight), // grid weight
             width: parseInt(rawConfig.width),
             height: parseInt(rawConfig.height),
@@ -67,11 +76,12 @@ define([
             // PointFactory config
             point : {
                 color: rawConfig.pointColor,
-                glow : (rawConfig.pointGlow === true || rawConfig.pointGlow === "true"),
+                glow : getBoolean(rawConfig.pointGlow, true),
                 radius: parseInt(rawConfig.pointRadius)
             }
         };
 
+        // check for invalid values
         if (gridConfig.x.step < 1) {
             gridConfig.x.step = 1;
         }
