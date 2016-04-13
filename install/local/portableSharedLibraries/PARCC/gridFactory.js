@@ -123,25 +123,25 @@ define(['OAT/lodash'], function( _ ){
             if (gridType === "oneQuadrant") {
                 if (_x.label) {
                     if (_y.start < 0) {
-                        labelPositions.abs = { zone: "bottom", align: "center" };
+                        labelPositions.abs = "bottom";
                     } else {
-                        labelPositions.abs = { zone: "top", align: "center" };
+                        labelPositions.abs = "top";
                     }
                 }
                 if (_y.label) {
                     if (_x.start >= 0) {
-                        labelPositions.ord = { zone: "left", align: "center" };
+                        labelPositions.ord = "left";
                     } else {
-                        labelPositions.ord = { zone: "right", align: "center" };
+                        labelPositions.ord = "right";
                     }
                 }
             // coordinates
             } else {
                 if (_x.label) {
-                    labelPositions.abs = { zone: "right", align: "axis" };
+                    labelPositions.abs = "right";
                 }
                 if (_y.label) {
-                    labelPositions.ord = { zone: "top", align: "axis" };
+                    labelPositions.ord = "top";
                 }
             }
             return labelPositions;
@@ -157,10 +157,10 @@ define(['OAT/lodash'], function( _ ){
                 padding.top += options.graphTitlePadding;
             }
 
-            if (_labelPositions.abs.zone === "top" || _labelPositions.ord.zone === "top") {
+            if (_labelPositions.abs === "top" || _labelPositions.ord === "top") {
                 padding.top += options.labelPadding;
             }
-            if (_labelPositions.abs.zone === "left" || _labelPositions.ord.zone === "left") {
+            if (_labelPositions.abs === "left" || _labelPositions.ord === "left") {
                 padding.left += options.labelPadding;
             }
             return padding;
@@ -172,7 +172,7 @@ define(['OAT/lodash'], function( _ ){
                     ord: {}
                 };
 
-            if (_labelPositions.abs.zone === "right") {
+            if (_labelPositions.abs === "right") {
                 labelsCoords.abs.x = _width + options.labelPadding;
                 labelsCoords.abs.angle = -90;
 
@@ -186,14 +186,14 @@ define(['OAT/lodash'], function( _ ){
                 labelsCoords.abs.x = _width / 2;
                 labelsCoords.abs.angle = 0;
 
-                if (_labelPositions.abs.zone === "bottom") {
+                if (_labelPositions.abs === "bottom") {
                     labelsCoords.abs.y = _height + options.labelPadding;
-                } else if (_labelPositions.abs.zone === "top") {
+                } else if (_labelPositions.abs === "top") {
                     labelsCoords.abs.y = -options.labelPadding;
                 }
             }
 
-            if (_labelPositions.ord.zone === "top") {
+            if (_labelPositions.ord === "top") {
                 labelsCoords.ord.y = -options.labelPadding;
                 labelsCoords.ord.angle = 0;
 
@@ -207,9 +207,9 @@ define(['OAT/lodash'], function( _ ){
                 labelsCoords.ord.y = _height / 2;
                 labelsCoords.ord.angle = -90;
 
-                if (_labelPositions.ord.zone === "left") {
+                if (_labelPositions.ord === "left") {
                     labelsCoords.ord.x = -options.labelPadding;
-                } else if (_labelPositions.ord.zone === "right") {
+                } else if (_labelPositions.ord === "right") {
                     labelsCoords.ord.x = _width + options.labelPadding;
                 }
             }
