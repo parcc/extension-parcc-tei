@@ -25,7 +25,6 @@ define(['OAT/lodash'], function( _ ){
             raphaelObj.node.setAttribute('class', pattern.test(oldClass) ? oldClass : oldClass + ' ' + newClass);
         }
 
-
         function drawLine(start, end, style){
             var path = paper.path(
                 'M'+(_padding.left+start[0])+' '+(_padding.top+start[1])+
@@ -106,16 +105,16 @@ define(['OAT/lodash'], function( _ ){
             _color = options.color,
             _weight = options.weight,
 
-            _labelPositions = getLabelsPosition(_x, _y),
-            _padding = getPadding(_labelPositions, options),
-            _labelCoords = getLabelsCoords(_labelPositions, options, _x, _y, _width, _height),
-            _snapToValues = getSnapToValues(),
+            _labelPositions = _getLabelsPosition(_x, _y),
+            _padding = _getPadding(_labelPositions, options),
+            _labelCoords = _getLabelsCoords(_labelPositions, options, _x, _y, _width, _height),
+            _snapToValues = _getSnapToValues(),
 
             clickableArea,
             set = paper.set(),
             _borderBox = {};
 
-        function getLabelsPosition(_x, _y) {
+        function _getLabelsPosition(_x, _y) {
             var xQuadrants = (_x.start < 0 && _x.end > 0) ? 2 : 1,
                 yQuadrants = (_y.start < 0 && _y.end > 0) ? 2 : 1,
                 gridType = (xQuadrants === 1 && yQuadrants === 1) ? "oneQuadrant" : "coordinates",
@@ -148,7 +147,7 @@ define(['OAT/lodash'], function( _ ){
             return labelPositions;
         }
 
-        function getPadding(_labelPositions, options) {
+        function _getPadding(_labelPositions, options) {
             var padding = {
                 top: options.padding,
                 left: options.padding
@@ -167,7 +166,7 @@ define(['OAT/lodash'], function( _ ){
             return padding;
         }
 
-        function getLabelsCoords(_labelPositions, options, _x, _y, _width, _height) {
+        function _getLabelsCoords(_labelPositions, options, _x, _y, _width, _height) {
             var labelsCoords = {
                     abs: {},
                     ord: {}
@@ -217,7 +216,7 @@ define(['OAT/lodash'], function( _ ){
             return labelsCoords;
         }
 
-        function getSnapToValues() {
+        function _getSnapToValues() {
             var snapToValues = {
                     x: [],
                     y: []
@@ -408,7 +407,7 @@ define(['OAT/lodash'], function( _ ){
                 y2 : y+_height
             };
         }
-        
+
         var obj = {
             children : set,
             snapping : options.snapping || false,
