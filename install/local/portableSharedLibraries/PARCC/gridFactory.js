@@ -106,29 +106,15 @@ define(['OAT/lodash'], function( _ ){
             _xSubStepSize = (_xStepSize / _x.subStep),
             _ySubStepSize = (_yStepSize / _y.subStep),
 
-            _xQuadrants = (_x.start < 0 && _x.end > 0) ? 2 : 1, // @todo remove
-            _yQuadrants = (_y.start < 0 && _y.end > 0) ? 2 : 1,// @todo remove
-            _gridType = (_xQuadrants === 1 && _yQuadrants === 1) ? "oneQuadrant" : "coordinates", // @todo remove
-
             _color = options.color,
             _weight = options.weight,
 
             _xSnapToValues = [],
             _ySnapToValues = [],
 
-            _paddingTop = options.padding, // @todo remove
-            _paddingLeft = options.padding,  // @todo remove
-
             _labelPositions = getLabelsPosition(_x, _y),
             _padding = getPadding(_labelPositions, options),
             _labelCoords = getLabelsCoords(_labelPositions, options, _x, _y, _width, _height),
-
-            _xLabelX, // @todo remove
-            _xLabelY,// @todo remove
-            _xLabelAngle, // @todo remove
-            _yLabelX, // @todo remove
-            _yLabelY, // @todo remove
-            _yLabelAngle, // @todo remove
 
             clickableArea,
             set = paper.set(),
@@ -237,73 +223,6 @@ define(['OAT/lodash'], function( _ ){
             return labelsCoords;
         }
         // ============================
-
-        // compute margins & label positions
-        if (options.graphTitle) {
-            _paddingTop += options.graphTitlePadding;
-        }
-
-        if (_gridType === "oneQuadrant") {
-            if (_x.label) {
-                // x label on bottom
-                if (_y.start < 0) {
-                    _xLabelY = _height + options.labelPadding;
-                // x label on top
-                } else {
-                    _paddingTop += options.labelPadding;
-                    _xLabelY = -options.labelPadding;
-                }
-                _xLabelX = _width / 2;
-                _xLabelAngle = 0;
-            }
-            if (_y.label) {
-                // y label on left
-                if (_x.start >= 0) {
-                    _paddingLeft += options.labelPadding;
-                    _yLabelX = -options.labelPadding;
-                // y label on right
-                } else {
-                    _yLabelX = _width + options.labelPadding;
-                }
-                _yLabelY = _height / 2;
-                _yLabelAngle = -90;
-            }
-        } else {
-            // x label on right
-            if (_x.label) {
-                var yOrigin;
-                if (_yQuadrants == 2) {
-                    yOrigin = -1 * _y.start * _y.unit;
-                } else {
-                    if (_y.start >= 0) {
-                        yOrigin = 0;
-                    } else {
-                        yOrigin = _height;
-                    }
-                }
-                _xLabelX = _width + options.labelPadding;
-                _xLabelY = yOrigin;
-                _xLabelAngle = -90;
-            }
-            // y label on top
-            if (_y.label) {
-                _paddingTop += options.labelPadding;
-
-                var xOrigin;
-                if (_xQuadrants == 2) {
-                    xOrigin = -1 * _x.start * _x.unit;
-                } else {
-                    if (_x.start >= 0) {
-                        xOrigin = 0;
-                    } else {
-                        xOrigin = _width;
-                    }
-                }
-                _yLabelX = xOrigin;
-                _yLabelY = -options.labelPadding;
-                _yLabelAngle = 0;
-            }
-        }
 
         // compute snapping values
         // use a double loop to avoid accumulating rounding error
