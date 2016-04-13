@@ -105,16 +105,16 @@ define(['OAT/lodash'], function( _ ){
             _color = options.color,
             _weight = options.weight,
 
-            _labelPositions = _getLabelsPosition(_x, _y),
-            _padding = _getPadding(_labelPositions, options),
-            _labelCoords = _getLabelsCoords(_labelPositions, options, _x, _y, _width, _height),
+            _labelPositions = _getLabelsPosition(),
+            _padding = _getPadding(),
+            _labelCoords = _getLabelsCoords(),
             _snapToValues = _getSnapToValues(),
 
             clickableArea,
             set = paper.set(),
             _borderBox = {};
 
-        function _getLabelsPosition(_x, _y) {
+        function _getLabelsPosition() {
             var xQuadrants = (_x.start < 0 && _x.end > 0) ? 2 : 1,
                 yQuadrants = (_y.start < 0 && _y.end > 0) ? 2 : 1,
                 gridType = (xQuadrants === 1 && yQuadrants === 1) ? "oneQuadrant" : "coordinates",
@@ -147,7 +147,7 @@ define(['OAT/lodash'], function( _ ){
             return labelPositions;
         }
 
-        function _getPadding(_labelPositions, options) {
+        function _getPadding() {
             var padding = {
                 top: options.padding,
                 left: options.padding
@@ -166,7 +166,7 @@ define(['OAT/lodash'], function( _ ){
             return padding;
         }
 
-        function _getLabelsCoords(_labelPositions, options, _x, _y, _width, _height) {
+        function _getLabelsCoords() {
             var labelsCoords = {
                     abs: {},
                     ord: {}

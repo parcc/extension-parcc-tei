@@ -112,16 +112,71 @@ define([
             y : { start : -50, end : 0, step : 5, label: 'Money ($)' }
         }, output: {
             width: 450, height: 300
-        }, outputContainer: '.test_13' }
+        }, outputContainer: '.test_13' },
+
+        { title: 'onequadrant, no x label', input: {
+            graphTitle : 'onequadrant, no x label',
+            width : 250, height : 200,
+            x : { start : 0, end : 10, step : 1 },
+            y : { start : -50, end : 0, step : 10, label: 'Money ($)' }
+        }, output: {
+            width: 250, height: 200
+        }, outputContainer: '.test_14' },
+
+        { title: 'onequadrant, no y label', input: {
+            graphTitle : 'onequadrant, no y label',
+            width : 250, height : 200,
+            x : { start : 0, end : 10, step : 1, label: 'Time (hours)' },
+            y : { start : -50, end : 0, step : 10 }
+        }, output: {
+            width: 250, height: 200
+        }, outputContainer: '.test_15' },
+
+        { title: 'onequadrant, no label', input: {
+            graphTitle : 'onequadrant, no label',
+            width : 250, height : 200,
+            x : { start : 0, end : 10, step : 1 },
+            y : { start : -50, end : 0, step : 10 }
+        }, output: {
+            width: 250, height: 200
+        }, outputContainer: '.test_16' },
+
+        { title: 'coordinates, no x label', input: {
+            graphTitle : 'coordinates, no x label',
+            width : 250, height : 250,
+            x : { start : -5, end : 5, step : 1 },
+            y : { start : -50, end : 50, step : 10, label: 'y' }
+        }, output: {
+            width: 250, height: 250
+        }, outputContainer: '.test_17' },
+
+        { title: 'coordinates, no y label', input: {
+            graphTitle : 'coordinates, no y label',
+            width : 250, height : 250,
+            x : { start : -5, end : 5, step : 1, label: 'x' },
+            y : { start : -50, end : 50, step : 10 }
+        }, output: {
+            width: 250, height: 250
+        }, outputContainer: '.test_18' },
+
+        { title: 'coordinates, no label', input: {
+            graphTitle : 'coordinates, no label',
+            width : 250, height : 250,
+            x : { start : -5, end : 5, step : 1 },
+            y : { start : -50, end : 50, step : 10 }
+        }, output: {
+            width: 250, height: 250
+        }, outputContainer: '.test_19' }
         /* */
     ];
     /* */
     QUnit
         .cases(gridParameters)
         .test('grid rendering', function test(data, assert) {
-            var $container = $('<div class="test ' + data.outputContainer + '_actual"><h3 class="title">' + data.title + '</h2><pre class="grid-config"></pre><div class="shape-container"></div>');
+            var $container = $('<div class="test ' + data.outputContainer + '_actual"><h3 class="title">' + data.title + '</h3><pre class="grid-config"></pre><div class="shape-container"></div>');
 
-            $container.find('.grid-config').append(formatJson(data.input));
+            // uncomment to display input above the graph
+            // $container.find('.grid-config').append(JSON.stringify(data.input, undefined, 2));
 
             var grid = initGrid($container, data.input);
 
@@ -161,10 +216,6 @@ define([
         );
 
         return paper;
-    }
-
-    function formatJson(json){
-        return JSON.stringify(json, undefined, 2);
     }
 
     /* * /
