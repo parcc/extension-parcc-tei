@@ -49,24 +49,7 @@ define([
         var widget = this.widget,
             interaction = widget.element,
             $form = widget.$form,
-            response = interaction.getResponseDeclaration(),
-            graphs = {
-                linear : {label : 'Linear'},
-                absolute : {label : 'Absolute Value'},
-                quadratic : {label : 'Quadratic'},
-                exponential : {label : 'Exponential'},
-                logarithmic : {label : 'Logarithmic'},
-                cosine : {label : 'Sin/Cos'},
-                tangent : {label : 'Tan/Cotan'}
-            };
-
-
-        // @todo clean this up!
-        var graphSet = interaction.prop('graphs');
-        graphSet = graphSet ? graphSet.split(',') : [];
-        _.each(graphSet, function(graph){
-            graphs[graph].checked = true;
-        });
+            response = interaction.getResponseDeclaration();
 
         //render the form using the form template
         $form.html(formTpl({
@@ -154,19 +137,7 @@ define([
         };
         changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks);
 
-        //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, changeCallbacks);
-
-        //manually get array of checked graphs
-        var $graphs = $form.find('[name=graphs]');
-        $graphs.on('change', function(){
-            var checked = [];
-            $graphs.filter(':checked').each(function(){
-                checked.push($(this).val());
-            });
-            interaction.prop('graphs', checked.join(','));
-            interaction.triggerPci('functionschange', [checked]);
-        });
     };
 
     return StateQuestion;
