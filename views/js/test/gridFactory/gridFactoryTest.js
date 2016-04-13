@@ -115,7 +115,7 @@ define([
         }, outputContainer: '.test_13' }
         /* */
     ];
-    /* * /
+    /* */
     QUnit
         .cases(gridParameters)
         .test('grid rendering', function test(data, assert) {
@@ -167,7 +167,7 @@ define([
         return JSON.stringify(json, undefined, 2);
     }
 
-    /* */
+    /* * /
      QUnit.module('subIncrement');
 
      var snapValues = [

@@ -28,8 +28,8 @@ define(['OAT/lodash'], function( _ ){
 
         function drawLine(start, end, style){
             var path = paper.path(
-                'M'+(_paddingLeft+start[0])+' '+(_paddingTop+start[1])+
-                'L'+(_paddingLeft+end[0])+' '+(_paddingTop+end[1])).attr(style);
+                'M'+(_padding.left+start[0])+' '+(_padding.top+start[1])+
+                'L'+(_padding.left+end[0])+' '+(_padding.top+end[1])).attr(style);
             addCssClass(path, 'scene scene-grid');
             return path;
         }
@@ -108,7 +108,7 @@ define(['OAT/lodash'], function( _ ){
 
             _xQuadrants = (_x.start < 0 && _x.end > 0) ? 2 : 1,
             _yQuadrants = (_y.start < 0 && _y.end > 0) ? 2 : 1,
-            _graphType = (_xQuadrants === 1 && _yQuadrants === 1) ? "oneQuadrant" : "coordinates",
+            _gridType = (_xQuadrants === 1 && _yQuadrants === 1) ? "oneQuadrant" : "coordinates",
 
             _color = options.color,
             _weight = options.weight,
@@ -116,8 +116,11 @@ define(['OAT/lodash'], function( _ ){
             _xSnapToValues = [],
             _ySnapToValues = [],
 
-            _paddingTop = options.padding,
-            _paddingLeft = options.padding,
+            _paddingTop = options.padding, // @todo remove
+            _paddingLeft = options.padding,  // @todo remove
+
+            _labelPositions = getLabelsPosition(_x, _y),
+            _padding = getPadding(_labelPositions, options),
 
             _xLabelX,
             _xLabelY,
@@ -130,12 +133,119 @@ define(['OAT/lodash'], function( _ ){
             set = paper.set(),
             _borderBox = {};
 
+        // ============================
+        function getLabelsPosition(_x, _y) {
+            var xQuadrants = (_x.start < 0 && _x.end > 0) ? 2 : 1,
+                yQuadrants = (_y.start < 0 && _y.end > 0) ? 2 : 1,
+                gridType = (xQuadrants === 1 && yQuadrants === 1) ? "oneQuadrant" : "coordinates",
+                labelPositions = {};
+
+            // oneQuadrant
+            if (gridType === "oneQuadrant") {
+                if (_x.label) {
+                    if (_y.start < 0) {
+                        labelPositions.abs = { zone: "bottom", align: "center" };
+                    } else {
+                        labelPositions.abs = { zone: "top", align: "center" };
+                    }
+                }
+                if (_y.label) {
+                    if (_x.start >= 0) {
+                        labelPositions.ord = { zone: "left", align: "center" };
+                    } else {
+                        labelPositions.ord = { zone: "right", align: "center" };
+                    }
+                }
+            // coordinates
+            } else {
+                if (_x.label) {
+                    labelPositions.abs = { zone: "right", align: "axis" };
+                }
+                if (_y.label) {
+                    labelPositions.ord = { zone: "top", align: "axis" };
+                }
+            }
+            return labelPositions;
+        }
+
+
+        var labelCoords = getLabelsCoords(_labelPositions, options, _x, _y, _width, _height);
+
+        function getPadding(_labelPositions, options) {
+            var padding = {
+                top: options.padding,
+                left: options.padding
+            };
+
+            if (options.graphTitle) {
+                padding.top += options.graphTitlePadding;
+            }
+
+            if (_labelPositions.abs.zone === "top" || _labelPositions.ord.zone === "top") {
+                padding.top += options.labelPadding;
+            }
+            if (_labelPositions.abs.zone === "left" || _labelPositions.ord.zone === "left") {
+                padding.left += options.labelPadding;
+            }
+            return padding;
+        }
+
+        function getLabelsCoords(_labelPositions, options, _x, _y, _width, _height) {
+            var labelsCoords = {
+                    abs: {},
+                    ord: {}
+                };
+
+            if (_labelPositions.abs.zone === "right") {
+                labelsCoords.abs.x = _width + options.labelPadding;
+                labelsCoords.abs.angle = -90;
+
+                // align abs label on its axis
+                if (_y.start < 0 && _y.end > 0) {
+                    labelsCoords.abs.y = -1 * _y.start * _y.unit; // two y quadrants
+                } else {
+                    labelsCoords.abs.y = (_y.start >= 0) ? 0 : _height;  // one y quadrant
+                }
+            } else {
+                labelsCoords.abs.x = _width / 2;
+                labelsCoords.abs.angle = 0;
+
+                if (_labelPositions.abs.zone === "bottom") {
+                    labelsCoords.abs.y = _height + options.labelPadding;
+                } else if (_labelPositions.abs.zone === "top") {
+                    labelsCoords.abs.y = -options.labelPadding;
+                }
+            }
+
+            if (_labelPositions.ord.zone === "top") {
+                labelsCoords.ord.y = -options.labelPadding;
+                labelsCoords.ord.angle = 0;
+
+                // align ord label on its axis
+                if (_x.start < 0 && _x.end > 0) {
+                    labelsCoords.ord.y = -1 * _x.start * _x.unit; // two x quadrants
+                } else {
+                    labelsCoords.ord.y = (_x.start >= 0) ? 0 : _width; // one x quadrant
+                }
+            } else {
+                labelsCoords.ord.x = _height / 2;
+                labelsCoords.ord.angle = -90;
+
+                if (_labelPositions.abs.zone === "left") {
+                    labelsCoords.ord.y = -options.labelPadding;
+                } else if (_labelPositions.abs.zone === "top") {
+                    labelsCoords.ord.y = _width + options.labelPadding;
+                }
+            }
+        }
+        // ============================
+
         // compute margins & label positions
         if (options.graphTitle) {
             _paddingTop += options.graphTitlePadding;
         }
 
-        if (_graphType === "oneQuadrant") {
+        if (_gridType === "oneQuadrant") {
             if (_x.label) {
                 // x label on bottom
                 if (_y.start < 0) {
@@ -197,13 +307,14 @@ define(['OAT/lodash'], function( _ ){
             }
         }
 
-        // compute useful values for rendering
+        // compute snapping values
+        // use a double loop to avoid accumulating rounding error
         var snapValue;
         for (var i = 0; i <= _width; i += _xStepSize) {
             for(var j = 0; j < _xStepSize; j += _xSubStepSize) {
                 snapValue = i + j;
                 if (snapValue <= _width) {
-                    _xSnapToValues.push(snapValue + _paddingLeft);
+                    _xSnapToValues.push(snapValue + _padding.left);
                 }
             }
         }
@@ -211,13 +322,13 @@ define(['OAT/lodash'], function( _ ){
             for(j = 0; j < _yStepSize; j += _ySubStepSize) {
                 snapValue = i + j;
                 if (snapValue <= _height) {
-                    _ySnapToValues.push(snapValue + _paddingTop);
+                    _ySnapToValues.push(snapValue + _padding.top);
                 }
             }
         }
 
         function _drawGraphTitle() {
-            var x = _paddingLeft + _width / 2,
+            var x = _padding.left + _width / 2,
                 y = options.padding + options.graphTitlePadding / 2,
                 style = {
                     'font-size' : options.graphTitleSize,
@@ -256,13 +367,13 @@ define(['OAT/lodash'], function( _ ){
                     text;
 
                 if(config.unitsOnTop){
-                    textTop = top + _paddingTop - fontSize/2;
+                    textTop = top + _padding.top - fontSize/2;
                 }else{
-                    textTop = top + _paddingTop + fontSize;
+                    textTop = top + _padding.top + fontSize;
                 }
 
                 for(var i = _x.start; i <= _x.end ; i = i + _x.step){
-                    text = paper.text(_paddingLeft + position, textTop, i).attr({
+                    text = paper.text(_padding.left + position, textTop, i).attr({
                         'font-size' : fontSize
                     });
                     addCssClass(text, 'scene scene-text');
@@ -284,13 +395,13 @@ define(['OAT/lodash'], function( _ ){
                     text;
 
                 if(config.unitsOnRight){
-                    textLeft = left + _paddingLeft + fontSize/2;
+                    textLeft = left + _padding.left + fontSize/2;
                 }else{
-                    textLeft = left + _paddingLeft - fontSize;
+                    textLeft = left + _padding.left - fontSize;
                 }
 
                 for(var i = _y.start; i <= _y.end ; i = i + _y.step){
-                    text = paper.text(textLeft, _paddingTop + position, -i).attr({
+                    text = paper.text(textLeft, _padding.top + position, -i).attr({
                         'font-size' : fontSize
                     });
                     addCssClass(text, 'scene scene-text');
@@ -326,16 +437,16 @@ define(['OAT/lodash'], function( _ ){
                 drawTitle(
                     _x.label,
                     labelStyle,
-                    _paddingLeft + _xLabelX,
-                    _paddingTop + _xLabelY,
+                    _padding.left + _xLabelX,
+                    _padding.top + _xLabelY,
                     _xLabelAngle);
             }
             if (_y.label) {
                 drawTitle(
                     _y.label,
                     labelStyle,
-                    _paddingLeft + _yLabelX,
-                    _paddingTop + _yLabelY,
+                    _padding.left + _yLabelX,
+                    _padding.top + _yLabelY,
                     _yLabelAngle);
             }
         }
@@ -365,8 +476,8 @@ define(['OAT/lodash'], function( _ ){
 
         function _calculateBBox(){
 
-            var x = _paddingLeft,
-                y = _paddingTop;
+            var x = _padding.left,
+                y = _padding.top;
 
             _borderBox = {
                 x : x,
@@ -435,6 +546,10 @@ define(['OAT/lodash'], function( _ ){
             getUnitSizes : function(){
                 return {x: _borderBox.width/_x.unit , y: _borderBox.height/_y.unit};
             },
+            /**
+             * Get the subStep size for x,y axis
+             * @return {Object}
+             */
             getSubStepSizes: function(){
                 return {x: _xSubStepSize, y: _ySubStepSize};
             },
@@ -453,8 +568,8 @@ define(['OAT/lodash'], function( _ ){
              */
             getOriginPosition : function(){
                 return {
-                    left : _paddingLeft - _x.start * _x.unit,
-                    top : _paddingTop - _y.start * _y.unit
+                    left : _padding.left - _x.start * _x.unit,
+                    top : _padding.top - _y.start * _y.unit
                 };
             },
             getPostionFromCartesian : function(x,y){
@@ -534,6 +649,9 @@ define(['OAT/lodash'], function( _ ){
             toFront : function(shape){
                 shape.toFront();
             }
+            /**
+             *
+             */
         };
 
         _calculateBBox();
