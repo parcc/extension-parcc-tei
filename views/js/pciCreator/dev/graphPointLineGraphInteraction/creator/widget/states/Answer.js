@@ -21,11 +21,44 @@ define([
         widget.$responseForm.on('initResponseForm', function(){
             initEquationBasedScoring(widget);
         });
-
+        
+        initResponseDeclarationWidget(widget);
+        
     }, function(){
-
+        
+        destroyResponseDeclarationWidget(this.widget);
     });
-
+    
+    function initResponseDeclarationWidget(widget){
+        
+        var interaction = widget.element;
+        var responseDeclaration = interaction.getResponseDeclaration();
+        
+        //set correct response as defined in the model
+        interaction.setResponse({
+            list : {
+                string : responseDeclaration.correctResponse || []
+            }
+        });
+        
+        //init editing widget event listener
+        interaction.onPci('responsechange', function(response){
+            var correctResponse = [];
+            if (response.base !== null && response.list) {
+                correctResponse = response.list.string;
+            }
+            responseDeclaration.setCorrect(correctResponse);
+        });
+    }
+    
+    function destroyResponseDeclarationWidget(widget){
+        var interaction = widget.element;
+        interaction.offPci('responsechange');
+        interaction.setResponse({
+            base : null
+        });
+    }
+    
     function initEquationBasedScoring(widget){
         
         var interaction = widget.element;
