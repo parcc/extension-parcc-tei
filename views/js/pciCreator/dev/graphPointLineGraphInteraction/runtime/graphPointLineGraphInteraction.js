@@ -24,11 +24,9 @@ define([
         var gridConfig = {
             // Interaction config
             draggable: (rawConfig.draggable === true || rawConfig.draggable === "true"),
-            graphType: rawConfig.graphType,
+            graphType: rawConfig.graphType, // scatterplot (nuage de points) or line
             maxPoints: parseInt(rawConfig.maxPoints),
-            segment: (rawConfig.segment === true || rawConfig.segment === "true"),
-            width: parseInt(rawConfig.width),
-            height: parseInt(rawConfig.height),
+            segment: (rawConfig.segment === true || rawConfig.segment === "true"), // draw only segments between points
 
             // Gridfactory config
             x : {
@@ -36,24 +34,26 @@ define([
                 end : parseInt(rawConfig.xEnd),
                 label : rawConfig.xLabel,
                 step: parseInt(rawConfig.xStep),
+                subStep : parseInt(rawConfig.xSubStep),
                 weight : parseInt(rawConfig.xWeight),
-                allowOuter : (rawConfig.xAllowOuter === true || rawConfig.xAllowOuter === "true"),
-                subStep : parseInt(rawConfig.xSubStep)
+                allowOuter : (rawConfig.xAllowOuter === true || rawConfig.xAllowOuter === "true")
             },
             y : {
                 start : -1 * parseInt(rawConfig.yEnd), // y-axis is reversed
                 end : -1 * parseInt(rawConfig.yStart), // y-axis is reversed
                 label : rawConfig.yLabel,
                 step: parseInt(rawConfig.yStep),
+                subStep : parseInt(rawConfig.ySubStep),
                 weight : parseInt(rawConfig.yWeight),
-                allowOuter : (rawConfig.yAllowOuter === true || rawConfig.yAllowOuter === "true"),
-                subStep : parseInt(rawConfig.ySubStep)
+                allowOuter : (rawConfig.yAllowOuter === true || rawConfig.yAllowOuter === "true")
             },
             graphTitle: rawConfig.graphTitle,
             graphTitleSize: 20,
             graphTitlePadding: 40,
-            graphTitleRequired : (rawConfig.graphTitleRequired === true || rawConfig.graphTitleRequired === "true"),
-            weight: parseInt(rawConfig.weight),
+            graphTitleRequired : (rawConfig.graphTitleRequired === true || rawConfig.graphTitleRequired === "true"), // unused for now
+            weight: parseInt(rawConfig.weight), // grid weight
+            width: parseInt(rawConfig.width),
+            height: parseInt(rawConfig.height),
             padding: 30,
             labelPadding: 28,
             labelSize: 14,
@@ -72,8 +72,18 @@ define([
             }
         };
 
-        // @todo set default values for 'risky' settings
-
+        if (gridConfig.x.step < 1) {
+            gridConfig.x.step = 1;
+        }
+        if (gridConfig.y.step < 1) {
+            gridConfig.y.step = 1;
+        }
+        if (gridConfig.x.subStep < 1) {
+            gridConfig.x.subStep = 1;
+        }
+        if (gridConfig.y.subStep < 1) {
+            gridConfig.y.subStep = 1;
+        }
         return gridConfig;
     }
 
@@ -145,18 +155,7 @@ define([
                 if(_.isObject(gridConfig.x) &&
                         _.isObject(gridConfig.y) &&
                         gridConfig.x.start < gridConfig.x.end &&
-                        gridConfig.y.start < gridConfig.y.end &&
-
-                        // @todo better to assing defaults ? if not wrong entry in authoring completely disable rendering
-                        // @todo move safety checks to Grid ?
-                        gridConfig.x.step >= 1 &&
-                        gridConfig.y.step >= 1 &&
-                        gridConfig.x.subStep >= 1 &&
-                        gridConfig.y.subStep >= 1
-
-                    /// @todo CHECK NEW CONFIGS HERE
-                    // graphTypes
-
+                        gridConfig.y.start < gridConfig.y.end
                     ){
 
                     grid = gridFactory(paper, gridConfig);
@@ -331,7 +330,6 @@ define([
                     return null;
                 }
                 var serializedPoints = points.map(function getPointsData(point) {
-                    // @todo round values ?!! check with sam or jerôme
                     var pointData = point.getCartesianCoord(1);
                     return pointData.x + ' ' + pointData.y;
                 });

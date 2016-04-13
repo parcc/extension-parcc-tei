@@ -45,33 +45,34 @@ define(['OAT/lodash'], function( _ ){
         function buildOptions(rawOptions) {
             var lineColor = '#222';
 
-            // @todo describe options
             var options = _.merge({},{
                 graphTitle : null,
                 graphTitleRequired : false, // unused for now
-                graphTitleSize : 24,
-                graphTitlePadding : 36,
+                graphTitleSize : 24, // pixels
+                graphTitlePadding : 36, // pixels
                 color : lineColor,
-                weight : 1,
-                labelSize : 14,
-                labelPadding : 28,
-                padding : 20,
-                height: null,
-                width: null,
+                weight : 1, // inner grid weight
+                labelSize : 14, // pixels
+                labelPadding : 28, // pixels
+                padding : 20, // pixels
+                height: null, // grid size in pixels
+                width: null, // grid size in pixels
                 x : {
-                    start : -10,
-                    end :  10,
+                    start : -10, // cartesian start
+                    end :  10, // cartesian end
                     label : null,
-                    step : 1,
-                    unit : 10,
+                    step : 1, // cartesian step
+                    subStep : 1,  // snapping divisions inside step
+                    unit : 10, // number of pixels for a cartesian unit
                     color : lineColor,
-                    weight : 3
+                    weight : 3 // axis weight
                 },
                 y : {
                     start : -10,
                     end :  10,
                     label : null,
                     step : 1,
+                    subStep : 1,
                     unit : 10,
                     color : lineColor,
                     weight : 3
