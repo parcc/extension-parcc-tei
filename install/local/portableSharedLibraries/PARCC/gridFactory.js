@@ -106,9 +106,9 @@ define(['OAT/lodash'], function( _ ){
             _xSubStepSize = (_xStepSize / _x.subStep),
             _ySubStepSize = (_yStepSize / _y.subStep),
 
-            _xQuadrants = (_x.start < 0 && _x.end > 0) ? 2 : 1,
-            _yQuadrants = (_y.start < 0 && _y.end > 0) ? 2 : 1,
-            _gridType = (_xQuadrants === 1 && _yQuadrants === 1) ? "oneQuadrant" : "coordinates",
+            _xQuadrants = (_x.start < 0 && _x.end > 0) ? 2 : 1, // @todo remove
+            _yQuadrants = (_y.start < 0 && _y.end > 0) ? 2 : 1,// @todo remove
+            _gridType = (_xQuadrants === 1 && _yQuadrants === 1) ? "oneQuadrant" : "coordinates", // @todo remove
 
             _color = options.color,
             _weight = options.weight,
@@ -121,13 +121,14 @@ define(['OAT/lodash'], function( _ ){
 
             _labelPositions = getLabelsPosition(_x, _y),
             _padding = getPadding(_labelPositions, options),
+            _labelCoords = getLabelsCoords(_labelPositions, options, _x, _y, _width, _height),
 
-            _xLabelX,
-            _xLabelY,
-            _xLabelAngle,
-            _yLabelX,
-            _yLabelY,
-            _yLabelAngle,
+            _xLabelX, // @todo remove
+            _xLabelY,// @todo remove
+            _xLabelAngle, // @todo remove
+            _yLabelX, // @todo remove
+            _yLabelY, // @todo remove
+            _yLabelAngle, // @todo remove
 
             clickableArea,
             set = paper.set(),
@@ -140,7 +141,6 @@ define(['OAT/lodash'], function( _ ){
                 gridType = (xQuadrants === 1 && yQuadrants === 1) ? "oneQuadrant" : "coordinates",
                 labelPositions = {};
 
-            // oneQuadrant
             if (gridType === "oneQuadrant") {
                 if (_x.label) {
                     if (_y.start < 0) {
@@ -167,9 +167,6 @@ define(['OAT/lodash'], function( _ ){
             }
             return labelPositions;
         }
-
-
-        var labelCoords = getLabelsCoords(_labelPositions, options, _x, _y, _width, _height);
 
         function getPadding(_labelPositions, options) {
             var padding = {
@@ -223,20 +220,21 @@ define(['OAT/lodash'], function( _ ){
 
                 // align ord label on its axis
                 if (_x.start < 0 && _x.end > 0) {
-                    labelsCoords.ord.y = -1 * _x.start * _x.unit; // two x quadrants
+                    labelsCoords.ord.x = -1 * _x.start * _x.unit; // two x quadrants
                 } else {
-                    labelsCoords.ord.y = (_x.start >= 0) ? 0 : _width; // one x quadrant
+                    labelsCoords.ord.x = (_x.start >= 0) ? 0 : _width; // one x quadrant
                 }
             } else {
-                labelsCoords.ord.x = _height / 2;
+                labelsCoords.ord.y = _height / 2;
                 labelsCoords.ord.angle = -90;
 
-                if (_labelPositions.abs.zone === "left") {
-                    labelsCoords.ord.y = -options.labelPadding;
-                } else if (_labelPositions.abs.zone === "top") {
-                    labelsCoords.ord.y = _width + options.labelPadding;
+                if (_labelPositions.ord.zone === "left") {
+                    labelsCoords.ord.x = -options.labelPadding;
+                } else if (_labelPositions.ord.zone === "right") {
+                    labelsCoords.ord.x = _width + options.labelPadding;
                 }
             }
+            return labelsCoords;
         }
         // ============================
 
@@ -437,17 +435,17 @@ define(['OAT/lodash'], function( _ ){
                 drawTitle(
                     _x.label,
                     labelStyle,
-                    _padding.left + _xLabelX,
-                    _padding.top + _xLabelY,
-                    _xLabelAngle);
+                    _padding.left + _labelCoords.abs.x,
+                    _padding.top + _labelCoords.abs.y,
+                    _labelCoords.abs.angle);
             }
             if (_y.label) {
                 drawTitle(
                     _y.label,
                     labelStyle,
-                    _padding.left + _yLabelX,
-                    _padding.top + _yLabelY,
-                    _yLabelAngle);
+                    _padding.left + _labelCoords.ord.x,
+                    _padding.top + _labelCoords.ord.y,
+                    _labelCoords.ord.angle);
             }
         }
 
