@@ -100,27 +100,21 @@ define(['OAT/lodash'], function( _ ){
             _width = _xRange * _x.unit,
             _height = _yRange * _y.unit,
 
-            _xStepSize = (_width / (_xRange / _x.step)),
-            _yStepSize = (_height / (_yRange / _y.step)),
-
-            _xSubStepSize = (_xStepSize / _x.subStep),
-            _ySubStepSize = (_yStepSize / _y.subStep),
+            _xSubStepSize = ((_width / (_xRange / _x.step)) / _x.subStep),
+            _ySubStepSize = ((_height / (_yRange / _y.step)) / _y.subStep),
 
             _color = options.color,
             _weight = options.weight,
 
-            _xSnapToValues = [],
-            _ySnapToValues = [],
-
             _labelPositions = getLabelsPosition(_x, _y),
             _padding = getPadding(_labelPositions, options),
             _labelCoords = getLabelsCoords(_labelPositions, options, _x, _y, _width, _height),
+            _snapToValues = getSnapToValues(),
 
             clickableArea,
             set = paper.set(),
             _borderBox = {};
 
-        // ============================
         function getLabelsPosition(_x, _y) {
             var xQuadrants = (_x.start < 0 && _x.end > 0) ? 2 : 1,
                 yQuadrants = (_y.start < 0 && _y.end > 0) ? 2 : 1,
@@ -222,26 +216,35 @@ define(['OAT/lodash'], function( _ ){
             }
             return labelsCoords;
         }
-        // ============================
 
-        // compute snapping values
-        // use a double loop to avoid accumulating rounding error
-        var snapValue;
-        for (var i = 0; i <= _width; i += _xStepSize) {
-            for(var j = 0; j < _xStepSize; j += _xSubStepSize) {
-                snapValue = i + j;
-                if (snapValue <= _width) {
-                    _xSnapToValues.push(snapValue + _padding.left);
+        function getSnapToValues() {
+            var snapToValues = {
+                    x: [],
+                    y: []
+                },
+                xStepSize = (_width / (_xRange / _x.step)),
+                yStepSize = (_height / (_yRange / _y.step)),
+                snapValue,
+                i, j;
+
+            // use a nested loop to avoid accumulating rounding error
+            for (i = 0; i <= _width; i += xStepSize) {
+                for(j = 0; j < xStepSize; j += _xSubStepSize) {
+                    snapValue = i + j;
+                    if (snapValue <= _width) {
+                        snapToValues.x.push(snapValue + _padding.left);
+                    }
                 }
             }
-        }
-        for (i = 0; i <= _height; i += _yStepSize) {
-            for(j = 0; j < _yStepSize; j += _ySubStepSize) {
-                snapValue = i + j;
-                if (snapValue <= _height) {
-                    _ySnapToValues.push(snapValue + _padding.top);
+            for (i = 0; i <= _height; i += yStepSize) {
+                for(j = 0; j < yStepSize; j += _ySubStepSize) {
+                    snapValue = i + j;
+                    if (snapValue <= _height) {
+                        snapToValues.y.push(snapValue + _padding.top);
+                    }
                 }
             }
+            return snapToValues;
         }
 
         function _drawGraphTitle() {
@@ -405,6 +408,7 @@ define(['OAT/lodash'], function( _ ){
                 y2 : y+_height
             };
         }
+        
         var obj = {
             children : set,
             snapping : options.snapping || false,
@@ -528,8 +532,8 @@ define(['OAT/lodash'], function( _ ){
              * @return {Array} snapped values x,y
              */
             snap : function(x,y){
-                x = paper.raphael.snapTo(_xSnapToValues, x, _xSubStepSize / 2);
-                y = paper.raphael.snapTo(_ySnapToValues, y, _ySubStepSize / 2);
+                x = paper.raphael.snapTo(_snapToValues.x, x, _xSubStepSize / 2);
+                y = paper.raphael.snapTo(_snapToValues.y, y, _ySubStepSize / 2);
                 return [x,y];
             },
             /**
