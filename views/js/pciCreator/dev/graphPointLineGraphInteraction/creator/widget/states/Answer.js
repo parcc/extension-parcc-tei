@@ -65,12 +65,14 @@ define([
         var item = interaction.getRelatedItem();
         var rp = item.responseProcessing;
         var $responseForm = widget.$responseForm;
+        var $templateSelector = $responseForm.find('select[name="template"]').closest('.panel');
         var $equationFormPanel;
         
         if(!$responseForm.find('.panel.equation-scoring').length && rp.processingType !== 'custom'){
             
             $equationFormPanel = $(equationFormElementTpl());
-            $responseForm.find('select[name=template]').parent('.panel').after($equationFormPanel);
+            $templateSelector.after($equationFormPanel);
+            $templateSelector.remove();//only authorize correct and custom response processing mode
             $equationFormPanel.on('change', '[name=equationScoring]', function(){
                 
                 var $checkbox = $(this);
