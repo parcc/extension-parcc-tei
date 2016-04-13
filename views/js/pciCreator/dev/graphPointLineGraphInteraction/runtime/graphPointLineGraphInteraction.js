@@ -23,10 +23,10 @@ define([
     function buildGridConfig(rawConfig){
         var gridConfig = {
             // Interaction config
-            draggable: !!rawConfig.draggable,
+            draggable: (rawConfig.draggable === true || rawConfig.draggable === "true"),
             graphType: rawConfig.graphType,
             maxPoints: parseInt(rawConfig.maxPoints),
-            segment: !!rawConfig.segment,
+            segment: (rawConfig.segment === true || rawConfig.segment === "true"),
             width: parseInt(rawConfig.width),
             height: parseInt(rawConfig.height),
 
@@ -37,7 +37,7 @@ define([
                 label : rawConfig.xLabel,
                 step: parseInt(rawConfig.xStep),
                 weight : parseInt(rawConfig.xWeight),
-                allowOuter : !!rawConfig.xAllowOuter,
+                allowOuter : (rawConfig.xAllowOuter === true || rawConfig.xAllowOuter === "true"),
                 subStep : parseInt(rawConfig.xSubStep)
             },
             y : {
@@ -46,13 +46,13 @@ define([
                 label : rawConfig.yLabel,
                 step: parseInt(rawConfig.yStep),
                 weight : parseInt(rawConfig.yWeight),
-                allowOuter : !!rawConfig.yAllowOuter,
+                allowOuter : (rawConfig.yAllowOuter === true || rawConfig.yAllowOuter === "true"),
                 subStep : parseInt(rawConfig.ySubStep)
             },
             graphTitle: rawConfig.graphTitle,
             graphTitleSize: 20,
             graphTitlePadding: 40,
-            graphTitleRequired: !!rawConfig.graphTitleRequired,
+            graphTitleRequired : (rawConfig.graphTitleRequired === true || rawConfig.graphTitleRequired === "true"),
             weight: parseInt(rawConfig.weight),
             padding: 30,
             labelPadding: 28,
@@ -67,7 +67,7 @@ define([
             // PointFactory config
             point : {
                 color: rawConfig.pointColor,
-                glow: !!rawConfig.pointGlow,
+                glow : (rawConfig.pointGlow === true || rawConfig.pointGlow === "true"),
                 radius: parseInt(rawConfig.pointRadius)
             }
         };
