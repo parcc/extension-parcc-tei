@@ -46,7 +46,7 @@ define(['OAT/lodash'], function( _ ){
 
             var options = _.merge({},{
                 graphTitle : null,
-                graphTitleRequired : false, // unused for now
+                graphTitleRequired : false, // display or not graph title
                 graphTitleSize : 24, // pixels
                 graphTitlePadding : 36, // pixels
                 color : lineColor,
@@ -153,7 +153,7 @@ define(['OAT/lodash'], function( _ ){
                 left: options.padding
             };
 
-            if (options.graphTitle) {
+            if (options.graphTitle && options.graphTitleRequired === true) {
                 padding.top += options.graphTitlePadding;
             }
 
@@ -254,7 +254,7 @@ define(['OAT/lodash'], function( _ ){
                     'font-weight' : 'bold'
                 };
 
-            if (options.graphTitle) {
+            if (options.graphTitle && options.graphTitleRequired === true) {
                 drawTitle(options.graphTitle, style, x, y);
             }
         }
