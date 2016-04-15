@@ -21,7 +21,7 @@
     "icon": "./creator/img/icon.svg",
     "response": {
         "baseType": "string",
-        "cardinality": "single"
+        "cardinality": "multiple"
     },
     "debug" : false
 }
