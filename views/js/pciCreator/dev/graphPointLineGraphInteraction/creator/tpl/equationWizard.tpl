@@ -7,7 +7,8 @@
                name="equation"
                value=""
                placeholder="e.g. y = 2*x^3 + 6"
-               data-validate="$notEmpty;">
+               data-validate="$notEmpty;"
+               class="long">
     </div>
     <div>
         <label for="mumPointsRequired" class="has-icon">{{__ "Required points"}}</label>
@@ -15,14 +16,16 @@
                name="mumPointsRequired"
                value="1"
                placeholder="e.g. 3"
-               data-validate="$notEmpty;">
+               data-validate="$notEmpty;"
+               class="short">
     </div>
     <div>
-        <label for="mumPointsRequired" class="has-icon">{{__ "Score"}}</label>
+        <label for="score" class="has-icon">{{__ "Score"}}</label>
         <input type="text"
                name="score"
                value="1"
                placeholder="e.g. 1"
-               data-validate="$notEmpty;">
+               data-validate="$notEmpty;"
+               class="short">
     </div>
 </div>
