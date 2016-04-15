@@ -5,3 +5,10 @@
 .item-editor-sidebar .tool-group .panel.creator-graphPointLineGraphInteraction-range .incrementer-ctrl-wrapper {margin:0 5px;}
 
 .item-editor-sidebar .tool-group .panel.creator-graphPointLineGraphInteraction-spinner .incrementer-ctrl-wrapper {float:right; top:-5px;}
+
+.item-editor-sidebar .tool-group .equation-scoring label{max-width: 170px;}
+
+.equation-wizard div {margin-bottom: 6px;}
+.equation-wizard label {min-width:120px;}
+.equation-wizard .short {width: 30px; min-width : 30px;}
+.equation-wizard .long {width : 280px;}

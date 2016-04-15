@@ -266,7 +266,7 @@ define([
                         return pointB;
                     });
                 }
-                _this.trigger('responseChange', [_this.getResponse()]);
+                _this.trigger('responsechange', [_this.getResponse()]);
             }
 
             function areCoordsValid(x, y, cartesian) {
@@ -401,13 +401,17 @@ define([
          * @param {Object} response
          */
         setResponse : function(response){
-
-            if(response &&
-                response.list &&
-                response.list.string &&
-                _.isArray(response.list.string)){
-
-                this.setRawResponse(response.list.string);
+            
+            if(response && response.list){
+                if(response.list.string && _.isArray(response.list.string)){
+                    this.setRawResponse(response.list.string);
+                }else if(response.list.point && _.isArray(response.list.point)){
+                    this.setRawResponse(response.list.point);
+                }else{
+                    throw 'invalid response baseType';
+                }
+            }else if(response && response.base === null){
+                this.setRawResponse([]);//empty response
             }
         },
         /**
