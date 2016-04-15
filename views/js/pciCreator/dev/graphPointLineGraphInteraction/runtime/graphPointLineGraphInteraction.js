@@ -323,6 +323,7 @@ define([
                     if (_this.gridConfig.draggable) {
                         newPoint.drag();
                     }
+                    newPoint.removeOnClic();
                     points.push(newPoint);
                 }
 
