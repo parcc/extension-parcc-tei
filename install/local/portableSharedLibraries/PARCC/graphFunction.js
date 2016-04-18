@@ -4,7 +4,7 @@ define(['OAT/lodash'], function(_){
 
     /**
      * Round the given number to a specific decimal
-     * 
+     *
      * @param {Float} number
      * @param {Integer} decimal
      * @returns {Number}
@@ -16,7 +16,7 @@ define(['OAT/lodash'], function(_){
 
     /**
      * Check if the argument is a correct point object
-     * 
+     *
      * @param {Object} point
      * @returns {Boolean}
      */
@@ -26,7 +26,7 @@ define(['OAT/lodash'], function(_){
 
     /**
      * Check if the pair of object are correct pair of points for equation evaluation
-     * 
+     *
      * @param {Object} point1
      * @param {Object} point2
      * @returns {Boolean}
@@ -37,7 +37,7 @@ define(['OAT/lodash'], function(_){
 
     /**
      * Plot a curved function based on its equation and plotting algorithm
-     * 
+     *
      * @param {Object} canvas - Raphaeljs object
      * @param {Array} equation
      * @param {Object} config
@@ -59,7 +59,7 @@ define(['OAT/lodash'], function(_){
 
         /**
          * Stop drawing and continue later
-         * 
+         *
          * @returns {undefined}
          */
         function jump(){
@@ -87,7 +87,7 @@ define(['OAT/lodash'], function(_){
          * Add the new position to the path
          * e.g. {left:250, top:150}
          * The position is relative to the canvas origin
-         * 
+         *
          * @param {Object} newPosition
          * @returns {undefined}
          */
@@ -149,7 +149,7 @@ define(['OAT/lodash'], function(_){
          * Get quadratic function from the vertex and another point
          * The returned equation is under the format [a, b, c]
          * which represents f(x) = ax² + bx + c;
-         * 
+         *
          * @param {Object} vertex
          * @param {Object} point
          * @returns {Array}
@@ -165,7 +165,7 @@ define(['OAT/lodash'], function(_){
         },
         /**
          * Plot a quadratic function from its equation
-         * 
+         *
          * @param {Object} canvas - RaphaelJs paper
          * @param {Array} equation
          * @param {Object} config
@@ -189,7 +189,7 @@ define(['OAT/lodash'], function(_){
          * Get exponential function from any two points with positive ordinates
          * The returned equation is under the format [a, b]
          * which represents f(x) = a * e^( bx );
-         * 
+         *
          * @param {Object} point1
          * @param {Object} point2
          * @returns {Array}
@@ -207,7 +207,7 @@ define(['OAT/lodash'], function(_){
         },
         /**
          * Plot an exponential function from its equation
-         * 
+         *
          * @param {Object} canvas - RaphaelJs paper
          * @param {Array} equation
          * @param {Object} config
@@ -230,7 +230,7 @@ define(['OAT/lodash'], function(_){
          * Get a cosine function from the starting point and the first inflection point
          * The returned equation is under the format [a, b, c, d]
          * which represents f(x) = a * cos( bx + c ) + d;
-         * 
+         *
          * @param {Object} start
          * @param {Object} inflection
          * @returns {Array}
@@ -249,7 +249,7 @@ define(['OAT/lodash'], function(_){
         },
         /**
          * Plot a cosine function from its equation
-         * 
+         *
          * @param {Object} canvas - RaphaelJs paper
          * @param {Array} equation
          * @param {Object} config
@@ -268,14 +268,14 @@ define(['OAT/lodash'], function(_){
 
             });
         }
-    }
+    };
 
     var logarithmic = {
         /**
          * Get logarithmic function from any two points
          * The returned equation is under the format [a, b]
          * which represents f(x) = a * ln( bx );
-         * 
+         *
          * @param {Object} point1
          * @param {Object} point2
          * @returns {Array}
@@ -295,7 +295,7 @@ define(['OAT/lodash'], function(_){
         },
         /**
          * Plot a logarithmic function from its equation
-         * 
+         *
          * @param {Object} canvas - RaphaelJs paper
          * @param {Array} equation
          * @param {Object} config
@@ -323,7 +323,7 @@ define(['OAT/lodash'], function(_){
          * Get a tangent function from the starting point and the first inflection point
          * The returned equation is under the format [a, b, c, d]
          * which represents f(x) = a * tan( bx + c ) + d;
-         * 
+         *
          * @param {Object} start
          * @param {Object} inflection
          * @returns {Array}
@@ -343,7 +343,7 @@ define(['OAT/lodash'], function(_){
         },
         /**
          * Plot a tangent function from its equation
-         * 
+         *
          * @param {Object} canvas - RaphaelJs paper
          * @param {Array} equation
          * @param {Object} config
@@ -369,7 +369,7 @@ define(['OAT/lodash'], function(_){
          * Get linear function from any two points
          * The returned equation is under the format [a, b]
          * which represents f(x) = ax+b;
-         * 
+         *
          * @param {Object} point1
          * @param {Object} point2
          * @returns {Array}
@@ -386,14 +386,14 @@ define(['OAT/lodash'], function(_){
         },
         /**
          * Plot a linear function from its equation
-         * 
+         *
          * @param {Object} canvas - RaphaelJs paper
          * @param {Array} equation
          * @param {Object} config
          * @returns {Object} RaphaelJs path
          */
         plot : function(canvas, equation, config){
-            
+
             function calc(equation, x){
 
                 var a = equation[0],
@@ -421,7 +421,7 @@ define(['OAT/lodash'], function(_){
          * Get absolute function from the start point and another point
          * The returned equation is under the format [a, b, c]
          * which represents f(x) = a|x+b|+c;
-         * 
+         *
          * @param {Object} start
          * @param {Object} point2
          * @returns {Array}
@@ -438,7 +438,7 @@ define(['OAT/lodash'], function(_){
         },
         /**
          * Plot an absolute function from its equation
-         * 
+         *
          * @param {Object} canvas - RaphaelJs paper
          * @param {Array} equation
          * @param {Object} config
@@ -474,14 +474,14 @@ define(['OAT/lodash'], function(_){
 
             return canvas.path(path);
         }
-    }
+    };
 
     var vertical = {
         /**
          * Get vertical line equation passing by a point
          * The returned equation is under the format [a]
          * which represents x = a;
-         * 
+         *
          * @param {Object} point
          * @returns {Array}
          */
@@ -492,7 +492,7 @@ define(['OAT/lodash'], function(_){
         },
         /**
          * Plot an absolute function from its equation
-         * 
+         *
          * @param {Object} canvas - RaphaelJs paper
          * @param {Array} equation
          * @param {Object} config
@@ -500,11 +500,19 @@ define(['OAT/lodash'], function(_){
          */
         plot : function(canvas, equation, config){
 
+            // fix to allow ploting vertical line in both segment and line mode
+            var multiplier;
+            if (config.segment === true) {
+                multiplier = -1; // coordinates are passed as cartesian values with "natural" y
+            } else {
+                multiplier = 1;  // coordinates are passed as cartesian values with "reversed" y, as expected by Raphael
+            }
+
             var x = equation[0] * config.unitSize.x + config.origin.left;
-            var yStart = -config.start_y * config.unitSize.y + config.origin.top;
-            var yEnd = -config.end_y * config.unitSize.y + config.origin.top;
+            var yStart = multiplier * config.start_y * config.unitSize.y + config.origin.top;
+            var yEnd = multiplier * config.end_y * config.unitSize.y + config.origin.top;
             var path = 'M' + x + ' ' + yStart + 'L' + x + ' ' + yEnd;
-            
+
             return canvas.path(path);
         }
     };
