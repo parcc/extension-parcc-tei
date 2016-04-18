@@ -98,7 +98,7 @@ class Updater extends \common_ext_ExtensionUpdater
 
         if($this->isVersion('0.1.5')){
 
-            $registry->registerFromFile('PARCC/plotFactory', $installBasePath.'/PARCC/plotFactory.js');
+            $registry->registerFromFile('PARCC/plotFactory', $installBasePath.'/PARCC/g.js');
             $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
             $registry->registerFromFile('PARCC/pointFactory', $installBasePath.'/PARCC/pointFactory.js');
 
