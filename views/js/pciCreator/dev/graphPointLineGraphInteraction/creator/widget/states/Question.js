@@ -51,16 +51,25 @@ define([
             $form = widget.$form,
             response = interaction.getResponseDeclaration();
 
+        function getBoolean(value, defaultValue) {
+            if (typeof(value) === "undefined") {
+                return defaultValue;
+            } else {
+                return (value === true || value === "true");
+            }
+        }
+
         //render the form using the form template
         $form.html(formTpl({
             serial : response.serial,
             identifier : interaction.attr('responseIdentifier'),
 
             graphTitle : interaction.prop('graphTitle'),
-            graphType : interaction.prop('graphType'),
+            graphTitleRequired : getBoolean(interaction.prop('graphTitleRequired'), true),
+            scatterPlot : interaction.prop('graphType') === "scatterPlot",
             maxPoints : interaction.prop('maxPoints'),
-            draggable : !!interaction.prop('draggable'),
-            segment : !!interaction.prop('segment'),
+            draggable : getBoolean(interaction.prop('draggable'), true),
+            segment : getBoolean(interaction.prop('segment'), true),
             width : interaction.prop('width'),
             height : interaction.prop('height'),
             weight : interaction.prop('weight'),
@@ -70,20 +79,20 @@ define([
             xEnd : interaction.prop('xEnd'),
             xStep : interaction.prop('xStep'),
             xSubStep : interaction.prop('xSubStep'),
-            xAllowOuter : !!interaction.prop('xAllowOuter'),
+            xAllowOuter : getBoolean(interaction.prop('xAllowOuter'), true),
 
             yLabel : interaction.prop('yLabel'),
             yStart : interaction.prop('yStart'),
             yEnd : interaction.prop('yEnd'),
             yStep : interaction.prop('yStep'),
             ySubStep : interaction.prop('ySubStep'),
-            yAllowOuter : !!interaction.prop('yAllowOuter'),
+            yAllowOuter : getBoolean(interaction.prop('yAllowOuter'), true),
 
             innerLineWeight : interaction.prop('innerLineWeight'),
             plotColor : interaction.prop('plotColor'),
             plotThickness : interaction.prop('plotThickness'),
             pointRadius : interaction.prop('pointRadius'),
-            pointGlow : !!interaction.prop('pointGlow'),
+            pointGlow : getBoolean(interaction.prop('pointGlow'), true),
             pointColor : interaction.prop('pointColor')
         }));
 
@@ -121,6 +130,7 @@ define([
             // maintain state
             graphTitle : graphConfigChangeCallback,
             graphType : graphConfigChangeCallback,
+            graphTitleRequired : graphConfigChangeCallback,
             draggable : graphConfigChangeCallback,
             segment : graphConfigChangeCallback,
             weight : graphConfigChangeCallback,

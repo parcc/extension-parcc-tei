@@ -33,7 +33,7 @@ define([
         var gridConfig = {
             // Interaction config
             draggable: getBoolean(rawConfig.draggable, true),
-            graphType: rawConfig.graphType, // scatterplot (nuage de points) or line
+            graphType: rawConfig.graphType, // scatterPlot (nuage de points) or line
             maxPoints: parseInt(rawConfig.maxPoints),
             segment: getBoolean(rawConfig.segment, true), // draw only segments between points
 
@@ -59,7 +59,7 @@ define([
             graphTitle: rawConfig.graphTitle,
             graphTitleSize: 20,
             graphTitlePadding: 40,
-            graphTitleRequired : getBoolean(rawConfig.graphTitleRequired, true), // unused for now
+            graphTitleRequired : getBoolean(rawConfig.graphTitleRequired, false),
             weight: parseInt(rawConfig.weight), // grid weight
             width: parseInt(rawConfig.width),
             height: parseInt(rawConfig.height),
@@ -401,7 +401,7 @@ define([
          * @param {Object} response
          */
         setResponse : function(response){
-            
+
             if(response && response.list){
                 if(response.list.string && _.isArray(response.list.string)){
                     this.setRawResponse(response.list.string);

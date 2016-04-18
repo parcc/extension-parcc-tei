@@ -16,13 +16,13 @@
     <h3>{{__ "Graph type"}}</h3>
     <div class="panel">
         <label class="smaller-prompt">
-            <input type="radio" name="graphType" value="line" {{#unless scatterplot}}checked{{/unless}} />
+            <input type="radio" name="graphType" value="line" {{#unless scatterPlot}}checked{{/unless}} />
             <span class="icon-radio"></span>
             {{__ 'Line'}}
         </label>
         <br />
         <label class="smaller-prompt">
-            <input type="radio" name="graphType" value="scatterplot" {{#if scatterplot}}checked{{/if}} />
+            <input type="radio" name="graphType" value="scatterPlot" {{#if scatterPlot}}checked{{/if}} />
             <span class="icon-radio"></span>
             {{__ 'Scatterplot'}}
         </label>
@@ -37,6 +37,11 @@
         <label for="graphTitle">{{__ "Title"}}</label>
         <input name="graphTitle" value="{{graphTitle}}" type="text" />
     </div>
+    <label>
+        <input name="graphTitleRequired" type="checkbox" {{#if graphTitleRequired}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "Display Title"}}
+    </label>
     <div class="panel creator-graphPointLineGraphInteraction-spinner">
         <label for="maxPoints" class="spinner">{{__ "Max number of points"}}</label>
         <input name="maxPoints" value="{{maxPoints}}" data-increment="1" data-min="1" type="text" /><br />
