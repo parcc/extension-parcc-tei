@@ -52,7 +52,7 @@ define(['OAT/lodash'], function( _ ){
                 color : lineColor,
                 weight : 1, // inner grid weight
                 labelSize : 14, // pixels
-                labelPadding : 28, // pixels
+                labelPadding : 36, // pixels
                 padding : 20, // pixels
                 height: null, // grid size in pixels
                 width: null, // grid size in pixels
@@ -173,7 +173,7 @@ define(['OAT/lodash'], function( _ ){
                 };
 
             if (_labelPositions.abs === "right") {
-                labelsCoords.abs.x = _width + options.labelPadding;
+                labelsCoords.abs.x = _width + options.padding; // workaround...
                 labelsCoords.abs.angle = -90;
 
                 // align abs label on its axis
@@ -189,12 +189,12 @@ define(['OAT/lodash'], function( _ ){
                 if (_labelPositions.abs === "bottom") {
                     labelsCoords.abs.y = _height + options.labelPadding;
                 } else if (_labelPositions.abs === "top") {
-                    labelsCoords.abs.y = -options.labelPadding;
+                    labelsCoords.abs.y = -options.labelPadding / 2;
                 }
             }
 
             if (_labelPositions.ord === "top") {
-                labelsCoords.ord.y = -options.labelPadding;
+                labelsCoords.ord.y = -options.labelPadding / 2;
                 labelsCoords.ord.angle = 0;
 
                 // align ord label on its axis
@@ -210,7 +210,7 @@ define(['OAT/lodash'], function( _ ){
                 if (_labelPositions.ord === "left") {
                     labelsCoords.ord.x = -options.labelPadding;
                 } else if (_labelPositions.ord === "right") {
-                    labelsCoords.ord.x = _width + options.labelPadding;
+                    labelsCoords.ord.x = _width + options.padding; // workaround...
                 }
             }
             return labelsCoords;
