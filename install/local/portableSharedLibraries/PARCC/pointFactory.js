@@ -100,18 +100,12 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 _x = grid.getOriginPosition().left + grid.getUnits().x * x;
                 _y = grid.getOriginPosition().top - grid.getUnits().y * y;
             },
-            /**
-             * Set coordinate in the cartesian coordinate system
-             *
-             * @param {Number} x
-             * @param {Number} y
-             * @returns {undefined}
-             */
-            getCartesianCoord : function(decimals){
-                decimals = (decimals === undefined) ? 0 : decimals;
+            getCartesianCoord : function(){
+                var cartesianX = (_x - grid.getOriginPosition().left)/grid.getUnits().x,
+                    cartesianY = - (_y - grid.getOriginPosition().top)/grid.getUnits().y;
                 return {
-                    x: (_x - grid.getOriginPosition().left)/grid.getUnits().x,
-                    y: - (_y - grid.getOriginPosition().top)/grid.getUnits().y
+                    x: Number(cartesianX.toFixed(2)), // fix for IEEE 754 rounding issues where:
+                    y: Number(cartesianY.toFixed(2))  // 60*2,7=162 != 162/2,7=59,999999
                 };
             },
             /**
