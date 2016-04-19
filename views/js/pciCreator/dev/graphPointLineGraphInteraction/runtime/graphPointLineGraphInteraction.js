@@ -266,7 +266,8 @@ define([
                         return pointB;
                     });
                 }
-                _this.trigger('responsechange', [_this.getResponse()]);
+                // debugger;
+                _this.trigger('responseChange', [_this.getResponse()]);
             }
 
             function areCoordsValid(x, y, cartesian) {

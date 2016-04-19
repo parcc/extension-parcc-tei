@@ -42,7 +42,7 @@ define([
         });
         
         //init editing widget event listener
-        interaction.onPci('responsechange', function(response){
+        interaction.onPci('responseChange', function(response){
             var correctResponse = [];
             if (response.base !== null && response.list) {
                 correctResponse = response.list.string;
@@ -53,7 +53,7 @@ define([
     
     function destroyResponseDeclarationWidget(widget){
         var interaction = widget.element;
-        interaction.offPci('responsechange');
+        interaction.offPci('responseChange');
         interaction.setResponse({
             base : null
         });
