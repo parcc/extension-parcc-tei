@@ -175,6 +175,9 @@ define([
         .test('grid rendering', function test(data, assert) {
             var $container = $('<div class="test ' + data.outputContainer + '_actual"><h3 class="title">' + data.title + '</h3><pre class="grid-config"></pre><div class="shape-container"></div>');
 
+            // display title for all samples
+            data.input.graphTitleRequired = true;
+
             // uncomment to display input above the graph
             // $container.find('.grid-config').append(JSON.stringify(data.input, undefined, 2));
 
