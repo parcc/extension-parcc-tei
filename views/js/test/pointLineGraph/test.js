@@ -9,7 +9,7 @@ define([
 
     var runner;
     // var fixtureContainerId = 'item-container';
-    var fixtureContainerId = 'outside-container';
+    var fixtureContainerId = 'outside-container'; // <= use this to display result on screen
 
     //override asset loading in order to resolve it from the runtime location
     var strategies = [{
@@ -26,7 +26,7 @@ define([
             }
         }];
 
-    module('Teardown', {
+    module('Point Line Graph Interaction', {
         teardown : function(){
             if(runner){
                 runner.clear();
@@ -34,8 +34,8 @@ define([
         }
     });
 
-    module('Point Line Graph Interaction');
     /* */
+
     QUnit.asyncTest('rendering', function (assert){
 
         var $container = $('#' + fixtureContainerId);
@@ -62,7 +62,7 @@ define([
             .render($container);
     });
 
-    /* * /
+    /* */
 
     QUnit.asyncTest('response', function (assert){
 
@@ -105,7 +105,9 @@ define([
             .render($container);
 
     });
-/* * /
+
+    /* */
+
     QUnit.asyncTest('state', function (assert){
 
         var response = {
@@ -143,6 +145,7 @@ define([
             .render($container);
 
     });
+
     /* */
 });
 
