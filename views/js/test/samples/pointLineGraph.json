@@ -57,13 +57,15 @@
                     "xStart": "0",
                     "xSubStep": "2",
                     "xWeight": "3",
+                    "xBorderWeight": "5",
                     "yAllowOuter": "true",
                     "yStep": "10",
                     "yLabel": "Number of Cells (x1,000,000)",
                     "yEnd": "150",
                     "yStart": "0",
                     "ySubStep": "2",
-                    "yWeight": "3"
+                    "yWeight": "3",
+                    "yBorderWeight": "5"
                 },
                 "entryPoint": "graphPointLineGraphInteraction\/runtime\/graphPointLineGraphInteraction.js"
             }

@@ -49,6 +49,7 @@ define([
                 "height": 300,
 
                 "xAllowOuter": true,
+                "xBorderWeight": 3,
                 "xStep": 1,
                 "xLabel": null,
                 "xStart": 0,
@@ -57,6 +58,7 @@ define([
                 "xWeight": 3,
 
                 "yAllowOuter": true,
+                "yBorderWeight": 3,
                 "yStep": 10,
                 "yLabel": null,
                 "yStart": 0,

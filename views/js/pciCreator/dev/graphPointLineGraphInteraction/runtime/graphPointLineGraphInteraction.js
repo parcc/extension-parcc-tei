@@ -30,58 +30,63 @@ define([
             }
         }
 
-        var gridConfig = {
-            // Interaction config
-            draggable: getBoolean(rawConfig.draggable, true),
-            graphType: rawConfig.graphType, // scatterPlot (nuage de points) or line
-            maxPoints: parseInt(rawConfig.maxPoints),
-            segment: getBoolean(rawConfig.segment, true), // draw only segments between points
+        var xWeight = parseInt(rawConfig.xWeight),
+            xBorderWeight = parseInt(rawConfig.xBorderWeight),
+            yWeight = parseInt(rawConfig.yWeight),
+            yBorderWeight = parseInt(rawConfig.yBorderWeight),
 
-            // Gridfactory config
-            x : {
-                start : parseInt(rawConfig.xStart),
-                end : parseInt(rawConfig.xEnd),
-                label : rawConfig.xLabel,
-                step: parseInt(rawConfig.xStep),
-                subStep : parseInt(rawConfig.xSubStep),
-                weight : parseInt(rawConfig.xWeight),
-                allowOuter : getBoolean(rawConfig.xAllowOuter, true)
-            },
-            y : {
-                start : -1 * parseInt(rawConfig.yEnd), // y-axis is reversed
-                end : -1 * parseInt(rawConfig.yStart), // y-axis is reversed
-                label : rawConfig.yLabel,
-                step: parseInt(rawConfig.yStep),
-                subStep : parseInt(rawConfig.ySubStep),
-                weight : parseInt(rawConfig.yWeight),
-                allowOuter : getBoolean(rawConfig.yAllowOuter, true)
-            },
-            graphTitle: rawConfig.graphTitle,
-            graphTitleSize: 20,
-            graphTitlePadding: 40,
-            graphTitleRequired : getBoolean(rawConfig.graphTitleRequired, false),
-            weight: parseInt(rawConfig.weight), // grid weight
-            width: parseInt(rawConfig.width),
-            height: parseInt(rawConfig.height),
-            padding: 30,
-            labelPadding: 28,
-            labelSize: 14,
+            gridConfig = {
+                // PCI config
+                draggable: getBoolean(rawConfig.draggable, true),
+                graphType: rawConfig.graphType, // scatterPlot (nuage de points) or line
+                maxPoints: parseInt(rawConfig.maxPoints),
+                segment: getBoolean(rawConfig.segment, true), // draw only segments between points
 
-            // PlotFactory config
-            plot : {
-                color: rawConfig.plotColor,
-                thickness: parseInt(rawConfig.plotThickness)
-            },
+                // Gridfactory config
+                x : {
+                    start : parseInt(rawConfig.xStart),
+                    end : parseInt(rawConfig.xEnd),
+                    label : rawConfig.xLabel,
+                    step: parseInt(rawConfig.xStep),
+                    subStep : parseInt(rawConfig.xSubStep),
+                    weight : (xWeight > 0) ? xWeight : xBorderWeight,
+                    allowOuter : getBoolean(rawConfig.xAllowOuter, true)
+                },
+                y : {
+                    start : -1 * parseInt(rawConfig.yEnd), // y-axis is reversed
+                    end : -1 * parseInt(rawConfig.yStart), // y-axis is reversed
+                    label : rawConfig.yLabel,
+                    step: parseInt(rawConfig.yStep),
+                    subStep : parseInt(rawConfig.ySubStep),
+                    weight : (yWeight > 0) ? yWeight : yBorderWeight,
+                    allowOuter : getBoolean(rawConfig.yAllowOuter, true)
+                },
+                graphTitle: rawConfig.graphTitle,
+                graphTitleSize: 20,
+                graphTitlePadding: 40,
+                graphTitleRequired : getBoolean(rawConfig.graphTitleRequired, false),
+                weight: parseInt(rawConfig.weight), // grid weight
+                width: parseInt(rawConfig.width),
+                height: parseInt(rawConfig.height),
+                padding: 30,
+                labelPadding: 28,
+                labelSize: 14,
 
-            // PointFactory config
-            point : {
-                color: rawConfig.pointColor,
-                glow : getBoolean(rawConfig.pointGlow, true),
-                radius: parseInt(rawConfig.pointRadius)
-            }
+                // PlotFactory config
+                plot : {
+                    color: rawConfig.plotColor,
+                    thickness: parseInt(rawConfig.plotThickness)
+                },
+
+                // PointFactory config
+                point : {
+                    color: rawConfig.pointColor,
+                    glow : getBoolean(rawConfig.pointGlow, true),
+                    radius: parseInt(rawConfig.pointRadius)
+                }
         };
 
-        // check for invalid values
+        // overide invalid values with safe defaults
         if (gridConfig.x.step < 1) {
             gridConfig.x.step = 1;
         }
@@ -93,6 +98,13 @@ define([
         }
         if (gridConfig.y.subStep < 1) {
             gridConfig.y.subStep = 1;
+        }
+
+        if (! gridConfig.x.weight > 0) {
+            gridConfig.x.weight = 3;
+        }
+        if (! gridConfig.y.weight > 0) {
+            gridConfig.y.weight = 3;
         }
         return gridConfig;
     }
@@ -266,7 +278,6 @@ define([
                         return pointB;
                     });
                 }
-                // debugger;
                 _this.trigger('responseChange', [_this.getResponse()]);
             }
 
