@@ -11,6 +11,3 @@
 .graphPointLineGraphInteraction .prompt {margin-bottom:20px;}
 .graphPointLineGraphInteraction .shape-panel {position:relative; display: inline-block; width: 100%;}
 .graphPointLineGraphInteraction .shape-panel .shape-container {float:left; margin-left:30px;}
-.graphPointLineGraphInteraction .shape-panel .shape-controls {float:left; margin-bottom:20px;}
-.graphPointLineGraphInteraction .shape-panel .shape-controls button {width:150px; margin:3px 0; display:none;}
-.graphPointLineGraphInteraction .shape-panel .shape-controls button.available {display:block;}
