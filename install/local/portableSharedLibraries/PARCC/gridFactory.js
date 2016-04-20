@@ -12,7 +12,7 @@ define(['OAT/lodash'], function( _ ){
             throw 'end must be greater than start';
         }
 
-        var options = buildOptions(rawOptions),
+        var options = _buildOptions(rawOptions),
 
             _x = options.x,
             _y = options.y,
@@ -37,8 +37,8 @@ define(['OAT/lodash'], function( _ ){
             clickableArea,
             set = paper.set(),
             _borderBox = {};
-        
-        function buildOptions(rawOptions) {
+
+        function _buildOptions(rawOptions) {
             var lineColor = '#222';
 
             var options = _.merge({},{
