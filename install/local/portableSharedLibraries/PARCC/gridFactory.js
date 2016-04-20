@@ -12,35 +12,32 @@ define(['OAT/lodash'], function( _ ){
             throw 'end must be greater than start';
         }
 
+        var options = buildOptions(rawOptions),
 
-        /**
-         * Add a css class to the node of a Raphaël object
-         * IE currently doesn't support the usage of element.classList in SVG
-         * @param raphaelObj
-         * @param {string} newClass
-         */
-        function addCssClass(raphaelObj, newClass) {
-            var pattern = new RegExp('\\b' + newClass + '\\b');
-            var oldClass = raphaelObj.node.getAttribute('class') || '';
-            raphaelObj.node.setAttribute('class', pattern.test(oldClass) ? oldClass : oldClass + ' ' + newClass);
-        }
+            _x = options.x,
+            _y = options.y,
 
-        function drawLine(start, end, style){
-            var path = paper.path(
-                'M'+(_padding.left+start[0])+' '+(_padding.top+start[1])+
-                'L'+(_padding.left+end[0])+' '+(_padding.top+end[1])).attr(style);
-            addCssClass(path, 'scene scene-grid');
-            return path;
-        }
+            _xRange = Math.abs(_x.end - _x.start),
+            _yRange = Math.abs(_y.end - _y.start),
 
-        function drawTitle(text, style, x, y, angle) {
-            var textElement = paper.text(x, y, text).attr(style);
+            _width = _xRange * _x.unit,
+            _height = _yRange * _y.unit,
 
-            if (angle) {
-                textElement.rotate(angle, x, y);
-            }
-        }
+            _xSubStepSize = ((_width / (_xRange / _x.step)) / _x.subStep),
+            _ySubStepSize = ((_height / (_yRange / _y.step)) / _y.subStep),
 
+            _color = options.color,
+            _weight = options.weight,
+
+            _labelPositions = _getLabelsPosition(),
+            _padding = _getPadding(),
+            _labelCoords = _getLabelsCoords(),
+            _snapToValues = _getSnapToValues(),
+
+            clickableArea,
+            set = paper.set(),
+            _borderBox = {};
+        
         function buildOptions(rawOptions) {
             var lineColor = '#222';
 
@@ -87,32 +84,6 @@ define(['OAT/lodash'], function( _ ){
             }
             return options;
         }
-
-        var options = buildOptions(rawOptions),
-
-            _x = options.x,
-            _y = options.y,
-
-            _xRange = Math.abs(_x.end - _x.start),
-            _yRange = Math.abs(_y.end - _y.start),
-
-            _width = _xRange * _x.unit,
-            _height = _yRange * _y.unit,
-
-            _xSubStepSize = ((_width / (_xRange / _x.step)) / _x.subStep),
-            _ySubStepSize = ((_height / (_yRange / _y.step)) / _y.subStep),
-
-            _color = options.color,
-            _weight = options.weight,
-
-            _labelPositions = _getLabelsPosition(),
-            _padding = _getPadding(),
-            _labelCoords = _getLabelsCoords(),
-            _snapToValues = _getSnapToValues(),
-
-            clickableArea,
-            set = paper.set(),
-            _borderBox = {};
 
         function _getLabelsPosition() {
             var xQuadrants = (_x.start < 0 && _x.end > 0) ? 2 : 1,
@@ -255,7 +226,7 @@ define(['OAT/lodash'], function( _ ){
                 };
 
             if (options.graphTitle && options.graphTitleRequired === true) {
-                drawTitle(options.graphTitle, style, x, y);
+                _drawTitle(options.graphTitle, style, x, y);
             }
         }
 
@@ -278,7 +249,7 @@ define(['OAT/lodash'], function( _ ){
 
                 config = config || {};
 
-                var line =  drawLine([0, top], [_width, top], config.style);
+                var line =  _drawLine([0, top], [_width, top], config.style);
 
                 var position = 0,
                     fontSize = 10,
@@ -295,7 +266,7 @@ define(['OAT/lodash'], function( _ ){
                     text = paper.text(_padding.left + position, textTop, i).attr({
                         'font-size' : fontSize
                     });
-                    addCssClass(text, 'scene scene-text');
+                    _addCssClass(text, 'scene scene-text');
                     position += _x.unit * _x.step;
                 }
 
@@ -306,7 +277,7 @@ define(['OAT/lodash'], function( _ ){
 
                 config = config || {};
 
-                var line =  drawLine([left, _height], [left, 0], config.style);
+                var line =  _drawLine([left, _height], [left, 0], config.style);
 
                 var position = 0,
                     fontSize = 10,
@@ -323,7 +294,7 @@ define(['OAT/lodash'], function( _ ){
                     text = paper.text(textLeft, _padding.top + position, -i).attr({
                         'font-size' : fontSize
                     });
-                    addCssClass(text, 'scene scene-text');
+                    _addCssClass(text, 'scene scene-text');
                     position += _y.unit * _y.step;
                 }
 
@@ -353,7 +324,7 @@ define(['OAT/lodash'], function( _ ){
             }
 
             if (_x.label) {
-                drawTitle(
+                _drawTitle(
                     _x.label,
                     labelStyle,
                     _padding.left + _labelCoords.abs.x,
@@ -361,7 +332,7 @@ define(['OAT/lodash'], function( _ ){
                     _labelCoords.abs.angle);
             }
             if (_y.label) {
-                drawTitle(
+                _drawTitle(
                     _y.label,
                     labelStyle,
                     _padding.left + _labelCoords.ord.x,
@@ -378,19 +349,45 @@ define(['OAT/lodash'], function( _ ){
                 };
 
             for(var y = 0; y <= _height; y += _y.step * _y.unit){
-                drawLine([0, y], [_width, y], style);
+                _drawLine([0, y], [_width, y], style);
             }
             // close the graph if uneven step/y axis
             if (Math.abs(_y.end - _y.start) % _y.step) {
-                drawLine([0, _height], [_width, _height], style);
+                _drawLine([0, _height], [_width, _height], style);
             }
             for(var x = 0; x <= _width; x += _x.step * _x.unit) {
-                drawLine([x, 0], [x, _height], style);
+                _drawLine([x, 0], [x, _height], style);
             }
             // close the graph if uneven step/x axis
             if (Math.abs(_x.end - _x.start) % _x.step) {
-                drawLine([_width, 0], [_width, _height], style);
+                _drawLine([_width, 0], [_width, _height], style);
             }
+        }
+
+        function _drawLine(start, end, style){
+            var path = paper.path(
+                'M'+(_padding.left+start[0])+' '+(_padding.top+start[1])+
+                'L'+(_padding.left+end[0])+' '+(_padding.top+end[1])).attr(style);
+            _addCssClass(path, 'scene scene-grid');
+            return path;
+        }
+
+        function _drawTitle(text, style, x, y, angle) {
+            var textElement = paper.text(x, y, text).attr(style);
+
+            if (angle) {
+                textElement.rotate(angle, x, y);
+            }
+        }
+
+        /**
+         * Add a css class to the node of a Raphaël object
+         * IE currently doesn't support the usage of element.classList in SVG
+         */
+        function _addCssClass(raphaelObj, newClass) {
+            var pattern = new RegExp('\\b' + newClass + '\\b');
+            var oldClass = raphaelObj.node.getAttribute('class') || '';
+            raphaelObj.node.setAttribute('class', pattern.test(oldClass) ? oldClass : oldClass + ' ' + newClass);
         }
 
         function _calculateBBox(){
