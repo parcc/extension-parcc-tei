@@ -5,6 +5,8 @@ define([
     'tpl!graphPointLineGraphInteraction/creator/tpl/markup'
 ], function(_, ciRegistry, Widget, markupTpl){
 
+    'use strict';
+
     var _typeIdentifier = 'graphPointLineGraphInteraction';
 
     var interactionCreator = {

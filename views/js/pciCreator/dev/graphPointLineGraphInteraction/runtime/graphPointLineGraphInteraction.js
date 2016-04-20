@@ -20,44 +20,45 @@ define([
 
     'use strict';
 
-    function buildGridConfig(rawConfig){
+    var buildGridConfig = function buildGridConfig(rawConfig){
 
-        function getBoolean(value, defaultValue) {
-            if (typeof(value) === "undefined") {
-                return defaultValue;
-            } else {
-                return (value === true || value === "true");
-            }
-        }
+        var getBoolean = function getBoolean(value, defaultValue) {
+                if (typeof(value) === "undefined") {
+                    return defaultValue;
+                } else {
+                    return (value === true || value === "true");
+                }
+            },
 
-        var xWeight = parseInt(rawConfig.xWeight),
-            xBorderWeight = parseInt(rawConfig.xBorderWeight),
-            yWeight = parseInt(rawConfig.yWeight),
-            yBorderWeight = parseInt(rawConfig.yBorderWeight),
+            radix = 10,
+            xWeight = parseInt(rawConfig.xWeight, radix),
+            xBorderWeight = parseInt(rawConfig.xBorderWeight, radix),
+            yWeight = parseInt(rawConfig.yWeight, radix),
+            yBorderWeight = parseInt(rawConfig.yBorderWeight, radix),
 
             gridConfig = {
                 // PCI config
                 draggable: getBoolean(rawConfig.draggable, true),
                 graphType: rawConfig.graphType, // scatterPlot (nuage de points) or line
-                maxPoints: parseInt(rawConfig.maxPoints),
+                maxPoints: parseInt(rawConfig.maxPoints, radix),
                 segment: getBoolean(rawConfig.segment, true), // draw only segments between points
 
                 // Gridfactory config
                 x : {
-                    start : parseInt(rawConfig.xStart),
-                    end : parseInt(rawConfig.xEnd),
+                    start : parseInt(rawConfig.xStart, radix),
+                    end : parseInt(rawConfig.xEnd, radix),
                     label : rawConfig.xLabel,
-                    step: parseInt(rawConfig.xStep),
-                    subStep : parseInt(rawConfig.xSubStep),
+                    step: parseInt(rawConfig.xStep, radix),
+                    subStep : parseInt(rawConfig.xSubStep, radix),
                     weight : (xWeight > 0) ? xWeight : xBorderWeight,
                     allowOuter : getBoolean(rawConfig.xAllowOuter, true)
                 },
                 y : {
-                    start : -1 * parseInt(rawConfig.yEnd), // y-axis is reversed
-                    end : -1 * parseInt(rawConfig.yStart), // y-axis is reversed
+                    start : -1 * parseInt(rawConfig.yEnd, radix), // y-axis is reversed
+                    end : -1 * parseInt(rawConfig.yStart, radix), // y-axis is reversed
                     label : rawConfig.yLabel,
-                    step: parseInt(rawConfig.yStep),
-                    subStep : parseInt(rawConfig.ySubStep),
+                    step: parseInt(rawConfig.yStep, radix),
+                    subStep : parseInt(rawConfig.ySubStep, radix),
                     weight : (yWeight > 0) ? yWeight : yBorderWeight,
                     allowOuter : getBoolean(rawConfig.yAllowOuter, true)
                 },
@@ -65,9 +66,9 @@ define([
                 graphTitleSize: 20,
                 graphTitlePadding: 40,
                 graphTitleRequired : getBoolean(rawConfig.graphTitleRequired, false),
-                weight: parseInt(rawConfig.weight), // grid weight
-                width: parseInt(rawConfig.width),
-                height: parseInt(rawConfig.height),
+                weight: parseInt(rawConfig.weight, radix), // grid weight
+                width: parseInt(rawConfig.width, radix),
+                height: parseInt(rawConfig.height, radix),
                 padding: 30,
                 labelPadding: 28,
                 labelSize: 14,
@@ -75,14 +76,14 @@ define([
                 // PlotFactory config
                 plot : {
                     color: rawConfig.plotColor,
-                    thickness: parseInt(rawConfig.plotThickness)
+                    thickness: parseInt(rawConfig.plotThickness, radix)
                 },
 
                 // PointFactory config
                 point : {
                     color: rawConfig.pointColor,
                     glow : getBoolean(rawConfig.pointGlow, true),
-                    radius: parseInt(rawConfig.pointRadius)
+                    radius: parseInt(rawConfig.pointRadius, radix)
                 }
         };
 
@@ -100,16 +101,16 @@ define([
             gridConfig.y.subStep = 1;
         }
 
-        if (! gridConfig.x.weight > 0) {
+        if ((gridConfig.x.weight > 0) === false) {
             gridConfig.x.weight = 3;
         }
-        if (! gridConfig.y.weight > 0) {
+        if ((gridConfig.y.weight > 0) === false) {
             gridConfig.y.weight = 3;
         }
         return gridConfig;
-    }
+    };
 
-    function createCanvas($container, config){
+    var createCanvas = function createCanvas($container, config){
 
         var xPadding = config.padding * 2,
             yPadding = config.padding * 2,
@@ -133,20 +134,21 @@ define([
         );
 
         return paper;
-    }
+    };
 
     var graphPointLineGraphInteraction = {
         id : -1,
         getTypeIdentifier : function(){
             return 'graphPointLineGraphInteraction';
         },
-        /**
-         * Render the PCI :
-         * @param {String} id
-         * @param {Node} dom
-         * @param {Object} config - json
-         */
         initialize : function(id, dom, config){
+            var $container = $(dom),
+                self,
+                paper,
+                grid,
+                points = [],
+                plotFactory,
+                paths = [];
 
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
@@ -155,23 +157,16 @@ define([
             this.dom = dom;
             this.config = config || {};
 
-            var $container = $(dom);
+            self = this;
 
-            var _this = this,
-                paper,
-                grid,
-                points = [],
-                plotFactory,
-                paths = [];
-
-            function initGrid($container, gridConfig){
+            function initGrid($gridContainer, gridConfig){
 
                 //clear existing drawn elements (if any)
                 clearPlot();
                 clearPoint();
 
                 //create paper
-                paper = createCanvas($container, gridConfig);
+                paper = createCanvas($gridContainer, gridConfig);
 
                 //intialize the grid only if the configuration is correct
                 if(_.isObject(gridConfig.x) &&
@@ -184,27 +179,28 @@ define([
                     grid.clickable();
 
                     //bind click event:
-                    grid.children.click(function(event){
+                    grid.children.click(function(clickEvent){
 
                         // Get the coordinate for a click
-                        var bnds = event.target.getBoundingClientRect(),
+                        var bnds = clickEvent.target.getBoundingClientRect(),
                             wfactor = paper.w / paper.width,
-                            fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
-                            fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
+                            fx = grid.getX() + Math.round((clickEvent.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
+                            fy = grid.getY() + Math.round((clickEvent.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor),
+                            oldPoint;
 
                         if (areCoordsValid(fx, fy)) {
-                            if (points.length < _this.gridConfig.maxPoints) {
+                            if (points.length < self.gridConfig.maxPoints) {
                                 addPoint(fx, fy);
                                 plot();
                             } else {
                                 // Get the last point placed
-                                var oldPoint = points.pop();
+                                oldPoint = points.pop();
                                 // Change their coordinates for new ones
                                 oldPoint.setCoord(fx, fy);
                                 // Re-draw the point
                                 oldPoint.render();
                                 // re-enable the drag'n'drop
-                                if (_this.gridConfig.draggable) {
+                                if (self.gridConfig.draggable) {
                                     oldPoint.drag();
                                 }
                                 // Add it back to the list
@@ -219,7 +215,7 @@ define([
                     plotFactory = new PlotFactory(grid, gridConfig.plot);
 
                     //add listener to removed.point
-                    $(paper.canvas).off('removed.point').on('removed.point', function(event, removedPoint){
+                    $(paper.canvas).off('removed.point').on('removed.point', function(_event, removedPoint){
                         // get the point to remove from the "registry"
                         var pointToDelete = _.findIndex(points, {uid : removedPoint.uid});
                         if(pointToDelete > -1){
@@ -235,7 +231,6 @@ define([
 
             function clearPlot(){
                 paths.forEach(function (path) {
-                    // add safety check ???
                     path.remove();
                 });
                 paths = [];
@@ -263,12 +258,12 @@ define([
                         }
                     }),
                     plotConfig = {
-                        segment : _this.gridConfig.segment
+                        segment : self.gridConfig.segment
                     };
 
                 clearPlot();
 
-                if (_this.gridConfig.graphType === 'line' && sortedPoints.length >= 2) {
+                if (self.gridConfig.graphType === 'line' && sortedPoints.length >= 2) {
                     sortedPoints.reduce(function (pointA, pointB) {
                         if (pointA.getX() === pointB.getX()) {
                             paths.push(plotFactory.plotVertical(pointA, pointB, plotConfig));
@@ -278,15 +273,15 @@ define([
                         return pointB;
                     });
                 }
-                _this.trigger('responseChange', [_this.getResponse()]);
+                self.trigger('responseChange', [self.getResponse()]);
             }
 
             function areCoordsValid(x, y, cartesian) {
                 var gridBBox, snappedPoint, xOnOuter, yOnOuter;
 
                 if (cartesian) {
-                    xOnOuter = (x === _this.gridConfig.x.start || x === _this.gridConfig.x.end);
-                    yOnOuter = (y === _this.gridConfig.y.start || y === _this.gridConfig.y.end);
+                    xOnOuter = (x === self.gridConfig.x.start || x === self.gridConfig.x.end);
+                    yOnOuter = (y === self.gridConfig.y.start || y === self.gridConfig.y.end);
                 } else {
                     gridBBox = grid.getBBox();
                     snappedPoint = grid.snap(x, y);
@@ -294,8 +289,8 @@ define([
                     yOnOuter = (snappedPoint[1] === gridBBox.y || snappedPoint[1] === gridBBox.y2);
                 }
                 return !
-                    ((_this.gridConfig.x.allowOuter === false && xOnOuter) ||
-                    (_this.gridConfig.y.allowOuter === false && yOnOuter));
+                    ((self.gridConfig.x.allowOuter === false && xOnOuter) ||
+                    (self.gridConfig.y.allowOuter === false && yOnOuter));
             }
 
             function addPoint(fx, fy, cartesian){
@@ -308,10 +303,10 @@ define([
                     subStepSizes = grid.getSubStepSizes();
 
                     draggableArea = {
-                        xMin: (_this.gridConfig.x.allowOuter) ? gridBBox.x  : gridBBox.x  + subStepSizes.x,
-                        xMax: (_this.gridConfig.x.allowOuter) ? gridBBox.x2 : gridBBox.x2 - subStepSizes.x,
-                        yMin: (_this.gridConfig.y.allowOuter) ? gridBBox.y  : gridBBox.y  + subStepSizes.y,
-                        yMax: (_this.gridConfig.y.allowOuter) ? gridBBox.y2 : gridBBox.y2 - subStepSizes.y
+                        xMin: (self.gridConfig.x.allowOuter) ? gridBBox.x  : gridBBox.x  + subStepSizes.x,
+                        xMax: (self.gridConfig.x.allowOuter) ? gridBBox.x2 : gridBBox.x2 - subStepSizes.x,
+                        yMin: (self.gridConfig.y.allowOuter) ? gridBBox.y  : gridBBox.y  + subStepSizes.y,
+                        yMax: (self.gridConfig.y.allowOuter) ? gridBBox.y2 : gridBBox.y2 - subStepSizes.y
                     };
 
                     pointConfig = _.defaults({
@@ -325,14 +320,14 @@ define([
                             dragStart : clearPlot,
                             dragStop : plot
                         }
-                    }, _this.gridConfig.point);
+                    }, self.gridConfig.point);
 
                     newPoint = pointFactory(paper, grid, pointConfig);
                     if(cartesian){
                         newPoint.setCartesianCoord(fx, fy, pointConfig);
                     }
                     newPoint.render();
-                    if (_this.gridConfig.draggable) {
+                    if (self.gridConfig.draggable) {
                         newPoint.drag();
                     }
                     newPoint.removeOnClic();
@@ -343,16 +338,15 @@ define([
             }
 
             /**
-             * Get the raw response of the interaction.
-             * If no graph is drawn, returns null
-             *
-             * @returns {array}
+             * @return {array} ['x1 y1', 'x2 y2', 'x3 y3'...]
              */
             this.getRawResponse = function getRawResponse(){
+                var serializedPoints;
+
                 if (points.length === 0) {
                     return null;
                 }
-                var serializedPoints = points.map(function getPointsData(point) {
+                serializedPoints = points.map(function getPointsData(point) {
                     var pointData = point.getCartesianCoord(1);
                     return pointData.x + ' ' + pointData.y;
                 });
@@ -361,7 +355,7 @@ define([
 
             /**
              * Set the raw response to the interaction
-             * @param {array} serializedPoints
+             * @param {array} serializedPoints ['x1 y1', 'x2 y2', 'x3 y3'...]
              */
             this.setRawResponse = function setRawResponse(serializedPoints){
                 clearPoint();
@@ -389,28 +383,25 @@ define([
              */
 
             // this event maintains state...
-            _this.on('configChange', function(config){
-                var state = _this.getRawResponse();
-                _this.config = config;
-                _this.gridConfig = buildGridConfig(config);
-                initGrid($container, _this.gridConfig);
+            self.on('configChange', function(newRawConfig){
+                var state = self.getRawResponse();
+                self.config = newRawConfig;
+                self.gridConfig = buildGridConfig(newRawConfig);
+                initGrid($container, self.gridConfig);
 
-                _this.setRawResponse(state);
+                self.setRawResponse(state);
             });
 
             // ...this one doesn't!
-            _this.on('gridChange', function(config){
-                _this.config = config;
-                _this.gridConfig = buildGridConfig(config);
-                initGrid($container, _this.gridConfig);
+            self.on('gridChange', function(newRawConfig){
+                self.config = newRawConfig;
+                self.gridConfig = buildGridConfig(newRawConfig);
+                initGrid($container, self.gridConfig);
             });
         },
         /**
-         * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         *
-         * @param {Object} interaction
-         * @param {Object} response
+         * @param {Object} response See JSON schema in link above
          */
         setResponse : function(response){
 
@@ -420,18 +411,16 @@ define([
                 }else if(response.list.point && _.isArray(response.list.point)){
                     this.setRawResponse(response.list.point);
                 }else{
-                    throw 'invalid response baseType';
+                    throw new Error('invalid response baseType');
                 }
             }else if(response && response.base === null){
                 this.setRawResponse([]);//empty response
             }
         },
+
         /**
-         * Get the response in the json format described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         *
-         * @param {Object} interaction
-         * @returns {Object}
+         * @returns {Object} See JSON schema in link above
          */
         getResponse : function(){
             var raw = this.getRawResponse();
@@ -447,8 +436,6 @@ define([
         /**
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
-         *
-         * @param {Object} interaction
          */
         resetResponse : function(){
             //not implemented
@@ -457,21 +444,15 @@ define([
          * Reverse operation performed by render()
          * After this function is executed, only the inital naked markup remains
          * Event listeners are removed and the state and the response are reset
-         *
-         * @param {Object} interaction
          */
         destroy : function(){
 
             var $container = $(this.dom);
             $container.off().empty();
-
-            //@todo reset response ?!!
         },
         /**
          * Restore the state of the interaction from the serializedState.
-         *
-         * @param {Object} interaction
-         * @param {Object} serializedState - json format
+         * @param {Object} state - json format
          */
         setSerializedState : function(state){
             //state == response
@@ -480,8 +461,6 @@ define([
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
-         *
-         * @param {Object} interaction
          * @returns {Object} json format
          */
         getSerializedState : function(){

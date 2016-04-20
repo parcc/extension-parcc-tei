@@ -5,11 +5,11 @@ define(['OAT/lodash'], function( _ ){
     function gridFactory(paper,rawOptions){
 
         if (typeof rawOptions.x !== 'object' && typeof rawOptions.y !== 'object'){
-            throw 'I need x and y axis';
+            throw new Error('I need x and y axis');
         }
 
         if ( (rawOptions.x.start >= rawOptions.x.end) || (rawOptions.y.start >= rawOptions.y.end) ) {
-            throw 'end must be greater than start';
+            throw new Error('end must be greater than start');
         }
 
         var options = _buildOptions(rawOptions),
@@ -246,15 +246,15 @@ define(['OAT/lodash'], function( _ ){
                 };
 
             function drawXaxis(top, config){
-
                 config = config || {};
 
-                var line =  _drawLine([0, top], [_width, top], config.style);
-
-                var position = 0,
+                var line =  _drawLine([0, top], [_width, top], config.style),
+                    position = 0,
                     fontSize = 10,
                     textTop,
-                    text;
+                    text,
+                    i;
+
 
                 if(config.unitsOnTop){
                     textTop = top + _padding.top - fontSize/2;
@@ -262,7 +262,7 @@ define(['OAT/lodash'], function( _ ){
                     textTop = top + _padding.top + fontSize;
                 }
 
-                for(var i = _x.start; i <= _x.end ; i = i + _x.step){
+                for(i = _x.start; i <= _x.end ; i = i + _x.step){
                     text = paper.text(_padding.left + position, textTop, i).attr({
                         'font-size' : fontSize
                     });
@@ -282,7 +282,8 @@ define(['OAT/lodash'], function( _ ){
                 var position = 0,
                     fontSize = 10,
                     textLeft,
-                    text;
+                    text,
+                    i;
 
                 if(config.unitsOnRight){
                     textLeft = left + _padding.left + fontSize/2;
@@ -290,7 +291,7 @@ define(['OAT/lodash'], function( _ ){
                     textLeft = left + _padding.left - fontSize;
                 }
 
-                for(var i = _y.start; i <= _y.end ; i = i + _y.step){
+                for(i = _y.start; i <= _y.end ; i = i + _y.step){
                     text = paper.text(textLeft, _padding.top + position, -i).attr({
                         'font-size' : fontSize
                     });
@@ -346,16 +347,17 @@ define(['OAT/lodash'], function( _ ){
             var style = {
                     'stroke': _color,
                     'stroke-width' : _weight
-                };
+                },
+                x, y;
 
-            for(var y = 0; y <= _height; y += _y.step * _y.unit){
+            for(y = 0; y <= _height; y += _y.step * _y.unit){
                 _drawLine([0, y], [_width, y], style);
             }
             // close the graph if uneven step/y axis
             if (Math.abs(_y.end - _y.start) % _y.step) {
                 _drawLine([0, _height], [_width, _height], style);
             }
-            for(var x = 0; x <= _width; x += _x.step * _x.unit) {
+            for(x = 0; x <= _width; x += _x.step * _x.unit) {
                 _drawLine([x, 0], [x, _height], style);
             }
             // close the graph if uneven step/x axis
@@ -383,6 +385,9 @@ define(['OAT/lodash'], function( _ ){
         /**
          * Add a css class to the node of a Raphaël object
          * IE currently doesn't support the usage of element.classList in SVG
+         *
+         * @param {Object} raphaelObj Raphael Object
+         * @param {String} newClass new class name
          */
         function _addCssClass(raphaelObj, newClass) {
             var pattern = new RegExp('\\b' + newClass + '\\b');
@@ -407,7 +412,7 @@ define(['OAT/lodash'], function( _ ){
 
         var obj = {
             children : set,
-            snapping : options.snapping || false,
+            snapping : options.snapping || false,
             /**
              * Set _color value
              * @param {String} color
@@ -422,7 +427,7 @@ define(['OAT/lodash'], function( _ ){
              * @param {Number} value weight in px
              */
             setWeight : function(value){
-                _weight = parseInt(value);
+                _weight = parseInt(value, 10);
                 set.remove().clear();
                 this.render();
             },
