@@ -62,12 +62,12 @@ define(['OAT/lodash'], function( _ ){
                 if (_labelPositions.abs === "bottom") {
                     labelsCoords.abs.y = _height + options.labelPadding;
                 } else if (_labelPositions.abs === "top") {
-                    labelsCoords.abs.y = -options.labelPadding / 2;
+                    labelsCoords.abs.y = -options.labelPadding;
                 }
             }
 
             if (_labelPositions.ord === "top") {
-                labelsCoords.ord.y = -options.labelPadding / 2;
+                labelsCoords.ord.y = -options.labelPadding;
                 labelsCoords.ord.angle = 0;
 
                 // align ord label on its axis
@@ -121,7 +121,7 @@ define(['OAT/lodash'], function( _ ){
 
         function _drawGraphTitle() {
             var x = _padding.left + _width / 2,
-                y = options.padding + options.graphTitlePadding / 2,
+                y = options.padding,
                 style = {
                     'font-size' : options.graphTitleSize,
                     'font-weight' : 'bold'
@@ -151,15 +151,15 @@ define(['OAT/lodash'], function( _ ){
                 config = config || {};
 
                 var line =  _drawLine([0, top], [_width, top], config.style),
-                    position = 0,
+                    readabilityOffset = (config.multiQuadrant) ? 5 : 0,
+                    position = readabilityOffset,
                     fontSize = 10,
                     textTop,
                     text,
                     i;
 
-
                 if(config.unitsOnTop){
-                    textTop = top + _padding.top - fontSize/2;
+                    textTop = top + _padding.top - fontSize;
                 }else{
                     textTop = top + _padding.top + fontSize;
                 }
@@ -179,18 +179,18 @@ define(['OAT/lodash'], function( _ ){
 
                 config = config || {};
 
-                var line =  _drawLine([left, _height], [left, 0], config.style);
-
-                var position = 0,
+                var line =  _drawLine([left, _height], [left, 0], config.style),
+                    readabilityOffset = (config.multiQuadrant) ? -5 : 0,
+                    position = readabilityOffset,
                     fontSize = 10,
                     textLeft,
                     text,
                     i;
 
                 if(config.unitsOnRight){
-                    textLeft = left + _padding.left + fontSize/2;
+                    textLeft = left + _padding.left + fontSize/2 + 2;
                 }else{
-                    textLeft = left + _padding.left - fontSize;
+                    textLeft = left + _padding.left - fontSize - 2;
                 }
 
                 for(i = _y.start; i <= _y.end ; i = i + _y.step){
@@ -212,7 +212,7 @@ define(['OAT/lodash'], function( _ ){
                drawXaxis(0, {style : xStyle, unitsOnTop : true});
             // both quadrants
             }else{
-                drawXaxis(Math.abs(_y.start) * _y.unit, {style : xStyle});
+                drawXaxis(Math.abs(_y.start) * _y.unit, {style : xStyle, multiQuadrant: true});
             }
 
             // left quadrant only
@@ -223,7 +223,7 @@ define(['OAT/lodash'], function( _ ){
                 drawYaxis(0, {style : yStyle});
             // both quadrants
             }else{
-                drawYaxis(Math.abs(_x.start) * _x.unit, {style : yStyle});
+                drawYaxis(Math.abs(_x.start) * _x.unit, {style : yStyle, multiQuadrant: true});
             }
 
             if (_x.label) {
@@ -500,14 +500,15 @@ define(['OAT/lodash'], function( _ ){
     };
 
     function _buildOptions(rawOptions) {
-        var lineColor = '#222',
+        var axisColor = '#222',
+            gridColor = '#999',
 
             options = _.merge({},{
                 graphTitle : null,
                 graphTitleRequired : false, // display or not graph title
                 graphTitleSize : 20, // pixels
                 graphTitlePadding : 40, // pixels
-                color : lineColor,
+                color : gridColor,
                 weight : 1, // inner grid weight
                 labelSize : 14, // pixels
                 labelPadding : 36, // pixels
@@ -521,7 +522,7 @@ define(['OAT/lodash'], function( _ ){
                     step : 1, // cartesian step
                     subStep : 1,  // snapping divisions inside step
                     unit : 10, // number of pixels for a cartesian unit
-                    color : lineColor,
+                    color : axisColor,
                     weight : 3 // axis weight
                 },
                 y : {
@@ -531,7 +532,7 @@ define(['OAT/lodash'], function( _ ){
                     step : 1,
                     subStep : 1,
                     unit : 10,
-                    color : lineColor,
+                    color : axisColor,
                     weight : 3
                 }
             }, rawOptions);

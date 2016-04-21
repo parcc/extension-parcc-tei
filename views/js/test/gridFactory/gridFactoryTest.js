@@ -10,7 +10,7 @@ define([
     // var outputContainer = "#paper-hidden";
 
     var gridFactoryParameters = [
-/* */
+        /* */
         { title: 'simple, no title', input: {
             graphTitle : null,
             x : { start : -6, end : 10, unit : 20, step : 1, label: 'x' },
@@ -189,7 +189,7 @@ define([
             width: 250, height: 250,
             paperWidth: 310, paperHeight: 350
         }, outputContainer: 'test_19' },
-/* */
+        /* */
         { title: 'Bouncing ball experiment', input: {
             //graphTitle : 'Bouncing ball experiment',
             width : 500, height : 500,
@@ -199,13 +199,14 @@ define([
             width: 495, height: 487.5,
             paperWidth: 591, paperHeight: 583.5
         }, outputContainer: 'test_20' }
-/* */
+        /* */
     ];
 
     QUnit
         .cases(gridFactoryParameters)
         .test('grid rendering', function test(data, assert) {
             var $container = $('<div class="test ' + data.outputContainer + '_actual"><h3 class="title">' + data.title + '</h3><pre class="grid-config"></pre><div class="shape-container"></div>');
+            $(outputContainer).append($container);
 
             // display title for all samples
             data.input.graphTitleRequired = true;
@@ -221,7 +222,7 @@ define([
             assert.equal(paperSize.width,   data.output.paperWidth,  'paper width ok');
             assert.equal(paperSize.height,  data.output.paperHeight, 'paper height ok');
 
-            $(outputContainer).append($container);
+
 
             assert.ok(
                 $container.find('.shape-container').html() ===
