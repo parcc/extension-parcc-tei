@@ -222,11 +222,9 @@ define([
             assert.equal(paperSize.width,   data.output.paperWidth,  'paper width ok');
             assert.equal(paperSize.height,  data.output.paperHeight, 'paper height ok');
 
-
-
             assert.ok(
-                $container.find('.shape-container').html() ===
-                $('.' + data.outputContainer + ' .shape-container').html(),
+                $container.find('.shape-container svg').html() ===
+                $('.' + data.outputContainer + ' .shape-container svg').html(),
                 'rendered markup ok');
         });
 
