@@ -29,8 +29,8 @@ define(['OAT/lodash'], function( _ ){
             _color = options.color,
             _weight = options.weight,
 
-            _labelPositions = _getLabelsPosition(),
-            _padding = _getPadding(),
+            _labelPositions = _getLabelsPosition(options),
+            _padding = _getPadding(options, _labelPositions),
             _labelCoords = _getLabelsCoords(),
             _snapToValues = _getSnapToValues(),
 
@@ -38,104 +38,6 @@ define(['OAT/lodash'], function( _ ){
             set = paper.set(),
             _borderBox = {};
 
-        function _buildOptions(rawOptions) {
-            var lineColor = '#222';
-
-            var options = _.merge({},{
-                graphTitle : null,
-                graphTitleRequired : false, // display or not graph title
-                graphTitleSize : 24, // pixels
-                graphTitlePadding : 36, // pixels
-                color : lineColor,
-                weight : 1, // inner grid weight
-                labelSize : 14, // pixels
-                labelPadding : 36, // pixels
-                padding : 20, // pixels
-                height: null, // grid size in pixels
-                width: null, // grid size in pixels
-                x : {
-                    start : -10, // cartesian start
-                    end :  10, // cartesian end
-                    label : null,
-                    step : 1, // cartesian step
-                    subStep : 1,  // snapping divisions inside step
-                    unit : 10, // number of pixels for a cartesian unit
-                    color : lineColor,
-                    weight : 3 // axis weight
-                },
-                y : {
-                    start : -10,
-                    end :  10,
-                    label : null,
-                    step : 1,
-                    subStep : 1,
-                    unit : 10,
-                    color : lineColor,
-                    weight : 3
-                }
-            },rawOptions);
-
-            // if defined, width and height takes precedence over units
-            if (options.width) {
-                options.x.unit = (options.width / Math.abs(options.x.end - options.x.start)).toPrecision(2);
-            }
-            if (options.height) {
-                options.y.unit = (options.height / Math.abs(options.y.end - options.y.start)).toPrecision(2);
-            }
-            return options;
-        }
-
-        function _getLabelsPosition() {
-            var xQuadrants = (_x.start < 0 && _x.end > 0) ? 2 : 1,
-                yQuadrants = (_y.start < 0 && _y.end > 0) ? 2 : 1,
-                gridType = (xQuadrants === 1 && yQuadrants === 1) ? "oneQuadrant" : "coordinates",
-                labelPositions = {};
-
-            if (gridType === "oneQuadrant") {
-                if (_x.label) {
-                    if (_y.start < 0) {
-                        labelPositions.abs = "bottom";
-                    } else {
-                        labelPositions.abs = "top";
-                    }
-                }
-                if (_y.label) {
-                    if (_x.start >= 0) {
-                        labelPositions.ord = "left";
-                    } else {
-                        labelPositions.ord = "right";
-                    }
-                }
-            // coordinates
-            } else {
-                if (_x.label) {
-                    labelPositions.abs = "right";
-                }
-                if (_y.label) {
-                    labelPositions.ord = "top";
-                }
-            }
-            return labelPositions;
-        }
-
-        function _getPadding() {
-            var padding = {
-                top: options.padding,
-                left: options.padding
-            };
-
-            if (options.graphTitle && options.graphTitleRequired === true) {
-                padding.top += options.graphTitlePadding;
-            }
-
-            if (_labelPositions.abs === "top" || _labelPositions.ord === "top") {
-                padding.top += options.labelPadding;
-            }
-            if (_labelPositions.abs === "left" || _labelPositions.ord === "left") {
-                padding.left += options.labelPadding;
-            }
-            return padding;
-        }
 
         function _getLabelsCoords() {
             var labelsCoords = {
@@ -580,6 +482,128 @@ define(['OAT/lodash'], function( _ ){
         obj.render();
 
         return obj;
+    }
+
+    gridFactory.getPaperSize = function getPaperSize(rawOptions) {
+        var options = _buildOptions(rawOptions),
+
+            width = Math.abs(options.x.end - options.x.start) * options.x.unit,
+            height = Math.abs(options.y.end - options.y.start) * options.y.unit,
+
+            labelPositions = _getLabelsPosition(options),
+            padding = _getPadding(options, labelPositions);
+
+        return {
+            width: padding.left + width + padding.right,
+            height: padding.top + height + padding.bottom
+        };
+    };
+
+    function _buildOptions(rawOptions) {
+        var lineColor = '#222',
+
+            options = _.merge({},{
+                graphTitle : null,
+                graphTitleRequired : false, // display or not graph title
+                graphTitleSize : 20, // pixels
+                graphTitlePadding : 40, // pixels
+                color : lineColor,
+                weight : 1, // inner grid weight
+                labelSize : 14, // pixels
+                labelPadding : 36, // pixels
+                padding : 30, // pixels
+                height: null, // grid size in pixels
+                width: null, // grid size in pixels
+                x : {
+                    start : -10, // cartesian start
+                    end :  10, // cartesian end
+                    label : null,
+                    step : 1, // cartesian step
+                    subStep : 1,  // snapping divisions inside step
+                    unit : 10, // number of pixels for a cartesian unit
+                    color : lineColor,
+                    weight : 3 // axis weight
+                },
+                y : {
+                    start : -10,
+                    end :  10,
+                    label : null,
+                    step : 1,
+                    subStep : 1,
+                    unit : 10,
+                    color : lineColor,
+                    weight : 3
+                }
+            }, rawOptions);
+
+        // if defined, width and height takes precedence over units
+        if (options.width) {
+            options.x.unit = (options.width / Math.abs(options.x.end - options.x.start)).toPrecision(2);
+        }
+        if (options.height) {
+            options.y.unit = (options.height / Math.abs(options.y.end - options.y.start)).toPrecision(2);
+        }
+        return options;
+    }
+
+    function _getLabelsPosition(options) {
+        var xQuadrants = (options.x.start < 0 && options.x.end > 0) ? 2 : 1,
+            yQuadrants = (options.y.start < 0 && options.y.end > 0) ? 2 : 1,
+            gridType = (xQuadrants === 1 && yQuadrants === 1) ? "oneQuadrant" : "coordinates",
+            labelPositions = {};
+
+        if (gridType === "oneQuadrant") {
+            if (options.x.label) {
+                if (options.y.start < 0) {
+                    labelPositions.abs = "bottom";
+                } else {
+                    labelPositions.abs = "top";
+                }
+            }
+            if (options.y.label) {
+                if (options.x.start >= 0) {
+                    labelPositions.ord = "left";
+                } else {
+                    labelPositions.ord = "right";
+                }
+            }
+            // coordinates
+        } else {
+            if (options.x.label) {
+                labelPositions.abs = "right";
+            }
+            if (options.y.label) {
+                labelPositions.ord = "top";
+            }
+        }
+        return labelPositions;
+    }
+
+    function _getPadding(options, _labelPositions) {
+        var padding = {
+            top: options.padding,
+            right: options.padding,
+            bottom: options.padding,
+            left: options.padding
+        };
+
+        if (options.graphTitle && options.graphTitleRequired === true) {
+            padding.top += options.graphTitlePadding;
+        }
+
+        if (_labelPositions.abs === "top" || _labelPositions.ord === "top") {
+            padding.top += options.labelPadding;
+        }
+        if (_labelPositions.abs === "right" || _labelPositions.ord === "right") {
+            padding.right += options.labelPadding;
+        }
+        if (_labelPositions.abs === "bottom" || _labelPositions.ord === "bottom") {
+            padding.bottom += options.labelPadding;
+        }
+        if (_labelPositions.abs === "left" || _labelPositions.ord === "left") {
+            padding.left += options.labelPadding;
+        }
+        return padding;
     }
 
     return gridFactory;

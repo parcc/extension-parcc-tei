@@ -63,15 +63,10 @@ define([
                     allowOuter : getBoolean(rawConfig.yAllowOuter, true)
                 },
                 graphTitle: rawConfig.graphTitle,
-                graphTitleSize: 20,
-                graphTitlePadding: 40,
                 graphTitleRequired : getBoolean(rawConfig.graphTitleRequired, false),
                 weight: parseInt(rawConfig.weight, radix), // grid weight
                 width: parseInt(rawConfig.width, radix),
                 height: parseInt(rawConfig.height, radix),
-                padding: 30,
-                labelPadding: 28,
-                labelSize: 14,
 
                 // PlotFactory config
                 plot : {
@@ -112,26 +107,12 @@ define([
 
     var createCanvas = function createCanvas($container, config){
 
-        var xPadding = config.padding * 2,
-            yPadding = config.padding * 2,
-            paper;
-
-        // we assume a oneQuadrant positioning for labels...
-        if (config.x.label) {
-            yPadding += config.labelPadding;
-        }
-        if (config.y.label) {
-            xPadding += config.labelPadding;
-        }
-
-        if (config.graphTitle) {
-            yPadding += config.graphTitlePadding;
-        }
-        paper = scaleRaphael(
-            $('.shape-container', $container)[0],
-            config.width + xPadding,
-            config.height + yPadding
-        );
+        var paperSize = gridFactory.getPaperSize(config),
+            paper = scaleRaphael(
+                $('.shape-container', $container)[0],
+                paperSize.width,
+                paperSize.height
+            );
 
         return paper;
     };

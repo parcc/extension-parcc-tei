@@ -3,18 +3,21 @@ define([
     'OAT/scale.raphael',
     'jquery'
 ], function(gridFactory, scaleRaphael, $){
+    'use strict';
     QUnit.module('gridFactory');
 
     var outputContainer = "#paper";
     // var outputContainer = "#paper-hidden";
 
-    var gridParameters = [
-        { title: 'simple', input: {
-            graphTitle : 'simple',
+    var gridFactoryParameters = [
+/* */
+        { title: 'simple, no title', input: {
+            graphTitle : null,
             x : { start : -6, end : 10, unit : 20, step : 1, label: 'x' },
             y : { start : -10, end : 6, unit : 20, step : 1, label: 'y' }
         }, output: {
-            width: 320, height: 320
+            width: 320, height: 320,
+            paperWidth: 416, paperHeight: 416
         }, outputContainer: 'test_01' },
 
         { title: 'x > 0', input: {
@@ -22,7 +25,8 @@ define([
             x : { start : 5, end : 10, unit : 20, step : 2, label: 'x' },
             y : { start : -6, end : 10, unit : 20, step : 2, label: 'y' }
         }, output: {
-            width: 100, height: 320
+            width: 100, height: 320,
+            paperWidth: 196, paperHeight: 456
         }, outputContainer: 'test_02' },
 
         { title: 'x < 0', input: {
@@ -30,7 +34,8 @@ define([
             x : { start : -10, end : -2, unit : 30, label: 'x' },
             y : { start : -6, end : 10, unit : 10, label: 'y' }
         }, output: {
-            width: 240, height: 160
+            width: 240, height: 160,
+            paperWidth: 336, paperHeight: 296
         }, outputContainer: 'test_03' },
 
         { title: 'y > 0', input: {
@@ -38,7 +43,8 @@ define([
             x : { start : -6, end : 10, unit : 5, label: 'x' },
             y : { start : 2, end : 6, unit : 15, label: 'y' }
         }, output: {
-            width: 80, height: 60
+            width: 80, height: 60,
+            paperWidth: 176, paperHeight: 196
         }, outputContainer: 'test_04' },
 
         { title: 'y < 0', input: {
@@ -46,7 +52,8 @@ define([
             x : { start : -6, end : 10, unit : 17, step : 2, label: 'x' },
             y : { start : -8,  end : -1, unit : 14, step : 2, label: 'y' }
         }, output: {
-            width: 272, height: 98
+            width: 272, height: 98,
+            paperWidth: 368, paperHeight: 234
         }, outputContainer: 'test_05' },
 
         { title: 'x > 0 && y > 0', input: {
@@ -54,7 +61,8 @@ define([
             x : { start : 5, end : 10, unit : 20, label: 'Time (hours)' },
             y : { start : 2, end : 9, unit : 20, step : 3, label: 'Money ($)' }
         }, output: {
-            width: 100, height: 140
+            width: 100, height: 140,
+            paperWidth: 196, paperHeight: 276
         }, outputContainer: 'test_06' },
 
         { title: 'x > 0 && y < 0', input: {
@@ -62,7 +70,8 @@ define([
             x : { start : 5, end : 10, unit : 20, label: 'Time (hours)' },
             y : { start : -10, end : -5, unit : 20, label: 'Money ($)' }
         }, output: {
-            width: 100, height: 100
+            width: 100, height: 100,
+            paperWidth: 196, paperHeight: 236
         }, outputContainer: 'test_07' },
 
         { title: 'x < 0 && y < 0', input: {
@@ -70,7 +79,8 @@ define([
             x : { start : -10, end : -5, unit : 13, label: 'Time (hours)' },
             y : { start : -10, end : -5, unit : 23, label: 'Money ($)' }
         }, output: {
-            width: 65, height: 115
+            width: 65, height: 115,
+            paperWidth: 161, paperHeight: 251
         }, outputContainer: 'test_08' },
 
         { title: 'x < 0 && y > 0', input: {
@@ -78,7 +88,8 @@ define([
             x : { start : -10, end : -5, unit : 20, label: 'Time (hours)' },
             y : { start : 5, end : 10, unit : 20, label: 'Money ($)' }
         }, output: {
-            width: 100, height: 100
+            width: 100, height: 100,
+            paperWidth: 196, paperHeight: 236
         }, outputContainer: 'test_09' },
 
         { title: 'different scales oneQuadrant', input: {
@@ -86,7 +97,8 @@ define([
             x : { start : 0, end : 7, unit : 58, step : 1, label: 'Time (hours)' },
             y : { start : -500, end : 0, unit : 0.8, step : 50, label: 'A whole lot of money ($$$$)' }
         }, output: {
-            width: 406, height: 400
+            width: 406, height: 400,
+            paperWidth: 502, paperHeight: 536
         }, outputContainer: 'test_10' },
 
         { title: 'different scales coordinates', input: {
@@ -94,7 +106,8 @@ define([
             x : { start : -60, end : 80, unit : 3.6, step : 10, label: 'x' },
             y : { start : -6, end : 8, unit : 36, step : 1, label: 'y' }
         }, output: {
-            width: 504, height: 504
+            width: 504, height: 504,
+            paperWidth: 600, paperHeight: 640
         }, outputContainer: 'test_11' },
 
         { title: 'size in pixels coordinates', input: {
@@ -103,7 +116,8 @@ define([
             x : { start : -5, end : 5, step : 1, label: 'Time (hours)' },
             y : { start : -50, end : +50, step : 10, label: 'Money ($)' }
         }, output: {
-            width: 450, height: 300
+            width: 450, height: 300,
+            paperWidth: 546, paperHeight: 436
         }, outputContainer: 'test_12' },
 
         { title: 'size in pixels one quadrant', input: {
@@ -112,7 +126,8 @@ define([
             x : { start : 0, end : 15, step : 1, label: 'Time (hours)' },
             y : { start : -50, end : 0, step : 5, label: 'Money ($)' }
         }, output: {
-            width: 450, height: 300
+            width: 450, height: 300,
+            paperWidth: 546, paperHeight: 436
         }, outputContainer: 'test_13' },
 
         { title: 'onequadrant, no x label', input: {
@@ -121,7 +136,8 @@ define([
             x : { start : 0, end : 10, step : 1 },
             y : { start : -50, end : 0, step : 10, label: 'Money ($)' }
         }, output: {
-            width: 250, height: 200
+            width: 250, height: 200,
+            paperWidth: 346, paperHeight: 300
         }, outputContainer: 'test_14' },
 
         { title: 'onequadrant, no y label', input: {
@@ -130,7 +146,8 @@ define([
             x : { start : 0, end : 10, step : 1, label: 'Time (hours)' },
             y : { start : -50, end : 0, step : 10 }
         }, output: {
-            width: 250, height: 200
+            width: 250, height: 200,
+            paperWidth: 310, paperHeight: 336
         }, outputContainer: 'test_15' },
 
         { title: 'onequadrant, no label', input: {
@@ -139,7 +156,8 @@ define([
             x : { start : 0, end : 10, step : 1 },
             y : { start : -50, end : 0, step : 10 }
         }, output: {
-            width: 250, height: 200
+            width: 250, height: 200,
+            paperWidth: 310, paperHeight: 300
         }, outputContainer: 'test_16' },
 
         { title: 'coordinates, no x label', input: {
@@ -148,7 +166,8 @@ define([
             x : { start : -5, end : 5, step : 1 },
             y : { start : -50, end : 50, step : 10, label: 'y' }
         }, output: {
-            width: 250, height: 250
+            width: 250, height: 250,
+            paperWidth: 310, paperHeight: 386
         }, outputContainer: 'test_17' },
 
         { title: 'coordinates, no y label', input: {
@@ -157,7 +176,8 @@ define([
             x : { start : -5, end : 5, step : 1, label: 'x' },
             y : { start : -50, end : 50, step : 10 }
         }, output: {
-            width: 250, height: 250
+            width: 250, height: 250,
+            paperWidth: 346, paperHeight: 350
         }, outputContainer: 'test_18' },
 
         { title: 'coordinates, no label', input: {
@@ -166,12 +186,24 @@ define([
             x : { start : -5, end : 5, step : 1 },
             y : { start : -50, end : 50, step : 10 }
         }, output: {
-            width: 250, height: 250
-        }, outputContainer: 'test_19' }
+            width: 250, height: 250,
+            paperWidth: 310, paperHeight: 350
+        }, outputContainer: 'test_19' },
+/* */
+        { title: 'Bouncing ball experiment', input: {
+            //graphTitle : 'Bouncing ball experiment',
+            width : 500, height : 500,
+            x : { start : 0, end : 275,  step : 25, label: 'Height of Drop (in inches)' },
+            y : { start : -325, end : 0,  step : 25, label: 'Height of Bounce (in inches)' }
+        }, output: {
+            width: 495, height: 487.5,
+            paperWidth: 591, paperHeight: 583.5
+        }, outputContainer: 'test_20' }
+/* */
     ];
 
     QUnit
-        .cases(gridParameters)
+        .cases(gridFactoryParameters)
         .test('grid rendering', function test(data, assert) {
             var $container = $('<div class="test ' + data.outputContainer + '_actual"><h3 class="title">' + data.title + '</h3><pre class="grid-config"></pre><div class="shape-container"></div>');
 
@@ -181,10 +213,13 @@ define([
             // uncomment to display input parameters above the graph
             // $container.find('.grid-config').append(JSON.stringify(data.input, undefined, 2));
 
-            var grid = initGrid($container, data.input);
+            var paperSize = gridFactory.getPaperSize(data.input),
+                grid = initGrid($container, data.input, paperSize);
 
-            assert.equal(grid.getWidth(),   data.output.width,  'width units ok');
-            assert.equal(grid.getHeight(),  data.output.height, 'height units ok');
+            assert.equal(grid.getWidth(),   data.output.width,  'width ok');
+            assert.equal(grid.getHeight(),  data.output.height, 'height ok');
+            assert.equal(paperSize.width,   data.output.paperWidth,  'paper width ok');
+            assert.equal(paperSize.height,  data.output.paperHeight, 'paper height ok');
 
             $(outputContainer).append($container);
 
@@ -194,24 +229,20 @@ define([
                 'rendered markup ok');
         });
 
-    function initGrid($container, gridConfig){
+    function initGrid($container, gridConfig, paperSize){
 
-        var paper = createCanvas($container, gridConfig);
+        var paper = createCanvas($container, paperSize);
         var grid = gridFactory(paper, gridConfig);
 
         return grid;
     }
 
-    function createCanvas($container, config){
-
-        var width = (config.width) ? config.width : (config.x.end - config.x.start) * config.x.unit,
-            height = (config.height) ? config.height : (config.y.end - config.y.start) * config.y.unit;
-
+    function createCanvas($container, paperSize){
         var paper = scaleRaphael(
-            $('.shape-container', $container)[0],
-            width + 20*2 + 28, // we assume a label with default size
-            height + 20*2 + 28 + 40 // we assume a label and a title with default size
-        );
+                $('.shape-container', $container)[0],
+                paperSize.width,
+                paperSize.height
+            );
         return paper;
     }
 
