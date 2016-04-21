@@ -501,7 +501,7 @@ define(['OAT/lodash'], function( _ ){
 
     function _buildOptions(rawOptions) {
         var axisColor = '#222',
-            gridColor = '#999',
+            gridColor = '#222',
 
             options = _.merge({},{
                 graphTitle : null,

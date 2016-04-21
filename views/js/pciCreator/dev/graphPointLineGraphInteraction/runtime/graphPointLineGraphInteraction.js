@@ -44,6 +44,12 @@ define([
                 segment: getBoolean(rawConfig.segment, true), // draw only segments between points
 
                 // Gridfactory config
+                graphTitle: rawConfig.graphTitle,
+                graphTitleRequired : getBoolean(rawConfig.graphTitleRequired, false),
+                weight: parseInt(rawConfig.weight, radix), // grid weight
+                width: parseInt(rawConfig.width, radix),
+                height: parseInt(rawConfig.height, radix),
+
                 x : {
                     start : parseInt(rawConfig.xStart, radix),
                     end : parseInt(rawConfig.xEnd, radix),
@@ -62,11 +68,6 @@ define([
                     weight : (yWeight > 0) ? yWeight : yBorderWeight,
                     allowOuter : getBoolean(rawConfig.yAllowOuter, true)
                 },
-                graphTitle: rawConfig.graphTitle,
-                graphTitleRequired : getBoolean(rawConfig.graphTitleRequired, false),
-                weight: parseInt(rawConfig.weight, radix), // grid weight
-                width: parseInt(rawConfig.width, radix),
-                height: parseInt(rawConfig.height, radix),
 
                 // PlotFactory config
                 plot : {
