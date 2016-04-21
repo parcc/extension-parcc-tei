@@ -34,34 +34,29 @@
                     </pci:libraries>
                 </pci:resources>
                 <pci:properties>
-                    <pci:entry key="draggable">true</pci:entry>
-                    <pci:entry key="graphTitle">Culture 2 Data</pci:entry>
-                    <pci:entry key="graphTitleRequired">true</pci:entry>
                     <pci:entry key="graphType">line</pci:entry>
-                    <pci:entry key="maxPoints">6</pci:entry>
+                    <pci:entry key="width">500</pci:entry>
+                    <pci:entry key="height">500</pci:entry>
+                    <pci:entry key="xLines">11</pci:entry>
+                    <pci:entry key="yLines">13</pci:entry>
+                    <pci:entry key="segment">false</pci:entry>
+                    <pci:entry key="pointRadius">8</pci:entry>
+                    <pci:entry key="pointGlow">true</pci:entry>
+                    <pci:entry key="pointColor">#0000FF</pci:entry>
                     <pci:entry key="plotColor">#0000FF</pci:entry>
                     <pci:entry key="plotThickness">6</pci:entry>
-                    <pci:entry key="pointColor">#0000FF</pci:entry>
-                    <pci:entry key="pointGlow">true</pci:entry>
-                    <pci:entry key="pointRadius">8</pci:entry>
-                    <pci:entry key="segment">true</pci:entry>
                     <pci:entry key="weight">1</pci:entry>
-                    <pci:entry key="width">450</pci:entry>
-                    <pci:entry key="height">300</pci:entry>
-                    <pci:entry key="xAllowOuter">true</pci:entry>
-                    <pci:entry key="xStep">1</pci:entry>
-                    <pci:entry key="xLabel">Time (hr)</pci:entry>
-                    <pci:entry key="xEnd">7</pci:entry>
                     <pci:entry key="xStart">0</pci:entry>
-                    <pci:entry key="xSubStep">2</pci:entry>
-                    <pci:entry key="xWeight">3</pci:entry>
-                    <pci:entry key="yAllowOuter">true</pci:entry>
-                    <pci:entry key="yStep">10</pci:entry>
-                    <pci:entry key="yLabel">Number of Cells (x1,000,000)</pci:entry>
-                    <pci:entry key="yEnd">100</pci:entry>
+                    <pci:entry key="xStep">25</pci:entry>
+                    <pci:entry key="xLabel">Height of Drop (in inchexxxs)</pci:entry>
                     <pci:entry key="yStart">0</pci:entry>
-                    <pci:entry key="ySubStep">2</pci:entry>
-                    <pci:entry key="yWeight">3</pci:entry>
+                    <pci:entry key="yStep">25</pci:entry>
+                    <pci:entry key="yLabel">Height of Bounce (in inchexxxs)</pci:entry>
+                    <pci:entry key="xSubStep">1</pci:entry>
+                    <pci:entry key="ySubStep">1</pci:entry>
+                    <pci:entry key="maxPoints">2</pci:entry>
+                    <pci:entry key="xEnd">275</pci:entry>
+                    <pci:entry key="yEnd">325</pci:entry>
                 </pci:properties>
                 <pci:markup>
                     <html5:div class="graphPointLineGraphInteraction">
