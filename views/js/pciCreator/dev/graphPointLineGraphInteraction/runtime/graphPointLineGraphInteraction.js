@@ -175,19 +175,10 @@ define([
                                 addPoint(fx, fy);
                                 plot();
                             } else {
-                                // Get the last point placed
+                                // Move the last point placed
                                 oldPoint = points.pop();
-                                // Change their coordinates for new ones
                                 oldPoint.setCoord(fx, fy);
-                                // Re-draw the point
-                                oldPoint.render();
-                                // re-enable the drag'n'drop
-                                if (self.gridConfig.draggable) {
-                                    oldPoint.drag();
-                                }
-                                // Add it back to the list
                                 points.push(oldPoint);
-                                // pair ready : plot the graph
                                 plot();
                             }
                         }
@@ -255,6 +246,14 @@ define([
                         return pointB;
                     });
                 }
+                points.forEach(function (point) {
+                    point.render();
+                    if (self.gridConfig.draggable) {
+                        point.drag();
+                    }
+                    point.removeOnClic();
+                });
+
                 self.trigger('responseChange', [self.getResponse()]);
             }
 
@@ -308,11 +307,6 @@ define([
                     if(cartesian){
                         newPoint.setCartesianCoord(fx, fy, pointConfig);
                     }
-                    newPoint.render();
-                    if (self.gridConfig.draggable) {
-                        newPoint.drag();
-                    }
-                    newPoint.removeOnClic();
                     points.push(newPoint);
                 }
 
