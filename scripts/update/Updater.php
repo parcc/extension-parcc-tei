@@ -25,14 +25,14 @@ use oat\taoQtiItem\model\SharedLibrariesRegistry;
 use oat\taoQtiItem\model\HookRegistry;
 
 /**
- * 
+ *
  * @author Sam <sam@taotesting.com>
  */
 class Updater extends \common_ext_ExtensionUpdater
 {
 
     /**
-     * 
+     *
      * @param string $initialVersion
      * @return string
      */
@@ -64,10 +64,10 @@ class Updater extends \common_ext_ExtensionUpdater
 
             $currentVersion = '0.1.2';
         }
-        
+
         //migrate from 0.1.2 to 0.1.3
         if($currentVersion == '0.1.2'){
-            
+
             $registry->registerFromFile('PARCC/graphFunction', $installBasePath.'/PARCC/graphFunction.js');
             $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
             $registry->registerFromFile('PARCC/plotFactory', $installBasePath.'/PARCC/plotFactory.js');
@@ -76,10 +76,10 @@ class Updater extends \common_ext_ExtensionUpdater
 
             $currentVersion = '0.1.3';
         }
-        
+
         //migrate from 0.1.3 to 0.1.4
         if($currentVersion == '0.1.3'){
-            
+
             HookRegistry::add('teiSystemItem', 'oat\parccTei\model\SystemItemHook');
 
             $currentVersion = '0.1.4';
@@ -94,7 +94,18 @@ class Updater extends \common_ext_ExtensionUpdater
             $currentVersion = '0.1.5';
         }
 
-        return $currentVersion;
+        $this->setVersion($currentVersion);
+
+        if($this->isVersion('0.1.5')){
+
+            $registry->registerFromFile('PARCC/plotFactory', $installBasePath.'/PARCC/graphFunction.js');
+            $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
+            $registry->registerFromFile('PARCC/pointFactory', $installBasePath.'/PARCC/pointFactory.js');
+            $registry->registerFromFile('PARCC/plotFactory', $installBasePath.'/PARCC/plotFactory.js');
+
+            $this->setVersion('0.2.0');
+        }
+
     }
 
 }

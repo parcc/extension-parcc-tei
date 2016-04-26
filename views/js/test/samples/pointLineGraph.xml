@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><assessmentItem xmlns="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" adaptive="false" identifier="VF643134" timeDependent="false" title="Composite" toolName="IBIS Export" toolVersion="1.0" xsi:schemaLocation="http://www.imsglobal.org/xsd/apip/apipv1p0/qtiitem/imsqti_v2p1 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiitemv2p1_v1p0.xsd http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0 http://www.imsglobal.org/profile/apip/apipv1p0/apipv1p0_qtiextv2p1_v1p0.xsd">
+    <responseDeclaration baseType="string" cardinality="multiple" identifier="RESPONSE">
+        <correctResponse>
+            <value>50 25</value>
+            <value>100 50</value>
+        </correctResponse>
+    </responseDeclaration>
+    <outcomeDeclaration baseType="float" cardinality="single" identifier="SCORE" normalMaximum="2" normalMinimum="0">
+        <defaultValue>
+            <value>0</value>
+        </defaultValue>
+    </outcomeDeclaration>
+    <templateDeclaration baseType="string" cardinality="single" identifier="EQUATION">
+        <defaultValue>
+            <value>y=x/2</value>
+        </defaultValue>
+    </templateDeclaration>
+    <templateDeclaration baseType="integer" cardinality="single" identifier="NumberofPointsRequired">
+        <defaultValue>
+            <value>2</value>
+        </defaultValue>
+    </templateDeclaration>
+    <itemBody>
+        <customInteraction responseIdentifier="RESPONSE">
+            <pci:portableCustomInteraction customInteractionTypeIdentifier="graphPointLineGraphInteraction" hook="graphPointLineGraphInteraction/runtime/graphPointLineGraphInteraction.js">
+                <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
+                <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
+                    <pci:libraries>
+                        <pci:lib id="IMSGlobal/jquery_2_1_1"/>
+                        <pci:lib id="PARCC/graphFunction"/>
+                        <pci:lib id="PARCC/gridFactory"/>
+                        <pci:lib id="PARCC/pointFactory"/>
+                        <pci:lib id="PARCC/lineFactory"/>
+                    </pci:libraries>
+                </pci:resources>
+                <pci:properties>
+                    <pci:entry key="graphType">line</pci:entry>
+                    <pci:entry key="width">500</pci:entry>
+                    <pci:entry key="height">500</pci:entry>
+                    <pci:entry key="xLines">11</pci:entry>
+                    <pci:entry key="yLines">13</pci:entry>
+                    <pci:entry key="segment">false</pci:entry>
+                    <pci:entry key="pointRadius">8</pci:entry>
+                    <pci:entry key="pointGlow">true</pci:entry>
+                    <pci:entry key="pointColor">#0000FF</pci:entry>
+                    <pci:entry key="plotColor">#0000FF</pci:entry>
+                    <pci:entry key="plotThickness">6</pci:entry>
+                    <pci:entry key="weight">1</pci:entry>
+                    <pci:entry key="xStart">0</pci:entry>
+                    <pci:entry key="xStep">25</pci:entry>
+                    <pci:entry key="xLabel">Height of Drop (in inchexxxs)</pci:entry>
+                    <pci:entry key="yStart">0</pci:entry>
+                    <pci:entry key="yStep">25</pci:entry>
+                    <pci:entry key="yLabel">Height of Bounce (in inchexxxs)</pci:entry>
+                    <pci:entry key="xSubStep">1</pci:entry>
+                    <pci:entry key="ySubStep">1</pci:entry>
+                    <pci:entry key="maxPoints">2</pci:entry>
+                    <pci:entry key="xEnd">275</pci:entry>
+                    <pci:entry key="yEnd">325</pci:entry>
+                </pci:properties>
+                <pci:markup>
+                    <html5:div class="graphPointLineGraphInteraction">
+                        <html5:div class="prompt"></html5:div>
+                        <html5:div class="shape-panel">
+                            <html5:div class="shape-container"></html5:div>
+                        </html5:div>
+                    </html5:div>
+                </pci:markup>
+            </pci:portableCustomInteraction>
+        </customInteraction>
+    </itemBody>
+    <responseProcessing>
+        <responseCondition>
+            <responseIf>
+                <gte>
+                    <customOperator class="qti.customOperators.math.graph.CountPointsThatSatisfyEquation">
+                        <variable identifier="RESPONSE"/>
+                        <variable identifier="EQUATION"/>
+                    </customOperator>
+                    <default identifier="NumberofPointsRequired"/>
+                </gte>
+                <setOutcomeValue identifier="SCORE">
+                    <sum>
+                        <variable identifier="SCORE"/>
+                        <baseValue baseType="float">1</baseValue>
+                    </sum>
+                </setOutcomeValue>
+            </responseIf>
+        </responseCondition>
+    </responseProcessing>
+    <apip:apipAccessibility xmlns:apip="http://www.imsglobal.org/xsd/apip/apipv1p0/imsapip_qtiv1p0"/>
+</assessmentItem>

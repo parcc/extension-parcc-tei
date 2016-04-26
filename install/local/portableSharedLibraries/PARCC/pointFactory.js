@@ -45,7 +45,9 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
             /** @type {Number} radius for the glowing effect */
             _rGlow = parseInt(options.glowRadius) || _r * 3,
             /** @type {Object} events callback */
-            _events = options.on || {};
+            _events = options.on || {},
+            /** @type {boolean} is drag functionality enabled? */
+            _dragEnabled = false;
 
         var obj = {
             /** @type {Object} Paper.set of elements */
@@ -89,7 +91,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
             },
             /**
              * Set coordinate in the cartesian coordinate system
-             * 
+             *
              * @param {Number} x
              * @param {Number} y
              * @returns {undefined}
@@ -98,18 +100,12 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 _x = grid.getOriginPosition().left + grid.getUnits().x * x;
                 _y = grid.getOriginPosition().top - grid.getUnits().y * y;
             },
-            /**
-             * Set coordinate in the cartesian coordinate system
-             * 
-             * @param {Number} x
-             * @param {Number} y
-             * @returns {undefined}
-             */
-            getCartesianCoord : function(decimals){
-                decimals = (decimals === undefined) ? 0 : decimals;
+            getCartesianCoord : function(){
+                var cartesianX = (_x - grid.getOriginPosition().left)/grid.getUnits().x,
+                    cartesianY = - (_y - grid.getOriginPosition().top)/grid.getUnits().y;
                 return {
-                    x: (_x - grid.getOriginPosition().left)/grid.getUnits().x,
-                    y: - (_y - grid.getOriginPosition().top)/grid.getUnits().y
+                    x: Number(cartesianX.toFixed(2)), // fix for IEEE 754 rounding issues where:
+                    y: Number(cartesianY.toFixed(2))  // 60*2,7=162 != 162/2,7=59,999999
                 };
             },
             /**
@@ -123,7 +119,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 _y = coord[1];
             },
             /**
-             * Set _r value 
+             * Set _r value
              * @param {Number} val in px
              */
             setR : function(val){
@@ -176,17 +172,29 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                     this.children.remove().clear();
                 }
             },
+            removeOnClic : function() {
+                var self = this;
+
+                this.children.click(function () {
+                    if (options.removable && _dragEnabled === false) {
+                        self.remove();
+                        $(paper.canvas).trigger('removed.point', self);
+                    }
+                });
+            },
             /**
              * Activate the dran'n'drop capability provide by RaphaelJS
              */
             drag : function(){
-                
+
                 var self = this,
                     bb,
                     moved = false;
-                
+
+                _dragEnabled = true;
+
                 this.children.drag(function(dx, dy){
-                    
+
                     moved = true;
                     /** @type {Object} The current bounding box */
                     bb = self.children.getBBox();
@@ -198,7 +206,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                     }else if(options.axis === 'y'){
                         newX = self.getX() - (bb.x + (bb.width / 2));
                     }
-                    
+
                     var absoluteX = (bb.x + bb.width / 2);
                     var absoluteY = (bb.y + bb.height / 2);
                     if(options.xMin && absoluteX + newX < options.xMin){
@@ -218,9 +226,9 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                     }
 
                     self.children.translate(newX, newY);
-                    
+
                 }, function(){
-                    
+
                     moved = false;
                     //trigger event
                     if(typeof _events.dragStart === 'function'){
@@ -231,18 +239,18 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                      Since it's not just circle, it's impossible to use cx & cy
                      instead, we'll use a bounding box representation and use their values*/
                     self.oBB = self.children.getBBox();
-                    
+
                 }, function(){
-                    
+
                     if(moved){
-                        
+
                         var newX = (bb.x + (bb.width / 2)),
                             newY = (bb.y + (bb.height / 2));
-                        
+
                         /** Set Coordinate with center of the bounding box */
                         self.setCoord(newX, newY);
                         /** Call for a render again */
-                        
+
                         //@todo this method is not correct sometimes
                         self.children.translate(parseInt(self.getX() - newX), parseInt(self.getY() - newY));
 
@@ -251,13 +259,13 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                             _events.dragStop.call(self, self.getX(), self.getY());
                         }
                         $(paper.canvas).trigger('moved.point', self);
-                        
+
                     }else if(options.removable){
-                        
+
                         self.remove();
                         $(paper.canvas).trigger('removed.point', self);
                     }
-                    
+
                 });
             },
             /**
@@ -265,6 +273,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
              */
             unDrag : function(){
                 this.children.undrag();
+                _dragEnabled = false;
             },
             /**
              * Add glowing on point
@@ -297,13 +306,13 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 options[key] = value;
             }
         };
-        
+
         if(options.cartesian){
             obj.setCartesianCoord(options.x, options.y);
         }else{
             obj.setCoord(options.x, options.y);
         }
-        
+
         return obj;
     }
     return pointFactory;

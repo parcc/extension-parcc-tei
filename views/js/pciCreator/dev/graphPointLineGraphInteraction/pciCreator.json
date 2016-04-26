@@ -1,0 +1,27 @@
+{
+    "typeIdentifier": "graphPointLineGraphInteraction",
+    "label": "Point Graph",
+    "short": "Point Graph",
+    "description": "Point Graph Interaction",
+    "version": "0.1",
+    "author": "Sam Sipasseuth & Christophe Noël",
+    "email": "sam@taotesting.com & christophe@taotesting.com",
+    "libraries": [
+        "IMSGlobal/jquery_2_1_1",
+        "PARCC/graphFunction",
+        "PARCC/gridFactory",
+        "PARCC/pointFactory",
+        "PARCC/plotFactory"
+    ],
+    "css": [
+        "./runtime/css/graphPointLineGraphInteraction.css"
+    ],
+    "entryPoint": "./runtime/graphPointLineGraphInteraction.js",
+    "tags": [],
+    "icon": "./creator/img/icon.svg",
+    "response": {
+        "baseType": "string",
+        "cardinality": "multiple"
+    },
+    "debug" : false
+}

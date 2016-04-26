@@ -10,6 +10,7 @@ module.exports = function(grunt) {
         'graphFunctionInteraction/runtime/graphFunctionInteraction',
         'graphLineAndPointInteraction/runtime/graphLineAndPointInteraction',
         'graphNumberLineInteraction/runtime/graphNumberLineInteraction',
+        'graphPointLineGraphInteraction/runtime/graphPointLineGraphInteraction',
         'graphZoomNumberLineInteraction/runtime/graphZoomNumberLineInteraction',
         'histogramInteraction/runtime/histogramInteraction',
         'interactivePassageInteraction/runtime/interactivePassageInteraction',

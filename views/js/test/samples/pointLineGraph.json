@@ -1,0 +1,204 @@
+{
+    "identifier": "VF643134",
+    "serial": "item_57187daaaa536002502882",
+    "qtiClass": "assessmentItem",
+    "attributes": {
+        "identifier": "VF643134",
+        "title": "Composite",
+        "label": "",
+        "adaptive": false,
+        "timeDependent": false,
+        "toolName": "TAO",
+        "toolVersion": "3.1.0-sprint15",
+        "class": ""
+    },
+    "body": {
+        "serial": "container_containeritembody_57187daaaa1a1001829624",
+        "body": "\n        {{interaction_portablecustominteraction_57187daaac716418027936}}\n    ",
+        "elements": {
+            "interaction_portablecustominteraction_57187daaac716418027936": {
+                "serial": "interaction_portablecustominteraction_57187daaac716418027936",
+                "qtiClass": "customInteraction",
+                "attributes": {
+                    "responseIdentifier": "RESPONSE"
+                },
+                "debug": {
+                    "relatedItem": "item_57187daaaa536002502882"
+                },
+                "choices": {},
+                "typeIdentifier": "graphPointLineGraphInteraction",
+                "markup": "\n                    <div class=\"graphPointLineGraphInteraction\">\n                        <div class=\"prompt\"><\/div>\n                        <div class=\"shape-panel\">\n                            <div class=\"shape-container\"><\/div>\n                        <\/div>\n                    <\/div>\n                ",
+                "libraries": [
+                    "IMSGlobal\/jquery_2_1_1",
+                    "PARCC\/graphFunction",
+                    "PARCC\/gridFactory",
+                    "PARCC\/pointFactory",
+                    "PARCC\/lineFactory"
+                ],
+                "properties": {
+                    "graphType": "line",
+                    "width": "500",
+                    "height": "500",
+                    "xLines": "11",
+                    "yLines": "13",
+                    "segment": "false",
+                    "pointRadius": "8",
+                    "pointGlow": "true",
+                    "pointColor": "#0000FF",
+                    "plotColor": "#0000FF",
+                    "plotThickness": "6",
+                    "weight": "1",
+                    "xStart": "0",
+                    "xStep": "25",
+                    "xLabel": "Height of Drop (in inchexxxs)",
+                    "yStart": "0",
+                    "yStep": "25",
+                    "yLabel": "Height of Bounce (in inchexxxs)",
+                    "xSubStep": "1",
+                    "ySubStep": "1",
+                    "maxPoints": "2",
+                    "xEnd": "275",
+                    "yEnd": "325"
+                },
+                "entryPoint": "graphPointLineGraphInteraction\/runtime\/graphPointLineGraphInteraction.js"
+            }
+        },
+        "debug": {
+            "relatedItem": "item_57187daaaa536002502882"
+        }
+    },
+    "debug": {
+        "relatedItem": "item_57187daaaa536002502882"
+    },
+    "namespaces": {
+        "": "http:\/\/www.imsglobal.org\/xsd\/apip\/apipv1p0\/qtiitem\/imsqti_v2p1",
+        "xml": "http:\/\/www.w3.org\/XML\/1998\/namespace",
+        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance"
+    },
+    "schemaLocations": {
+        "http:\/\/www.imsglobal.org\/xsd\/apip\/apipv1p0\/qtiitem\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/profile\/apip\/apipv1p0\/apipv1p0_qtiitemv2p1_v1p0.xsd",
+        "http:\/\/www.imsglobal.org\/xsd\/apip\/apipv1p0\/imsapip_qtiv1p0": "http:\/\/www.imsglobal.org\/profile\/apip\/apipv1p0\/apipv1p0_qtiextv2p1_v1p0.xsd"
+    },
+    "stylesheets": {},
+    "outcomes": {
+        "outcomedeclaration_57187daaabc86048468435": {
+            "identifier": "SCORE",
+            "serial": "outcomedeclaration_57187daaabc86048468435",
+            "qtiClass": "outcomeDeclaration",
+            "attributes": {
+                "identifier": "SCORE",
+                "cardinality": "single",
+                "baseType": "float",
+                "normalMaximum": 2,
+                "normalMinimum": 0
+            },
+            "debug": {
+                "relatedItem": "item_57187daaaa536002502882"
+            },
+            "defaultValue": "0"
+        }
+    },
+    "responses": {
+        "responsedeclaration_57187daaab32e608428529": {
+            "identifier": "RESPONSE",
+            "serial": "responsedeclaration_57187daaab32e608428529",
+            "qtiClass": "responseDeclaration",
+            "attributes": {
+                "identifier": "RESPONSE",
+                "cardinality": "multiple",
+                "baseType": "string"
+            },
+            "debug": {
+                "relatedItem": "item_57187daaaa536002502882"
+            },
+            "mapping": [],
+            "areaMapping": [],
+            "howMatch": null,
+            "correctResponses": [
+                "50 25",
+                "100 50"
+            ],
+            "mappingAttributes": {
+                "defaultValue": 0
+            },
+            "feedbackRules": {}
+        }
+    },
+    "feedbacks": {},
+    "responseProcessing": {
+        "serial": "response_custom_57187daaad871880547493",
+        "qtiClass": "responseProcessing",
+        "attributes": [],
+        "debug": {
+            "relatedItem": ""
+        },
+        "processingType": "custom",
+        "data": "<responseProcessing>\n        <responseCondition>\n            <responseIf>\n                <gte>\n                    <customOperator class=\"qti.customOperators.math.graph.CountPointsThatSatisfyEquation\">\n                        <variable identifier=\"RESPONSE\"\/>\n                        <variable identifier=\"EQUATION\"\/>\n                    <\/customOperator>\n                    <default identifier=\"NumberofPointsRequired\"\/>\n                <\/gte>\n                <setOutcomeValue identifier=\"SCORE\">\n                    <sum>\n                        <variable identifier=\"SCORE\"\/>\n                        <baseValue baseType=\"float\">1<\/baseValue>\n                    <\/sum>\n                <\/setOutcomeValue>\n            <\/responseIf>\n        <\/responseCondition>\n    <\/responseProcessing>",
+        "responseRules": [
+            {
+                "qtiClass": "responseCondition",
+                "responseIf": {
+                    "qtiClass": "responseIf",
+                    "expression": {
+                        "qtiClass": "gte",
+                        "expressions": [
+                            {
+                                "qtiClass": "customOperator",
+                                "attributes": {
+                                    "class": "qti.customOperators.math.graph.CountPointsThatSatisfyEquation"
+                                },
+                                "expressions": [
+                                    {
+                                        "qtiClass": "variable",
+                                        "attributes": {
+                                            "identifier": "RESPONSE"
+                                        }
+                                    },
+                                    {
+                                        "qtiClass": "variable",
+                                        "attributes": {
+                                            "identifier": "EQUATION"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "qtiClass": "default",
+                                "attributes": {
+                                    "identifier": "NumberofPointsRequired"
+                                }
+                            }
+                        ]
+                    },
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "sum",
+                                "expressions": [
+                                    {
+                                        "qtiClass": "variable",
+                                        "attributes": {
+                                            "identifier": "SCORE"
+                                        }
+                                    },
+                                    {
+                                        "qtiClass": "baseValue",
+                                        "attributes": {
+                                            "baseType": "float"
+                                        },
+                                        "value": "1"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "apipAccessibility": "<apip:apipAccessibility xmlns:apip=\"http:\/\/www.imsglobal.org\/xsd\/apip\/apipv1p0\/imsapip_qtiv1p0\"\/>"
+}

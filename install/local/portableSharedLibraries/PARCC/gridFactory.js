@@ -2,203 +2,319 @@ define(['OAT/lodash'], function( _ ){
 
     'use strict';
 
-    function gridFactory(paper,options){
-        
-        if (typeof options.x !== 'object' && typeof options.y !== 'object'){ 
-            throw 'I need x and y axis';
-        }
-        
-        if ( (options.x.start >= options.x.end) || (options.y.start >= options.y.end) ) {
-            throw 'end must be greater than start';
+    function gridFactory(paper,rawOptions){
+
+        if (typeof rawOptions.x !== 'object' && typeof rawOptions.y !== 'object'){
+            throw new Error('I need x and y axis');
         }
 
+        if ( (rawOptions.x.start >= rawOptions.x.end) || (rawOptions.y.start >= rawOptions.y.end) ) {
+            throw new Error('end must be greater than start');
+        }
+
+        var options = _buildOptions(rawOptions),
+
+            _x = options.x,
+            _y = options.y,
+
+            _xRange = Math.abs(_x.end - _x.start),
+            _yRange = Math.abs(_y.end - _y.start),
+
+            _width = _xRange * _x.unit,
+            _height = _yRange * _y.unit,
+
+            _xSubStepSize = ((_width / (_xRange / _x.step)) / _x.subStep),
+            _ySubStepSize = ((_height / (_yRange / _y.step)) / _y.subStep),
+
+            _color = options.color,
+            _weight = options.weight,
+
+            _labelPositions = _getLabelsPosition(options),
+            _padding = _getPadding(options, _labelPositions),
+            _labelCoords = _getLabelsCoords(),
+            _snapToValues = _getSnapToValues(),
+
+            clickableArea,
+            set = paper.set(),
+            _borderBox = {};
+
+
+        function _getLabelsCoords() {
+            var labelsCoords = {
+                    abs: {},
+                    ord: {}
+                };
+
+            if (_labelPositions.abs === "right") {
+                labelsCoords.abs.x = _width + options.padding; // workaround...
+                labelsCoords.abs.angle = -90;
+
+                // align abs label on its axis
+                if (_y.start < 0 && _y.end > 0) {
+                    labelsCoords.abs.y = -1 * _y.start * _y.unit; // two y quadrants
+                } else {
+                    labelsCoords.abs.y = (_y.start >= 0) ? 0 : _height;  // one y quadrant
+                }
+            } else {
+                labelsCoords.abs.x = _width / 2;
+                labelsCoords.abs.angle = 0;
+
+                if (_labelPositions.abs === "bottom") {
+                    labelsCoords.abs.y = _height + options.labelPadding;
+                } else if (_labelPositions.abs === "top") {
+                    labelsCoords.abs.y = -options.labelPadding;
+                }
+            }
+
+            if (_labelPositions.ord === "top") {
+                labelsCoords.ord.y = -options.labelPadding;
+                labelsCoords.ord.angle = 0;
+
+                // align ord label on its axis
+                if (_x.start < 0 && _x.end > 0) {
+                    labelsCoords.ord.x = -1 * _x.start * _x.unit; // two x quadrants
+                } else {
+                    labelsCoords.ord.x = (_x.start >= 0) ? 0 : _width; // one x quadrant
+                }
+            } else {
+                labelsCoords.ord.y = _height / 2;
+                labelsCoords.ord.angle = -90;
+
+                if (_labelPositions.ord === "left") {
+                    labelsCoords.ord.x = -options.labelPadding;
+                } else if (_labelPositions.ord === "right") {
+                    labelsCoords.ord.x = _width + options.padding; // workaround...
+                }
+            }
+            return labelsCoords;
+        }
+
+        function _getSnapToValues() {
+            var snapToValues = {
+                    x: [],
+                    y: []
+                },
+                xStepSize = (_width / (_xRange / _x.step)),
+                yStepSize = (_height / (_yRange / _y.step)),
+                snapValue,
+                i, j;
+
+            // use a nested loop to avoid accumulating rounding error
+            for (i = 0; i <= _width; i += xStepSize) {
+                for(j = 0; j < xStepSize; j += _xSubStepSize) {
+                    snapValue = i + j;
+                    if (snapValue <= _width) {
+                        snapToValues.x.push(snapValue + _padding.left);
+                    }
+                }
+            }
+            for (i = 0; i <= _height; i += yStepSize) {
+                for(j = 0; j < yStepSize; j += _ySubStepSize) {
+                    snapValue = i + j;
+                    if (snapValue <= _height) {
+                        snapToValues.y.push(snapValue + _padding.top);
+                    }
+                }
+            }
+            return snapToValues;
+        }
+
+        function _drawGraphTitle() {
+            var x = _padding.left + _width / 2,
+                y = options.padding,
+                style = {
+                    'font-size' : options.graphTitleSize,
+                    'font-weight' : 'bold'
+                };
+
+            if (options.graphTitle && options.graphTitleRequired === true) {
+                _drawTitle(options.graphTitle, style, x, y);
+            }
+        }
+
+        function _drawAxis(){
+
+            var xStyle = {
+                    'stroke' :  _x.color,
+                    'stroke-width': _x.weight
+                },
+                yStyle = {
+                    'stroke' :  _y.color,
+                    'stroke-width': _y.weight
+                },
+                labelStyle = {
+                    'font-size' : options.labelSize,
+                    'font-weight' : 'bold'
+                };
+
+            function drawXaxis(top, config){
+                config = config || {};
+
+                var line =  _drawLine([0, top], [_width, top], config.style),
+                    readabilityOffset = (config.multiQuadrant) ? 5 : 0,
+                    position = readabilityOffset,
+                    fontSize = 10,
+                    textTop,
+                    text,
+                    i;
+
+                if(config.unitsOnTop){
+                    textTop = top + _padding.top - fontSize;
+                }else{
+                    textTop = top + _padding.top + fontSize;
+                }
+
+                for(i = _x.start; i <= _x.end ; i = i + _x.step){
+                    text = paper.text(_padding.left + position, textTop, i).attr({
+                        'font-size' : fontSize
+                    });
+                    _addCssClass(text, 'scene scene-text');
+                    position += _x.unit * _x.step;
+                }
+
+                return line;
+            }
+
+            function drawYaxis(left, config){
+
+                config = config || {};
+
+                var line =  _drawLine([left, _height], [left, 0], config.style),
+                    readabilityOffset = (config.multiQuadrant) ? -5 : 0,
+                    position = readabilityOffset,
+                    fontSize = 10,
+                    textLeft,
+                    text,
+                    i;
+
+                if(config.unitsOnRight){
+                    textLeft = left + _padding.left + fontSize/2 + 2;
+                }else{
+                    textLeft = left + _padding.left - fontSize - 2;
+                }
+
+                for(i = _y.start; i <= _y.end ; i = i + _y.step){
+                    text = paper.text(textLeft, _padding.top + position, -i).attr({
+                        'font-size' : fontSize
+                    });
+                    _addCssClass(text, 'scene scene-text');
+                    position += _y.unit * _y.step;
+                }
+
+                return line;
+            }
+
+            // top quadrant only
+            if((_y.start < 0) && (_y.end <= 0)){
+                drawXaxis(_height, {style : xStyle});
+            // bottom quadrant only
+            }else if((_y.start >= 0) && (_y.end > 0)){
+               drawXaxis(0, {style : xStyle, unitsOnTop : true});
+            // both quadrants
+            }else{
+                drawXaxis(Math.abs(_y.start) * _y.unit, {style : xStyle, multiQuadrant: true});
+            }
+
+            // left quadrant only
+            if((_x.start < 0 ) && (_x.end <= 0)){
+                drawYaxis(_width, {style : yStyle, unitsOnRight:true});
+            // right quadrant only
+            }else if((_x.start >= 0 ) && (_x.end > 0)){
+                drawYaxis(0, {style : yStyle});
+            // both quadrants
+            }else{
+                drawYaxis(Math.abs(_x.start) * _x.unit, {style : yStyle, multiQuadrant: true});
+            }
+
+            if (_x.label) {
+                _drawTitle(
+                    _x.label,
+                    labelStyle,
+                    _padding.left + _labelCoords.abs.x,
+                    _padding.top + _labelCoords.abs.y,
+                    _labelCoords.abs.angle);
+            }
+            if (_y.label) {
+                _drawTitle(
+                    _y.label,
+                    labelStyle,
+                    _padding.left + _labelCoords.ord.x,
+                    _padding.top + _labelCoords.ord.y,
+                    _labelCoords.ord.angle);
+            }
+        }
+
+        function _drawGrid(){
+
+            var style = {
+                    'stroke': _color,
+                    'stroke-width' : _weight
+                },
+                x, y;
+
+            for(y = 0; y <= _height; y += _y.step * _y.unit){
+                _drawLine([0, y], [_width, y], style);
+            }
+            // close the graph if uneven step/y axis
+            if (Math.abs(_y.end - _y.start) % _y.step) {
+                _drawLine([0, _height], [_width, _height], style);
+            }
+            for(x = 0; x <= _width; x += _x.step * _x.unit) {
+                _drawLine([x, 0], [x, _height], style);
+            }
+            // close the graph if uneven step/x axis
+            if (Math.abs(_x.end - _x.start) % _x.step) {
+                _drawLine([_width, 0], [_width, _height], style);
+            }
+        }
+
+        function _drawLine(start, end, style){
+            var path = paper.path(
+                'M'+(_padding.left+start[0])+' '+(_padding.top+start[1])+
+                'L'+(_padding.left+end[0])+' '+(_padding.top+end[1])).attr(style);
+            _addCssClass(path, 'scene scene-grid');
+            return path;
+        }
+
+        function _drawTitle(text, style, x, y, angle) {
+            var textElement = paper.text(x, y, text).attr(style);
+
+            if (angle) {
+                textElement.rotate(angle, x, y);
+            }
+        }
 
         /**
          * Add a css class to the node of a Raphaël object
          * IE currently doesn't support the usage of element.classList in SVG
          *
-         * @param raphaelObj
-         * @param {string} newClass
+         * @param {Object} raphaelObj Raphael Object
+         * @param {String} newClass new class name
          */
-        function addCssClass(raphaelObj, newClass) {
+        function _addCssClass(raphaelObj, newClass) {
             var pattern = new RegExp('\\b' + newClass + '\\b');
             var oldClass = raphaelObj.node.getAttribute('class') || '';
             raphaelObj.node.setAttribute('class', pattern.test(oldClass) ? oldClass : oldClass + ' ' + newClass);
         }
 
-        
-        function drawLine(start, end, style){
-            var padding = options.padding;
-            var path = paper.path('M'+(padding+start[0])+' '+(padding+start[1])+'L'+(padding+end[0])+' '+(padding+end[1])).attr(style);
-            addCssClass(path, 'scene scene-grid');
-            return path;
-        }
-
-        var lineColor = '#222';
-        
-        options = _.merge({},{
-            color : lineColor,
-            weight : 1,
-            padding : 20,
-            x : {
-                start : -10,
-                end :  10,
-                label : null,
-                step : 1,
-                unit : 10,
-                color : lineColor,
-                weight : 3
-            },
-            y : {
-                start : -10,
-                end :  10,
-                label : null,
-                step : 1,
-                unit : 10,
-                color : lineColor,
-                weight : 3
-            }
-        },options);
-        /** @type {String} Color of the grid's lines */
-        var _color = options.color,
-        /** @type {Number} line weight of grid */
-        _weight = options.weight,
-        _x = options.x,
-        _y = options.y,
-        set = paper.set(),
-        clickableArea,
-        /** @type {Object} [description] */
-        _borderBox = {},
-        /**
-         * Draw Axis on the paper according the configuration of the grid
-         */
-        _drawAxis = function (){
-            
-            var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit);
-            
-            var xStyle = {
-                'stroke' :  _x.color,
-                'stroke-width': _x.weight
-            };
-
-            var yStyle = {
-                'stroke' :  _y.color,
-                'stroke-width': _y.weight
-            };
-            
-            function drawXaxis(top, config){
-                
-                config = config || {};
-                
-                var line =  drawLine([0, top], [width, top], config.style);
-                
-                var padding = options.padding, 
-                    position = 0,
-                    fontSize = 10,
-                    textTop,
-                    text;
-                
-                if(config.labelOnTop){
-                    textTop = top + padding - fontSize/2;
-                }else{
-                    textTop = top + padding + fontSize;
-                }
-                
-                for(var i = _x.start; i <= _x.end ; i++){
-                    text = paper.text(padding + position, textTop, i).attr({
-                        'font-size' : fontSize
-                    });
-                    addCssClass(text, 'scene scene-text');
-                    position += _x.unit;
-                }
-                
-                return line;
-            }
-            
-            function drawYaxis(left, config){
-                
-                config = config || {};
-                
-                var line =  drawLine([left, height], [left, 0], config.style);
-                
-                var padding = options.padding, 
-                    position = 0,
-                    fontSize = 10,
-                    textLeft,
-                    text;
-                
-                if(config.labelOnRight){
-                    textLeft = left + padding + fontSize/2;
-                }else{
-                    textLeft = left + padding - fontSize;
-                }
-                
-                for(var i = _y.start; i <= _y.end ; i++){
-                    text = paper.text(textLeft, padding + position, -i).attr({
-                        'font-size' : fontSize
-                    });
-                    addCssClass(text, 'scene scene-text');
-                    position += _y.unit;
-                }
-                
-                return line;
-            }
-            
-            if((_y.start < 0) && (_y.end <= 0)){
-                drawXaxis(height, {style : xStyle});
-            }else if((_y.start >= 0) && (_y.end > 0)){
-                drawXaxis(0, {style : xStyle, labelOnTop : true});
-            }else{
-                drawXaxis(Math.abs(_y.start) * _y.unit, {style : xStyle});
-            }
-            
-            if((_x.start < 0 ) && (_x.end <= 0)){
-                drawYaxis(width, {style : yStyle, labelOnRight:true});
-            }else if((_x.start >= 0 ) && (_x.end > 0)){
-                drawYaxis(0, {style : yStyle});
-            }else{
-                drawYaxis(Math.abs(_x.start) * _x.unit, {style : yStyle});
-            }
-
-        };
-        
-        function _drawGrid(){
-            
-            var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit),
-                style = {
-                    'stroke': _color,
-                    'stroke-width' : _weight
-                };
-            
-            for(var y = 0; y <= height; y += _y.step * _y.unit){
-                drawLine([0, y], [width, y], style);
-            }
-            for(var x = 0; x <= width; x += _x.step * _x.unit) {
-                drawLine([x, 0], [x, height], style);
-            }
-        }
-        
         function _calculateBBox(){
-            
-            var height = (Math.abs(_y.end - _y.start) * _y.unit),
-                width  = (Math.abs(_x.end - _x.start) * _x.unit),
-                x = options.padding,
-                y = options.padding;
-            
+
+            var x = _padding.left,
+                y = _padding.top;
+
             _borderBox = {
                 x : x,
                 y : y,
-                width : width,
-                height : height,
-                x2 : x+width,
-                y2 : y+height
+                width : _width,
+                height : _height,
+                x2 : x+_width,
+                y2 : y+_height
             };
         }
+
         var obj = {
             children : set,
-            snapping : options.snapping || false,
+            snapping : options.snapping || false,
             /**
              * Set _color value
              * @param {String} color
@@ -213,7 +329,7 @@ define(['OAT/lodash'], function( _ ){
              * @param {Number} value weight in px
              */
             setWeight : function(value){
-                _weight = parseInt(value);
+                _weight = parseInt(value, 10);
                 set.remove().clear();
                 this.render();
             },
@@ -255,22 +371,29 @@ define(['OAT/lodash'], function( _ ){
                 return {x: _borderBox.width/_x.unit , y: _borderBox.height/_y.unit};
             },
             /**
+             * Get the subStep size for x,y axis
+             * @return {Object}
+             */
+            getSubStepSizes: function(){
+                return {x: _xSubStepSize, y: _ySubStepSize};
+            },
+            /**
              * Get the Raphaeljs paper object used for this grid
-             * 
+             *
              * @returns {Object} Raphaeljs paper object
              */
             getCanvas : function(){
-                return paper;  
+                return paper;
             },
             /**
              * Get the position (top/left) of the origin of the cartesian axis relative to the paper
-             * 
+             *
              * @returns {Object}
              */
             getOriginPosition : function(){
                 return {
-                    left : options.padding - _x.start * _x.unit,
-                    top : options.padding - _y.start * _y.unit
+                    left : _padding.left - _x.start * _x.unit,
+                    top : _padding.top - _y.start * _y.unit
                 };
             },
             getPostionFromCartesian : function(x,y){
@@ -283,7 +406,7 @@ define(['OAT/lodash'], function( _ ){
             },
             /**
              * The the upper and lower bounds fof the grid on both axis
-             * 
+             *
              * @returns {Object}
              */
             getGridBounds : function(){
@@ -304,16 +427,16 @@ define(['OAT/lodash'], function( _ ){
             render : function(){
                 _drawGrid();
                 _drawAxis();
-            },   
+                _drawGraphTitle();
+            },
             /**
-             * Return a callback function to determine for a value the corrected value according grid snapping
              * @param {Number} x coordinate x to convert to snapped value
              * @param {Number} y  coordinate y to convert to snapped value
              * @return {Array} snapped values x,y
              */
             snap : function(x,y){
-                x = paper.raphael.snapTo(_x.unit, x, _x.unit / 2);
-                y = paper.raphael.snapTo(_y.unit, y, _y.unit / 2);
+                x = paper.raphael.snapTo(_snapToValues.x, x, _xSubStepSize / 2);
+                y = paper.raphael.snapTo(_snapToValues.y, y, _ySubStepSize / 2);
                 return [x,y];
             },
             /**
@@ -334,7 +457,7 @@ define(['OAT/lodash'], function( _ ){
             },
             /**
              * Take the shape back to the interactive layer
-             * 
+             *
              * @param {Object} shape - a RaphaelJs Element
              */
             toBack : function(shape){
@@ -344,19 +467,145 @@ define(['OAT/lodash'], function( _ ){
             },
             /**
              * Bring the shape in front of the interactive layer
-             * 
+             *
              * @param {Object} shape - a RaphaelJs Element
              */
             toFront : function(shape){
                 shape.toFront();
             }
+            /**
+             *
+             */
         };
-        
+
         _calculateBBox();
         obj.render();
-        
+
         return obj;
     }
-    
+
+    gridFactory.getPaperSize = function getPaperSize(rawOptions) {
+        var options = _buildOptions(rawOptions),
+
+            width = Math.abs(options.x.end - options.x.start) * options.x.unit,
+            height = Math.abs(options.y.end - options.y.start) * options.y.unit,
+
+            labelPositions = _getLabelsPosition(options),
+            padding = _getPadding(options, labelPositions);
+
+        return {
+            width: padding.left + width + padding.right,
+            height: padding.top + height + padding.bottom
+        };
+    };
+
+    function _buildOptions(rawOptions) {
+        var axisColor = '#222',
+            gridColor = '#222',
+
+            options = _.merge({},{
+                graphTitle : null,
+                graphTitleRequired : false, // display or not graph title
+                graphTitleSize : 20, // pixels
+                graphTitlePadding : 40, // pixels
+                color : gridColor,
+                weight : 1, // inner grid weight
+                labelSize : 14, // pixels
+                labelPadding : 36, // pixels
+                padding : 30, // pixels
+                height: null, // grid size in pixels
+                width: null, // grid size in pixels
+                x : {
+                    start : -10, // cartesian start
+                    end :  10, // cartesian end
+                    label : null,
+                    step : 1, // cartesian step
+                    subStep : 1,  // snapping divisions inside step
+                    unit : 10, // number of pixels for a cartesian unit
+                    color : axisColor,
+                    weight : 3 // axis weight
+                },
+                y : {
+                    start : -10,
+                    end :  10,
+                    label : null,
+                    step : 1,
+                    subStep : 1,
+                    unit : 10,
+                    color : axisColor,
+                    weight : 3
+                }
+            }, rawOptions);
+
+        // if defined, width and height takes precedence over units
+        if (options.width) {
+            options.x.unit = (options.width / Math.abs(options.x.end - options.x.start)).toPrecision(2);
+        }
+        if (options.height) {
+            options.y.unit = (options.height / Math.abs(options.y.end - options.y.start)).toPrecision(2);
+        }
+        return options;
+    }
+
+    function _getLabelsPosition(options) {
+        var xQuadrants = (options.x.start < 0 && options.x.end > 0) ? 2 : 1,
+            yQuadrants = (options.y.start < 0 && options.y.end > 0) ? 2 : 1,
+            gridType = (xQuadrants === 1 && yQuadrants === 1) ? "oneQuadrant" : "coordinates",
+            labelPositions = {};
+
+        if (gridType === "oneQuadrant") {
+            if (options.x.label) {
+                if (options.y.start < 0) {
+                    labelPositions.abs = "bottom";
+                } else {
+                    labelPositions.abs = "top";
+                }
+            }
+            if (options.y.label) {
+                if (options.x.start >= 0) {
+                    labelPositions.ord = "left";
+                } else {
+                    labelPositions.ord = "right";
+                }
+            }
+            // coordinates
+        } else {
+            if (options.x.label) {
+                labelPositions.abs = "right";
+            }
+            if (options.y.label) {
+                labelPositions.ord = "top";
+            }
+        }
+        return labelPositions;
+    }
+
+    function _getPadding(options, _labelPositions) {
+        var padding = {
+            top: options.padding,
+            right: options.padding,
+            bottom: options.padding,
+            left: options.padding
+        };
+
+        if (options.graphTitle && options.graphTitleRequired === true) {
+            padding.top += options.graphTitlePadding;
+        }
+
+        if (_labelPositions.abs === "top" || _labelPositions.ord === "top") {
+            padding.top += options.labelPadding;
+        }
+        if (_labelPositions.abs === "right" || _labelPositions.ord === "right") {
+            padding.right += options.labelPadding;
+        }
+        if (_labelPositions.abs === "bottom" || _labelPositions.ord === "bottom") {
+            padding.bottom += options.labelPadding;
+        }
+        if (_labelPositions.abs === "left" || _labelPositions.ord === "left") {
+            padding.left += options.labelPadding;
+        }
+        return padding;
+    }
+
     return gridFactory;
 });
