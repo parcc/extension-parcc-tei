@@ -47,7 +47,7 @@ define(['OAT/lodash'], function( _ ){
 
             if (_labelPositions.abs === "right") {
                 labelsCoords.abs.x = _width + options.padding; // workaround...
-                labelsCoords.abs.angle = -90;
+                labelsCoords.abs.angle = 0;
 
                 // align abs label on its axis
                 if (_y.start < 0 && _y.end > 0) {
