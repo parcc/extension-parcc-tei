@@ -54,6 +54,7 @@ define([
                     start : parseInt(rawConfig.xStart, radix),
                     end : parseInt(rawConfig.xEnd, radix),
                     label : rawConfig.xLabel,
+                    title : rawConfig.xTitle,
                     step: parseInt(rawConfig.xStep, radix),
                     subStep : parseInt(rawConfig.xSubStep, radix),
                     weight : (xWeight > 0) ? xWeight : xBorderWeight,
@@ -63,6 +64,7 @@ define([
                     start : -1 * parseInt(rawConfig.yEnd, radix), // y-axis is reversed
                     end : -1 * parseInt(rawConfig.yStart, radix), // y-axis is reversed
                     label : rawConfig.yLabel,
+                    title : rawConfig.yTitle,
                     step: parseInt(rawConfig.yStep, radix),
                     subStep : parseInt(rawConfig.ySubStep, radix),
                     weight : (yWeight > 0) ? yWeight : yBorderWeight,

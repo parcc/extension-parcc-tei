@@ -518,7 +518,8 @@ define(['OAT/lodash'], function( _ ){
                 x : {
                     start : -10, // cartesian start
                     end :  10, // cartesian end
-                    label : null,
+                    label : null, // small label (like 'x', 'y', 't'...) at the tip of an axis
+                    title : null, // axis title
                     step : 1, // cartesian step
                     subStep : 1,  // snapping divisions inside step
                     unit : 10, // number of pixels for a cartesian unit
@@ -529,6 +530,7 @@ define(['OAT/lodash'], function( _ ){
                     start : -10,
                     end :  10,
                     label : null,
+                    title : null,
                     step : 1,
                     subStep : 1,
                     unit : 10,

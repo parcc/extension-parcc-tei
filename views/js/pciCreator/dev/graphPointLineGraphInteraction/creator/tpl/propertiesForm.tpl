@@ -67,6 +67,10 @@
 <div class="panel">
     <h3>{{__ "X axis"}}</h3>
     <div class="panel">
+        <label for="xTitle">{{__ "title"}}</label>
+        <input name="xTitle" value="{{xTitle}}" type="text" />
+    </div>
+    <div class="panel">
         <label for="xLabel">{{__ "label"}}</label>
         <input name="xLabel" value="{{xLabel}}" type="text" />
     </div>
@@ -94,6 +98,10 @@
 
 <div class="panel">
     <h3>{{__ "Y axis"}}</h3>
+    <div class="panel">
+        <label for="yTitle">{{__ "title"}}</label>
+        <input name="yTitle" value="{{yTitle}}" type="text" />
+    </div>
     <div class="panel">
         <label for="yLabel">{{__ "label"}}</label>
         <input name="yLabel" value="{{yLabel}}" type="text" />

@@ -77,6 +77,7 @@ define([
             weight : interaction.prop('weight'),
 
             xLabel : interaction.prop('xLabel'),
+            xTitle : interaction.prop('xTitle'),
             xStart : interaction.prop('xStart'),
             xEnd : interaction.prop('xEnd'),
             xStep : interaction.prop('xStep'),
@@ -84,6 +85,7 @@ define([
             xAllowOuter : getBoolean(interaction.prop('xAllowOuter'), true),
 
             yLabel : interaction.prop('yLabel'),
+            yTitle : interaction.prop('yTitle'),
             yStart : interaction.prop('yStart'),
             yEnd : interaction.prop('yEnd'),
             yStep : interaction.prop('yStep'),
@@ -138,7 +140,9 @@ define([
             weight : graphConfigChangeCallback,
 
             xLabel : graphConfigChangeCallback,
+            xTitle : graphConfigChangeCallback,
             yLabel : graphConfigChangeCallback,
+            yTitle : graphConfigChangeCallback,
 
             plotColor : graphConfigChangeCallback,
             plotThickness : graphConfigChangeCallback,
