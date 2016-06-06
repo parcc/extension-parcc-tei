@@ -155,8 +155,7 @@ define(['OAT/lodash'], function( _ ){
                     'font-weight' : 'bold'
                 },
                 labelStyle = {
-                    'font-size' : options.labelSize,
-                    'font-weight' : 'bold'
+                    'font-size' : options.labelSize
                 };
 
             function drawXaxis(top, config){
