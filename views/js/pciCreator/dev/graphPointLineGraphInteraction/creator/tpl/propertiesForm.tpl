@@ -65,7 +65,21 @@
 <hr/>
 
 <div class="panel">
-    <h3>{{__ "X axis"}}</h3>
+    <h3>{{__ "X axis"}}</h3><br />
+    <label>{{__ "Graduation"}}</label>
+    <div class="panel subpanel">
+        <div class="panel creator-graphPointLineGraphInteraction-range">
+            <label for="xStart" class="spinner">{{__ "from"}}</label>
+            <input name="xStart" value="{{xStart}}" data-increment="1" type="text" />
+            <label for="xEnd" class="spinner">{{__ "to"}}</label>
+            <input name="xEnd" value="{{xEnd}}" data-increment="1" type="text" /><br />
+        </div>
+        <div class="panel xStepValue">
+            <label for="xStep" class="spinner">{{__ "by increment of"}}</label>
+            <input name="xStep" value="{{xStep}}" data-increment="1" data-min="1" type="text" />
+        </div>
+        <div class="panel xStepInfo"></div>
+    </div>
     <div class="panel">
         <label for="xTitle">{{__ "title"}}</label>
         <input name="xTitle" value="{{xTitle}}" type="text" />
@@ -74,16 +88,7 @@
         <label for="xLabel">{{__ "label"}}</label>
         <input name="xLabel" value="{{xLabel}}" type="text" />
     </div>
-    <div class="panel creator-graphPointLineGraphInteraction-range">
-        <label for="xStart" class="spinner">{{__ "from"}}</label>
-        <input name="xStart" value="{{xStart}}" data-increment="1" type="text" />
-        <label for="xEnd" class="spinner">{{__ "to"}}</label>
-        <input name="xEnd" value="{{xEnd}}" data-increment="1" type="text" /><br />
-    </div>
     <div class="panel creator-graphPointLineGraphInteraction-spinner">
-        <label for="xStep" class="spinner">{{__ "step"}}</label>
-        <input name="xStep" value="{{xStep}}" data-increment="1" data-min="1" type="text" />
-        <br />
         <label for="xSubStep" class="spinner">{{__ "sub step (snapping)"}}</label>
         <input name="xSubStep" value="{{xSubStep}}" data-increment="1" data-min="1" type="text" />
     </div>
@@ -98,6 +103,21 @@
 
 <div class="panel">
     <h3>{{__ "Y axis"}}</h3>
+    <br />
+    <label>{{__ "Graduation"}}</label>
+    <div class="panel subpanel">
+        <div class="panel creator-graphPointLineGraphInteraction-range">
+            <label for="yytart" class="spinner">{{__ "from"}}</label>
+            <input name="yStart" value="{{yStart}}" data-increment="1" type="text" />
+            <label for="yEnd" class="spinner">{{__ "to"}}</label>
+            <input name="xynd" value="{{yEnd}}" data-increment="1" type="text" /><br />
+        </div>
+        <div class="panel yStepValue">
+            <label for="yStep" class="spinner">{{__ "by increment of"}}</label>
+            <input name="yStep" value="{{yStep}}" data-increment="1" data-min="1" type="text" />
+        </div>
+        <div class="panel yStepInfo"></div>
+    </div>
     <div class="panel">
         <label for="yTitle">{{__ "title"}}</label>
         <input name="yTitle" value="{{yTitle}}" type="text" />
@@ -106,16 +126,7 @@
         <label for="yLabel">{{__ "label"}}</label>
         <input name="yLabel" value="{{yLabel}}" type="text" />
     </div>
-    <div class="panel creator-graphPointLineGraphInteraction-range">
-        <label for="yStart" class="spinner">from</label>
-        <input name="yStart" value="{{yStart}}" data-increment="1" type="text" />
-        <label for="yEnd" class="spinner">to</label>
-        <input name="yEnd" value="{{yEnd}}" data-increment="1" data-min="1" type="text" />
-    </div>
     <div class="panel creator-graphPointLineGraphInteraction-spinner">
-        <label for="yStep" class="spinner">{{__ "step"}}</label>
-        <input name="yStep" value="{{yStep}}" data-increment="1" data-min="1" type="text" />
-        <br />
         <label for="ySubStep" class="spinner">{{__ "sub step (snapping)"}}</label>
         <input name="ySubStep" value="{{ySubStep}}" data-increment="1" data-min="1" type="text" />
     </div>
