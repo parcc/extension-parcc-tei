@@ -5,8 +5,9 @@ define([
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!graphPointLineGraphInteraction/creator/tpl/propertiesForm',
     'lodash',
-    'jquery'
-], function(stateFactory, Question, formElement, containerEditor, formTpl, _, $){
+    'jquery',
+    'i18n'
+], function(stateFactory, Question, formElement, containerEditor, formTpl, _, $, __){
 
     'use strict';
 
@@ -113,8 +114,105 @@ define([
             }
         };
 
+        function getMinStep(start, end) {
+            var maxSubDiv = 100,
+                range = Math.abs(interaction.prop(end) - interaction.prop(start));
+
+            return Math.round(range / maxSubDiv);
+        }
+
+        updateMinStepInfo('.xStepInfo', getMinStep('xStart', 'xEnd'));
+        updateMinStepInfo('.yStepInfo', getMinStep('yStart', 'yEnd'));
+/
         var xAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'xStart', 'xEnd', options);
         var yAxisCallbacks = formElement.getMinMaxAttributeCallbacks(this.widget.$form, 'yStart', 'yEnd', options);
+
+        function updateMinStepInfo(stepInfo, minStep) {
+            var $stepInfo = $(stepInfo);
+            $stepInfo.html(__('(min. increment: ' + minStep + ')'));
+        }
+
+        function adjustStepToRange(start, end, step) {
+            var $step = $form.find('input[name=' + step + ']'),
+                currentStep = $step.val(),
+                minStep = getMinStep(start, end, step),
+                stepInfoSelector = '.' + step + 'Info';
+
+            if (currentStep < minStep) {
+                updateMinStepInfo(stepInfoSelector, minStep);
+                highlightStepError(stepInfoSelector);
+                highlightStepError('.' + step + 'Value');
+                $step.val(minStep);
+                interaction.prop(step, minStep);
+                $step.trigger('change');
+
+            } else if (currentStep !== minStep) {
+                highlightStepInfo(stepInfoSelector);
+            }
+        }
+
+
+        function highlightStep(selector, classname) {
+            var $stepInfo = $(selector);
+            $stepInfo.addClass(classname);
+            setTimeout(function() {
+                $stepInfo.removeClass(classname);
+            }, 1000);
+        }
+
+        function highlightStepInfo(selector) {
+            highlightStep(selector, 'feedback-info');
+        }
+
+        function highlightStepError(selector) {
+            highlightStep(selector, 'feedback-error');
+
+        }
+
+        // we wrap axis getMinMaxAttributeCallbacks callbacks to provide a safety check for the step value
+        var axisCallbacks = {
+            xStart: function (element, value, name) {
+                if (interaction.prop(name) !== value) {
+                    adjustStepToRange('xStart', 'xEnd', 'xStep');
+                    xAxisCallbacks.xStart(element, value, name);
+                }
+            },
+            xEnd: function (element, value, name) {
+                if (interaction.prop(name) !== value) {
+                    adjustStepToRange('xStart', 'xEnd', 'xStep');
+                    xAxisCallbacks.xEnd(element, value, name);
+                }
+            },
+            yStart: function (element, value, name) {
+                yAxisCallbacks.yStart(element, value, name);
+                adjustStepToRange('yStart', 'yEnd', 'yStep');
+            },
+            yEnd: function (element, value, name) {
+                yAxisCallbacks.yEnd(element, value, name);
+                adjustStepToRange('yStart', 'yEnd', 'yStep');
+            }
+        };
+
+        // safety check for step value
+        var stepCallbacks = {
+            xStep: function (element, value, name) {
+                var minStep = getMinStep('xStart', 'xEnd'),
+                    $step = $form.find('input[name=xStep]');
+
+                if (value < minStep) {
+                    value = minStep;
+                    $step.val(value);
+                    highlightStepError('.xStepInfo');
+                }
+                graphGridChangeCallback(element, value, name);
+            },
+            yStep: function (element, value, name) {
+                var safeStep = getMinStep('yStart', 'yEnd', 'yStep');
+                graphGridChangeCallback(element, safeStep, name);
+            }
+        };
+
+
         var changeCallbacks = {
             identifier : function(i, value){
                 response.id(value);
@@ -124,9 +222,9 @@ define([
             width : graphGridChangeCallback,
             height : graphGridChangeCallback,
             maxPoints : graphGridChangeCallback,
-            xStep : graphGridChangeCallback,
+            // xStep : graphGridChangeCallback,
             xSubStep : graphGridChangeCallback,
-            yStep : graphGridChangeCallback,
+            // yStep : graphGridChangeCallback,
             ySubStep : graphGridChangeCallback,
             yAllowOuter : graphConfigChangeCallback,
             xAllowOuter : graphConfigChangeCallback,
@@ -151,7 +249,7 @@ define([
             pointColor : graphConfigChangeCallback,
             innerLineWeight : graphConfigChangeCallback
         };
-        changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks);
+        changeCallbacks = _.assign(changeCallbacks, axisCallbacks, stepCallbacks);
 
         formElement.setChangeCallbacks($form, interaction, changeCallbacks);
     };
