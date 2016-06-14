@@ -29,8 +29,9 @@ define(['OAT/lodash'], function( _ ){
             _color = options.color,
             _weight = options.weight,
 
-            _labelPositions = _getLabelsPosition(options),
-            _padding = _getPadding(options, _labelPositions),
+            _axisTitlePositions = _getAxisTitlePositions(options),
+            _padding = _getPadding(options, _axisTitlePositions),
+            _axisTitleCoords = _getAxisTitleCoords(),
             _labelCoords = _getLabelsCoords(),
             _snapToValues = _getSnapToValues(),
 
@@ -39,54 +40,61 @@ define(['OAT/lodash'], function( _ ){
             _borderBox = {};
 
 
+        function _getAxisTitleCoords() {
+            var axisTitleCoords = {
+                abs: {},
+                ord: {}
+            };
+
+            // abs title
+            axisTitleCoords.abs.x = _width / 2;
+            axisTitleCoords.abs.angle = 0;
+
+            if (_axisTitlePositions.abs === "bottom") {
+                axisTitleCoords.abs.y = _height + options.axisTitlePadding;
+            } else if (_axisTitlePositions.abs === "top") {
+                axisTitleCoords.abs.y = -options.axisTitlePadding;
+            }
+
+            // ord title
+            axisTitleCoords.ord.y = _height / 2;
+            axisTitleCoords.ord.angle = -90;
+
+            if (_axisTitlePositions.ord === "left") {
+                axisTitleCoords.ord.x = -options.axisTitlePadding;
+            } else if (_axisTitlePositions.ord === "right") {
+                axisTitleCoords.ord.x = _width + options.padding; // approximation...
+            }
+
+            return axisTitleCoords;
+        }
+
         function _getLabelsCoords() {
-            var labelsCoords = {
-                    abs: {},
-                    ord: {}
-                };
+            var labelCoords = {
+                abs: {},
+                ord: {}
+            };
 
-            if (_labelPositions.abs === "right") {
-                labelsCoords.abs.x = _width + options.padding; // workaround...
-                labelsCoords.abs.angle = 0;
+            // abs label
+            labelCoords.abs.x = _width + options.labelPadding;
+            labelCoords.abs.angle = 0;
 
-                // align abs label on its axis
-                if (_y.start < 0 && _y.end > 0) {
-                    labelsCoords.abs.y = -1 * _y.start * _y.unit; // two y quadrants
-                } else {
-                    labelsCoords.abs.y = (_y.start >= 0) ? 0 : _height;  // one y quadrant
-                }
+            if (_y.start < 0 && _y.end > 0) {
+                labelCoords.abs.y = -1 * _y.start * _y.unit; // two y quadrants
             } else {
-                labelsCoords.abs.x = _width / 2;
-                labelsCoords.abs.angle = 0;
-
-                if (_labelPositions.abs === "bottom") {
-                    labelsCoords.abs.y = _height + options.labelPadding;
-                } else if (_labelPositions.abs === "top") {
-                    labelsCoords.abs.y = -options.labelPadding;
-                }
+                labelCoords.abs.y = (_y.start >= 0) ? 0 : _height;  // one y quadrant
             }
 
-            if (_labelPositions.ord === "top") {
-                labelsCoords.ord.y = -options.labelPadding;
-                labelsCoords.ord.angle = 0;
+            // ord label
+            labelCoords.ord.y = -options.labelPadding;
+            labelCoords.ord.angle = 0;
 
-                // align ord label on its axis
-                if (_x.start < 0 && _x.end > 0) {
-                    labelsCoords.ord.x = -1 * _x.start * _x.unit; // two x quadrants
-                } else {
-                    labelsCoords.ord.x = (_x.start >= 0) ? 0 : _width; // one x quadrant
-                }
+            if (_x.start < 0 && _x.end > 0) {
+                labelCoords.ord.x = -1 * _x.start * _x.unit; // two x quadrants
             } else {
-                labelsCoords.ord.y = _height / 2;
-                labelsCoords.ord.angle = -90;
-
-                if (_labelPositions.ord === "left") {
-                    labelsCoords.ord.x = -options.labelPadding;
-                } else if (_labelPositions.ord === "right") {
-                    labelsCoords.ord.x = _width + options.padding; // workaround...
-                }
+                labelCoords.ord.x = (_x.start >= 0) ? 0 : _width; // one x quadrant
             }
-            return labelsCoords;
+            return labelCoords;
         }
 
         function _getSnapToValues() {
@@ -99,7 +107,7 @@ define(['OAT/lodash'], function( _ ){
                 snapValue,
                 i, j;
 
-            // use a nested loop to avoid accumulating rounding error
+            // using a nested loop to avoid accumulating rounding error
             for (i = 0; i <= _width; i += xStepSize) {
                 for(j = 0; j < xStepSize; j += _xSubStepSize) {
                     snapValue = i + j;
@@ -142,9 +150,12 @@ define(['OAT/lodash'], function( _ ){
                     'stroke' :  _y.color,
                     'stroke-width': _y.weight
                 },
-                labelStyle = {
-                    'font-size' : options.labelSize,
+                axisTitleStyle = {
+                    'font-size' : options.axisTitleSize,
                     'font-weight' : 'bold'
+                },
+                labelStyle = {
+                    'font-size' : options.labelSize
                 };
 
             function drawXaxis(top, config){
@@ -176,7 +187,6 @@ define(['OAT/lodash'], function( _ ){
             }
 
             function drawYaxis(left, config){
-
                 config = config || {};
 
                 var line =  _drawLine([left, _height], [left, 0], config.style),
@@ -241,6 +251,23 @@ define(['OAT/lodash'], function( _ ){
                     _padding.left + _labelCoords.ord.x,
                     _padding.top + _labelCoords.ord.y,
                     _labelCoords.ord.angle);
+            }
+
+            if (_x.title) {
+                _drawTitle(
+                    _x.title,
+                    axisTitleStyle,
+                    _padding.left + _axisTitleCoords.abs.x,
+                    _padding.top + _axisTitleCoords.abs.y,
+                    _axisTitleCoords.abs.angle);
+            }
+            if (_y.title) {
+                _drawTitle(
+                    _y.title,
+                    axisTitleStyle,
+                    _padding.left + _axisTitleCoords.ord.x,
+                    _padding.top + _axisTitleCoords.ord.y,
+                    _axisTitleCoords.ord.angle);
             }
         }
 
@@ -490,8 +517,8 @@ define(['OAT/lodash'], function( _ ){
             width = Math.abs(options.x.end - options.x.start) * options.x.unit,
             height = Math.abs(options.y.end - options.y.start) * options.y.unit,
 
-            labelPositions = _getLabelsPosition(options),
-            padding = _getPadding(options, labelPositions);
+            axisTitlePositions = _getAxisTitlePositions(options),
+            padding = _getPadding(options, axisTitlePositions);
 
         return {
             width: padding.left + width + padding.right,
@@ -510,15 +537,18 @@ define(['OAT/lodash'], function( _ ){
                 graphTitlePadding : 40, // pixels
                 color : gridColor,
                 weight : 1, // inner grid weight
-                labelSize : 14, // pixels
-                labelPadding : 36, // pixels
+                axisTitleSize : 14, // pixels
+                axisTitlePadding : 36, // pixels
+                labelSize : 12, // pixels
+                labelPadding : 24, // pixels
                 padding : 30, // pixels
                 height: null, // grid size in pixels
                 width: null, // grid size in pixels
                 x : {
                     start : -10, // cartesian start
                     end :  10, // cartesian end
-                    label : null,
+                    label : null, // small label (like 'x', 'y', 't'...) at the tip of an axis
+                    title : null, // axis title
                     step : 1, // cartesian step
                     subStep : 1,  // snapping divisions inside step
                     unit : 10, // number of pixels for a cartesian unit
@@ -529,6 +559,7 @@ define(['OAT/lodash'], function( _ ){
                     start : -10,
                     end :  10,
                     label : null,
+                    title : null,
                     step : 1,
                     subStep : 1,
                     unit : 10,
@@ -547,40 +578,27 @@ define(['OAT/lodash'], function( _ ){
         return options;
     }
 
-    function _getLabelsPosition(options) {
-        var xQuadrants = (options.x.start < 0 && options.x.end > 0) ? 2 : 1,
-            yQuadrants = (options.y.start < 0 && options.y.end > 0) ? 2 : 1,
-            gridType = (xQuadrants === 1 && yQuadrants === 1) ? "oneQuadrant" : "coordinates",
-            labelPositions = {};
+    function _getAxisTitlePositions(options) {
+        var axisTitlePositions = {};
 
-        if (gridType === "oneQuadrant") {
-            if (options.x.label) {
-                if (options.y.start < 0) {
-                    labelPositions.abs = "bottom";
-                } else {
-                    labelPositions.abs = "top";
-                }
-            }
-            if (options.y.label) {
-                if (options.x.start >= 0) {
-                    labelPositions.ord = "left";
-                } else {
-                    labelPositions.ord = "right";
-                }
-            }
-            // coordinates
-        } else {
-            if (options.x.label) {
-                labelPositions.abs = "right";
-            }
-            if (options.y.label) {
-                labelPositions.ord = "top";
+        if (options.x.title) {
+            if (options.y.start < 0) {
+                axisTitlePositions.abs = "bottom";
+            } else {
+                axisTitlePositions.abs = "top";
             }
         }
-        return labelPositions;
+        if (options.y.title) {
+            if (options.x.start < 0 && options.x.end <= 0) {
+                axisTitlePositions.ord = "right";
+            } else {
+                axisTitlePositions.ord = "left";
+            }
+        }
+        return axisTitlePositions;
     }
 
-    function _getPadding(options, _labelPositions) {
+    function _getPadding(options, _axisTitlePositions) {
         var padding = {
             top: options.padding,
             right: options.padding,
@@ -592,17 +610,24 @@ define(['OAT/lodash'], function( _ ){
             padding.top += options.graphTitlePadding;
         }
 
-        if (_labelPositions.abs === "top" || _labelPositions.ord === "top") {
+        if (_axisTitlePositions.abs === "top" && options.x.title) {
+            padding.top += options.axisTitlePadding;
+        } else if (options.y.label) {
             padding.top += options.labelPadding;
         }
-        if (_labelPositions.abs === "right" || _labelPositions.ord === "right") {
+
+        if (_axisTitlePositions.abs === "bottom" && options.x.title) {
+            padding.bottom += options.axisTitlePadding;
+        }
+
+        if (_axisTitlePositions.ord === "right" && options.y.title) {
+            padding.right += options.axisTitlePadding;
+        } else if (options.x.label) {
             padding.right += options.labelPadding;
         }
-        if (_labelPositions.abs === "bottom" || _labelPositions.ord === "bottom") {
-            padding.bottom += options.labelPadding;
-        }
-        if (_labelPositions.abs === "left" || _labelPositions.ord === "left") {
-            padding.left += options.labelPadding;
+
+        if (_axisTitlePositions.ord === "left" && options.y.title) {
+            padding.left += options.axisTitlePadding;
         }
         return padding;
     }

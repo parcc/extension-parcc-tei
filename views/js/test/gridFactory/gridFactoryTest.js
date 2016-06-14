@@ -17,7 +17,7 @@ define([
             y : { start : -10, end : 6, unit : 20, step : 1, label: 'y' }
         }, output: {
             width: 320, height: 320,
-            paperWidth: 416, paperHeight: 416
+            paperWidth: 404, paperHeight: 404
         }, outputContainer: 'test_01' },
 
         { title: 'x > 0', input: {
@@ -26,7 +26,7 @@ define([
             y : { start : -6, end : 10, unit : 20, step : 2, label: 'y' }
         }, output: {
             width: 100, height: 320,
-            paperWidth: 196, paperHeight: 456
+            paperWidth: 184, paperHeight: 444
         }, outputContainer: 'test_02' },
 
         { title: 'x < 0', input: {
@@ -35,7 +35,7 @@ define([
             y : { start : -6, end : 10, unit : 10, label: 'y' }
         }, output: {
             width: 240, height: 160,
-            paperWidth: 336, paperHeight: 296
+            paperWidth: 324, paperHeight: 284
         }, outputContainer: 'test_03' },
 
         { title: 'y > 0', input: {
@@ -44,7 +44,7 @@ define([
             y : { start : 2, end : 6, unit : 15, label: 'y' }
         }, output: {
             width: 80, height: 60,
-            paperWidth: 176, paperHeight: 196
+            paperWidth: 164, paperHeight: 184
         }, outputContainer: 'test_04' },
 
         { title: 'y < 0', input: {
@@ -53,40 +53,40 @@ define([
             y : { start : -8,  end : -1, unit : 14, step : 2, label: 'y' }
         }, output: {
             width: 272, height: 98,
-            paperWidth: 368, paperHeight: 234
+            paperWidth: 356, paperHeight: 222
         }, outputContainer: 'test_05' },
 
         { title: 'x > 0 && y > 0', input: {
             graphTitle : 'x > 0 && y > 0',
-            x : { start : 5, end : 10, unit : 20, label: 'Time (hours)' },
-            y : { start : 2, end : 9, unit : 20, step : 3, label: 'Money ($)' }
+            x : { start : 5, end : 10, unit : 20, label: 'h', title: 'Time (hours)' },
+            y : { start : 2, end : 9, unit : 20, step : 3, label: '$', title:  'Money' }
         }, output: {
             width: 100, height: 140,
-            paperWidth: 196, paperHeight: 276
+            paperWidth: 220, paperHeight: 276
         }, outputContainer: 'test_06' },
 
         { title: 'x > 0 && y < 0', input: {
             graphTitle : 'x > 0 && y < 0',
-            x : { start : 5, end : 10, unit : 20, label: 'Time (hours)' },
-            y : { start : -10, end : -5, unit : 20, label: 'Money ($)' }
+            x : { start : 5, end : 10, unit : 20, label: 'h', title: 'Time (hours)' },
+            y : { start : -10, end : -5, unit : 20, label: '$', title:  'Money' }
         }, output: {
             width: 100, height: 100,
-            paperWidth: 196, paperHeight: 236
+            paperWidth: 220, paperHeight: 260
         }, outputContainer: 'test_07' },
 
         { title: 'x < 0 && y < 0', input: {
             graphTitle : 'x < 0 && y < 0',
-            x : { start : -10, end : -5, unit : 13, label: 'Time (hours)' },
-            y : { start : -10, end : -5, unit : 23, label: 'Money ($)' }
+            x : { start : -10, end : -5, unit : 13, label: 'h', title: 'Time (hours)' },
+            y : { start : -10, end : -5, unit : 23, label: '$', title:  'Money' }
         }, output: {
             width: 65, height: 115,
-            paperWidth: 161, paperHeight: 251
+            paperWidth: 161, paperHeight: 275
         }, outputContainer: 'test_08' },
 
         { title: 'x < 0 && y > 0', input: {
             graphTitle : 'x < 0 && y > 0',
-            x : { start : -10, end : -5, unit : 20, label: 'Time (hours)' },
-            y : { start : 5, end : 10, unit : 20, label: 'Money ($)' }
+            x : { start : -10, end : -5, unit : 20, label: 'h', title: 'Time (hours)' },
+            y : { start : 5, end : 10, unit : 20, label: '$', title:  'Money' }
         }, output: {
             width: 100, height: 100,
             paperWidth: 196, paperHeight: 236
@@ -94,11 +94,11 @@ define([
 
         { title: 'different scales oneQuadrant', input: {
             graphTitle : 'different scales oneQuadrant',
-            x : { start : 0, end : 7, unit : 58, step : 1, label: 'Time (hours)' },
-            y : { start : -500, end : 0, unit : 0.8, step : 50, label: 'A whole lot of money ($$$$)' }
+            x : { start : 0, end : 7, unit : 58, step : 1, label: 'h', title: 'Time (hours)' },
+            y : { start : -500, end : 0, unit : 0.8, step : 50, label: '$', title: 'A whole lot of money' }
         }, output: {
             width: 406, height: 400,
-            paperWidth: 502, paperHeight: 536
+            paperWidth: 526, paperHeight: 560
         }, outputContainer: 'test_10' },
 
         { title: 'different scales coordinates', input: {
@@ -107,47 +107,47 @@ define([
             y : { start : -6, end : 8, unit : 36, step : 1, label: 'y' }
         }, output: {
             width: 504, height: 504,
-            paperWidth: 600, paperHeight: 640
+            paperWidth: 588, paperHeight: 628
         }, outputContainer: 'test_11' },
 
         { title: 'size in pixels coordinates', input: {
             graphTitle : 'size in pixels coordinates',
             width : 450, height : 300,
-            x : { start : -5, end : 5, step : 1, label: 'Time (hours)' },
-            y : { start : -50, end : +50, step : 10, label: 'Money ($)' }
+            x : { start : -5, end : 5, step : 1, label: 'h', title: 'Time (hours)' },
+            y : { start : -50, end : +50, step : 10, label: '$', title:  'Money' }
         }, output: {
             width: 450, height: 300,
-            paperWidth: 546, paperHeight: 436
+            paperWidth: 570, paperHeight: 460
         }, outputContainer: 'test_12' },
 
         { title: 'size in pixels one quadrant', input: {
             graphTitle : 'size in pixels one quadrant',
             width : 450, height : 300,
-            x : { start : 0, end : 15, step : 1, label: 'Time (hours)' },
-            y : { start : -50, end : 0, step : 5, label: 'Money ($)' }
+            x : { start : 0, end : 15, step : 1, label: 'h', title: 'Time (hours)' },
+            y : { start : -50, end : 0, step : 5, label: '$', title:  'Money' }
         }, output: {
             width: 450, height: 300,
-            paperWidth: 546, paperHeight: 436
+            paperWidth: 570, paperHeight: 460
         }, outputContainer: 'test_13' },
 
         { title: 'onequadrant, no x label', input: {
             graphTitle : 'onequadrant, no x label',
             width : 250, height : 200,
             x : { start : 0, end : 10, step : 1 },
-            y : { start : -50, end : 0, step : 10, label: 'Money ($)' }
+            y : { start : -50, end : 0, step : 10, label: '$', title: 'Money' }
         }, output: {
             width: 250, height: 200,
-            paperWidth: 346, paperHeight: 300
+            paperWidth: 346, paperHeight: 324
         }, outputContainer: 'test_14' },
 
         { title: 'onequadrant, no y label', input: {
             graphTitle : 'onequadrant, no y label',
             width : 250, height : 200,
-            x : { start : 0, end : 10, step : 1, label: 'Time (hours)' },
+            x : { start : 0, end : 10, step : 1, label: 't', title: 'Time' },
             y : { start : -50, end : 0, step : 10 }
         }, output: {
             width: 250, height: 200,
-            paperWidth: 310, paperHeight: 336
+            paperWidth: 334, paperHeight: 336
         }, outputContainer: 'test_15' },
 
         { title: 'onequadrant, no label', input: {
@@ -167,7 +167,7 @@ define([
             y : { start : -50, end : 50, step : 10, label: 'y' }
         }, output: {
             width: 250, height: 250,
-            paperWidth: 310, paperHeight: 386
+            paperWidth: 310, paperHeight: 374
         }, outputContainer: 'test_17' },
 
         { title: 'coordinates, no y label', input: {
@@ -177,7 +177,7 @@ define([
             y : { start : -50, end : 50, step : 10 }
         }, output: {
             width: 250, height: 250,
-            paperWidth: 346, paperHeight: 350
+            paperWidth: 334, paperHeight: 350
         }, outputContainer: 'test_18' },
 
         { title: 'coordinates, no label', input: {
@@ -193,11 +193,11 @@ define([
         { title: 'Bouncing ball experiment', input: {
             //graphTitle : 'Bouncing ball experiment',
             width : 500, height : 500,
-            x : { start : 0, end : 275,  step : 25, label: 'Height of Drop (in inches)' },
-            y : { start : -325, end : 0,  step : 25, label: 'Height of Bounce (in inches)' }
+            x : { start : 0, end : 275,  step : 25, label: 'i', title: 'Height of Drop (in inches)' },
+            y : { start : -325, end : 0,  step : 25, label: 'i', title: 'Height of Bounce (in inches)' }
         }, output: {
             width: 495, height: 487.5,
-            paperWidth: 591, paperHeight: 583.5
+            paperWidth: 615, paperHeight: 607.5
         }, outputContainer: 'test_20' }
         /* */
     ];
