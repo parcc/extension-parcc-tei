@@ -106,6 +106,13 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('0.2.0');
         }
 
+        if($this->isVersion('0.2.0')){
+
+            $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
+
+            $this->setVersion('0.2.1');
+        }
+
     }
 
 }
