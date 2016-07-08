@@ -78,9 +78,9 @@ define([
 
                 state = this.getState();
                 assert.ok(typeof state === 'object', 'The state is an object');
-                assert.ok(_.isArray(state.RESPONSE.list.boolean), 'The state contains a well formated response');
-                assert.equal(_.filter(state.RESPONSE.list.boolean).length, 0, 'No selected partition by default');
-                assert.equal(state.RESPONSE.list.boolean.length, 2, 'There is 2 partitions by default');
+                assert.ok(_.isArray(state.RESPONSE.selection), 'The state contains a well formated array');
+                assert.equal(_.filter(state.RESPONSE.selection).length, 0, 'No selected partition by default');
+                assert.equal(state.RESPONSE.selection.length, 2, 'There is 2 partitions by default');
 
                 $more = $('.fractionModelInteraction .shape-controls button.more', $container);
                 assert.equal($more.length, 1, 'the more button is there');
@@ -89,9 +89,9 @@ define([
             })
             .on('statechange', function(state){
 
-                assert.ok(_.isArray(state.RESPONSE.list.boolean), 'The state contains a well formated response');
-                assert.equal(_.filter(state.RESPONSE.list.boolean).length, 0, 'No selected partition in the state');
-                assert.equal(state.RESPONSE.list.boolean.length, 3, '3 partitions in the state');
+                assert.ok(_.isArray(state.RESPONSE.selection), 'The state contains a well formated array');
+                assert.equal(_.filter(state.RESPONSE.selection).length, 0, 'No selected partition in the state');
+                assert.equal(state.RESPONSE.selection.length, 3, '3 partitions in the state');
 
                 QUnit.start();
             })
@@ -122,9 +122,9 @@ define([
 
                 state = this.getState();
                 assert.ok(typeof state === 'object', 'The state is an object');
-                assert.ok(_.isArray(state.RESPONSE.list.boolean), 'The state contains a well formated response');
-                assert.equal(_.filter(state.RESPONSE.list.boolean).length, 0, 'No selected partition by default');
-                assert.equal(state.RESPONSE.list.boolean.length, 4, 'There is 4 partitions by default');
+                assert.ok(_.isArray(state.RESPONSE.selection), 'The state contains a well formated response');
+                assert.equal(_.filter(state.RESPONSE.selection).length, 0, 'No selected partition by default');
+                assert.equal(state.RESPONSE.selection.length, 4, 'There is 4 partitions by default');
 
                 $fewer = $('.fractionModelInteraction .shape-controls button.fewer', $container);
                 assert.equal($fewer.length, 1, 'the less button is there');
@@ -133,9 +133,9 @@ define([
             })
             .on('statechange', function(state){
 
-                assert.ok(_.isArray(state.RESPONSE.list.boolean), 'The state contains a well formated response');
-                assert.equal(_.filter(state.RESPONSE.list.boolean).length, 0, 'No selected partition in the state');
-                assert.equal(state.RESPONSE.list.boolean.length, 3, '3 partitions in the state');
+                assert.ok(_.isArray(state.RESPONSE.selection), 'The state contains a well formated response');
+                assert.equal(_.filter(state.RESPONSE.selection).length, 0, 'No selected partition in the state');
+                assert.equal(state.RESPONSE.selection.length, 3, '3 partitions in the state');
 
                 QUnit.start();
             })
@@ -166,9 +166,9 @@ define([
 
                 state = this.getState();
                 assert.ok(typeof state === 'object', 'The state is an object');
-                assert.ok(_.isArray(state.RESPONSE.list.boolean), 'The state contains a well formated response');
-                assert.equal(_.filter(state.RESPONSE.list.boolean).length, 0, 'No selected partition by default');
-                assert.equal(state.RESPONSE.list.boolean.length, 4, 'There is 4 partitions by default');
+                assert.ok(_.isArray(state.RESPONSE.selection), 'The state contains a well formated response');
+                assert.equal(_.filter(state.RESPONSE.selection).length, 0, 'No selected partition by default');
+                assert.equal(state.RESPONSE.selection.length, 4, 'There is 4 partitions by default');
 
                 $partitions = $('.fractionModelInteraction .shape-container svg > path', $container);
                 assert.equal($partitions.length, 4, 'There is 4 partitions in the canvas');
@@ -179,9 +179,9 @@ define([
             })
             .on('statechange', function(state){
 
-                assert.ok(_.isArray(state.RESPONSE.list.boolean), 'The state contains a well formated response');
-                assert.equal(_.filter(state.RESPONSE.list.boolean).length, 1, '1 partition is selected');
-                assert.equal(state.RESPONSE.list.boolean.length, 4, '4 partitions in the state');
+                assert.ok(_.isArray(state.RESPONSE.selection), 'The state contains a well formated response');
+                assert.equal(_.filter(state.RESPONSE.selection).length, 1, '1 partition is selected');
+                assert.equal(state.RESPONSE.selection.length, 4, '4 partitions in the state');
 
                 QUnit.start();
             })
@@ -190,7 +190,7 @@ define([
             .render($container);
     });
 
-    QUnit.asyncTest('set state', 10, function(assert){
+    QUnit.asyncTest('set state', 16, function(assert){
         var $container = $('#' + fixtureContainerId);
 
         assert.equal($container.length, 1, 'the item container exists');
@@ -201,32 +201,43 @@ define([
                 assert.ok(false, err);
             })
             .on('render', function(){
-                var $partitions,
+                var self = this,
+                    $partitions,
+                    responses,
                     state;
 
                 assert.equal($container.find('.qti-customInteraction .fractionModelInteraction').length, 1, 'the custom interaction is a fraction model');
 
                 state = this.getState();
                 assert.ok(typeof state === 'object', 'The state is an object');
-                assert.ok(_.isArray(state.RESPONSE.list.boolean), 'The state contains a well formated response');
-                assert.equal(_.filter(state.RESPONSE.list.boolean).length, 0, 'No selected partition by default');
-                assert.equal(state.RESPONSE.list.boolean.length, 2, 'There is 2 partitions by default');
+                assert.ok(_.isArray(state.RESPONSE.selection), 'The state contains a well formated response');
+                assert.equal(_.filter(state.RESPONSE.selection).length, 0, 'No selected partition by default');
+                assert.equal(state.RESPONSE.selection.length, 2, 'There is 2 partitions by default');
+
+                responses = this.getResponses();
+                assert.ok(typeof responses === 'object', 'The responses is an object');
+                assert.ok(responses.RESPONSE.base && responses.RESPONSE.base.string, 'The state contains a well formated response');
+                assert.equal(responses.RESPONSE.base.string, '0/2', 'No selected partition by default');
 
                 $partitions = $('.fractionModelInteraction .shape-container svg > path', $container);
                 assert.equal($partitions.length, 2, 'There is 2 partitions in the canvas');
 
                 this.setState({
                     RESPONSE : {
-                        list : {
-                            boolean : [false, true, false, true, true]
-                        }
+                        selection : [false, true, false, true, true]
                     }
                  });
 
                 _.defer(function(){
+
                     $partitions = $('.fractionModelInteraction .shape-container svg > path', $container);
-                    assert.equal($partitions.length, 5, 'There is 2 partitions in the canvas');
+                    assert.equal($partitions.length, 5, 'There is 5 partitions in the canvas');
                     assert.equal($partitions.filter('[fill="#ff0000"]').length, 3, 'There is 3 selected partitions in the canvas');
+
+                    responses = self.getResponses();
+                    assert.ok(typeof responses === 'object', 'The responses is an object');
+                    assert.ok(responses.RESPONSE.base && responses.RESPONSE.base.string, 'The state contains a well formated response');
+                    assert.equal(responses.RESPONSE.base.string, '3/5', 'No selected partition by default');
 
                     QUnit.start();
                 });

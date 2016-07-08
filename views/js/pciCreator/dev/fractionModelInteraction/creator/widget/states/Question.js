@@ -12,8 +12,15 @@ define([
 
     var StateQuestion = stateFactory.extend(Question, function(){
 
-        var interaction = this.widget.element,
-            $container = this.widget.$container;
+        var interaction = this.widget.element;
+        var $container = this.widget.$container;
+        var changeCallback = function changeCallback(selection){
+            var selected = _.values(selection);
+            interaction.prop('selectedPartitionsInit', _.filter(selected).length);
+            interaction.prop('partitionInit', selected.length);
+            interaction.prop('selectedPartitions', JSON.stringify(selected));
+            interaction.triggerPci('configchange', [_.clone(interaction.properties)]);
+        };
 
         //inti color pickers
         this.initColorPickers();
@@ -37,22 +44,16 @@ define([
 
         //init event listeners
         interaction
-          .onPci('changepartition', function(response){
-            if(response && response.base && response.base.directedPair){
-                interaction.prop('selectedPartitionsInit', response.base.directedPair[0]);
-                interaction.prop('partitionInit', response.base.directedPair[1]);
-            }
-          })
-          .onPci('selectedpartition', function(selectedPartitions){
-            var selected = _.values(selectedPartitions);
-            interaction.prop('selectedPartitionsInit', _.filter(selected).length);
-            interaction.prop('selectedPartitions', JSON.stringify(selected));
-          });
+            .onPci('changepartition', changeCallback)
+            .onPci('selectedpartition', changeCallback);
 
     }, function(){
 
+        var interaction = this.widget.element;
+
         //remove event listeners
-        this.widget.element.offPci('.question');
+        interaction.offPci('changepartition');
+        interaction.offPci('selectedpartition');
 
         //destroy editors
         simpleEditor.destroy(this.widget.$container);

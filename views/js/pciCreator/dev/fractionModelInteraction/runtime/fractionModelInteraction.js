@@ -133,7 +133,7 @@ define([
                     var newState = _this.getState();
                     newState.push(false);
                     _this.setState(newState);
-                    $container.trigger('changeResponse.fraction');
+                    $container.trigger('statechange.fraction');
                 }
 
             }).on('click.fraction', 'button.fewer', function(){
@@ -143,7 +143,7 @@ define([
                     var newState = _this.getState();
                     newState.pop();
                     _this.setState(newState);
-                    $container.trigger('changeResponse.fraction');
+                    $container.trigger('statechange.fraction');
                 }
 
             }).on('click.fraction', 'button.reset', function(){
@@ -152,15 +152,15 @@ define([
                 _this.setState(_this.config.selectedPartitions);
                 $container.trigger('reset.fraction');
 
-            }).on('changeResponse.fraction reset.fraction', function(event){
+            }).on('statechange.fraction reset.fraction', function(event){
 
                 // Redraw the pieChart
                 canvas.clear();
                 canvas.pieChart(_this.getState(), _this.config, $container);
 
                 //communicate the response change to the interaction
-                _this.trigger('changepartition', [_this.getResponse()]);
-                _this.trigger('responseChange');
+                _this.trigger('changepartition', [_this.getState()]);
+                _this.trigger('responseChange', [_this.getResponse()]);
 
             }).on('select_slice.pieChart unselect_slice.pieChart', function(e, selectedPartitions, totalSelected){
 
@@ -172,12 +172,11 @@ define([
 
                 //communicate the state change to the interaction
                 _this.trigger('selectedpartition', [selectedPartitions]);
-                _this.trigger('responseChange');
+                _this.trigger('responseChange', [_this.getResponse()]);
             });
 
             //listening to dynamic configuration change
             this.on('configchange', function(config){
-
                 _this.config = config;
                 _this.setFractionModel(_this.config.selectedPartitionsInit, _this.config.partitionInit);
                 _this.setState(_this.config.selectedPartitions);
@@ -195,10 +194,20 @@ define([
          * @param {Object} response
          */
         setResponse : function(response){
-            var i, selected;
-            if(response && response.list && _.isArray(response.list.boolean)){
-                this.setState(response.list.boolean);
-                $(this.dom).trigger('changeResponse.fraction');
+            var i, parts, state = [], numerator, denominator, value = '0';
+
+            if(response && response.base && response.base.string){
+                value = response.base.string;
+
+                parts = value.split('/');
+                numerator = parseInt(parts[0]);
+                denominator = parseInt(parts[1] || 0);
+                for(i = 0; i< denominator; i++){
+                    state.push(i<numerator);
+                }
+
+                this.setState(state);
+                $(this.dom).trigger('statechange.fraction');
             }
         },
         /**
@@ -209,9 +218,12 @@ define([
          * @returns {Object}
          */
         getResponse : function(){
+            var selection = _.values(this.getState());
+            var numerator = _.filter(selection).length;
+            var denominator = selection.length;
             return {
-                list : {
-                    'boolean' : _.values(this.getState())
+                base : {
+                    string : numerator + '/' + denominator
                 }
             };
         },
@@ -224,7 +236,7 @@ define([
         resetResponse : function(){
             this.setFractionModel(this.config.selectedPartitionsInit, this.config.partitionInit);
             this.setState(this.config.selectedPartitions);
-            $(this.dom).trigger('changeResponse.fraction');
+            $(this.dom).trigger('statechange.fraction');
         },
         /**
          * Reverse operation performed by render()
@@ -245,7 +257,10 @@ define([
          * @param {Object} serializedState - json format
          */
         setSerializedState : function(state){
-            this.setResponse(state);
+            if(state && _.isArray(state.selection)){
+                this.setState(state.selection);
+                $(this.dom).trigger('statechange.fraction');
+            }
         },
         /**
          * Get the current state of the interaction as a string.
@@ -255,7 +270,9 @@ define([
          * @returns {Object} json format
          */
         getSerializedState : function(){
-            return this.getResponse();
+            return {
+                selection : _.values(this.getState())
+            }
         }
     };
 
