@@ -2,8 +2,10 @@ define([
     'lodash',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'fractionModelInteraction/creator/widget/Widget',
-    'tpl!fractionModelInteraction/creator/tpl/markup'
-], function(_, ciRegistry, Widget, markupTpl){
+    'tpl!fractionModelInteraction/creator/tpl/markup',
+    'tpl!fractionModelInteraction/creator/tpl/responseCondition',
+    'parccTei/pciCreator/helper/responseCondition'
+], function(_, ciRegistry, Widget, markupTpl, rcTpl, responseCondition){
     'use strict';
 
     var _typeIdentifier = 'fractionModelInteraction';
@@ -54,7 +56,14 @@ define([
          * @returns {Object}
          */
         afterCreate : function(pci){
-            //do some stuff
+            //debugger;
+            //turn into custom rp and substitute the resp cond
+            responseCondition.replace(pci, rcTpl({
+                responseIdentifier : pci.attr('responseIdentifier'),
+                score : 1
+            }), {
+                responseIdentifierCount : 2
+            });
         },
         /**
          * (required) Gives the qti pci xml template
