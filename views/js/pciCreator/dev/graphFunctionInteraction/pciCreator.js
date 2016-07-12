@@ -2,8 +2,10 @@ define([
     'lodash',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'graphFunctionInteraction/creator/widget/Widget',
-    'tpl!graphFunctionInteraction/creator/tpl/markup'
-], function(_, ciRegistry, Widget, markupTpl){
+    'tpl!graphFunctionInteraction/creator/tpl/markup',
+    'tpl!graphFunctionInteraction/creator/tpl/responseCondition',
+    'parccTei/pciCreator/helper/responseCondition'
+], function(_, ciRegistry, Widget, markupTpl, rcTpl, responseCondition){
 
     var _typeIdentifier = 'graphFunctionInteraction';
 
@@ -49,7 +51,19 @@ define([
          * @returns {Object}
          */
         afterCreate : function(pci){
-            //do some stuff
+
+            //turn into custom rp and substitute the resp cond
+            responseCondition.replace(pci, rcTpl({
+                responseIdentifier : pci.attr('responseIdentifier'),
+                score : 1
+            }));
+
+            //set default (and fixed) correct "numberPointsRequired" value
+            pci.getResponseDeclaration().correctResponse = [{
+                fieldIdentifier : 'numberPointsRequired',
+                baseType : 'integer',
+                value : 2//it is presently always 2
+            }];
         },
         /**
          * (required) Gives the qti pci xml template 

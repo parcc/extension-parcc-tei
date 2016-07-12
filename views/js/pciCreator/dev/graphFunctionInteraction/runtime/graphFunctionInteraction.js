@@ -62,6 +62,29 @@ define([
         return paper;
     }
 
+    /**
+     * Extract points from the string format e.g ["3 40", "4.5 55"]
+     * Into proper internal format [{x:3, y:40}, {x:4.5, y:55}]
+     *
+     * @param stringPoints
+     * @returns {Array}
+     */
+    function extractPointsFromString(stringPoints){
+        var points = [];
+        _.each(stringPoints, function(strPoint){
+            var pt = strPoint.split(/\s+/);
+            if(pt.length === 2){
+                points.push({
+                    x : pt[0],
+                    y : pt[1]
+                });
+            }else{
+                return false;//stop on first wrong point format
+            }
+        });
+        return points;
+    }
+
     var graphFunctionInteraction = {
         id : -1,
         getTypeIdentifier : function(){
@@ -175,9 +198,10 @@ define([
                 activateButton($shapeControls.children('.available:first'));
             }
 
-            function activateButton($button){
+            function activateButton($button, preventDefaultPlot){
 
                 if(typeof $button === 'string'){
+                    console.log($button);
                     $button = $shapeControls.find('[name=' + $button + ']');
                 }
 
@@ -187,8 +211,9 @@ define([
                     $button.removeClass('btn-info').addClass('btn-success');
                     $button.siblings('button').removeClass('btn-success').addClass('btn-info');
 
-                    //always replot the default
-                    plotDefault();
+                    if(!preventDefaultPlot){
+                        plotDefault();
+                    }
                 }
             }
 
@@ -315,7 +340,7 @@ define([
                     return {
                         point1 : point1.getCartesianCoord(1),
                         point2 : point2.getCartesianCoord(1),
-                        mathFunction : mathFunction
+                        mathFunction : mathFunction.replace('plot', '').toLowerCase()
                     };
                 }
             };
@@ -335,9 +360,14 @@ define([
             this.setRawResponse = function setRawResponse(mathFn, point1, point2){
                 clearPoint();
                 clearPlot();
-                mathFunction = mathFn;
-                addPoint(point1.x, point1.y, true);
-                addPoint(point2.x, point2.y, true);
+                mathFunction = mathFn||mathFunctions[0];
+                activateButton(mathFunction, true);
+                if(point1 && point1.x && point1.y){
+                    addPoint(point1.x, point1.y, true);
+                }
+                if(point2 && point2.x && point2.y){
+                    addPoint(point2.x, point2.y, true);
+                }
                 plot();
             };
             
@@ -388,7 +418,8 @@ define([
          * @param {Object} response
          */
         setResponse : function(response){
-            
+
+            var points;
             if(response &&
                 _.isArray(response.record) &&
                 response.record[0] &&
@@ -398,19 +429,12 @@ define([
                 response.record[0].base.string &&
                 response.record[1].name === 'points' &&
                 response.record[1].list &&
-                response.record[1].list &&
-                _.isArray(response.record[1].list.point)){
-                
-                var point1 = response.record[1].list.point[0];
-                var point2 = response.record[1].list.point[1];
-                
-                this.setRawResponse(response.record[0].base.string, {
-                    x : point1[0],
-                    y : point1[1]
-                },{
-                    x : point2[0],
-                    y : point2[1]
-                });
+                _.isArray(response.record[1].list.string)
+            ){
+
+                points = extractPointsFromString(response.record[1].list.string);
+                console.log(points);
+                this.setRawResponse(response.record[0].base.string, points.shift(),points.shift());
             }
         },
         /**
@@ -433,9 +457,9 @@ define([
                         {
                             name : 'points',
                             list : {
-                                point : [
-                                    [raw.point1.x, raw.point1.y],
-                                    [raw.point2.x, raw.point2.y]
+                                string : [
+                                    raw.point1.x+' '+raw.point1.y,
+                                    raw.point2.x+' '+raw.point2.y
                                 ]
                             }
                         }
@@ -451,7 +475,7 @@ define([
          * @param {Object} interaction
          */
         resetResponse : function(){
-            //not implemented
+            this.setRawResponse();
         },
         /**
          * Reverse operation performed by render()

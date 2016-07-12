@@ -67,59 +67,7 @@ define([
                 {
                     name : 'points',
                     list : {
-                        point : [
-                            [-2, -8],
-                            [6, -1]
-                        ]
-                    }
-                }
-            ]
-        };
-        var $container = $('#' + fixtureContainerId);
-        assert.equal($container.length, 1, 'the item container exists');
-        assert.equal($container.children().length, 0, 'the container has no children');
-
-        runner = qtiItemRunner('qti', fractionData)
-            .on('render', function (){
-                
-                var interaction, 
-                    interactions = this._item.getInteractions();
-                    
-                assert.equal(_.size(interactions), 1, 'one interaction');
-                interaction = interactions[0];
-                
-                //set the response
-                interaction.setResponse(response);
-            })
-            .on('responsechange', function (res){
-                
-                QUnit.start();
-            
-                assert.ok(_.isPlainObject(res), 'response changed');
-                assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
-                assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
-            })
-            .assets(strategies)
-            .init()
-            .render($container);
-
-    });
-    
-    QUnit.asyncTest('state', function (assert){
-        
-        var response = {
-            record : [
-                {
-                    name : 'functionGraphType',
-                    base : {'string' : 'plotLinear'}
-                },
-                {
-                    name : 'points',
-                    list : {
-                        point : [
-                            [-2, -8],
-                            [6, -1]
-                        ]
+                        string : ['-2 -8', '6 1']
                     }
                 }
             ]
@@ -140,6 +88,48 @@ define([
                 QUnit.start();
                 
                 //if the state has been set, the response should have changed
+                assert.ok(_.isPlainObject(res), 'response changed');
+                assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
+                assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
+            })
+            .assets(strategies)
+            .init()
+            .render($container);
+
+    });
+
+    QUnit.asyncTest('state', function (assert){
+
+        var response = {
+            record : [
+                {
+                    name : 'functionGraphType',
+                    base : {'string' : 'plotLinear'}
+                },
+                {
+                    name : 'points',
+                    list : {
+                        string : ['-2 -8', '6 1']
+                    }
+                }
+            ]
+        };
+        var state = {RESPONSE : response};
+        var $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        runner = qtiItemRunner('qti', fractionData)
+            .on('render', function (){
+
+                this.setState(state);
+                assert.deepEqual(this.getState(), state, 'state set/get ok');
+            })
+            .on('statechange', function (res){
+
+                QUnit.start();
+
+                //if the state has been set, the state should have changed
                 assert.ok(_.isPlainObject(res), 'response changed');
                 assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
                 assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
