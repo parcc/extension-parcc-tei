@@ -83,45 +83,6 @@ define([
                 setCorrectResponseRecordEntry(responseDeclaration, 'vertex', 'string', response.record[1].list.string[0] || '');
             }
         });
-
-        return;
-        //test...
-        setCorrectResponseRecordEntry(responseDeclaration, 'functionGraphType', 'string', 'abs');
-        setCorrectResponseRecordEntry(responseDeclaration, 'points', 'string', '0 1, -1 3');
-        setCorrectResponseRecordEntry(responseDeclaration, 'points', 'string', '0 1, -1 3, x x');
-        console.log(responseDeclaration.correctResponse);
-
-        return;
-
-
-
-        var correct = responseDeclaration.correctResponse;
-        var points = _.find(correct, {fieldIdentifier : 'points'});
-        console.log(correct);
-        console.log(points);
-        points.value += ',9 9';
-        console.log(correct);
-        return;
-
-        //find sample points:
-        //_.find()
-
-        //set correct response as defined in the model
-        interaction.setResponse({
-            base : {
-                string : correct
-            }
-        });
-
-        //init editing widget event listener
-        interaction.onPci('responseChange', function(response){
-
-            if(response && response.base && response.base.string){
-                var correctResponse = response.base.string
-                responseDeclaration.setCorrect(correctResponse);
-            }
-        });
-
     }
     
     function destroyResponseDeclarationWidget(widget){
@@ -135,7 +96,7 @@ define([
         var recordEntry = _.find(record, {fieldIdentifier : fieldIdentifier});
         if(!recordEntry){
             recordEntry = {fieldIdentifier : fieldIdentifier};
-            responseDeclaration.correctResponse.push(recordEntry);
+            responseDeclaration.correctResponse[fieldIdentifier] = recordEntry;
         }
         recordEntry.baseType = baseType;
         recordEntry.value = value;

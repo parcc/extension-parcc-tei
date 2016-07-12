@@ -62,7 +62,7 @@ define([
             record : [
                 {
                     name : 'functionGraphType',
-                    base : {'string' : 'plotLinear'}
+                    base : {'string' : 'linear'}
                 },
                 {
                     name : 'points',
@@ -104,7 +104,7 @@ define([
             record : [
                 {
                     name : 'functionGraphType',
-                    base : {'string' : 'plotLinear'}
+                    base : {'string' : 'linear'}
                 },
                 {
                     name : 'points',
