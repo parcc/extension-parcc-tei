@@ -47,6 +47,8 @@ define([
             }
         });
 
+        //remove the response processing mode selector as this interaction only supports custom rp
+        widget.$responseForm.find('select[name="template"]').closest('.panel').remove();
     }
 
     /**

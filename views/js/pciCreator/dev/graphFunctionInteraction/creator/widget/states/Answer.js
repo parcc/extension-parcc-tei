@@ -91,6 +91,9 @@ define([
                 setCorrectResponseRecordEntry(responseDeclaration, 'vertex', 'string', response.record[1].list.string[0] || '');
             }
         });
+
+        //remove the response processing mode selector as this interaction only supports custom rp
+        widget.$responseForm.find('select[name="template"]').closest('.panel').remove();
     }
 
     /**
