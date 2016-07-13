@@ -203,7 +203,7 @@ define([
                             fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
                         // Create the first point or the second or replace the second according the rules defined by the client
-                        if(points.length < 2){//&&areCoordsValid(fx, fy)
+                        if(points.length < 2 && areCoordsValid(fx, fy)){
                             addPoint(fx, fy);
                             if(points.length === 2){
                                 // pair ready : plot the graph

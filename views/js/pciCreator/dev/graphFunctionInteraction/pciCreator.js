@@ -40,7 +40,6 @@ define([
                 "draggable": true,
                 "graphTitle": null,
                 "graphTitleRequired": false,
-                "graphType": "line",
                 "plotColor": "#0000FF",
                 "plotThickness": 6,
                 "pointColor": "#0000FF",

@@ -13,25 +13,6 @@
 <hr/>
 
 <div class="panel">
-    <h3>{{__ "Graph type"}}</h3>
-    <div class="panel">
-        <label class="smaller-prompt">
-            <input type="radio" name="graphType" value="line" {{#unless scatterPlot}}checked{{/unless}} />
-            <span class="icon-radio"></span>
-            {{__ 'Line'}}
-        </label>
-        <br />
-        <label class="smaller-prompt">
-            <input type="radio" name="graphType" value="scatterPlot" {{#if scatterPlot}}checked{{/if}} />
-            <span class="icon-radio"></span>
-            {{__ 'Scatterplot'}}
-        </label>
-    </div>
-</div>
-
-<hr/>
-
-<div class="panel">
     <h3>{{__ "Graph properties"}}</h3>
     <div class="panel">
         <label for="graphTitle">{{__ "Title"}}</label>
@@ -48,11 +29,6 @@
         <label for="height" class="spinner">{{__ "height"}}</label>
         <input name="height" value="{{height}}" data-increment="1" data-min="1" type="text" /><br />
     </div>
-    <label>
-        <input name="draggable" type="checkbox" {{#if draggable}}checked="checked"{{/if}}/>
-        <span class="icon-checkbox"></span>
-        {{__ "Draggable"}}
-    </label>
 </div>
 
 <hr/>
