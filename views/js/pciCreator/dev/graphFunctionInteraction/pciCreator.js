@@ -36,12 +36,39 @@ define([
         getDefaultProperties : function(pci){
             return {
                 graphs : 'linear,absolute,quadratic,exponential,logarithmic,cosine,tangent',
-                xMin : -10,
-                xMax : 10,
-                yMin : -10,
-                yMax : 10,
-                graphColor : '#bb1a2a',
-                graphWidth : 3
+
+                "draggable": true,
+                "graphTitle": null,
+                "graphTitleRequired": false,
+                "graphType": "line",
+                "plotColor": "#0000FF",
+                "plotThickness": 6,
+                "pointColor": "#0000FF",
+                "pointGlow": true,
+                "pointRadius": 8,
+                "weight": 1,
+                "width": 450,
+                "height": 450,
+
+                "xAllowOuter": true,
+                "xBorderWeight": 3,
+                "xStep": 1,
+                "xLabel": null,
+                "xTitle": null,
+                "xStart": -10,
+                "xEnd": 10,
+                "xSubStep": 2,
+                "xWeight": 3,
+
+                "yAllowOuter": true,
+                "yBorderWeight": 3,
+                "yStep": 1,
+                "yLabel": null,
+                "yTitle": null,
+                "yStart": -10,
+                "yEnd": 10,
+                "ySubStep": 2,
+                "yWeight": 3
             };
         },
         /**

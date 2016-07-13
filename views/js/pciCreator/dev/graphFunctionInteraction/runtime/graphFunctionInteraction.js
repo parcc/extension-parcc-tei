@@ -20,47 +20,105 @@ define([
 
     'use strict';
 
-    function buildGridConfig(rawConfig){
+    var buildGridConfig = function buildGridConfig(rawConfig){
 
-        var _color = rawConfig.graphColor || '#bb1a2a';
+        var getBoolean = function getBoolean(value, defaultValue) {
+                if (typeof(value) === "undefined") {
+                    return defaultValue;
+                } else {
+                    return (value === true || value === "true");
+                }
+            },
 
-        return {
-            x : {
-                start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
-                end : rawConfig.xMax === undefined ? 10 : parseInt(rawConfig.xMax),
-                unit : 20
-            },
-            y : {
-                //the y-axis is reversed 
-                start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
-                end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
-                unit : 20
-            },
-            plot : {
-                color : _color,
-                thickness : rawConfig.graphWidth || 3
-            },
-            point : {
-                color : _color,
-                radius : 10
-            },
-            padding : 20
-        };
-    }
+            radix = 10,
+            xWeight = parseInt(rawConfig.xWeight, radix),
+            xBorderWeight = parseInt(rawConfig.xBorderWeight, radix),
+            yWeight = parseInt(rawConfig.yWeight, radix),
+            yBorderWeight = parseInt(rawConfig.yBorderWeight, radix),
 
-    function createCanvas($container, config){
+            gridConfig = {
+                // PCI config
+                draggable: getBoolean(rawConfig.draggable, true),
+                graphType: rawConfig.graphType, // scatterPlot or line
+                //maxPoints: parseInt(rawConfig.maxPoints, radix),
+                segment: getBoolean(rawConfig.segment, true), // draw only segments between points
 
-        var padding = 2 * config.padding;
-        var paper = scaleRaphael(
-            $('.shape-container', $container)[0],
-            (config.x.end - config.x.start) * config.x.unit + padding,
-            (config.y.end - config.y.start) * config.y.unit + padding
+                // Gridfactory config
+                graphTitle: rawConfig.graphTitle,
+                graphTitleRequired : getBoolean(rawConfig.graphTitleRequired, false),
+                weight: parseInt(rawConfig.weight, radix), // grid weight
+                width: parseInt(rawConfig.width, radix),
+                height: parseInt(rawConfig.height, radix),
+
+                x : {
+                    start : parseInt(rawConfig.xStart, radix),
+                    end : parseInt(rawConfig.xEnd, radix),
+                    label : rawConfig.xLabel,
+                    title : rawConfig.xTitle,
+                    step: parseInt(rawConfig.xStep, radix),
+                    subStep : parseInt(rawConfig.xSubStep, radix),
+                    weight : (xWeight > 0) ? xWeight : xBorderWeight,
+                    allowOuter : getBoolean(rawConfig.xAllowOuter, true)
+                },
+                y : {
+                    start : -1 * parseInt(rawConfig.yEnd, radix), // y-axis is reversed
+                    end : -1 * parseInt(rawConfig.yStart, radix), // y-axis is reversed
+                    label : rawConfig.yLabel,
+                    title : rawConfig.yTitle,
+                    step: parseInt(rawConfig.yStep, radix),
+                    subStep : parseInt(rawConfig.ySubStep, radix),
+                    weight : (yWeight > 0) ? yWeight : yBorderWeight,
+                    allowOuter : getBoolean(rawConfig.yAllowOuter, true)
+                },
+
+                // PlotFactory config
+                plot : {
+                    color: rawConfig.plotColor,
+                    thickness: parseInt(rawConfig.plotThickness, radix)
+                },
+
+                // PointFactory config
+                point : {
+                    color: rawConfig.pointColor,
+                    glow : getBoolean(rawConfig.pointGlow, true),
+                    radius: parseInt(rawConfig.pointRadius, radix)
+                }
+            };
+
+        // overide invalid values with safe defaults
+        if (gridConfig.x.step < 1) {
+            gridConfig.x.step = 1;
+        }
+        if (gridConfig.y.step < 1) {
+            gridConfig.y.step = 1;
+        }
+        if (gridConfig.x.subStep < 1) {
+            gridConfig.x.subStep = 1;
+        }
+        if (gridConfig.y.subStep < 1) {
+            gridConfig.y.subStep = 1;
+        }
+
+        if ((gridConfig.x.weight > 0) === false) {
+            gridConfig.x.weight = 3;
+        }
+        if ((gridConfig.y.weight > 0) === false) {
+            gridConfig.y.weight = 3;
+        }
+        return gridConfig;
+    };
+
+    var createCanvas = function createCanvas($container, config){
+
+        var paperSize = gridFactory.getPaperSize(config),
+            paper = scaleRaphael(
+                $('.shape-container', $container)[0],
+                paperSize.width,
+                paperSize.height
             );
 
-        //@todo make it responsive
-
         return paper;
-    }
+    };
 
     /**
      * Extract points from the string format e.g ["3 40", "4.5 55"]
@@ -108,7 +166,7 @@ define([
             var $container = $(dom);
             var mathFunctions = config.graphs.split(',');
             var $shapeControls = $container.find('.shape-controls');
-            var _this = this,
+            var self = this,
                 paper,
                 grid,
                 points = [],
@@ -144,8 +202,8 @@ define([
                             fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
                             fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
-                        // Create the first point or the second or replace the second according the rules defined by the client                  
-                        if(points.length < 2){
+                        // Create the first point or the second or replace the second according the rules defined by the client
+                        if(points.length < 2){//&&areCoordsValid(fx, fy)
                             addPoint(fx, fy);
                             if(points.length === 2){
                                 // pair ready : plot the graph
@@ -237,30 +295,54 @@ define([
                 if(point1 && point2 && mathFunction && plotFactory[mathFunction]){
                     clearPlot();
                     path = plotFactory[mathFunction](point1, point2);
-                    _this.trigger('responseChange', [_this.getResponse()]);
+                    self.trigger('responseChange', [self.getResponse()]);
                 }
             }
 
-            function addPoint(fx, fy, cartesian){
-                
-                 var gridBBox, newPoint, pointConfig;
-                 
-                if(grid){
-                    
+            function areCoordsValid(x, y, cartesian) {
+                var gridBBox, snappedPoint, xOnOuter, yOnOuter;
+
+                if (cartesian) {
+                    xOnOuter = (x === self.gridConfig.x.start || x === self.gridConfig.x.end);
+                    yOnOuter = (y === self.gridConfig.y.start || y === self.gridConfig.y.end);
+                } else {
                     gridBBox = grid.getBBox();
+                    snappedPoint = grid.snap(x, y);
+                    xOnOuter = (snappedPoint[0] === gridBBox.x || snappedPoint[0] === gridBBox.x2);
+                    yOnOuter = (snappedPoint[1] === gridBBox.y || snappedPoint[1] === gridBBox.y2);
+                }
+                return !
+                    ((self.gridConfig.x.allowOuter === false && xOnOuter) ||
+                    (self.gridConfig.y.allowOuter === false && yOnOuter));
+            }
+
+            function addPoint(fx, fy, cartesian){
+                var gridBBox, newPoint, pointConfig, draggableArea, subStepSizes;
+
+                if(grid && areCoordsValid(fx, fy, cartesian)){
+
+                    gridBBox = grid.getBBox();
+                    subStepSizes = grid.getSubStepSizes();
+
+                    draggableArea = {
+                        xMin: (self.gridConfig.x.allowOuter) ? gridBBox.x  : gridBBox.x  + subStepSizes.x,
+                        xMax: (self.gridConfig.x.allowOuter) ? gridBBox.x2 : gridBBox.x2 - subStepSizes.x,
+                        yMin: (self.gridConfig.y.allowOuter) ? gridBBox.y  : gridBBox.y  + subStepSizes.y,
+                        yMax: (self.gridConfig.y.allowOuter) ? gridBBox.y2 : gridBBox.y2 - subStepSizes.y
+                    };
 
                     pointConfig = _.defaults({
                         x : fx,
                         y : fy,
-                        xMin : gridBBox.x,
-                        xMax : gridBBox.x2,
-                        yMin : gridBBox.y,
-                        yMax : gridBBox.y2,
+                        xMin : draggableArea.xMin,
+                        xMax : draggableArea.xMax,
+                        yMin : draggableArea.yMin,
+                        yMax : draggableArea.yMax,
                         on : {
                             dragStart : clearPlot,
                             dragStop : plot
                         }
-                    }, _this.gridConfig.point);
+                    }, self.gridConfig.point);
 
                     newPoint = pointFactory(paper, grid, pointConfig);
                     if(cartesian){
@@ -270,15 +352,14 @@ define([
                     newPoint.drag();
                     points.push(newPoint);
                 }
-                
 
                 return newPoint;
             }
 
             function getGraphOrigin(){
 
-                var _y = _this.gridConfig.y,
-                    _x = _this.gridConfig.x,
+                var _y = self.gridConfig.y,
+                    _x = self.gridConfig.x,
                     x0, y0;
 
                 if((_y.start < 0) && (_y.end <= 0)){
@@ -386,11 +467,27 @@ define([
             });
 
             /**
-             * Add event listening fo rdynamic configuration change
+             * Add event listening for dynamic configuration change
              */
 
+            // this event maintains state...
+            self.on('configChange', function(newRawConfig){
+                var state = self.getRawResponse();
+                self.config = newRawConfig;
+                self.gridConfig = buildGridConfig(newRawConfig);
+                initGrid($container, self.gridConfig);
+                self.setRawResponse(state);
+            });
 
-            _this.on('functionschange', function(graphs){
+            // ...this one doesn't!
+            self.on('gridChange', function(newRawConfig){
+                self.config = newRawConfig;
+                self.gridConfig = buildGridConfig(newRawConfig);
+                initGrid($container, self.gridConfig);
+                plotDefault();
+            });
+
+            self.on('functionsChange', function(graphs){
 
                 //reset selected graph
                 mathFunction = null;
@@ -398,14 +495,6 @@ define([
                 //update list of available graph types
                 mathFunctions = graphs;
                 showControl(mathFunctions);
-                plotDefault();
-            });
-
-            _this.on('gridchange', function(config){
-                //the configuration of the gird, point or line have changed:
-                _this.config = config;
-                _this.gridConfig = buildGridConfig(config);
-                initGrid($container, _this.gridConfig);
                 plotDefault();
             });
         },
