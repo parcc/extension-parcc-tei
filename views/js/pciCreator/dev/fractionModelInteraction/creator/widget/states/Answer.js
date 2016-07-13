@@ -3,9 +3,7 @@ define([
     'jquery',
     'i18n',
     'taoQtiItem/qtiCreator/widgets/states/factory',
-    'taoQtiItem/qtiCreator/widgets/interactions/states/Answer',
-    'taoQtiItem/qtiCreator/widgets/helpers/formElement',
-    'taoQtiItem/qtiCreator/widgets/interactions/helpers/answerState'
+    'taoQtiItem/qtiCreator/widgets/interactions/states/Answer'
 ], function(_, $, __, stateFactory, Answer){
 
     var StateAnswer = stateFactory.extend(Answer, function(){
