@@ -201,7 +201,6 @@ define([
             function activateButton($button, preventDefaultPlot){
 
                 if(typeof $button === 'string'){
-                    console.log($button);
                     $button = $shapeControls.find('[name=' + $button + ']');
                 }
 
@@ -431,9 +430,7 @@ define([
                 response.record[1].list &&
                 _.isArray(response.record[1].list.string)
             ){
-
                 points = extractPointsFromString(response.record[1].list.string);
-                console.log(points);
                 this.setRawResponse(response.record[0].base.string, points.shift(),points.shift());
             }
         },

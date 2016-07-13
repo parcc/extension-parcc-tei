@@ -16,7 +16,12 @@ define([
         
         destroyResponseDeclarationWidget(this.widget);
     });
-    
+
+    /**
+     * Set the correct response to the state of interaction and set the correct response listener
+     *
+     * @param widget
+     */
     function initResponseDeclarationWidget(widget){
         
         var interaction = widget.element;
@@ -43,7 +48,12 @@ define([
         });
 
     }
-    
+
+    /**
+     * Restore default interaction state and remove listeners
+     *
+     * @param widget
+     */
     function destroyResponseDeclarationWidget(widget){
         var interaction = widget.element;
         interaction.offPci('responseChange');

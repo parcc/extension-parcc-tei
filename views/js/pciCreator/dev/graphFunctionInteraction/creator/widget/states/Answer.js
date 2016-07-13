@@ -17,6 +17,11 @@ define([
         destroyResponseDeclarationWidget(this.widget);
     });
 
+    /**
+     * Init the form to edit the response declaration option
+     *
+     * @param widget
+     */
     function initResponseDeclarationForm(widget){
 
         var responseDeclaration = widget.element.getResponseDeclaration();
@@ -36,6 +41,11 @@ define([
         });
     }
 
+    /**
+     * Set the correct response to the state of interaction and set the correct response listener
+     *
+     * @param widget
+     */
     function initResponseDeclarationWidget(widget){
         
         var interaction = widget.element;
@@ -65,8 +75,6 @@ define([
 
         //init editing widget event listener
         interaction.onPci('responseChange', function(response){
-
-            console.log('responseChange', response);
             if(response &&
                 _.isArray(response.record) &&
                 response.record[0] &&
@@ -84,13 +92,26 @@ define([
             }
         });
     }
-    
+
+    /**
+     * Restore default interaction state and remove listeners
+     *
+     * @param widget
+     */
     function destroyResponseDeclarationWidget(widget){
         var interaction = widget.element;
         interaction.offPci('responseChange');
         interaction.resetResponse();
     }
 
+    /**
+     * Set an entry into the record typed correct response
+     *
+     * @param responseDeclaration
+     * @param fieldIdentifier
+     * @param baseType
+     * @param value
+     */
     function setCorrectResponseRecordEntry(responseDeclaration, fieldIdentifier, baseType, value){
         var record = responseDeclaration.correctResponse;
         var recordEntry = _.find(record, {fieldIdentifier : fieldIdentifier});
@@ -102,6 +123,13 @@ define([
         recordEntry.value = value;
     }
 
+    /**
+     * Get an entry from the record typed correct response
+     *
+     * @param responseDeclaration
+     * @param fieldIdentifier
+     * @returns {*}
+     */
     function getCorrectResponseRecordEntryValue(responseDeclaration, fieldIdentifier){
         var record = responseDeclaration.correctResponse;
         var recordEntry = _.find(record, {fieldIdentifier : fieldIdentifier});
