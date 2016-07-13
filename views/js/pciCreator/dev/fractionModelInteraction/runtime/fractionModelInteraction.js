@@ -128,7 +128,7 @@ define([
             // Catch click on more or less
             $container.on('click.fraction', 'button.more', function(){
 
-                if(denominator < config.partitionMax){
+                if(denominator < _this.config.partitionMax){
                     denominator += 1;
                     var newState = _this.getState();
                     newState.push(false);
@@ -138,7 +138,7 @@ define([
 
             }).on('click.fraction', 'button.fewer', function(){
 
-                if(denominator > config.partitionMin){
+                if(denominator > _this.config.partitionMin){
                     denominator -= 1;
                     var newState = _this.getState();
                     newState.pop();

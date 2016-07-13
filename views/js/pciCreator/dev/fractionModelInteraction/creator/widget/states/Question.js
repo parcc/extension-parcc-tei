@@ -87,14 +87,39 @@ define([
             partitionColor : interaction.prop('partitionColor'),
             outlineColor : interaction.prop('outlineColor'),
             outlineThickness : interaction.prop('outlineThickness'),
-            identifier : interaction.attr('responseIdentifier')
+            identifier : interaction.attr('responseIdentifier'),
+            partitionMin : interaction.prop('partitionMin'),
+            partitionMax : interaction.prop('partitionMax')
         }));
 
         //init form javascript
         formElement.initWidget($form);
 
-        //init data change callbacks
-        formElement.setChangeCallbacks($form, interaction, {
+        var partitionChangeCallbacks = formElement.getMinMaxAttributeCallbacks($form, 'partitionMin', 'partitionMax', {
+            allowNull : false,
+            updateCardinality : false,
+            attrMethodNames : {set : 'prop', remove : 'removeProp'},
+            callback : function(interaction, value, name){
+
+                var i;
+                var selected = JSON.parse(interaction.prop('selectedPartitions'));
+
+                interaction.prop(name, value);
+
+                //ensure that the selected partition is within range:
+                for(i = selected.length; i < interaction.prop('partitionMin'); i++){
+                    selected.push(false);
+                }
+                for(i = interaction.prop('partitionMax'); i < selected.length; i++){
+                    selected.pop();
+                }
+                interaction.prop('selectedPartitions', JSON.stringify(selected));
+
+                interaction.triggerPci('configchange', [_.clone(interaction.properties)]);
+            }
+        });
+
+        var callbacks = _.assign({
             radius : _getChangeCallback(true),
             selectedPartitionsColor : _getChangeCallback(true),
             partitionColor : _getChangeCallback(true),
@@ -104,7 +129,10 @@ define([
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             }
-        });
+        }, partitionChangeCallbacks);
+
+        //init data change callbacks
+        formElement.setChangeCallbacks($form, interaction, callbacks);
     };
 
     return StateQuestion;
