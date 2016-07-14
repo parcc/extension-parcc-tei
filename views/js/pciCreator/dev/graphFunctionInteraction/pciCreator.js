@@ -37,7 +37,6 @@ define([
             return {
                 graphs : 'linear,absolute,quadratic,exponential,logarithmic,cosine,tangent',
 
-                "draggable": true,
                 "graphTitle": null,
                 "graphTitleRequired": false,
                 "plotColor": "#0000FF",

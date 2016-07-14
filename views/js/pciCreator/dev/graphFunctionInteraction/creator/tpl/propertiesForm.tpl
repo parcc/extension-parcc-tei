@@ -23,7 +23,7 @@
         <span class="icon-checkbox"></span>
         {{__ "Display Title"}}
     </label>
-    <div class="panel creator-graphPointLineGraphInteraction-spinner">
+    <div class="panel creator-graphFunctionInteraction-spinner">
         <label for="width" class="spinner">{{__ "width"}}</label>
         <input name="width" value="{{width}}" data-increment="1" data-min="1" type="text" /><br />
         <label for="height" class="spinner">{{__ "height"}}</label>
@@ -37,7 +37,7 @@
     <h3>{{__ "X axis"}}</h3><br />
     <label>{{__ "Graduation"}}</label>
     <div class="panel subpanel">
-        <div class="panel creator-graphPointLineGraphInteraction-range">
+        <div class="panel creator-graphFunctionInteraction-range">
             <label for="xStart" class="spinner">{{__ "from"}}</label>
             <input name="xStart" value="{{xStart}}" data-increment="1" type="text" />
             <label for="xEnd" class="spinner">{{__ "to"}}</label>
@@ -57,7 +57,7 @@
         <label for="xLabel">{{__ "label"}}</label>
         <input name="xLabel" value="{{xLabel}}" type="text" />
     </div>
-    <div class="panel creator-graphPointLineGraphInteraction-spinner">
+    <div class="panel creator-graphFunctionInteraction-spinner">
         <label for="xSubStep" class="spinner">{{__ "sub step (snapping)"}}</label>
         <input name="xSubStep" value="{{xSubStep}}" data-increment="1" data-min="1" type="text" />
     </div>
@@ -75,11 +75,11 @@
     <br />
     <label>{{__ "Graduation"}}</label>
     <div class="panel subpanel">
-        <div class="panel creator-graphPointLineGraphInteraction-range">
-            <label for="yytart" class="spinner">{{__ "from"}}</label>
+        <div class="panel creator-graphFunctionInteraction-range">
+            <label for="yStart" class="spinner">{{__ "from"}}</label>
             <input name="yStart" value="{{yStart}}" data-increment="1" type="text" />
             <label for="yEnd" class="spinner">{{__ "to"}}</label>
-            <input name="xynd" value="{{yEnd}}" data-increment="1" type="text" /><br />
+            <input name="yEnd" value="{{yEnd}}" data-increment="1" type="text" /><br />
         </div>
         <div class="panel yStepValue">
             <label for="yStep" class="spinner">{{__ "by increment of"}}</label>
@@ -95,7 +95,7 @@
         <label for="yLabel">{{__ "label"}}</label>
         <input name="yLabel" value="{{yLabel}}" type="text" />
     </div>
-    <div class="panel creator-graphPointLineGraphInteraction-spinner">
+    <div class="panel creator-graphFunctionInteraction-spinner">
         <label for="ySubStep" class="spinner">{{__ "sub step (snapping)"}}</label>
         <input name="ySubStep" value="{{ySubStep}}" data-increment="1" data-min="1" type="text" />
     </div>
@@ -130,7 +130,7 @@
     </div>
 </div>
 <div class="panel">
-    <div class="panel  creator-graphPointLineGraphInteraction-spinner">
+    <div class="panel creator-graphFunctionInteraction-spinner">
         <label for="plotThickness" class="spinner">{{__ "Thickness"}}</label>
         <input name="plotThickness" value="{{plotThickness}}" data-increment="1" data-min="1" type="text" class="incrementer">
         <label for="pointRadius" class="spinner">{{__ "Point radius"}}</label>

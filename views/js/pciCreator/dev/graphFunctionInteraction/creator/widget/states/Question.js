@@ -78,9 +78,6 @@ define([
             graphTitle : interaction.prop('graphTitle'),
             graphTitleRequired : getBoolean(interaction.prop('graphTitleRequired'), true),
 
-            maxPoints : interaction.prop('maxPoints'),
-            draggable : getBoolean(interaction.prop('draggable'), true),
-            segment : getBoolean(interaction.prop('segment'), true),
             width : interaction.prop('width'),
             height : interaction.prop('height'),
             weight : interaction.prop('weight'),
@@ -132,7 +129,6 @@ define([
             // reset state
             width : graphGridChangeCallback,
             height : graphGridChangeCallback,
-            maxPoints : graphGridChangeCallback,
             xStep : graphGridChangeCallback,
             xSubStep : graphGridChangeCallback,
             yStep : graphGridChangeCallback,
@@ -143,8 +139,6 @@ define([
             // maintain state
             graphTitle : graphConfigChangeCallback,
             graphTitleRequired : graphConfigChangeCallback,
-            draggable : graphConfigChangeCallback,
-            segment : graphConfigChangeCallback,
             weight : graphConfigChangeCallback,
 
             xLabel : graphConfigChangeCallback,

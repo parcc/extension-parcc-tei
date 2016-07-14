@@ -38,10 +38,7 @@ define([
 
             gridConfig = {
                 // PCI config
-                draggable: getBoolean(rawConfig.draggable, true),
                 graphType: rawConfig.graphType, // scatterPlot or line
-                //maxPoints: parseInt(rawConfig.maxPoints, radix),
-                segment: getBoolean(rawConfig.segment, true), // draw only segments between points
 
                 // Gridfactory config
                 graphTitle: rawConfig.graphTitle,
@@ -197,31 +194,34 @@ define([
                     grid.children.click(function(event){
 
                         // Get the coordinate for a click
-                        var bnds = event.target.getBoundingClientRect(),
+                        var oldPoint,
+                            bnds = event.target.getBoundingClientRect(),
                             wfactor = paper.w / paper.width,
                             fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
                             fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
                         // Create the first point or the second or replace the second according the rules defined by the client
-                        if(points.length < 2 && areCoordsValid(fx, fy)){
-                            addPoint(fx, fy);
-                            if(points.length === 2){
+                        if(areCoordsValid(fx, fy)){
+                            if(points.length < 2){
+                                addPoint(fx, fy);
+                                if(points.length === 2){
+                                    // pair ready : plot the graph
+                                    plot();
+                                }
+                            }else{
+                                // Get the last point placed
+                                oldPoint = points.pop();
+                                // Change their coordinates for new ones
+                                oldPoint.setCoord(fx, fy);
+                                // Re-draw the point
+                                oldPoint.render();
+                                // re-enable the drag'n'drop
+                                oldPoint.drag();
+                                // Add it back to the list
+                                points.push(oldPoint);
                                 // pair ready : plot the graph
                                 plot();
                             }
-                        }else{
-                            // Get the last point placed
-                            var oldPoint = points.pop();
-                            // Change their coordinates for new ones
-                            oldPoint.setCoord(fx, fy);
-                            // Re-draw the point
-                            oldPoint.render();
-                            // re-enable the drag'n'drop
-                            oldPoint.drag();
-                            // Add it back to the list
-                            points.push(oldPoint);
-                            // pair ready : plot the graph
-                            plot();
                         }
 
                     });
