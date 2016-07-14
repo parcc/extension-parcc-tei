@@ -76,21 +76,21 @@ define([
             $equationFormPanel.on('change', '[name=equationScoring]', function(){
                 
                 var $checkbox = $(this);
-                
+
                 //init the prompt box 
-                equationWizard(function(equation, mumPointsRequired){
-                    
+                equationWizard(function(equation, mumPointsRequired, score){
+
                     //turn into custom rp and substitute the resp cond
                     responseCondition.replace(interaction, equationRcTpl({
                         responseIdentifier : interaction.attr('responseIdentifier'),
                         equation : equation,
                         mumPointsRequired : mumPointsRequired,
-                        score : 1
+                        score : score
                     }));
-                    
+
                     //reload
                     answerStateHelper.initResponseForm(widget);
-                    
+
                 }, function(){
                     $checkbox.prop('checked', false);
                 });
@@ -107,9 +107,12 @@ define([
             autoRender: true,
             autoDestroy: true,
             onOkBtn: function() {
+                var equation = dlg.$html.find('input[name=equation]').val();
+                var numPoints = dlg.$html.find('input[name=mumPointsRequired]').val();
+                var score = dlg.$html.find('input[name=score]').val();
                 accepted = true;
                 if (_.isFunction(accept)) {
-                    accept.call(this, dlg.$html.find('input[name=equation]').val(), dlg.$html.find('input[name=mumPointsRequired]').val());
+                    accept.call(this, equation, numPoints, score);
                 }
             }
         });

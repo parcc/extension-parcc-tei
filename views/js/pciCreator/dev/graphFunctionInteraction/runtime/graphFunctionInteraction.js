@@ -20,46 +20,124 @@ define([
 
     'use strict';
 
-    function buildGridConfig(rawConfig){
+    var buildGridConfig = function buildGridConfig(rawConfig){
 
-        var _color = rawConfig.graphColor || '#bb1a2a';
+        var getBoolean = function getBoolean(value, defaultValue) {
+                if (typeof(value) === "undefined") {
+                    return defaultValue;
+                } else {
+                    return (value === true || value === "true");
+                }
+            },
 
-        return {
-            x : {
-                start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
-                end : rawConfig.xMax === undefined ? 10 : parseInt(rawConfig.xMax),
-                unit : 20
-            },
-            y : {
-                //the y-axis is reversed 
-                start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
-                end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
-                unit : 20
-            },
-            plot : {
-                color : _color,
-                thickness : rawConfig.graphWidth || 3
-            },
-            point : {
-                color : _color,
-                radius : 10
-            },
-            padding : 20
-        };
-    }
+            radix = 10,
+            xWeight = parseInt(rawConfig.xWeight, radix),
+            xBorderWeight = parseInt(rawConfig.xBorderWeight, radix),
+            yWeight = parseInt(rawConfig.yWeight, radix),
+            yBorderWeight = parseInt(rawConfig.yBorderWeight, radix),
 
-    function createCanvas($container, config){
+            gridConfig = {
+                // PCI config
+                graphType: rawConfig.graphType, // scatterPlot or line
 
-        var padding = 2 * config.padding;
-        var paper = scaleRaphael(
-            $('.shape-container', $container)[0],
-            (config.x.end - config.x.start) * config.x.unit + padding,
-            (config.y.end - config.y.start) * config.y.unit + padding
+                // Gridfactory config
+                graphTitle: rawConfig.graphTitle,
+                graphTitleRequired : getBoolean(rawConfig.graphTitleRequired, false),
+                weight: parseInt(rawConfig.weight, radix), // grid weight
+                width: parseInt(rawConfig.width, radix),
+                height: parseInt(rawConfig.height, radix),
+
+                x : {
+                    start : parseInt(rawConfig.xStart, radix),
+                    end : parseInt(rawConfig.xEnd, radix),
+                    label : rawConfig.xLabel,
+                    title : rawConfig.xTitle,
+                    step: parseInt(rawConfig.xStep, radix),
+                    subStep : parseInt(rawConfig.xSubStep, radix),
+                    weight : (xWeight > 0) ? xWeight : xBorderWeight,
+                    allowOuter : getBoolean(rawConfig.xAllowOuter, true)
+                },
+                y : {
+                    start : -1 * parseInt(rawConfig.yEnd, radix), // y-axis is reversed
+                    end : -1 * parseInt(rawConfig.yStart, radix), // y-axis is reversed
+                    label : rawConfig.yLabel,
+                    title : rawConfig.yTitle,
+                    step: parseInt(rawConfig.yStep, radix),
+                    subStep : parseInt(rawConfig.ySubStep, radix),
+                    weight : (yWeight > 0) ? yWeight : yBorderWeight,
+                    allowOuter : getBoolean(rawConfig.yAllowOuter, true)
+                },
+
+                // PlotFactory config
+                plot : {
+                    color: rawConfig.plotColor,
+                    thickness: parseInt(rawConfig.plotThickness, radix)
+                },
+
+                // PointFactory config
+                point : {
+                    color: rawConfig.pointColor,
+                    glow : getBoolean(rawConfig.pointGlow, true),
+                    radius: parseInt(rawConfig.pointRadius, radix)
+                }
+            };
+
+        // overide invalid values with safe defaults
+        if (gridConfig.x.step < 1) {
+            gridConfig.x.step = 1;
+        }
+        if (gridConfig.y.step < 1) {
+            gridConfig.y.step = 1;
+        }
+        if (gridConfig.x.subStep < 1) {
+            gridConfig.x.subStep = 1;
+        }
+        if (gridConfig.y.subStep < 1) {
+            gridConfig.y.subStep = 1;
+        }
+
+        if ((gridConfig.x.weight > 0) === false) {
+            gridConfig.x.weight = 3;
+        }
+        if ((gridConfig.y.weight > 0) === false) {
+            gridConfig.y.weight = 3;
+        }
+        return gridConfig;
+    };
+
+    var createCanvas = function createCanvas($container, config){
+
+        var paperSize = gridFactory.getPaperSize(config),
+            paper = scaleRaphael(
+                $('.shape-container', $container)[0],
+                paperSize.width,
+                paperSize.height
             );
 
-        //@todo make it responsive
-
         return paper;
+    };
+
+    /**
+     * Extract points from the string format e.g ["3 40", "4.5 55"]
+     * Into proper internal format [{x:3, y:40}, {x:4.5, y:55}]
+     *
+     * @param stringPoints
+     * @returns {Array}
+     */
+    function extractPointsFromString(stringPoints){
+        var points = [];
+        _.each(stringPoints, function(strPoint){
+            var pt = strPoint.split(/\s+/);
+            if(pt.length === 2){
+                points.push({
+                    x : pt[0],
+                    y : pt[1]
+                });
+            }else{
+                return false;//stop on first wrong point format
+            }
+        });
+        return points;
     }
 
     var graphFunctionInteraction = {
@@ -85,7 +163,7 @@ define([
             var $container = $(dom);
             var mathFunctions = config.graphs.split(',');
             var $shapeControls = $container.find('.shape-controls');
-            var _this = this,
+            var self = this,
                 paper,
                 grid,
                 points = [],
@@ -116,31 +194,34 @@ define([
                     grid.children.click(function(event){
 
                         // Get the coordinate for a click
-                        var bnds = event.target.getBoundingClientRect(),
+                        var oldPoint,
+                            bnds = event.target.getBoundingClientRect(),
                             wfactor = paper.w / paper.width,
                             fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
                             fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
-                        // Create the first point or the second or replace the second according the rules defined by the client                  
-                        if(points.length < 2){
-                            addPoint(fx, fy);
-                            if(points.length === 2){
+                        // Create the first point or the second or replace the second according the rules defined by the client
+                        if(areCoordsValid(fx, fy)){
+                            if(points.length < 2){
+                                addPoint(fx, fy);
+                                if(points.length === 2){
+                                    // pair ready : plot the graph
+                                    plot();
+                                }
+                            }else{
+                                // Get the last point placed
+                                oldPoint = points.pop();
+                                // Change their coordinates for new ones
+                                oldPoint.setCoord(fx, fy);
+                                // Re-draw the point
+                                oldPoint.render();
+                                // re-enable the drag'n'drop
+                                oldPoint.drag();
+                                // Add it back to the list
+                                points.push(oldPoint);
                                 // pair ready : plot the graph
                                 plot();
                             }
-                        }else{
-                            // Get the last point placed
-                            var oldPoint = points.pop();
-                            // Change their coordinates for new ones
-                            oldPoint.setCoord(fx, fy);
-                            // Re-draw the point
-                            oldPoint.render();
-                            // re-enable the drag'n'drop
-                            oldPoint.drag();
-                            // Add it back to the list
-                            points.push(oldPoint);
-                            // pair ready : plot the graph
-                            plot();
                         }
 
                     });
@@ -175,7 +256,7 @@ define([
                 activateButton($shapeControls.children('.available:first'));
             }
 
-            function activateButton($button){
+            function activateButton($button, preventDefaultPlot){
 
                 if(typeof $button === 'string'){
                     $button = $shapeControls.find('[name=' + $button + ']');
@@ -187,8 +268,9 @@ define([
                     $button.removeClass('btn-info').addClass('btn-success');
                     $button.siblings('button').removeClass('btn-success').addClass('btn-info');
 
-                    //always replot the default
-                    plotDefault();
+                    if(!preventDefaultPlot){
+                        plotDefault();
+                    }
                 }
             }
 
@@ -213,30 +295,54 @@ define([
                 if(point1 && point2 && mathFunction && plotFactory[mathFunction]){
                     clearPlot();
                     path = plotFactory[mathFunction](point1, point2);
-                    _this.trigger('responseChange', [_this.getResponse()]);
+                    self.trigger('responseChange', [self.getResponse()]);
                 }
             }
 
-            function addPoint(fx, fy, cartesian){
-                
-                 var gridBBox, newPoint, pointConfig;
-                 
-                if(grid){
-                    
+            function areCoordsValid(x, y, cartesian) {
+                var gridBBox, snappedPoint, xOnOuter, yOnOuter;
+
+                if (cartesian) {
+                    xOnOuter = (x === self.gridConfig.x.start || x === self.gridConfig.x.end);
+                    yOnOuter = (y === self.gridConfig.y.start || y === self.gridConfig.y.end);
+                } else {
                     gridBBox = grid.getBBox();
+                    snappedPoint = grid.snap(x, y);
+                    xOnOuter = (snappedPoint[0] === gridBBox.x || snappedPoint[0] === gridBBox.x2);
+                    yOnOuter = (snappedPoint[1] === gridBBox.y || snappedPoint[1] === gridBBox.y2);
+                }
+                return !
+                    ((self.gridConfig.x.allowOuter === false && xOnOuter) ||
+                    (self.gridConfig.y.allowOuter === false && yOnOuter));
+            }
+
+            function addPoint(fx, fy, cartesian){
+                var gridBBox, newPoint, pointConfig, draggableArea, subStepSizes;
+
+                if(grid && areCoordsValid(fx, fy, cartesian)){
+
+                    gridBBox = grid.getBBox();
+                    subStepSizes = grid.getSubStepSizes();
+
+                    draggableArea = {
+                        xMin: (self.gridConfig.x.allowOuter) ? gridBBox.x  : gridBBox.x  + subStepSizes.x,
+                        xMax: (self.gridConfig.x.allowOuter) ? gridBBox.x2 : gridBBox.x2 - subStepSizes.x,
+                        yMin: (self.gridConfig.y.allowOuter) ? gridBBox.y  : gridBBox.y  + subStepSizes.y,
+                        yMax: (self.gridConfig.y.allowOuter) ? gridBBox.y2 : gridBBox.y2 - subStepSizes.y
+                    };
 
                     pointConfig = _.defaults({
                         x : fx,
                         y : fy,
-                        xMin : gridBBox.x,
-                        xMax : gridBBox.x2,
-                        yMin : gridBBox.y,
-                        yMax : gridBBox.y2,
+                        xMin : draggableArea.xMin,
+                        xMax : draggableArea.xMax,
+                        yMin : draggableArea.yMin,
+                        yMax : draggableArea.yMax,
                         on : {
                             dragStart : clearPlot,
                             dragStop : plot
                         }
-                    }, _this.gridConfig.point);
+                    }, self.gridConfig.point);
 
                     newPoint = pointFactory(paper, grid, pointConfig);
                     if(cartesian){
@@ -246,15 +352,14 @@ define([
                     newPoint.drag();
                     points.push(newPoint);
                 }
-                
 
                 return newPoint;
             }
 
             function getGraphOrigin(){
 
-                var _y = _this.gridConfig.y,
-                    _x = _this.gridConfig.x,
+                var _y = self.gridConfig.y,
+                    _x = self.gridConfig.x,
                     x0, y0;
 
                 if((_y.start < 0) && (_y.end <= 0)){
@@ -315,7 +420,7 @@ define([
                     return {
                         point1 : point1.getCartesianCoord(1),
                         point2 : point2.getCartesianCoord(1),
-                        mathFunction : mathFunction
+                        mathFunction : mathFunction.replace('plot', '').toLowerCase()
                     };
                 }
             };
@@ -335,9 +440,14 @@ define([
             this.setRawResponse = function setRawResponse(mathFn, point1, point2){
                 clearPoint();
                 clearPlot();
-                mathFunction = mathFn;
-                addPoint(point1.x, point1.y, true);
-                addPoint(point2.x, point2.y, true);
+                mathFunction = mathFn||mathFunctions[0];
+                activateButton(mathFunction, true);
+                if(point1 && point1.x && point1.y){
+                    addPoint(point1.x, point1.y, true);
+                }
+                if(point2 && point2.x && point2.y){
+                    addPoint(point2.x, point2.y, true);
+                }
                 plot();
             };
             
@@ -357,11 +467,27 @@ define([
             });
 
             /**
-             * Add event listening fo rdynamic configuration change
+             * Add event listening for dynamic configuration change
              */
 
+            // this event maintains state...
+            self.on('configChange', function(newRawConfig){
+                var state = self.getRawResponse();
+                self.config = newRawConfig;
+                self.gridConfig = buildGridConfig(newRawConfig);
+                initGrid($container, self.gridConfig);
+                self.setRawResponse(state);
+            });
 
-            _this.on('functionschange', function(graphs){
+            // ...this one doesn't!
+            self.on('gridChange', function(newRawConfig){
+                self.config = newRawConfig;
+                self.gridConfig = buildGridConfig(newRawConfig);
+                initGrid($container, self.gridConfig);
+                plotDefault();
+            });
+
+            self.on('functionsChange', function(graphs){
 
                 //reset selected graph
                 mathFunction = null;
@@ -369,14 +495,6 @@ define([
                 //update list of available graph types
                 mathFunctions = graphs;
                 showControl(mathFunctions);
-                plotDefault();
-            });
-
-            _this.on('gridchange', function(config){
-                //the configuration of the gird, point or line have changed:
-                _this.config = config;
-                _this.gridConfig = buildGridConfig(config);
-                initGrid($container, _this.gridConfig);
                 plotDefault();
             });
         },
@@ -388,7 +506,8 @@ define([
          * @param {Object} response
          */
         setResponse : function(response){
-            
+
+            var points;
             if(response &&
                 _.isArray(response.record) &&
                 response.record[0] &&
@@ -398,19 +517,10 @@ define([
                 response.record[0].base.string &&
                 response.record[1].name === 'points' &&
                 response.record[1].list &&
-                response.record[1].list &&
-                _.isArray(response.record[1].list.point)){
-                
-                var point1 = response.record[1].list.point[0];
-                var point2 = response.record[1].list.point[1];
-                
-                this.setRawResponse(response.record[0].base.string, {
-                    x : point1[0],
-                    y : point1[1]
-                },{
-                    x : point2[0],
-                    y : point2[1]
-                });
+                _.isArray(response.record[1].list.string)
+            ){
+                points = extractPointsFromString(response.record[1].list.string);
+                this.setRawResponse(response.record[0].base.string, points.shift(),points.shift());
             }
         },
         /**
@@ -433,9 +543,9 @@ define([
                         {
                             name : 'points',
                             list : {
-                                point : [
-                                    [raw.point1.x, raw.point1.y],
-                                    [raw.point2.x, raw.point2.y]
+                                string : [
+                                    raw.point1.x+' '+raw.point1.y,
+                                    raw.point2.x+' '+raw.point2.y
                                 ]
                             }
                         }
@@ -451,7 +561,7 @@ define([
          * @param {Object} interaction
          */
         resetResponse : function(){
-            //not implemented
+            this.setRawResponse();
         },
         /**
          * Reverse operation performed by render()

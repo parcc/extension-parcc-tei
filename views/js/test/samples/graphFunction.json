@@ -1,64 +1,111 @@
 {
-    "identifier": "i1440585855838854",
-    "serial": "item_55dd9c4a53a5e494689465",
+    "identifier": "i1468405819547274",
+    "serial": "item_578627a4c942a387100331",
     "qtiClass": "assessmentItem",
     "attributes": {
-        "identifier": "i1440585855838854",
-        "title": "graph function A",
+        "identifier": "i1468405819547274",
+        "title": "function",
         "label": "",
         "adaptive": false,
         "timeDependent": false,
         "toolName": "TAO",
-        "toolVersion": "3.1.0-sprint05"
+        "toolVersion": "3.1.0-sprint15",
+        "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_55dd9c4a53a3f408295767",
-        "body": "\n        \n        <div class=\"grid-row\">\n            <div class=\"col-12\">\n                {{interaction_portablecustominteraction_55dd9c4a54f7f349021280}}\n            <\/div>\n        <\/div>\n        \n    ",
+        "serial": "container_containeritembody_578627a4c9412143096881",
+        "body": "\n        <div class=\"grid-row\">\n            <div class=\"col-12\">\n                {{interaction_portablecustominteraction_578627a4d2291484258881}}\n            <\/div>\n        <\/div>\n    ",
         "elements": {
-            "interaction_portablecustominteraction_55dd9c4a54f7f349021280": {
-                "serial": "interaction_portablecustominteraction_55dd9c4a54f7f349021280",
+            "interaction_portablecustominteraction_578627a4d2291484258881": {
+                "serial": "interaction_portablecustominteraction_578627a4d2291484258881",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_55dd9c4a53a5e494689465"
+                    "relatedItem": "item_578627a4c942a387100331"
                 },
                 "choices": {},
                 "typeIdentifier": "graphFunctionInteraction",
-                "markup": "\n                            <div class=\"graphFunctionInteraction\">\n                                <div class=\"prompt\">\n        \n                                <\/div>\n                                <div class=\"shape-panel\">\n                                    <div class=\"shape-controls\">\n                                        <button name=\"linear\" value=\"linear\" class=\"btn btn-info\" type=\"button\">Linear<\/button>\n                                        <button name=\"absolute\" value=\"absolute\" class=\"btn btn-info\" type=\"button\">Absolute Value<\/button>\n                                        <button name=\"quadratic\" value=\"quadratic\" class=\"btn btn-info\" type=\"button\">Quadratic<\/button>\n                                        <button name=\"exponential\" value=\"exponential\" class=\"btn btn-info\" type=\"button\">Exponential<\/button>\n                                        <button name=\"logarithmic\" value=\"logarithmic\" class=\"btn btn-info\" type=\"button\">Logarithmic<\/button>\n                                        <button name=\"cosine\" value=\"cosine\" class=\"btn btn-info\" type=\"button\">Sin\/Cos<\/button>\n                                        <button name=\"tangent\" value=\"tangent\" class=\"btn btn-info\" type=\"button\">Tan\/Cotan<\/button>\n                                    <\/div>\n                                    <div class=\"shape-container\"><\/div>\n                                <\/div>\n                            <\/div>\n                        ",
+                "markup": "\n                            <div class=\"graphFunctionInteraction\">\n                                <div class=\"prompt\"><\/div>\n                                <div class=\"shape-panel\">\n                                    <div class=\"shape-controls\">\n                                        <button name=\"linear\" value=\"linear\" class=\"btn btn-info\" type=\"button\">Linear<\/button>\n                                        <button name=\"absolute\" value=\"absolute\" class=\"btn btn-info\" type=\"button\">Absolute Value<\/button>\n                                        <button name=\"quadratic\" value=\"quadratic\" class=\"btn btn-info\" type=\"button\">Quadratic<\/button>\n                                        <button name=\"exponential\" value=\"exponential\" class=\"btn btn-info\" type=\"button\">Exponential<\/button>\n                                        <button name=\"logarithmic\" value=\"logarithmic\" class=\"btn btn-info\" type=\"button\">Logarithmic<\/button>\n                                        <button name=\"cosine\" value=\"cosine\" class=\"btn btn-info\" type=\"button\">Sin\/Cos<\/button>\n                                        <button name=\"tangent\" value=\"tangent\" class=\"btn btn-info\" type=\"button\">Tan\/Cotan<\/button>\n                                    <\/div>\n                                    <div class=\"shape-container\"><\/div>\n                                <\/div>\n                            <\/div>\n                        ",
                 "libraries": [
+                    "IMSGlobal\/jquery_2_1_1",
+                    "PARCC\/graphFunction",
+                    "PARCC\/gridFactory",
+                    "PARCC\/pointFactory",
+                    "PARCC\/plotFactory"
                 ],
                 "properties": {
                     "graphs": "linear,absolute,quadratic,exponential,logarithmic,cosine,tangent",
-                    "xMin": "-10",
-                    "xMax": "10",
-                    "yMin": "-10",
-                    "yMax": "10",
-                    "graphColor": "#bb1a2a",
-                    "graphWidth": "3"
+                    "draggable": "true",
+                    "graphTitle": "",
+                    "graphTitleRequired": "",
+                    "graphType": "line",
+                    "plotColor": "#0000FF",
+                    "plotThickness": "6",
+                    "pointColor": "#0000FF",
+                    "pointGlow": "true",
+                    "pointRadius": "8",
+                    "segment": "true",
+                    "weight": "1",
+                    "width": "450",
+                    "height": "450",
+                    "xAllowOuter": "true",
+                    "xBorderWeight": "3",
+                    "xStep": "1",
+                    "xLabel": "",
+                    "xTitle": "",
+                    "xStart": "-10",
+                    "xEnd": "10",
+                    "xSubStep": "2",
+                    "xWeight": "3",
+                    "yAllowOuter": "true",
+                    "yBorderWeight": "3",
+                    "yStep": "1",
+                    "yLabel": "",
+                    "yTitle": "",
+                    "yStart": "-10",
+                    "yEnd": "10",
+                    "ySubStep": "2",
+                    "yWeight": "3"
                 },
                 "entryPoint": "graphFunctionInteraction\/runtime\/graphFunctionInteraction.js"
             }
         },
         "debug": {
-            "relatedItem": "item_55dd9c4a53a5e494689465"
+            "relatedItem": "item_578627a4c942a387100331"
         }
     },
     "debug": {
-        "relatedItem": "item_55dd9c4a53a5e494689465"
+        "relatedItem": "item_578627a4c942a387100331"
     },
     "namespaces": {
-        "xml": "http:\/\/www.w3.org\/XML\/1998\/namespace",
+        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
         "html5": "html5",
-        "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
         "m": "http:\/\/www.w3.org\/1998\/Math\/MathML",
-        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance",
-        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1"
+        "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
+        "xml": "http:\/\/www.w3.org\/XML\/1998\/namespace",
+        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance"
+    },
+    "schemaLocations": {
+        "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
     },
     "stylesheets": {
-        "stylesheet_55dd9c4a540ff968457768": {
-            "serial": "stylesheet_55dd9c4a540ff968457768",
+        "stylesheet_578627a4cc83a024962758": {
+            "serial": "stylesheet_578627a4cc83a024962758",
+            "qtiClass": "stylesheet",
+            "attributes": {
+                "href": "style\/custom\/tao-user-styles.css",
+                "type": "text\/css",
+                "media": "all",
+                "title": ""
+            },
+            "debug": {
+                "relatedItem": "item_578627a4c942a387100331"
+            }
+        },
+        "stylesheet_578627a4cda1f665742700": {
+            "serial": "stylesheet_578627a4cda1f665742700",
             "qtiClass": "stylesheet",
             "attributes": {
                 "href": "graphFunctionInteraction\/runtime\/css\/graphFunctionInteraction.css",
@@ -67,14 +114,14 @@
                 "title": ""
             },
             "debug": {
-                "relatedItem": "item_55dd9c4a53a5e494689465"
+                "relatedItem": "item_578627a4c942a387100331"
             }
         }
     },
     "outcomes": {
-        "outcomedeclaration_55dd9c4a54856884877449": {
+        "outcomedeclaration_578627a4cfc1d031534282": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_55dd9c4a54856884877449",
+            "serial": "outcomedeclaration_578627a4cfc1d031534282",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -82,31 +129,34 @@
                 "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_55dd9c4a53a5e494689465"
+                "relatedItem": "item_578627a4c942a387100331"
             },
             "defaultValue": null
         }
     },
     "responses": {
-        "responsedeclaration_55dd9c4a545cd880460366": {
+        "responsedeclaration_578627a4ce651042152391": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_55dd9c4a545cd880460366",
+            "serial": "responsedeclaration_578627a4ce651042152391",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
-                "cardinality": "single",
-                "baseType": "integer"
+                "cardinality": "record"
             },
             "debug": {
-                "relatedItem": "item_55dd9c4a53a5e494689465"
+                "relatedItem": "item_578627a4c942a387100331"
             },
-            "correctResponses": [
-            ],
-            "mapping": [
-            ],
-            "areaMapping": [
-            ],
-            "howMatch": "http:\/\/www.imsglobal.org\/question\/qti_v2p1\/rptemplates\/match_correct",
+            "mapping": [],
+            "areaMapping": [],
+            "howMatch": null,
+            "correctResponses": {
+                "numberPointsRequired": {
+                    "value": "2",
+                    "fieldIdentifier": "numberPointsRequired",
+                    "baseType": "integer",
+                    "cardinality": "single"
+                }
+            },
             "mappingAttributes": {
                 "defaultValue": 0
             },
@@ -115,33 +165,239 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_templatesdriven_55dd9c4a559af909901071",
+        "serial": "response_custom_578627a4d4b0e472626926",
         "qtiClass": "responseProcessing",
-        "attributes": [
-        ],
+        "attributes": [],
         "debug": {
-            "relatedItem": "item_55dd9c4a53a5e494689465"
+            "relatedItem": ""
         },
-        "processingType": "templateDriven",
+        "processingType": "custom",
+        "data": "<responseProcessing>\n        <responseCondition>\n            <responseIf>\n                <and>\n                    <match>\n                        <index n=\"1\">\n                            <customOperator class=\"qti.customOperators.CsvToOrdered\">\n                                <fieldValue fieldIdentifier=\"points\">\n                                    <variable identifier=\"RESPONSE\"\/>\n                                <\/fieldValue>\n                            <\/customOperator>\n                        <\/index>\n                        <fieldValue fieldIdentifier=\"vertex\">\n                            <correct identifier=\"RESPONSE\"\/>\n                        <\/fieldValue>\n                    <\/match>\n                    <match>\n                        <fieldValue fieldIdentifier=\"functionGraphType\">\n                            <variable identifier=\"RESPONSE\"\/>\n                        <\/fieldValue>\n                        <fieldValue fieldIdentifier=\"functionGraphType\">\n                            <correct identifier=\"RESPONSE\"\/>\n                        <\/fieldValue>\n                    <\/match>\n                    <not>\n                        <match>\n                            <index n=\"1\">\n                                <customOperator class=\"qti.customOperators.CsvToOrdered\">\n                                    <fieldValue fieldIdentifier=\"points\">\n                                        <variable identifier=\"RESPONSE\"\/>\n                                    <\/fieldValue>\n                                <\/customOperator>\n                            <\/index>\n                            <index n=\"2\">\n                                <customOperator class=\"qti.customOperators.CsvToOrdered\">\n                                    <fieldValue fieldIdentifier=\"points\">\n                                        <variable identifier=\"RESPONSE\"\/>\n                                    <\/fieldValue>\n                                <\/customOperator>\n                            <\/index>\n                        <\/match>\n                    <\/not>\n                    <equal toleranceMode=\"exact\">\n                        <customOperator class=\"qti.customOperators.math.graph.CountPointsThatSatisfyEquation\">\n                            <customOperator class=\"qti.customOperators.CsvToMultiple\">\n                                <fieldValue fieldIdentifier=\"points\">\n                                    <variable identifier=\"RESPONSE\"\/>\n                                <\/fieldValue>\n                            <\/customOperator>\n                            <fieldValue fieldIdentifier=\"equation\">\n                                <correct identifier=\"RESPONSE\"\/>\n                            <\/fieldValue>\n                        <\/customOperator>\n                        <fieldValue fieldIdentifier=\"numberPointsRequired\">\n                            <correct identifier=\"RESPONSE\"\/>\n                        <\/fieldValue>\n                    <\/equal>\n                <\/and>\n                <setOutcomeValue identifier=\"SCORE\">\n                    <sum>\n                        <variable identifier=\"SCORE\"\/>\n                        <baseValue baseType=\"float\">1<\/baseValue>\n                    <\/sum>\n                <\/setOutcomeValue>\n            <\/responseIf>\n            <responseElse>\n                <setOutcomeValue identifier=\"SCORE\">\n                    <baseValue baseType=\"float\">0<\/baseValue>\n                <\/setOutcomeValue>\n            <\/responseElse>\n        <\/responseCondition>\n    <\/responseProcessing>",
         "responseRules": [
             {
                 "qtiClass": "responseCondition",
                 "responseIf": {
                     "qtiClass": "responseIf",
                     "expression": {
-                        "qtiClass": "match",
+                        "qtiClass": "and",
                         "expressions": [
                             {
-                                "qtiClass": "variable",
-                                "attributes": {
-                                    "identifier": "RESPONSE"
-                                }
+                                "qtiClass": "match",
+                                "expressions": [
+                                    {
+                                        "qtiClass": "index",
+                                        "attributes": {
+                                            "n": "1"
+                                        },
+                                        "expressions": [
+                                            {
+                                                "qtiClass": "customOperator",
+                                                "attributes": {
+                                                    "class": "qti.customOperators.CsvToOrdered"
+                                                },
+                                                "expressions": [
+                                                    {
+                                                        "qtiClass": "fieldValue",
+                                                        "attributes": {
+                                                            "fieldIdentifier": "points"
+                                                        },
+                                                        "expressions": [
+                                                            {
+                                                                "qtiClass": "variable",
+                                                                "attributes": {
+                                                                    "identifier": "RESPONSE"
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "qtiClass": "fieldValue",
+                                        "attributes": {
+                                            "fieldIdentifier": "vertex"
+                                        },
+                                        "expressions": [
+                                            {
+                                                "qtiClass": "correct",
+                                                "attributes": {
+                                                    "identifier": "RESPONSE"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
                             },
                             {
-                                "qtiClass": "correct",
+                                "qtiClass": "match",
+                                "expressions": [
+                                    {
+                                        "qtiClass": "fieldValue",
+                                        "attributes": {
+                                            "fieldIdentifier": "functionGraphType"
+                                        },
+                                        "expressions": [
+                                            {
+                                                "qtiClass": "variable",
+                                                "attributes": {
+                                                    "identifier": "RESPONSE"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "qtiClass": "fieldValue",
+                                        "attributes": {
+                                            "fieldIdentifier": "functionGraphType"
+                                        },
+                                        "expressions": [
+                                            {
+                                                "qtiClass": "correct",
+                                                "attributes": {
+                                                    "identifier": "RESPONSE"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "qtiClass": "not",
+                                "expressions": [
+                                    {
+                                        "qtiClass": "match",
+                                        "expressions": [
+                                            {
+                                                "qtiClass": "index",
+                                                "attributes": {
+                                                    "n": "1"
+                                                },
+                                                "expressions": [
+                                                    {
+                                                        "qtiClass": "customOperator",
+                                                        "attributes": {
+                                                            "class": "qti.customOperators.CsvToOrdered"
+                                                        },
+                                                        "expressions": [
+                                                            {
+                                                                "qtiClass": "fieldValue",
+                                                                "attributes": {
+                                                                    "fieldIdentifier": "points"
+                                                                },
+                                                                "expressions": [
+                                                                    {
+                                                                        "qtiClass": "variable",
+                                                                        "attributes": {
+                                                                            "identifier": "RESPONSE"
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "qtiClass": "index",
+                                                "attributes": {
+                                                    "n": "2"
+                                                },
+                                                "expressions": [
+                                                    {
+                                                        "qtiClass": "customOperator",
+                                                        "attributes": {
+                                                            "class": "qti.customOperators.CsvToOrdered"
+                                                        },
+                                                        "expressions": [
+                                                            {
+                                                                "qtiClass": "fieldValue",
+                                                                "attributes": {
+                                                                    "fieldIdentifier": "points"
+                                                                },
+                                                                "expressions": [
+                                                                    {
+                                                                        "qtiClass": "variable",
+                                                                        "attributes": {
+                                                                            "identifier": "RESPONSE"
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "qtiClass": "equal",
                                 "attributes": {
-                                    "identifier": "RESPONSE"
-                                }
+                                    "toleranceMode": "exact"
+                                },
+                                "expressions": [
+                                    {
+                                        "qtiClass": "customOperator",
+                                        "attributes": {
+                                            "class": "qti.customOperators.math.graph.CountPointsThatSatisfyEquation"
+                                        },
+                                        "expressions": [
+                                            {
+                                                "qtiClass": "customOperator",
+                                                "attributes": {
+                                                    "class": "qti.customOperators.CsvToMultiple"
+                                                },
+                                                "expressions": [
+                                                    {
+                                                        "qtiClass": "fieldValue",
+                                                        "attributes": {
+                                                            "fieldIdentifier": "points"
+                                                        },
+                                                        "expressions": [
+                                                            {
+                                                                "qtiClass": "variable",
+                                                                "attributes": {
+                                                                    "identifier": "RESPONSE"
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "qtiClass": "fieldValue",
+                                                "attributes": {
+                                                    "fieldIdentifier": "equation"
+                                                },
+                                                "expressions": [
+                                                    {
+                                                        "qtiClass": "correct",
+                                                        "attributes": {
+                                                            "identifier": "RESPONSE"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "qtiClass": "fieldValue",
+                                        "attributes": {
+                                            "fieldIdentifier": "numberPointsRequired"
+                                        },
+                                        "expressions": [
+                                            {
+                                                "qtiClass": "correct",
+                                                "attributes": {
+                                                    "identifier": "RESPONSE"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -152,11 +408,22 @@
                                 "identifier": "SCORE"
                             },
                             "expression": {
-                                "qtiClass": "baseValue",
-                                "attributes": {
-                                    "baseType": "float"
-                                },
-                                "value": "1"
+                                "qtiClass": "sum",
+                                "expressions": [
+                                    {
+                                        "qtiClass": "variable",
+                                        "attributes": {
+                                            "identifier": "SCORE"
+                                        }
+                                    },
+                                    {
+                                        "qtiClass": "baseValue",
+                                        "attributes": {
+                                            "baseType": "float"
+                                        },
+                                        "value": "1"
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -181,5 +448,6 @@
                 }
             }
         ]
-    }
+    },
+    "apipAccessibility": ""
 }
