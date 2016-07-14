@@ -54,6 +54,8 @@ define([
                 "staticPointColor": "#AA00AA",
                 "staticPointGlow": false,
                 "staticPointRadius": 6,
+                "staticPointLabelSize": 10,
+                "staticPointLabelColor": "#FFF",
                 "staticDisplayPoints": true,
                 "staticLineColor": "#AA00AA",
                 "staticLineThickness": 4,

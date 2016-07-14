@@ -87,18 +87,22 @@ define([
                 // StaticPlotFactory config
                 staticPlot : {
                     color: rawConfig.staticLineColor,
-                    thickness: parseInt(rawConfig.staticLineThickness, radix),
-                    show: getBoolean(rawConfig.staticShowLine, true)
+                    thickness: parseInt(rawConfig.staticLineThickness, radix)
                 },
 
                 // StaticPointFactory config
                 staticPoint : {
                     color: rawConfig.staticPointColor,
+                    labelColor: rawConfig.staticPointLabelColor,
+                    labelSize: rawConfig.staticPointLabelSize,
                     glow : getBoolean(rawConfig.staticPointGlow, false),
-                    radius: parseInt(rawConfig.staticPointRadius, radix),
-                    show: getBoolean(rawConfig.staticDisplayPoints, true),
-                    points: rawConfig.staticPoints
-                }
+                    radius: parseInt(rawConfig.staticPointRadius, radix)
+                },
+
+                // StaticPoints config
+                showStaticLines: getBoolean(rawConfig.staticShowLine, true),
+                showStaticPoints: getBoolean(rawConfig.staticDisplayPoints, true),
+                staticPoints: rawConfig.staticPoints
         };
 
         // override invalid values with safe defaults
@@ -212,7 +216,7 @@ define([
                     staticPlotFactory = new PlotFactory(grid, gridConfig.staticPlot);
 
                     //add static points, if any
-                    _.forEach(gridConfig.staticPoint.points, function(point) {
+                    _.forEach(gridConfig.staticPoints, function(point) {
                         addStaticPoint(point.x, point.y, point.label, true);
                     });
                     staticPlot();
@@ -308,13 +312,15 @@ define([
             function staticPlot(){
                 clearStaticPlot();
 
-                if (self.gridConfig.staticPlot.show) {
+                if (self.gridConfig.showStaticLines) {
                     plotLines(staticPoints, staticPaths, staticPlotFactory);
                 }
 
-                staticPoints.forEach(function (point) {
-                    point.render();
-                });
+                if (self.gridConfig.showStaticPoints) {
+                    staticPoints.forEach(function (point) {
+                        point.render();
+                    });
+                }
             }
 
             function areCoordsValid(x, y, cartesian) {
