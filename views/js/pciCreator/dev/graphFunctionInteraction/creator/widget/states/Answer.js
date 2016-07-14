@@ -50,27 +50,24 @@ define([
         
         var interaction = widget.element;
         var responseDeclaration = interaction.getResponseDeclaration();
-
-        if(_.isArray(responseDeclaration.correctResponse)){
-            var graphType = getCorrectResponseRecordEntryValue(responseDeclaration, 'functionGraphType');
-            var samplePoints = getCorrectResponseRecordEntryValue(responseDeclaration, 'samplePoints');
-            if(graphType && samplePoints){
-                samplePoints = samplePoints.split(',');
-                interaction.setResponse({
-                    record : [
-                        {
-                            name: 'functionGraphType',
-                            base : {'string' : graphType}
-                        },
-                        {
-                            name : 'points',
-                            list : {
-                                string : samplePoints
-                            }
+        var graphType = getCorrectResponseRecordEntryValue(responseDeclaration, 'functionGraphType');
+        var samplePoints = getCorrectResponseRecordEntryValue(responseDeclaration, 'samplePoints');
+        if(graphType && samplePoints){
+            samplePoints = samplePoints.split(',');
+            interaction.setResponse({
+                record : [
+                    {
+                        name: 'functionGraphType',
+                        base : {'string' : graphType}
+                    },
+                    {
+                        name : 'points',
+                        list : {
+                            string : samplePoints
                         }
-                    ]
-                });
-            }
+                    }
+                ]
+            });
         }
 
         //init editing widget event listener
