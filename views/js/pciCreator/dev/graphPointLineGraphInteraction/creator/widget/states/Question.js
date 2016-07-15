@@ -55,7 +55,7 @@ define([
             staticPoints = {},
             staticPointsNb = 0,
             $form = widget.$form,
-            $staticPointsForms,
+            $staticPointsForms, $staticPointsPanel,
             response = interaction.getResponseDeclaration();
 
         function getBoolean(value, defaultValue) {
@@ -154,13 +154,14 @@ define([
             staticLineThickness : interaction.prop('staticLineThickness'),
             staticShowLine : getBoolean(interaction.prop('staticShowLine'), true)
         }));
-        $staticPointsForms = $form.find('.static-points');
+        $staticPointsPanel = $form.find('.static-points-panel');
+        $staticPointsForms = $staticPointsPanel.find('.static-points');
 
         //init form javascript
         formElement.initWidget($form);
 
         buildStaticPointsForms();
-        $form
+        $staticPointsPanel
             .on('click', '.static-point-add', function(e) {
                 e.preventDefault();
                 addStaticPoint();
