@@ -21,26 +21,26 @@ define([
         widget.$responseForm.on('initResponseForm', function(){
             initEquationBasedScoring(widget);
         });
-        
+
         initResponseDeclarationWidget(widget);
-        
+
     }, function(){
-        
+
         destroyResponseDeclarationWidget(this.widget);
     });
-    
+
     function initResponseDeclarationWidget(widget){
-        
+
         var interaction = widget.element;
         var responseDeclaration = interaction.getResponseDeclaration();
-        
+
         //set correct response as defined in the model
         interaction.setResponse({
             list : {
                 string : responseDeclaration.correctResponse || []
             }
         });
-        
+
         //init editing widget event listener
         interaction.onPci('responseChange', function(response){
             var correctResponse = [];
@@ -50,7 +50,7 @@ define([
             responseDeclaration.setCorrect(correctResponse);
         });
     }
-    
+
     function destroyResponseDeclarationWidget(widget){
         var interaction = widget.element;
         interaction.offPci('responseChange');
@@ -58,28 +58,28 @@ define([
             base : null
         });
     }
-    
+
     function initEquationBasedScoring(widget){
-        
+
         var interaction = widget.element;
         var item = interaction.getRelatedItem();
         var rp = item.responseProcessing;
         var $responseForm = widget.$responseForm;
         var $templateSelector = $responseForm.find('select[name="template"]').closest('.panel');
         var $equationFormPanel;
-        
+
         if(!$responseForm.find('.panel.equation-scoring').length && rp.processingType !== 'custom'){
-            
+
             $equationFormPanel = $(equationFormElementTpl());
             $templateSelector.after($equationFormPanel);
             $templateSelector.remove();//only authorize correct and custom response processing mode
             $equationFormPanel.on('change', '[name=equationScoring]', function(){
-                
+
                 var $checkbox = $(this);
-                
-                //init the prompt box 
+
+                //init the prompt box
                 equationWizard(function(equation, mumPointsRequired){
-                    
+
                     //turn into custom rp and substitute the resp cond
                     responseCondition.replace(interaction, equationRcTpl({
                         responseIdentifier : interaction.attr('responseIdentifier'),
@@ -87,17 +87,17 @@ define([
                         mumPointsRequired : mumPointsRequired,
                         score : 1
                     }));
-                    
+
                     //reload
                     answerStateHelper.initResponseForm(widget);
-                    
+
                 }, function(){
                     $checkbox.prop('checked', false);
                 });
             });
         }
     }
-    
+
     function equationWizard(accept, refuse) {
         var accepted = false;
         var dlg = dialog({
@@ -113,9 +113,9 @@ define([
                 }
             }
         });
-        
+
         //@todo validate equation during input
-        
+
         if (_.isFunction(refuse)) {
             dlg.on('closed.modal', function() {
                 if (!accepted) {
@@ -124,7 +124,7 @@ define([
             });
         }
         return dlg;
-    };
-    
+    }
+
     return StateAnswer;
 });
