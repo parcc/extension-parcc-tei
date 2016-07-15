@@ -184,6 +184,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 if (_label) {
                     var text = paper.text(_x, _y, _label);
                     text.attr({
+                        fill : options.labelColor || '#000',
                         stroke : options.labelColor || '#000',
                         'font-size': options.labelSize || 10
                     });
