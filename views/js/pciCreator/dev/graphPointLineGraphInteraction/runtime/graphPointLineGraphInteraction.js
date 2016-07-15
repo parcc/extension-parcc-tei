@@ -95,6 +95,7 @@ define([
                     color: rawConfig.staticPointColor,
                     labelColor: rawConfig.staticPointLabelColor,
                     labelSize: rawConfig.staticPointLabelSize,
+                    labelWeight: rawConfig.staticPointLabelWeight,
                     glow : getBoolean(rawConfig.staticPointGlow, false),
                     radius: parseInt(rawConfig.staticPointRadius, radix)
                 },

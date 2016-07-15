@@ -31,6 +31,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
      * @param  {String} [options.label=""]                  a label to display with the point
      * @param  {String} [options.labelColor="#000"]         color of label
      * @param  {Number} [options.labelSize=10]              font size of label
+     * @param  {Number} [options.labelWeight=0]             font weight of label
      * @return {Object}                                     point Object
      */
     function pointFactory(paper, grid, options){
@@ -186,6 +187,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                     text.attr({
                         fill : options.labelColor || '#000',
                         stroke : options.labelColor || '#000',
+                        'stroke-width' : options.labelWeight || 0,
                         'font-size': options.labelSize || 10
                     });
                     this.children.push(text);
