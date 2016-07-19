@@ -113,6 +113,13 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('0.2.1');
         }
 
+        if($this->isVersion('0.2.1')){
+
+            $registry->registerFromFile('PARCC/pointFactory', $installBasePath.'/PARCC/pointFactory.js');
+
+            $this->setVersion('0.3.0');
+        }
+
     }
 
 }

@@ -50,6 +50,18 @@ define([
                 "width": 450,
                 "height": 300,
 
+                "staticPoints": [],
+                "staticPointColor": "#AA00AA",
+                "staticPointGlow": false,
+                "staticPointRadius": 6,
+                "staticPointLabelSize": 10,
+                "staticPointLabelWeight": 0,
+                "staticPointLabelColor": "#FFF",
+                "staticDisplayPoints": true,
+                "staticLineColor": "#AA00AA",
+                "staticLineThickness": 4,
+                "staticShowLine": true,
+
                 "xAllowOuter": true,
                 "xBorderWeight": 3,
                 "xStep": 1,

@@ -4,9 +4,11 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!graphPointLineGraphInteraction/creator/tpl/propertiesForm',
+    'tpl!graphPointLineGraphInteraction/creator/tpl/staticPoint',
     'lodash',
-    'jquery'
-], function(stateFactory, Question, formElement, containerEditor, formTpl, _, $){
+    'jquery',
+    'ui/incrementer'
+], function(stateFactory, Question, formElement, containerEditor, formTpl, staticPointTpl, _, $, spinner){
 
     'use strict';
 
@@ -50,7 +52,10 @@ define([
 
         var widget = this.widget,
             interaction = widget.element,
+            staticPoints = {},
+            staticPointsNb = 0,
             $form = widget.$form,
+            $staticPointsForms, $staticPointsPanel,
             response = interaction.getResponseDeclaration();
 
         function getBoolean(value, defaultValue) {
@@ -59,6 +64,44 @@ define([
             } else {
                 return (value === true || value === "true");
             }
+        }
+
+        function graphGridChangeStaticPointsCallback() {
+            graphGridChangeCallback.apply(this, arguments);
+            buildStaticPointsForms();
+            updateStaticPoints();
+        }
+
+        function updateStaticPoints() {
+            graphConfigChangeCallback(interaction, _.compact(_.values(staticPoints)), 'staticPoints');
+        }
+
+        function buildStaticPointsForms() {
+            staticPoints = {};
+            staticPointsNb = 0;
+            $staticPointsForms.empty();
+            _.forEach(interaction.prop('staticPoints'), addStaticPoint);
+        }
+
+        function addStaticPoint(staticPoint) {
+            var idx = staticPointsNb ++;
+            var $staticPoint;
+            staticPoint = staticPoint || {x: 0, y: 0};
+
+            $staticPoint = $(staticPointTpl({
+                idx: idx,
+                x: staticPoint.x,
+                y: staticPoint.y,
+                xMax: interaction.prop('xEnd'),
+                xStep: parseInt(interaction.prop('xStep')) / (parseInt(interaction.prop('xSubStep')) || 0),
+                yMax: interaction.prop('yEnd'),
+                yStep: parseInt(interaction.prop('yStep')) / (parseInt(interaction.prop('ySubStep')) || 0),
+                label: staticPoint.label
+            }));
+            spinner($staticPoint);
+
+            staticPoints[idx] = staticPoint;
+            $staticPointsForms.append($staticPoint);
         }
 
         //render the form using the form template
@@ -97,11 +140,52 @@ define([
             plotThickness : interaction.prop('plotThickness'),
             pointRadius : interaction.prop('pointRadius'),
             pointGlow : getBoolean(interaction.prop('pointGlow'), true),
-            pointColor : interaction.prop('pointColor')
+            pointColor : interaction.prop('pointColor'),
+
+            staticPoints : interaction.prop('staticPoints'),
+            staticPointColor : interaction.prop('staticPointColor'),
+            staticPointGlow : getBoolean(interaction.prop('staticPointGlow'), false),
+            staticPointRadius : interaction.prop('staticPointRadius'),
+            staticPointLabelSize : interaction.prop('staticPointLabelSize'),
+            staticPointLabelWeight : interaction.prop('staticPointLabelWeight'),
+            staticPointLabelColor : interaction.prop('staticPointLabelColor'),
+            staticDisplayPoints : getBoolean(interaction.prop('staticDisplayPoints'), true),
+            staticLineColor : interaction.prop('staticLineColor'),
+            staticLineThickness : interaction.prop('staticLineThickness'),
+            staticShowLine : getBoolean(interaction.prop('staticShowLine'), true)
         }));
+        $staticPointsPanel = $form.find('.static-points-panel');
+        $staticPointsForms = $staticPointsPanel.find('.static-points');
 
         //init form javascript
         formElement.initWidget($form);
+
+        buildStaticPointsForms();
+        $staticPointsPanel
+            .on('click', '.static-point-add', function(e) {
+                e.preventDefault();
+                addStaticPoint();
+                updateStaticPoints();
+            })
+            .on('click', '.static-point-delete', function(e) {
+                var $panel = $(this).closest('.static-point-container');
+                var idx = $panel.data('idx');
+                e.preventDefault();
+                $panel.remove();
+                staticPoints[idx] = null;
+                updateStaticPoints();
+            })
+            .on('change', '.static-point-container input', function() {
+                var $panel = $(this).closest('.static-point-container');
+                var idx = $panel.data('idx');
+                var staticPoint = staticPoints[idx];
+                if (staticPoint) {
+                    staticPoint.x = $panel.find('input[name="x"]').val();
+                    staticPoint.y = $panel.find('input[name="y"]').val();
+                    staticPoint.label = $panel.find('input[name="label"]').val();
+                    updateStaticPoints();
+                }
+            });
 
         //set change callbacks:
         var options = {
@@ -121,13 +205,13 @@ define([
                 interaction.attr('responseIdentifier', value);
             },
             // reset state
-            width : graphGridChangeCallback,
-            height : graphGridChangeCallback,
+            width : graphGridChangeStaticPointsCallback,
+            height : graphGridChangeStaticPointsCallback,
             maxPoints : graphGridChangeCallback,
-            xStep : graphGridChangeCallback,
-            xSubStep : graphGridChangeCallback,
-            yStep : graphGridChangeCallback,
-            ySubStep : graphGridChangeCallback,
+            xStep : graphGridChangeStaticPointsCallback,
+            xSubStep : graphGridChangeStaticPointsCallback,
+            yStep : graphGridChangeStaticPointsCallback,
+            ySubStep : graphGridChangeStaticPointsCallback,
             yAllowOuter : graphConfigChangeCallback,
             xAllowOuter : graphConfigChangeCallback,
 
@@ -149,7 +233,19 @@ define([
             pointRadius : graphConfigChangeCallback,
             pointGlow : graphConfigChangeCallback,
             pointColor : graphConfigChangeCallback,
-            innerLineWeight : graphConfigChangeCallback
+            innerLineWeight : graphConfigChangeCallback,
+
+            staticPoints : graphConfigChangeCallback,
+            staticPointColor : graphConfigChangeCallback,
+            staticPointGlow : graphConfigChangeCallback,
+            staticPointRadius : graphConfigChangeCallback,
+            staticPointLabelSize : graphConfigChangeCallback,
+            staticPointLabelWeight : graphConfigChangeCallback,
+            staticPointLabelColor : graphConfigChangeCallback,
+            staticDisplayPoints : graphConfigChangeCallback,
+            staticLineColor : graphConfigChangeCallback,
+            staticLineThickness : graphConfigChangeCallback,
+            staticShowLine : graphConfigChangeCallback
         };
         changeCallbacks = _.assign(changeCallbacks, xAxisCallbacks, yAxisCallbacks);
 

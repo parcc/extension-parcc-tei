@@ -82,10 +82,31 @@ define([
                     color: rawConfig.pointColor,
                     glow : getBoolean(rawConfig.pointGlow, true),
                     radius: parseInt(rawConfig.pointRadius, radix)
-                }
+                },
+
+                // StaticPlotFactory config
+                staticPlot : {
+                    color: rawConfig.staticLineColor,
+                    thickness: parseInt(rawConfig.staticLineThickness, radix)
+                },
+
+                // StaticPointFactory config
+                staticPoint : {
+                    color: rawConfig.staticPointColor,
+                    labelColor: rawConfig.staticPointLabelColor,
+                    labelSize: rawConfig.staticPointLabelSize,
+                    labelWeight: rawConfig.staticPointLabelWeight,
+                    glow : getBoolean(rawConfig.staticPointGlow, false),
+                    radius: parseInt(rawConfig.staticPointRadius, radix)
+                },
+
+                // StaticPoints config
+                showStaticLines: getBoolean(rawConfig.staticShowLine, true),
+                showStaticPoints: getBoolean(rawConfig.staticDisplayPoints, true),
+                staticPoints: rawConfig.staticPoints
         };
 
-        // overide invalid values with safe defaults
+        // override invalid values with safe defaults
         if (gridConfig.x.step < 1) {
             gridConfig.x.step = 1;
         }
@@ -131,8 +152,11 @@ define([
                 paper,
                 grid,
                 points = [],
+                paths = [],
                 plotFactory,
-                paths = [];
+                staticPoints = [],
+                staticPaths = [],
+                staticPlotFactory;
 
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
@@ -148,6 +172,8 @@ define([
                 //clear existing drawn elements (if any)
                 clearPlot();
                 clearPoint();
+                clearStaticPlot();
+                clearStaticPoint();
 
                 //create paper
                 paper = createCanvas($gridContainer, gridConfig);
@@ -188,6 +214,13 @@ define([
 
                     //init related plot factory
                     plotFactory = new PlotFactory(grid, gridConfig.plot);
+                    staticPlotFactory = new PlotFactory(grid, gridConfig.staticPlot);
+
+                    //add static points, if any
+                    _.forEach(gridConfig.staticPoints, function(point) {
+                        addStaticPoint(point.x, point.y, point.label, true);
+                    });
+                    staticPlot();
 
                     //add listener to removed.point
                     $(paper.canvas).off('removed.point').on('removed.point', function(_event, removedPoint){
@@ -204,22 +237,33 @@ define([
                 return grid;
             }
 
-            function clearPlot(){
-                paths.forEach(function (path) {
-                    path.remove();
+            function removeAll(list) {
+                list.forEach(function(element) {
+                    element.remove();
                 });
+            }
+
+            function clearPlot(){
+                removeAll(paths);
                 paths = [];
             }
 
             function clearPoint(){
-                _.each(points, function(point){
-                    point.remove();
-                });
+                removeAll(points);
                 points = [];
             }
 
-            function plot(){
+            function clearStaticPlot(){
+                removeAll(staticPaths);
+                staticPaths = [];
+            }
 
+            function clearStaticPoint(){
+                removeAll(staticPoints);
+                staticPoints = [];
+            }
+
+            function plotLines(points, paths, plotFactory) {
                 var sortedPoints = points.sort(function(pointA, pointB) {
                         var ax = pointA.getX(),
                             ay = pointA.getY(),
@@ -236,10 +280,8 @@ define([
                         segment : self.gridConfig.segment
                     };
 
-                clearPlot();
-
-                if (self.gridConfig.graphType === 'line' && sortedPoints.length >= 2) {
-                    sortedPoints.reduce(function (pointA, pointB) {
+                if (sortedPoints.length >= 2) {
+                    sortedPoints.reduce(function(pointA, pointB) {
                         if (pointA.getX() === pointB.getX()) {
                             paths.push(plotFactory.plotVertical(pointA, pointB, plotConfig));
                         } else {
@@ -248,6 +290,15 @@ define([
                         return pointB;
                     });
                 }
+            }
+
+            function plot(){
+                clearPlot();
+
+                if (self.gridConfig.graphType === 'line') {
+                    plotLines(points, paths, plotFactory);
+                }
+
                 points.forEach(function (point) {
                     point.render();
                     if (self.gridConfig.draggable) {
@@ -257,6 +308,20 @@ define([
                 });
 
                 self.trigger('responseChange', [self.getResponse()]);
+            }
+
+            function staticPlot(){
+                clearStaticPlot();
+
+                if (self.gridConfig.showStaticLines) {
+                    plotLines(staticPoints, staticPaths, staticPlotFactory);
+                }
+
+                if (self.gridConfig.showStaticPoints) {
+                    staticPoints.forEach(function (point) {
+                        point.render();
+                    });
+                }
             }
 
             function areCoordsValid(x, y, cartesian) {
@@ -310,6 +375,28 @@ define([
                         newPoint.setCartesianCoord(fx, fy, pointConfig);
                     }
                     points.push(newPoint);
+                }
+
+                return newPoint;
+            }
+
+            function addStaticPoint(fx, fy, label, cartesian){
+
+                var newPoint, pointConfig;
+
+                if(grid && areCoordsValid(fx, fy, cartesian)){
+
+                    pointConfig = _.defaults({
+                        x : fx,
+                        y : fy,
+                        label : label
+                    }, self.gridConfig.staticPoint);
+
+                    newPoint = pointFactory(paper, grid, pointConfig);
+                    if(cartesian){
+                        newPoint.setCartesianCoord(fx, fy, pointConfig);
+                    }
+                    staticPoints.push(newPoint);
                 }
 
                 return newPoint;

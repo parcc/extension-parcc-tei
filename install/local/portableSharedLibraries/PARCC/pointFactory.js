@@ -28,6 +28,10 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
      * @param  {Number} [options.fill=true]                 fill the point with given color, the border is colored otherwise
      * @param  {Number} [options.removable=true]            define if the point should be remove on simple click
      * @param  {Number} [options.cartesian=false]           define the inital position as cartesian coordinate
+     * @param  {String} [options.label=""]                  a label to display with the point
+     * @param  {String} [options.labelColor="#000"]         color of label
+     * @param  {Number} [options.labelSize=10]              font size of label
+     * @param  {Number} [options.labelWeight=0]             font weight of label
      * @return {Object}                                     point Object
      */
     function pointFactory(paper, grid, options){
@@ -42,6 +46,8 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
             _x = 0,
             /** @type {Number} y coordinate (in px) */
             _y = 1,
+            /** @type {String} label to display */
+            _label = "",
             /** @type {Number} radius for the glowing effect */
             _rGlow = parseInt(options.glowRadius) || _r * 3,
             /** @type {Object} events callback */
@@ -76,6 +82,13 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                 return _x;
             },
             /**
+             * Get label
+             * @return {String}
+             */
+            getLabel : function(){
+                return _label;
+            },
+            /**
              * Get _y value
              * @return {Number} y position
              */
@@ -88,6 +101,13 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
              */
             setY : function(val){
                 _y = parseInt(val);
+            },
+            /**
+             * Set label
+             * @param {String} val
+             */
+            setLabel : function(val){
+                _label = val;
             },
             /**
              * Set coordinate in the cartesian coordinate system
@@ -162,6 +182,16 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
                     this.showGlow();
                 }
 
+                if (_label) {
+                    var text = paper.text(_x, _y, _label);
+                    text.attr({
+                        fill : options.labelColor || '#000',
+                        stroke : options.labelColor || '#000',
+                        'stroke-width' : options.labelWeight || 0,
+                        'font-size': options.labelSize || 10
+                    });
+                    this.children.push(text);
+                }
             },
             /**
              * Remove the point from the canvas
@@ -312,6 +342,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash'], function($, _){
         }else{
             obj.setCoord(options.x, options.y);
         }
+        obj.setLabel(options.label);
 
         return obj;
     }

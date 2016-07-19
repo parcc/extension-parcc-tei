@@ -107,10 +107,10 @@
     <label>{{__ "Graduation"}}</label>
     <div class="panel subpanel">
         <div class="panel creator-graphPointLineGraphInteraction-range">
-            <label for="yytart" class="spinner">{{__ "from"}}</label>
+            <label for="yStart" class="spinner">{{__ "from"}}</label>
             <input name="yStart" value="{{yStart}}" data-increment="1" type="text" />
             <label for="yEnd" class="spinner">{{__ "to"}}</label>
-            <input name="xynd" value="{{yEnd}}" data-increment="1" type="text" /><br />
+            <input name="yEnd" value="{{yEnd}}" data-increment="1" type="text" /><br />
         </div>
         <div class="panel yStepValue">
             <label for="yStep" class="spinner">{{__ "by increment of"}}</label>
@@ -174,5 +174,67 @@
         <span class="icon-checkbox"></span>
         {{__ " points Glow"}}
     </label>
+</div>
+
+<hr/>
+
+<div class="static-points-panel">
+    <h3>{{__ "Static points"}}</h3>
+    <div class="panel">
+        <div class="static-points"></div>
+        <a href="#" class="adder static-point-add">{{__ "Add a static point"}}</a>
+    </div>
+    <div class="item-editor-color-picker">
+        <div class="color-picker-container sidebar-popup">
+            <div class="sidebar-popup-title">
+                <h3>{{__ "Color selector"}}</h3>
+                <a class="closer" href="#" data-close="#color-picker-container"></a>
+            </div>
+            <div class="color-picker"></div>
+            <input class="color-picker-input" type="text" value="#000000">
+        </div>
+        <div class="panel">
+            <label for="staticLineColor">{{__ "Graph Color"}}</label>
+            <span class="color-trigger" id="staticLineColor"></span>
+            <input type="hidden" name="staticLineColor" value="{{staticLineColor}}"/>
+        </div>
+        <div class="panel">
+            <label for="staticPointColor">{{__ "Point Color"}}</label>
+            <span class="color-trigger" id="staticPointColor"></span>
+            <input type="hidden" name="staticPointColor" value="{{staticPointColor}}"/>
+        </div>
+        <div class="panel">
+            <label for="staticPointLabelColor">{{__ "Label Color"}}</label>
+            <span class="color-trigger" id="staticPointLabelColor"></span>
+            <input type="hidden" name="staticPointLabelColor" value="{{staticPointLabelColor}}"/>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel  creator-graphPointLineGraphInteraction-spinner">
+            <label for="staticLineThickness" class="spinner">{{__ "Thickness"}}</label>
+            <input name="staticLineThickness" value="{{staticLineThickness}}" data-increment="1" data-min="1" type="text" class="incrementer">
+            <label for="staticPointRadius" class="spinner">{{__ "Point radius"}}</label>
+            <input name="staticPointRadius" value="{{staticPointRadius}}" data-increment="1" data-min="1" type="text" class="incrementer">
+            <label for="staticPointLabelSize" class="spinner">{{__ "Label font size"}}</label>
+            <input name="staticPointLabelSize" value="{{staticPointLabelSize}}" data-increment="1" data-min="8" type="text" />
+            <label for="staticPointLabelWeight" class="spinner">{{__ "Label font weight"}}</label>
+            <input name="staticPointLabelWeight" value="{{staticPointLabelWeight}}" data-increment="1" data-min="0" type="text" />
+        </div>
+        <label>
+            <input name="staticPointGlow" type="checkbox" {{#if staticPointGlow}}checked="checked"{{/if}}/>
+            <span class="icon-checkbox"></span>
+            {{__ " points Glow"}}
+        </label>
+        <label>
+            <input name="staticDisplayPoints" type="checkbox" {{#if staticDisplayPoints}}checked="checked"{{/if}}/>
+            <span class="icon-checkbox"></span>
+            {{__ " Display points"}}
+        </label>
+        <label>
+            <input name="staticShowLine" type="checkbox" {{#if staticShowLine}}checked="checked"{{/if}}/>
+            <span class="icon-checkbox"></span>
+            {{__ " Display lines"}}
+        </label>
+    </div>
 </div>
 
