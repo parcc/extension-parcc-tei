@@ -9,8 +9,8 @@
         </gte>
         <setOutcomeValue identifier="SCORE">
             <sum>
-            <variable identifier="SCORE"/>
-            <baseValue baseType="float">{{score}}</baseValue>
+                <variable identifier="SCORE"/>
+                <baseValue baseType="float">{{score}}</baseValue>
             </sum>
         </setOutcomeValue>
     </responseIf>

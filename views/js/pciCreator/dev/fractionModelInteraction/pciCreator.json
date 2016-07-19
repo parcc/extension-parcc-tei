@@ -17,7 +17,8 @@
     "tags": [],
     "icon": "./creator/img/icon.svg",
     "response": {
-        "baseType": "boolean",
-        "cardinality": "multiple"
-    }
+        "baseType": "string",
+        "cardinality": "single"
+    },
+    "debug" : true
 }

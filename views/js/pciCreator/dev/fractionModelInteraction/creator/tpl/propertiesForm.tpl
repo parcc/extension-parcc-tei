@@ -29,8 +29,20 @@
     <span class="tooltip-content">{{__ "Outline Thickness Description"}}</span>
 </div>
 <div class="panel">
-    <label for="someProp" class="spinner">{{__ "Radius"}}</label>
+    <label for="radius" class="spinner">{{__ "Radius"}}</label>
     <input name="radius" value="{{radius}}" data-increment="10" data-min="0" type="text" class="incrementer">
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
     <span class="tooltip-content">{{__ "Radius Description"}}</span>
+</div>
+<div class="panel">
+    <label for="partitionMin" class="spinner">{{__ "Min. Segments"}}</label>
+    <input name="partitionMin" value="{{partitionMin}}" data-increment="1" data-min="1" type="text" class="incrementer">
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">{{__ "Mininum number of segments allowed."}}</span>
+</div>
+<div class="panel">
+    <label for="partitionMax" class="spinner">{{__ "Max. Segments"}}</label>
+    <input name="partitionMax" value="{{partitionMax}}" data-increment="1" data-min="1" type="text" class="incrementer">
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">{{__ "Maximum number of segments allowed."}}</span>
 </div>

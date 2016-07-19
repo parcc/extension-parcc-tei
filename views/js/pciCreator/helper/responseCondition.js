@@ -15,17 +15,22 @@
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  */
-define(['jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], function($, xmlRenderer){
+define(['lodash', 'jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], function(_, $, xmlRenderer){
     'use strict';
     
-    function replaceResponseCondition(interaction, newResponseConditionXml){
+    function replaceResponseCondition(interaction, newResponseConditionXml, criteria){
         
         var item = interaction.getRelatedItem();
         var rp = item.responseProcessing;
         var $rpXml = $($.parseXML(rp.render(xmlRenderer.get())));
         var newRc = $rpXml[0].importNode($.parseXML(newResponseConditionXml).documentElement, true);
         var responseIdentifier = interaction.attr('responseIdentifier');
-        
+
+        //prepare replacement criteria
+        criteria = _.defaults(criteria || {}, {
+            responseIdentifierCount : 1
+        });
+
         if($rpXml.length){
             if($rpXml[0].documentElement.getAttribute('template')){
                 
@@ -38,7 +43,7 @@ define(['jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], function($, xmlRe
             }else{
                 //if it is not a standard template, replace its rc with the new one
                 var $respVar = $rpXml.find('variable[identifier="'+responseIdentifier+'"]');
-                if($respVar.length === 1){
+                if($respVar.length === criteria.responseIdentifierCount){
                     
                     //remove old node
                     var $respCond = $respVar.parents('responseCondition');
@@ -52,6 +57,7 @@ define(['jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], function($, xmlRe
                 }
             }
 
+            //programmatically modifying the response condition requires the whole item RP mode of item to turn into custom mode
             rp.setProcessingType('custom');
             
             //serialize
