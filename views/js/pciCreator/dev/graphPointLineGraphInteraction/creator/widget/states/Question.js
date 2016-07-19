@@ -93,9 +93,9 @@ define([
                 x: staticPoint.x,
                 y: staticPoint.y,
                 xMax: interaction.prop('xEnd'),
-                xStep: interaction.prop('xStep'),
+                xStep: parseInt(interaction.prop('xStep')) / (parseInt(interaction.prop('xSubStep')) || 0),
                 yMax: interaction.prop('yEnd'),
-                yStep: interaction.prop('yStep'),
+                yStep: parseInt(interaction.prop('yStep')) / (parseInt(interaction.prop('ySubStep')) || 0),
                 label: staticPoint.label
             }));
             spinner($staticPoint);
@@ -209,9 +209,9 @@ define([
             height : graphGridChangeStaticPointsCallback,
             maxPoints : graphGridChangeCallback,
             xStep : graphGridChangeStaticPointsCallback,
-            xSubStep : graphGridChangeCallback,
+            xSubStep : graphGridChangeStaticPointsCallback,
             yStep : graphGridChangeStaticPointsCallback,
-            ySubStep : graphGridChangeCallback,
+            ySubStep : graphGridChangeStaticPointsCallback,
             yAllowOuter : graphConfigChangeCallback,
             xAllowOuter : graphConfigChangeCallback,
 
