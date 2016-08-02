@@ -52,26 +52,28 @@ define([
         var responseDeclaration = interaction.getResponseDeclaration();
         var graphType = getCorrectResponseRecordEntryValue(responseDeclaration, 'functionGraphType');
         var samplePoints = getCorrectResponseRecordEntryValue(responseDeclaration, 'samplePoints');
+
         if(graphType && samplePoints){
-            samplePoints = samplePoints.split(',');
             interaction.setResponse({
                 record : [
                     {
                         name: 'functionGraphType',
-                        base : {'string' : graphType}
+                        base : {string : graphType}
                     },
                     {
                         name : 'points',
-                        list : {
-                            string : samplePoints
-                        }
+                        base : {string : samplePoints}
                     }
                 ]
             });
+        }else{
+            //start with no response defined
+            interaction.resetResponse();
         }
 
         //init editing widget event listener
         interaction.onPci('responseChange', function(response){
+            var points;
             if(response &&
                 _.isArray(response.record) &&
                 response.record[0] &&
@@ -80,12 +82,15 @@ define([
                 response.record[0].base &&
                 response.record[0].base.string &&
                 response.record[1].name === 'points' &&
-                response.record[1].list &&
-                _.isArray(response.record[1].list.string)
+                response.record[1].base &&
+                response.record[1].base.string
             ){
                 setCorrectResponseRecordEntry(responseDeclaration, 'functionGraphType', 'string', response.record[0].base.string);
-                setCorrectResponseRecordEntry(responseDeclaration, 'samplePoints', 'string', response.record[1].list.string.join(','));
-                setCorrectResponseRecordEntry(responseDeclaration, 'vertex', 'string', response.record[1].list.string[0] || '');
+                setCorrectResponseRecordEntry(responseDeclaration, 'samplePoints', 'string', response.record[1].base.string);
+                points = response.record[1].base.string.split(',');
+                if(points && points.length){
+                    setCorrectResponseRecordEntry(responseDeclaration, 'vertex', 'string', points[0].trim() || '');
+                }
             }
         });
 

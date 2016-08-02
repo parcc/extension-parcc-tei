@@ -62,13 +62,11 @@ define([
             record : [
                 {
                     name : 'functionGraphType',
-                    base : {'string' : 'linear'}
+                    base : {string : 'linear'}
                 },
                 {
                     name : 'points',
-                    list : {
-                        string : ['-2 -8', '6 1']
-                    }
+                    base : {string : '-2 -8,6 1'}
                 }
             ]
         };
@@ -104,13 +102,11 @@ define([
             record : [
                 {
                     name : 'functionGraphType',
-                    base : {'string' : 'linear'}
+                    base : {string : 'linear'}
                 },
                 {
                     name : 'points',
-                    list : {
-                        string : ['-2 -8', '6 1']
-                    }
+                    base : {string : '-2 -8,6 1'}
                 }
             ]
         };

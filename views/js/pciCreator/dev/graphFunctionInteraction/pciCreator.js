@@ -84,11 +84,11 @@ define([
             }));
 
             //set default (and fixed) correct "numberPointsRequired" value
-            pci.getResponseDeclaration().correctResponse = [{
+            pci.getResponseDeclaration().correctResponse = {numberPointsRequired : {
                 fieldIdentifier : 'numberPointsRequired',
                 baseType : 'integer',
                 value : 2//it is presently always 2
-            }];
+            }};
         },
         /**
          * (required) Gives the qti pci xml template 

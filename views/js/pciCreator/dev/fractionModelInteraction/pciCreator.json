@@ -20,5 +20,5 @@
         "baseType": "string",
         "cardinality": "single"
     },
-    "debug" : true
+    "debug" : false
 }
