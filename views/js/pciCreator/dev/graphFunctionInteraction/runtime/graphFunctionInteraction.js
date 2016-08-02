@@ -538,16 +538,11 @@ define([
                     record : [
                         {
                             name: 'functionGraphType',
-                            base : {'string' : raw.mathFunction}
+                            base : {string : raw.mathFunction}
                         },
                         {
                             name : 'points',
-                            list : {
-                                string : [
-                                    raw.point1.x+' '+raw.point1.y,
-                                    raw.point2.x+' '+raw.point2.y
-                                ]
-                            }
+                            base : {string :  raw.point1.x+' '+raw.point1.y+','+raw.point2.x+' '+raw.point2.y}
                         }
                     ]
                 };
