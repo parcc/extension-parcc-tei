@@ -126,8 +126,8 @@ define([
      */
     function extractPointsFromString(stringPoints){
         var points = [];
-        _.each(stringPoints, function(strPoint){
-            var pt = strPoint.split(/\s+/);
+        _.each(stringPoints.split(/,/), function(strPoint){
+            var pt = strPoint.trim().split(/\s+/);
             if(pt.length === 2){
                 points.push({
                     x : pt[0],
@@ -516,10 +516,10 @@ define([
                 response.record[0].base &&
                 response.record[0].base.string &&
                 response.record[1].name === 'points' &&
-                response.record[1].list &&
-                _.isArray(response.record[1].list.string)
+                response.record[1].base &&
+                response.record[1].base.string
             ){
-                points = extractPointsFromString(response.record[1].list.string);
+                points = extractPointsFromString(response.record[1].base.string);
                 this.setRawResponse(response.record[0].base.string, points.shift(),points.shift());
             }
         },
@@ -538,16 +538,11 @@ define([
                     record : [
                         {
                             name: 'functionGraphType',
-                            base : {'string' : raw.mathFunction}
+                            base : {string : raw.mathFunction}
                         },
                         {
                             name : 'points',
-                            list : {
-                                string : [
-                                    raw.point1.x+' '+raw.point1.y,
-                                    raw.point2.x+' '+raw.point2.y
-                                ]
-                            }
+                            base : {string :  raw.point1.x+' '+raw.point1.y+','+raw.point2.x+' '+raw.point2.y}
                         }
                     ]
                 };

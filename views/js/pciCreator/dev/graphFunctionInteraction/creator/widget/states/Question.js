@@ -34,11 +34,6 @@ define([
         this.destroyColorPickers();
     });
 
-    function graphPropChangeCallback(interaction, value, name){
-        interaction.prop(name, value);
-        interaction.triggerPci('gridchange', [interaction.getProperties()]);
-    }
-
     StateQuestion.prototype.initForm = function(){
 
         var widget = this.widget,
