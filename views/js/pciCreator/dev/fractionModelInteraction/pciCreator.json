@@ -1,0 +1,24 @@
+{
+    "typeIdentifier": "fractionModelInteraction",
+    "label": "Fraction Model",
+    "short": "Fractions",
+    "description": "Select one or more fraction",
+    "version": "0.1.1",
+    "author": "Thibault Milan",
+    "email": "contact@taotesting.com",
+    "libraries": [
+        "IMSGlobal/jquery_2_1_1",
+        "./runtime/libs/pieChart"
+    ],
+    "css": [
+        "./runtime/css/fractionModelInteraction.css"
+    ],
+    "entryPoint": "./runtime/fractionModelInteraction.js",
+    "tags": [],
+    "icon": "./creator/img/icon.svg",
+    "response": {
+        "baseType": "string",
+        "cardinality": "single"
+    },
+    "debug" : false
+}

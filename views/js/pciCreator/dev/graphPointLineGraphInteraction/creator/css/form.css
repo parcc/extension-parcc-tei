@@ -1,0 +1,29 @@
+.item-editor-sidebar .tool-group .panel.creator-graphPointLineGraphInteraction-range h3 {display:block; padding-bottom: 8px;}
+.item-editor-sidebar .tool-group .panel.creator-graphPointLineGraphInteraction-range label {display:inline;}
+.item-editor-sidebar .tool-group .panel.creator-graphPointLineGraphInteraction-range .incrementer-ctrl-wrapper {margin:0 5px;}
+
+.item-editor-sidebar .tool-group .panel.creator-graphPointLineGraphInteraction-spinner .incrementer-ctrl-wrapper {float:right; top:-5px;}
+
+.item-editor-sidebar .tool-group .equation-scoring label{max-width: 170px;}
+
+.equation-wizard div {margin-bottom: 6px;}
+.equation-wizard label {min-width:120px;}
+.equation-wizard .short {width: 30px; min-width : 30px;}
+.equation-wizard .long {width : 280px;}
+
+.static-point-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: 5px 0;
+    padding: 4px 8px 4px 2px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    background-color: rgba(255,255,255,0.8);
+    max-width: 500px;
+}
+.static-point-props { display: flex; flex-direction: row; padding: 4px 0; align-items: center; }
+.static-point-props label { display: inline-block; min-width: auto!important; padding: 0 5px!important; margin: 0!important;; }
+.static-point-props input { display: inline-block; min-width: auto!important; }
+.static-point-delete { cursor: pointer; padding: 5px 0; margin-left: 10px; }

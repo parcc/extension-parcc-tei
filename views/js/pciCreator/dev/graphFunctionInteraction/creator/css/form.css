@@ -1,0 +1,7 @@
+#creator-graphFunctionInteraction-available-graphs {padding-top:10px;} 
+
+.item-editor-sidebar .tool-group .panel.creator-graphFunctionInteraction-range h3 {display:block; padding-bottom: 8px;}
+.item-editor-sidebar .tool-group .panel.creator-graphFunctionInteraction-range label {display:inline;}
+.item-editor-sidebar .tool-group .panel.creator-graphFunctionInteraction-range .incrementer-ctrl-wrapper {margin:0 5px;}
+
+.item-editor-sidebar .tool-group .panel.creator-graphFunctionInteraction-spinner .incrementer-ctrl-wrapper {float:right; top:-5px;}

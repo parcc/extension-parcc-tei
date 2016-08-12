@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+        <title>PCI Graph Function Interaction Common Renderer Test</title>
+        <link rel="stylesheet" type="text/css" href="/tao/views/js/lib/qunit/qunit.css">
+        <script type="text/javascript" src="/tao/views/js/lib/require.js"></script>
+        <script type="text/javascript" src="/tao/views/js/lib/qunit/qunit.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="/tao/views/css/tao-main-style.css" />
+        <link rel="stylesheet" type="text/css" href="/taoQtiItem/views/css/qti-runner.css" />
+        <link rel="stylesheet" type="text/css" href="/taoQtiItem/views/css/themes/default.css" />
+
+        <script  type="text/javascript">
+            QUnit.config.autostart = false;
+            require(['/tao/ClientConfig/config'], function () {
+                require(['parccTei/pciCreator/dev/multiTabbedExhibit/test/passageEditorTest'], function () {
+                    QUnit.start();
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="qunit"></div>
+        <div id="qunit-fixture">
+            <div class="multiTabbedExhibit-markup">
+                <div class="multiTabbedExhibit">
+                    <div class="prompt">
+                        some prompt text
+                    </div>
+                    <div class="passages">
+                        <div class="passage" title="Passage 1">
+                            Simple passage
+                        </div>
+                        <div class="passage passage-paging passage540" title="Passage 2">
+                            <div class="page">
+                                page content #1
+                            </div>
+                            <div class="page">
+                                page content #2
+                            </div>
+                            <div class="page">
+                                page content #3
+                            </div>
+                            <div class="page">
+                                page content #4
+                            </div>
+                        </div>
+                        <div class="passage passage-scrolling passage240" title="Passage 3">
+                            Passage with scrolling
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

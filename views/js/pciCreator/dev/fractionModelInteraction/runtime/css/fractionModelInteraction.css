@@ -1,0 +1,15 @@
+/*add some style, need to scope (using the typeIdentifier as class prefix) every style declaration to prevent collision */
+
+.fractionModelInteraction {width:100%;}
+
+.fractionModelInteraction .prompt {position:relative; border : 2px solid #EFEFEF;}
+
+.fractionModelInteraction .likert-label {min-width:90px; color: #444;}
+.fractionModelInteraction .likert-label-min {text-align: right;}
+.fractionModelInteraction .likert-label-max {text-align: left;}
+
+.fractionModelInteraction .shape-title {margin-top: 10px; margin-right : auto; margin-left : auto; width : 50%; text-align : center;}
+.fractionModelInteraction .shape-panel {padding: 10px 10px 20px; background : #EFEFEF;}
+.fractionModelInteraction .shape-container {margin:auto;}
+.fractionModelInteraction .shape-controls {text-align: center;}
+.fractionModelInteraction .shape-controls button {margin: 0 5px; padding: 0 20px;}
