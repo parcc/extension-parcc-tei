@@ -235,7 +235,7 @@ define(['OAT/lodash'], function(_){
          * @param {Object} inflection
          * @returns {Array}
          */
-        get : function(start, inflection){
+        get : function(inflection, start){
 
             if(checkPairOfPoints(start, inflection)){
 
