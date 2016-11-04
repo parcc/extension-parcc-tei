@@ -60,6 +60,11 @@ define([
         });
     }
 
+    /**
+     * Init the equation based scoring widget
+     *
+     * @param widget
+     */
     function initEquationBasedScoring(widget){
 
         var interaction = widget.element;
@@ -69,36 +74,67 @@ define([
         var $templateSelector = $responseForm.find('select[name="template"]').closest('.panel');
         var $equationFormPanel;
 
-        if(!$responseForm.find('.panel.equation-scoring').length && rp.processingType !== 'custom'){
+        //currently, only authorize correct and custom response processing mode
+        //should not be removed as thecustom response widget will hook to this dom element
+        $templateSelector.hide();
 
-            $equationFormPanel = $(equationFormElementTpl());
+        if(!$responseForm.find('.panel.equation-scoring').length){
+
+            $equationFormPanel = $(equationFormElementTpl({
+                equationScoring : (rp.processingType === 'custom')
+            }));
             $templateSelector.after($equationFormPanel);
-            $templateSelector.remove();//only authorize correct and custom response processing mode
+
             $equationFormPanel.on('change', '[name=equationScoring]', function(){
 
                 var $checkbox = $(this);
+                if($checkbox.prop('checked')){
+                    //init the prompt box
+                    equationWizard(function(equation, mumPointsRequired, score){
 
-                //init the prompt box
-                equationWizard(function(equation, mumPointsRequired, score){
+                        //turn into custom rp and substitute the resp cond
+                        responseCondition.replace(interaction, equationRcTpl({
+                            responseIdentifier : interaction.attr('responseIdentifier'),
+                            equation : equation,
+                            mumPointsRequired : mumPointsRequired,
+                            score : score
+                        }));
 
-                    //turn into custom rp and substitute the resp cond
-                    responseCondition.replace(interaction, equationRcTpl({
-                        responseIdentifier : interaction.attr('responseIdentifier'),
-                        equation : equation,
-                        mumPointsRequired : mumPointsRequired,
-                        score : score
-                    }));
+                        //reload
+                        answerStateHelper.initResponseForm(widget);
 
+                    }, function(){
+                        $checkbox.prop('checked', false);
+                    });
+                }else{
+                    restoreCorrectRp(interaction);
                     //reload
                     answerStateHelper.initResponseForm(widget);
-
-                }, function(){
-                    $checkbox.prop('checked', false);
-                });
+                }
             });
         }
     }
 
+    /**
+     * Allow restoring the response processing of an interaction back to the standard correct
+     *
+     * @param interaction
+     */
+    function restoreCorrectRp(interaction){
+        var responseDeclaration = interaction.getResponseDeclaration();
+        var item = interaction.getRelatedItem();
+        var rp = item.responseProcessing;
+        rp.setProcessingType('templateDriven');
+        responseDeclaration.template = 'http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct';
+    }
+
+    /**
+     * Init equation wizard
+     *
+     * @param {Function} accept - callback to be executed when the wizard is complete
+     * @param {Function} refuse - callback to be executed when the wizard is cancelled
+     * @returns {*}
+     */
     function equationWizard(accept, refuse) {
         var accepted = false;
         var dlg = dialog({
