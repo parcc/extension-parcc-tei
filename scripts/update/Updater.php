@@ -120,6 +120,13 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('0.3.0');
         }
 
+        if($this->isVersion('0.3.0')){
+
+            $registry->registerFromFile('PARCC/graphFunction', $installBasePath.'/PARCC/graphFunction.js');
+
+            $this->setVersion('0.3.1');
+        }
+
     }
 
 }
