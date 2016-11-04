@@ -1,6 +1,6 @@
 <div class="equation-wizard">
-    <h2>{{__ "Equation Reponse Processing Wizard"}}</h2>
-    <p>{{__ "The response processing will turn into qti custom mode using this equation to score this interaction. Subsequent changes need to be done on the global item custom response processing editor."}}</p>
+    <h2>{{__ "Equation Response Processing Wizard"}}</h2>
+    <p>{{__ "The response processing will turn into qti custom mode using this equation to score this interaction. Subsequent changes need to be done in the global item custom response processing editor."}}</p>
     <div>
         <label for="equation" class="has-icon">{{__ "Equation"}}</label>
         <input type="text"
