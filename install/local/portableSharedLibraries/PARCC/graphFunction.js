@@ -231,11 +231,11 @@ define(['OAT/lodash'], function(_){
          * The returned equation is under the format [a, b, c, d]
          * which represents f(x) = a * cos( bx + c ) + d;
          *
-         * @param {Object} start
          * @param {Object} inflection
+         * @param {Object} start
          * @returns {Array}
          */
-        get : function(start, inflection){
+        get : function(inflection, start){
 
             if(checkPairOfPoints(start, inflection)){
 
