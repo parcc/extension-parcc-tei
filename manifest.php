@@ -23,7 +23,7 @@ return array(
     'name' => 'parccTei',
 	'label' => 'PARCC Portable Custom Interaction',
 	'description' => '',
-    'license' => 'PARCC',
+    'license' => 'GPL-2.0',
     'version' => '0.4.0',
 	'author' => 'Open Assessment Technologies',
 	'requires' => array(
