@@ -3,21 +3,21 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
 
-define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function($, _, pointFactory){
+define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/OAT/lodash', 'parccTei/portableLib/pointFactory'], function($, _, pointFactory){
 
     var _defaults = {
         color : '#00f',
@@ -31,10 +31,10 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
         var paper = axis.getCanvas();
         var set = paper.set();
         var $canvas = $(paper.canvas);
-        
+
         /**
          * Apply the configured style to the path
-         * 
+         *
          * @param {object} path - raphael path object
          */
         function _applyStyle(path){
@@ -43,10 +43,10 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                 'stroke-width' : config.thickness
             });
         }
-        
+
         /**
-         * Get the position object {top, left} in pixels 
-         * 
+         * Get the position object {top, left} in pixels
+         *
          * @param {integer} x
          * @param {boolean} cartesian
          * @returns {object}
@@ -63,10 +63,10 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
             }
             return position;
         }
-        
+
         /**
          * Draw the line that goes through two points
-         * 
+         *
          * @param {object} position1
          * @param {object} position2
          * @returns {object}
@@ -93,10 +93,10 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
             return path;
 
         }
-        
+
         /**
          * Draw the orientation
-         * 
+         *
          * @param {string} orientation
          * @returns {unresolved}
          */
@@ -108,10 +108,10 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
 
             return arrow;
         }
-        
+
         /**
          * Build a point
-         * 
+         *
          * @param {integer} position - in cartesian unit
          * @param {string} fill - color code
          * @param {function} [drag] - callback function on drag
@@ -143,10 +143,10 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
             set.push(point.children);
             return point;
         }
-        
+
         /**
          * Build an interval limited by its min and max value
-         * 
+         *
          * @param {string} min - lowerbound in cartesian unit
          * @param {string} max - upperbound in cartesian unit
          * @returns {object}
@@ -177,7 +177,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                 start.left = x;
                 _drawLine();
                 pointMax.setOption('xMin', x + .5 * axis.getUnits().x);
-                
+
                 //responseChange
                 coord.start = this.getCartesianCoord().x;
                 $canvas.trigger('change.interval', [_interval]);
@@ -190,11 +190,11 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                 end.left += dx;
                 _drawLine();
             }, function(x){
-                
+
                 end.left = x;
                 _drawLine();
                 pointMin.setOption('xMax', x - .5 * axis.getUnits().x);
-                
+
                 //responseChange
                 coord.end = this.getCartesianCoord().x;
                 $canvas.trigger('change.interval', [_interval]);
@@ -205,9 +205,9 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
 
             _drawLine();
             enable();
-            
+
             /**
-             * draw the line between the two tips of the segment 
+             * draw the line between the two tips of the segment
              */
             function _drawLine(){
                 if(line){
@@ -216,7 +216,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                 line = drawLine(start, end);
                 set.push(line);
             }
-            
+
             /**
              * activate the interval
              */
@@ -234,7 +234,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                     active = true;
                 }
             }
-            
+
             /**
              * disable the interval
              */
@@ -252,29 +252,29 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                     active = false;
                 }
             }
-            
+
             /**
              * destroy and remove the interval
              */
             function destroy(){
                 set.remove().clear();
             }
-            
+
             /**
              * Get start and end of the segment (in cartesian unit)
-             * 
+             *
              * @returns {object}
              */
             function getCoordinates(){
                 return _.clone(coord);
             }
-            
+
             return _interval;
         }
-        
+
         /**
          * Build an interval limited by its tip position and its arrow orientation
-         * 
+         *
          * @param {integer} pt - the tip in cartesian unit
          * @param {string} orientation - the arrow orientation
          * @returns {object}
@@ -302,18 +302,18 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
             }, function(x){
                 pos.left = x;
                 _drawLine();
-                
+
                 //response change
                 coord = this.getCartesianCoord().x;
                 $canvas.trigger('change.interval', [_interval]);
             });
-            
+
             set.push(arrow);
             set.push(point.children);
-            
+
             _drawLine();
             enable();
-            
+
             /**
              * draw the line betwen the tip and arrow
              */
@@ -324,7 +324,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                 line = drawLine(pos, tip);
                 set.push(line);
             }
-            
+
             /**
              * activate the interval
              */
@@ -340,7 +340,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                     active = true;
                 }
             }
-            
+
             /**
              * disable the interval
              */
@@ -356,14 +356,14 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                     active = false;
                 }
             }
-            
+
             /**
              * destroy and remove the interval
              */
             function destroy(){
                 set.remove().clear();
             }
-            
+
             /**
              * Get start and end of the segment (in cartesian unit)
              * The arrow is represented by the "null" value
@@ -441,10 +441,10 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
                 }, 'right');
             }
         };
-        
+
         /**
          * Create and draw an interval
-         * 
+         *
          * @param {string} intervalType
          * @param {integer} min
          * @param {integer} max
@@ -453,7 +453,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/lodash', 'PARCC/pointFactory'], function(
         this.plot = function plot(intervalType, min, max){
             return plots[intervalType](min, max);
         };
-        
+
         /**
          * remove ALL intervals create by the factory
          */

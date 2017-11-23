@@ -3,28 +3,28 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
 
 define([
-    'IMSGlobal/jquery_2_1_1',
+    'taoQtiItem/portableLib/jquery_2_1_1',
     'qtiCustomInteractionContext',
-    'OAT/util/event',
-    'OAT/lodash',
-    'OAT/scale.raphael',
-    'OAT/raphael',
-    'PARCC/gridFactory',
+    'taoQtiItem/portableLib/OAT/util/event',
+    'taoQtiItem/portableLib/OAT/lodash',
+    'taoQtiItem/portableLib/OAT/scale.raphael',
+    'taoQtiItem/portableLib/OAT/raphael',
+    'parccTei/portableLib/gridFactory',
     'graphLineAndPointInteraction/runtime/wrappers/setOfPoints',
     'graphLineAndPointInteraction/runtime/wrappers/points',
     'graphLineAndPointInteraction/runtime/wrappers/lines',
@@ -105,7 +105,7 @@ define([
     function getWrapper(type){
         return _wrappers[type];
     }
-    
+
     function drawLineStyle(dom, config){
         var w = 57, h = 20;
         var lineStylePaper = new Raphael(dom, w, h);
@@ -120,7 +120,7 @@ define([
 
     /**
      * Validate the record entry format (used in setResponse)
-     * 
+     *
      * @param {object} entry
      * @returns {boolean}
      */
@@ -132,10 +132,10 @@ define([
             entry.base.list &&
             _.isArray(entry.base.list.point));
     }
-    
+
     /**
      * Format the response element
-     * 
+     *
      * @param {string} name
      * @param {array} points
      * @returns {object}
@@ -154,7 +154,7 @@ define([
             throw 'invalid arguments';
         }
     }
-    
+
     /**
      * List of events to listen to in order to detect a response change
      * @type Array
@@ -197,7 +197,7 @@ define([
 
             /**
              * Initialize a new graphic element called grid with all needed
-             * 
+             *
              * @param  {Object} $container jQuery node
              * @param  {Object} gridConfig Config (cleaned)
              */
@@ -226,7 +226,7 @@ define([
                             fx = grid.getX() + Math.round((event.clientX - bnds.left) / bnds.width * grid.getWidth() * wfactor),
                             fy = grid.getY() + Math.round((event.clientY - bnds.top) / bnds.height * grid.getHeight() * wfactor);
 
-                        //transfer the click event to the paper    
+                        //transfer the click event to the paper
                         $canvas.trigger('click_grid', {x : fx, y : fy});
                     });
 
@@ -237,7 +237,7 @@ define([
 
             /**
              * Init the interaction
-             * 
+             *
              * @param {Object} grid - the grid object build from GridFactory
              * @param {Object} $cont - the container
              * @param {Object} options
@@ -366,7 +366,7 @@ define([
 
             /**
              * Activate a graph element
-             * 
+             *
              * @param {Object} element
              */
             function activate(element){
@@ -391,7 +391,7 @@ define([
 
             /**
              * Get the current state of initialized element
-             * 
+             *
              * @returns {Object}
              */
             function getState(){
@@ -410,7 +410,7 @@ define([
 
             /**
              * restore state of already initialized elements:
-             * 
+             *
              * @param {Object} state
              * @param {Boolean} ignoreConfig
              */
@@ -439,7 +439,7 @@ define([
 
             /**
              * Get the raw response of the interaction
-             * 
+             *
              * @returns {array}
              */
             this.getRawResponse = function getRawResponse(){
@@ -464,10 +464,10 @@ define([
 
                 return response;
             };
-            
+
             /**
              * Set the raw response
-             * 
+             *
              * @param {object} response
              */
             this.setRawResponse = function setRawResponse(response){
@@ -522,7 +522,7 @@ define([
 
                 _.each(response.record, function(entry){
                     var points, id;
-                    
+
                     if(isValidRecordEntry(entry)){
 
                         id = entry.name;
@@ -554,7 +554,7 @@ define([
                         selections : solutionSetSelections
                     });
                 }
-                
+
                 this.setRawResponse(rawResponse);
             }
         },

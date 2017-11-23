@@ -3,34 +3,34 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
 
 define([
-    'IMSGlobal/jquery_2_1_1',
+    'taoQtiItem/portableLib/jquery_2_1_1',
     'qtiCustomInteractionContext',
-    'OAT/lodash',
-    'OAT/util/event',
-    'OAT/scale.raphael',
-    'PARCC/pointFactory',
-    'PARCC/axisFactory',
+    'taoQtiItem/portableLib/OAT/lodash',
+    'taoQtiItem/portableLib/OAT/util/event',
+    'taoQtiItem/portableLib/OAT/scale.raphael',
+    'parccTei/portableLib/pointFactory',
+    'parccTei/portableLib/axisFactory',
     'graphZoomNumberLineInteraction/runtime/libs/axisZoom'
 ], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, axisZoom){
-    
+
     /**
      * Create the raphael canvas
-     * 
+     *
      * @param {JQuery} $container
      * @param {Object} config
      * @returns {Object}
@@ -43,10 +43,10 @@ define([
 
         return paper;
     }
-    
+
     /**
      * Build the axis config
-     * 
+     *
      * @param {Object} rawConfig
      * @returns {Object}
      */
@@ -76,18 +76,18 @@ define([
 
     /**
      * Format a float into a string maximum of 3 digits
-     * 
+     *
      * @param {Number} num
      * @returns {String}
      */
     function _format(num){
-        
+
         var str = num + '';
         if(str.length > 5){
             if(str.match(/99999\d$/)){
                 str = Math.round(num* 10000) / 10000;
             }else{
-                //cut : 
+                //cut :
                 str = Math.floor(num * 1000) / 1000;
                 str = str.toString();
                 if(str.match(/^\d+\.\d{3,}$/)){
@@ -130,10 +130,10 @@ define([
                 selectedCoord,
                 axisPoint,
                 zoomPoint;
-            
+
             /**
              * Found the selected rectangle representing the area of the axis to be zommed
-             * 
+             *
              * @param {Array} rects
              * @param {Number} position
              * @returns {Object} the rectangle object
@@ -153,10 +153,10 @@ define([
                 });
                 return ret;
             }
-            
+
             /**
              * Draw the point on the "normal" axis
-             * 
+             *
              * @param {Number} coord
              * @returns {Object} the point object
              */
@@ -184,10 +184,10 @@ define([
 
                 return axisPoint;
             }
-            
+
             /**
              * Draw the point on the zoom axis
-             * 
+             *
              * @param {Number} left - the position.left of the point relative to the the zomm axis
              * @returns {Object} the point object
              */
@@ -221,19 +221,19 @@ define([
 
                 return zoomPoint;
             }
-            
+
             /**
              * Get the cartesian coordinate of the point selected in the zommed axis
-             * 
+             *
              * @returns {Number}
              */
             function getZoomPointCoordinate(){
                 return selectedRect.coord + zoomPoint.getCartesianCoord().x / _this.axisConfig.unitSubDivision;
             }
-            
+
             /**
              * Return the postion.left of the selected point relative to the zoomed axis
-             * 
+             *
              * @returns {Number}
              */
             function getSelectedPointPositionLeft(){
@@ -247,7 +247,7 @@ define([
                     }
                 }
             }
-            
+
             /**
              * Update and store the currently selected coord in a private variable
              */
@@ -257,10 +257,10 @@ define([
                 //draw to axis point
                 drawAxisPoint(selectedCoord);
             }
-            
+
             /**
              * Init the axis
-             * 
+             *
              * @param {JQuery} $container
              * @param {Object} axisConfig
              */
@@ -337,7 +337,7 @@ define([
                 });
 
             }
-            
+
             /**
              * Reset drawn elements
              */
@@ -360,10 +360,10 @@ define([
                 }
                 selectedCoord = undefined;
             }
-            
+
             /**
              * Set new config to the axis
-             * 
+             *
              * @param {Object} axisConfig
              */
             function setAxis(axisConfig){
@@ -371,21 +371,21 @@ define([
                 initAxis($container, _this.axisConfig);
                 reset();
             }
-            
+
             //expose the reset() method
             this.reset = function(){
                 reset();
             };
-            
+
             //expose the getRawResponse() method
             this.getRawResponse = function(){
                 return selectedCoord;
             };
-            
+
             //init rendering
             this.axisConfig = buildAxisConfig(this.config);
             initAxis($container, this.axisConfig);
-            
+
             //init event
             this.on('axischange', setAxis);
         },
@@ -414,7 +414,7 @@ define([
             }else{
                 return {base : null};
             }
-            
+
         },
         /**
          * Remove the current response set in the interaction

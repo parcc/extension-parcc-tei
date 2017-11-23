@@ -3,23 +3,23 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
 
 define([
-    'OAT/raphael',
-    'OAT/lodash'
+    'taoQtiItem/portableLib/OAT/raphael',
+    'taoQtiItem/portableLib/OAT/lodash'
 ], function(Raphael, _){
 
     'use strict';
@@ -27,9 +27,9 @@ define([
     function getTotalSelected(selectedPartitions){
         return _.compact(_.values(selectedPartitions)).length;
     }
-    
+
     /**
-     * 
+     *
      * @param {Array} selectedPartitions - e.g. [true, false, false, true, false, false]
      * @param {Object} config
      * @param {Object} [config.padding] - the padding of the pie chart
@@ -71,7 +71,7 @@ define([
                     });
                 });
             };
-        
+
         //work on a clone of the array to prevent external modification
         selectedPartitions = _.clone(selectedPartitions);
 
@@ -95,7 +95,7 @@ define([
 
         var angle = 0,
             angleplus = 360 / selectedPartitions.length;
-            
+
         /**
          * Iterational function that draw every slice
          * @param  {int} j slice number
@@ -109,7 +109,7 @@ define([
 
             // Slice , also called sector.
             p = sector(cx, cy, r, angle, angle + angleplus, getStyle(selected));
-            
+
             //increase the andle
             angle += angleplus;
 
@@ -141,17 +141,17 @@ define([
             return function(){
                 if(String(this.attrs.fill) === config.partitionColor){
                     //it is selected:
-                    
+
                     // Change the color of the background
                     this.attr(getStyle(true));
-                    // update the internal state 
+                    // update the internal state
                     selectedPartitions[j] = true;
                     $container.trigger('select_slice.pieChart', [selectedPartitions, getTotalSelected(selectedPartitions)]);
                 }else{
-                    
+
                     // Change the background color to the default unselected value
                     this.attr(getStyle(false));
-                    // update the internal state 
+                    // update the internal state
                     selectedPartitions[j] = false;
                     $container.trigger('unselect_slice.pieChart', [selectedPartitions, getTotalSelected(selectedPartitions)]);
                 }

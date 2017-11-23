@@ -3,25 +3,25 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
 
 define([
-    'IMSGlobal/jquery_2_1_1',
-    'OAT/lodash',
-    'PARCC/pointFactory',
-    'PARCC/plotFactory'
+    'taoQtiItem/portableLib/jquery_2_1_1',
+    'taoQtiItem/portableLib/OAT/lodash',
+    'parccTei/portableLib/pointFactory',
+    'parccTei/portableLib/plotFactory'
 ], function(
     $,
     _,
@@ -48,7 +48,7 @@ define([
             $paperCanvas = $(paper.canvas),
             plotFactory = new PlotFactory(grid),
             line;
-        
+
         function setConfig(cfg){
             config = _.defaults(cfg, _defaults);
         }
@@ -68,20 +68,20 @@ define([
                 clearPlot();
                 line = plotFactory.plotLinear(point1, point2, plotConf);
                 if(point1.getX() === point2.getX()){
-                    //vertical line : 
+                    //vertical line :
                     //@todo implement this case
                     line = plotFactory.plotVertical(point1, point2, plotConf);
                 }
                 line.uid = uid;
-                
+
                 if(config.lineStyle){
                     line.attr({'stroke-dasharray' : config.lineStyle});
                 }
-                
+
                 $paperCanvas.trigger('drawn.lines', [line]);
             }
         }
-        
+
         // Remove line
         function clearPlot(){
             if(line){

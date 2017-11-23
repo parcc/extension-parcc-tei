@@ -1,6 +1,6 @@
 /*! sly 1.3.0 - 30th Nov 2014 | https://github.com/darsain/sly */
 /* wrapped in AMD and added method getCurrentPos() by ssipasseuth - 17/06/2015*/
-define(['IMSGlobal/jquery_2_1_1'], function(jQuery){
+define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery){
     (function($, w, undefined){
         'use strict';
 
@@ -1279,10 +1279,10 @@ define(['IMSGlobal/jquery_2_1_1'], function(jQuery){
                     }
                 }
             };
-            
+
             /**
              * Return the current position
-             * 
+             *
              * @param  {Function} fn   Function
              */
             self.getCurrentPos = function(fn){
@@ -1290,7 +1290,7 @@ define(['IMSGlobal/jquery_2_1_1'], function(jQuery){
                     fn.call(self, pos.cur);
                 }
             };
-            
+
             /**
              * Returns callback array index.
              *

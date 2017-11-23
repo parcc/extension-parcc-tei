@@ -3,29 +3,29 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
 
 define([
-    'IMSGlobal/jquery_2_1_1',
+    'taoQtiItem/portableLib/jquery_2_1_1',
     'qtiCustomInteractionContext',
-    'OAT/lodash',
-    'OAT/util/event',
-    'OAT/scale.raphael',
-    'PARCC/gridFactory',
-    'PARCC/pointFactory',
-    'PARCC/plotFactory'
+    'taoQtiItem/portableLib/OAT/lodash',
+    'taoQtiItem/portableLib/OAT/util/event',
+    'taoQtiItem/portableLib/OAT/scale.raphael',
+    'parccTei/portableLib/gridFactory',
+    'parccTei/portableLib/pointFactory',
+    'parccTei/portableLib/plotFactory'
 ], function(
     $,
     qtiCustomInteractionContext,
@@ -165,7 +165,7 @@ define([
             return 'graphFunctionInteraction';
         },
         /**
-         * Render the PCI : 
+         * Render the PCI :
          * @param {String} id
          * @param {Node} dom
          * @param {Object} config - json
@@ -178,7 +178,7 @@ define([
             this.id = id;
             this.dom = dom;
             this.config = config || {};
-            
+
             var $container = $(dom);
             var mathFunctions = config.graphs.split(',');
             var $shapeControls = $container.find('.shape-controls');
@@ -205,7 +205,7 @@ define([
                     gridConfig.x.start < gridConfig.x.end &&
                     gridConfig.y.start < gridConfig.y.end
                     ){
-                    
+
                     grid = gridFactory(paper, gridConfig);
                     grid.clickable();
 
@@ -259,7 +259,7 @@ define([
                         }
                     });
                 }
-                
+
                 return grid;
             }
 
@@ -423,18 +423,18 @@ define([
                     plot();
                 }
             }
-            
+
             /**
              * Get the raw response of the interaction.
              * If no graph is drawn, returns null
-             * 
+             *
              * @returns {object}
              */
             this.getRawResponse = function getRawResponse(){
-                
+
                 var point1 = points[0],
                     point2 = points[1];
-                
+
                 if(point1 && point2 && mathFunction){
                     return {
                         point1 : point1.getCartesianCoord(1),
@@ -443,10 +443,10 @@ define([
                     };
                 }
             };
-            
+
             /**
              * Set the raw response to the interaction
-             * 
+             *
              * @param {string} mathFn
              * @param {object} point1
              * @param {number} point1.x
@@ -469,7 +469,7 @@ define([
                 }
                 plot();
             };
-            
+
             /**
              * init rendering:
              */
@@ -520,7 +520,7 @@ define([
         /**
          * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         * 
+         *
          * @param {Object} interaction
          * @param {Object} response
          */
@@ -545,7 +545,7 @@ define([
         /**
          * Get the response in the json format described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         * 
+         *
          * @param {Object} interaction
          * @returns {Object}
          */
@@ -571,7 +571,7 @@ define([
         /**
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
-         * 
+         *
          * @param {Object} interaction
          */
         resetResponse : function(){
@@ -579,9 +579,9 @@ define([
         },
         /**
          * Reverse operation performed by render()
-         * After this function is executed, only the inital naked markup remains 
+         * After this function is executed, only the inital naked markup remains
          * Event listeners are removed and the state and the response are reset
-         * 
+         *
          * @param {Object} interaction
          */
         destroy : function(){
@@ -591,7 +591,7 @@ define([
         },
         /**
          * Restore the state of the interaction from the serializedState.
-         * 
+         *
          * @param {Object} interaction
          * @param {Object} serializedState - json format
          */
@@ -602,7 +602,7 @@ define([
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
-         * 
+         *
          * @param {Object} interaction
          * @returns {Object} json format
          */

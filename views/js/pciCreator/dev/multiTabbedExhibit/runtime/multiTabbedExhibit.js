@@ -3,27 +3,27 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
 
 define([
-    'IMSGlobal/jquery_2_1_1',
+    'taoQtiItem/portableLib/jquery_2_1_1',
     'qtiCustomInteractionContext',
-    'OAT/util/event',
-    'OAT/lodash',
-    'OAT/handlebars',
-    'OAT/waitForMedia',
+    'taoQtiItem/portableLib/OAT/util/event',
+    'taoQtiItem/portableLib/OAT/lodash',
+    'taoQtiItem/portableLib/OAT/handlebars',
+    'taoQtiItem/portableLib/OAT/waitForMedia',
     'multiTabbedExhibit/runtime/lib/sly.min'
 ], function(
     $,
@@ -216,7 +216,7 @@ define([
                 mouseDragging: false
             });
         });
-        
+
         //scroll by press up and down buttons
         $frame.closest('.passage').on('keyup', function (e) {
             if (e.keyCode === 40) {
@@ -227,7 +227,7 @@ define([
             }
             return false;
         });
-        
+
         //reload slider setting because the container might have been resized
         $(window).on('resize.multiTabbedExhibit.' + pci.id, function(){
             $frame.sly('reload');
