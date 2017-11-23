@@ -6,19 +6,34 @@
     "version": "0.1.1",
     "author": "Thibault Milan",
     "email": "contact@taotesting.com",
-    "libraries": [
-        "IMSGlobal/jquery_2_1_1",
-        "./runtime/libs/pieChart"
-    ],
-    "css": [
-        "./runtime/css/fractionModelInteraction.css"
-    ],
-    "entryPoint": "./runtime/fractionModelInteraction.js",
-    "tags": [],
-    "icon": "./creator/img/icon.svg",
     "response": {
         "baseType": "string",
         "cardinality": "single"
     },
-    "debug" : false
+    "runtime" : {
+        "hook" : "./runtime/fractionModelInteraction.js",
+        "libraries" : [
+            "./runtime/libs/pieChart.js"
+        ],
+        "stylesheets" : [
+            "./runtime/css/fractionModelInteraction.css"
+        ],
+        "src" : [
+        ],
+        "mediaFiles" : [
+        ]
+    },
+    "creator" : {
+        "icon": "./creator/img/icon.svg",
+        "hook": "./pciCreator.js",
+        "libraries" : [
+            "./creator/tpl/markup.tpl",
+            "./creator/tpl/propertiesForm.tpl",
+            "./creator/tpl/responseCondition.tpl",
+            "./creator/widget/states/Answer.js",
+            "./creator/widget/states/Question.js",
+            "./creator/widget/states/states.js",
+            "./creator/widget/Widget.js"
+        ]
+    }
 }

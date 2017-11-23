@@ -6,22 +6,37 @@
     "version": "0.1",
     "author": "Sam Sipasseuth & Christophe Noël",
     "email": "sam@taotesting.com & christophe@taotesting.com",
-    "libraries": [
-        "IMSGlobal/jquery_2_1_1",
-        "PARCC/graphFunction",
-        "PARCC/gridFactory",
-        "PARCC/pointFactory",
-        "PARCC/plotFactory"
-    ],
-    "css": [
-        "./runtime/css/graphPointLineGraphInteraction.css"
-    ],
-    "entryPoint": "./runtime/graphPointLineGraphInteraction.js",
-    "tags": [],
-    "icon": "./creator/img/icon.svg",
     "response": {
         "baseType": "string",
         "cardinality": "multiple"
     },
-    "debug" : false
+    "runtime" : {
+        "hook" : "./runtime/graphPointLineGraphInteraction.js",
+        "libraries" : [
+        ],
+        "stylesheets" : [
+            "./runtime/css/graphPointLineGraphInteraction.css"
+        ],
+        "src" : [
+        ],
+        "mediaFiles" : [
+        ]
+    },
+    "creator" : {
+        "icon": "./creator/img/icon.svg",
+        "hook": "./pciCreator.js",
+        "libraries" : [
+            "./creator/css/form.css",
+            "./creator/tpl/equationFormElement.tpl",
+            "./creator/tpl/equationResponseCondition.tpl",
+            "./creator/tpl/equationWizard.tpl",
+            "./creator/tpl/markup.tpl",
+            "./creator/tpl/propertiesForm.tpl",
+            "./creator/tpl/staticPoint.tpl",
+            "./creator/widget/states/Answer.js",
+            "./creator/widget/states/Question.js",
+            "./creator/widget/states/states.js",
+            "./creator/widget/Widget.js"
+        ]
+    }
 }

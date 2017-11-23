@@ -6,25 +6,39 @@
     "version": "0.1.1",
     "author": "Thibault Milan, Sam Sipasseuth",
     "email": "contact@taotesting.com",
-    "libraries": [
-        "IMSGlobal/jquery_2_1_1",
-        "PARCC/graphFunction",
-        "PARCC/gridFactory",
-        "PARCC/pointFactory",
-        "PARCC/plotFactory",
-        "./runtime/wrappers/setOfPoints",
-        "./runtime/wrappers/points",
-        "./runtime/wrappers/lines",
-        "./runtime/wrappers/segments",
-        "./runtime/wrappers/solutionSet"
-    ],
-    "css": [
-        "./runtime/css/graphLineAndPointInteraction.css"
-    ],
-    "entryPoint": "./runtime/graphLineAndPointInteraction.js",
-    "tags": [],
-    "icon": "./creator/img/icon.svg",
     "response": {
         "cardinality": "record"
+    },
+    "runtime" : {
+        "hook" : "./runtime/graphLineAndPointInteraction.js",
+        "libraries" : [
+            "./runtime/wrappers/lines.js",
+            "./runtime/wrappers/points.js",
+            "./runtime/wrappers/segments.js",
+            "./runtime/wrappers/setOfPoints.js",
+            "./runtime/wrappers/solutionSet.js"
+        ],
+        "stylesheets" : [
+            "./runtime/css/graphLineAndPointInteraction.css"
+        ]
+    },
+    "creator" : {
+        "icon": "./creator/img/icon.svg",
+        "hook": "./pciCreator.js",
+        "libraries" : [
+            "./creator/css/form.css",
+            "./creator/libs/randomColor/LICENSE.md",
+            "./creator/libs/randomColor/randomColor.js",
+            "./creator/tpl/lineForm.tpl",
+            "./creator/tpl/markup.tpl",
+            "./creator/tpl/pointForm.tpl",
+            "./creator/tpl/pointSetForm.tpl",
+            "./creator/tpl/propertiesForm.tpl",
+            "./creator/tpl/segmentForm.tpl",
+            "./creator/tpl/solutionSetForm.tpl",
+            "./creator/widget/states/Question.js",
+            "./creator/widget/states/states.js",
+            "./creator/widget/Widget.js"
+        ]
     }
 }
