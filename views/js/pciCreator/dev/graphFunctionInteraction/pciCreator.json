@@ -3,7 +3,7 @@
     "label": "Graphing Function",
     "short": "Graphing f(x)",
     "description": "Graphing functions",
-    "version": "0.1",
+    "version": "1.0.0",
     "author": "Sam Sipasseuth",
     "email": "sam@taotesting.com",
     "response": {

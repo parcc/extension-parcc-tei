@@ -3,7 +3,7 @@
     "label": "Point Graph",
     "short": "Point Graph",
     "description": "Point Graph Interaction",
-    "version": "0.1",
+    "version": "1.0.0",
     "author": "Sam Sipasseuth & Christophe Noël",
     "email": "sam@taotesting.com & christophe@taotesting.com",
     "response": {

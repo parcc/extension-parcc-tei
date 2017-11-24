@@ -24,7 +24,7 @@ return array(
 	'label' => 'PARCC Portable Custom Interaction',
 	'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '0.4.0',
+    'version' => '0.5.0',
 	'author' => 'Open Assessment Technologies',
 	'requires' => array(
         'qtiItemPci' => '>=0.1',
@@ -38,7 +38,9 @@ return array(
 		    dirname(__FILE__). '/install/ontology/role.rdf'
 		),
         'php'	=> array(
-			dirname(__FILE__).'/scripts/install/addHook.php'
+			dirname(__FILE__).'/scripts/install/addHook.php',
+            \oat\parccTei\scripts\install\RegisterPciFractionModelInteraction::class,
+            \oat\parccTei\scripts\install\RegisterPciLineAndPointInteraction::class
 		)
     ),
     'update' => 'oat\\parccTei\\scripts\\update\\Updater',

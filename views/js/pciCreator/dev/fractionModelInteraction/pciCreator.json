@@ -3,7 +3,7 @@
     "label": "Fraction Model",
     "short": "Fractions",
     "description": "Select one or more fraction",
-    "version": "0.1.1",
+    "version": "1.0.0",
     "author": "Thibault Milan",
     "email": "contact@taotesting.com",
     "response": {
