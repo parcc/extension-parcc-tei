@@ -17,7 +17,7 @@
  */
 
 
-define(['taoQtiItem/portableLib/OAT/lodash'], function(_){
+define(['taoQtiItem/portableLib/lodash'], function(_){
 
     function createZoomable(axis){
 

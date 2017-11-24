@@ -21,7 +21,7 @@ define([
     'taoQtiItem/portableLib/jquery_2_1_1',
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/OAT/util/event',
-    'taoQtiItem/portableLib/OAT/lodash',
+    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/scale.raphael',
     'fractionModelInteraction/runtime/libs/pieChart'
 ], function($, qtiCustomInteractionContext, event, _, scaleRaphael){

@@ -18,8 +18,8 @@
 
 
 define([
-    'taoQtiItem/portableLib/OAT/raphael',
-    'taoQtiItem/portableLib/OAT/lodash'
+    'taoQtiItem/portableLib/raphael',
+    'taoQtiItem/portableLib/lodash'
 ], function(Raphael, _){
 
     'use strict';

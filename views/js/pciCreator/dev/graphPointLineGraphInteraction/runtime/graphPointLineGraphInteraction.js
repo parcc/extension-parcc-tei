@@ -20,7 +20,7 @@
 define([
     'taoQtiItem/portableLib/jquery_2_1_1',
     'qtiCustomInteractionContext',
-    'taoQtiItem/portableLib/OAT/lodash',
+    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
     'taoQtiItem/portableLib/OAT/scale.raphael',
     'parccTei/portableLib/gridFactory',

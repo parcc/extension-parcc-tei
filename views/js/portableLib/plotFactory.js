@@ -3,21 +3,21 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
 
-define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
+define(['taoQtiItem/portableLib/lodash', 'parccTei/portableLib/graphFunction'], function(_, graphFunction){
 
     'use strict';
 
@@ -32,7 +32,7 @@ define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
 
     /**
      * Apply relevant stroke attribute from config on a Raphaeljs path
-     * 
+     *
      * @param {Object} path - Raphaeljs Path
      * @param {Object} config
      * @returns {undefined}
@@ -47,11 +47,11 @@ define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
 
     /**
      * Create a new plot factory for a grid
-     * 
+     *
      * Usage:
      * var myPlotFactory = new PlotFactory(myGrid, myCOnfig);
      * myPlotFactory.plotLinear({x : 4, y : 0}, {x : 0, y : 4});
-     * 
+     *
      * @param {Object} grid - a grid build from the gridFactory
      * @param {type} config - the plot factory configuration
      * @param {Integer} [config.start = -10] - the starting abcisse in cartesian coordinate system
@@ -102,12 +102,12 @@ define(['OAT/lodash', 'PARCC/graphFunction'], function(_, graphFunction){
                         conf.start_y = point1.y;
                         conf.end_y = point2.y;
                     }
-                    
+
                     equation.type = fnName;
                     plot = graphFunction[fnName].plot(canvas, equation, conf);
                     plot.equation = equation;
                     _applyStyle(plot, conf);
-                    
+
                     return plot;
                 }
             }catch(e){

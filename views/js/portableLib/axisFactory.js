@@ -3,21 +3,21 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
 
-define(['OAT/lodash'], function(_){
+define(['taoQtiItem/portableLib/lodash'], function(_){
 
     'use strict';
 
@@ -83,7 +83,7 @@ define(['OAT/lodash'], function(_){
 
     /**
      * Apply relevant stroke attribute from config on a Raphaeljs path
-     * 
+     *
      * @param {Object} path - Raphaeljs Path
      * @param {Object} config
      * @returns {undefined}
@@ -283,15 +283,15 @@ define(['OAT/lodash'], function(_){
                 config[key] = value;
             },
             buildContainerBox : function(options){
-                
+
                 var _defaults = {
                     padding : 20,
                     absolute : true,
                     shadow : false
                 };
-                
+
                 options = _.defaults(options || {}, _defaults);
-                
+
                 var padding = options.padding,
                     bb = set.getBBox(),
                     box;
@@ -307,7 +307,7 @@ define(['OAT/lodash'], function(_){
                 });
                 set.push(box);
                 box.insertBefore(set);
-                
+
                 if(options && options.shadow){
                     set.push(box.glow({
                         width : 5,
@@ -324,7 +324,7 @@ define(['OAT/lodash'], function(_){
         };
 
         obj.render();
-        
+
         return obj;
     }
 

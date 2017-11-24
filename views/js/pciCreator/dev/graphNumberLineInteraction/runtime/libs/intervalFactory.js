@@ -17,7 +17,7 @@
  */
 
 
-define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/OAT/lodash', 'parccTei/portableLib/pointFactory'], function($, _, pointFactory){
+define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/lodash', 'parccTei/portableLib/pointFactory'], function($, _, pointFactory){
 
     var _defaults = {
         color : '#00f',

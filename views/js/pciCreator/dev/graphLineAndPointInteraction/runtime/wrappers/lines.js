@@ -19,7 +19,7 @@
 
 define([
     'taoQtiItem/portableLib/jquery_2_1_1',
-    'taoQtiItem/portableLib/OAT/lodash',
+    'taoQtiItem/portableLib/lodash',
     'parccTei/portableLib/pointFactory',
     'parccTei/portableLib/plotFactory'
 ], function(

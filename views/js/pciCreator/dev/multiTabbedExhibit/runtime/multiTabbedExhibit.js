@@ -21,8 +21,8 @@ define([
     'taoQtiItem/portableLib/jquery_2_1_1',
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/OAT/util/event',
-    'taoQtiItem/portableLib/OAT/lodash',
-    'taoQtiItem/portableLib/OAT/handlebars',
+    'taoQtiItem/portableLib/lodash',
+    'taoQtiItem/portableLib/handlebars',
     'taoQtiItem/portableLib/OAT/waitForMedia',
     'multiTabbedExhibit/runtime/lib/sly.min'
 ], function(
