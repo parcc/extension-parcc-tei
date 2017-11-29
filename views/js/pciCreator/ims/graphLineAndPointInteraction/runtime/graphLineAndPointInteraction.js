@@ -48,6 +48,30 @@ define([
 
     'use strict';
 
+    var _wrappers = {
+        setPoints : setPointsWrapper,
+        points : pointsWrapper,
+        lines : linesWrapper,
+        segments : segmentsWrapper,
+        solutionSet : solutionSetWrapper
+    };
+
+    /**
+     * List of events to listen to in order to detect a response change
+     * @type Array
+     */
+    var responseChangeEvents = [
+        'drawn.lines',
+        'moved.point',
+        'removed.point',
+        'added.pointSet',
+        'moved.pointSet',
+        'unselected.solutionSet',
+        'selected.solutionSet'
+    ];
+
+    var graphLineAndPointInteraction;
+
     /**
      * Sanitize configuration
      * @param  {Object} rawConfig Raw Config from Authoring
@@ -56,17 +80,17 @@ define([
     function buildGridConfig(rawConfig){
         return {
             x : {
-                start : rawConfig.xMin === undefined ? -10 : parseInt(rawConfig.xMin),
-                end : rawConfig.xMax === undefined ? 10 : parseInt(rawConfig.xMax),
+                start : _.isUndefined(rawConfig.xMin) ? -10 : parseInt(rawConfig.xMin),
+                end : _.isUndefined(rawConfig.xMax) ? 10 : parseInt(rawConfig.xMax),
                 unit : 20
             },
             y : {
                 //the y-axis is reversed
-                start : rawConfig.yMax === undefined ? 10 : -1 * parseInt(rawConfig.yMax),
-                end : rawConfig.yMin === undefined ? -10 : -1 * parseInt(rawConfig.yMin),
+                start : _.isUndefined(rawConfig.yMax) ? 10 : -1 * parseInt(rawConfig.yMax),
+                end : _.isUndefined(rawConfig.yMin) ? -10 : -1 * parseInt(rawConfig.yMin),
                 unit : 20
             },
-            graphs : rawConfig.graphs === undefined ? {} : rawConfig.graphs,
+            graphs : _.isUndefined(rawConfig.graphs) ? {} : rawConfig.graphs,
             padding : 20
         };
     }
@@ -84,19 +108,8 @@ define([
             (config.x.end - config.x.start) * config.x.unit + padding,
             (config.y.end - config.y.start) * config.y.unit + padding
             );
-
-        //@todo make it responsive
-
         return paper;
     }
-
-    var _wrappers = {
-        setPoints : setPointsWrapper,
-        points : pointsWrapper,
-        lines : linesWrapper,
-        segments : segmentsWrapper,
-        solutionSet : solutionSetWrapper
-    };
 
     /**
      * Dirty functiion to return the right wrapper for a given config element
@@ -152,25 +165,11 @@ define([
                 base : {list : {point : points}}
             };
         }else{
-            throw 'invalid arguments';
+            throw new Error('invalid arguments');
         }
     }
 
-    /**
-     * List of events to listen to in order to detect a response change
-     * @type Array
-     */
-    var responseChangeEvents = [
-        'drawn.lines',
-        'moved.point',
-        'removed.point',
-        'added.pointSet',
-        'moved.pointSet',
-        'unselected.solutionSet',
-        'selected.solutionSet'
-    ];
-
-    var graphLineAndPointInteraction = {
+    graphLineAndPointInteraction = {
         id : -1,
         getTypeIdentifier : function(){
             return 'graphLineAndPointInteraction';
@@ -182,6 +181,11 @@ define([
          * @param {Object} config - json
          */
         initialize : function(id, dom, config){
+            var grid,
+                graph,
+                elements,
+                $container = $(dom),
+                self = this;
 
             this.id = id;
             this.dom = dom;
@@ -189,12 +193,6 @@ define([
 
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
-
-            var grid,
-                graph,
-                elements,
-                $container = $(dom),
-                self = this;
 
             /**
              * Initialize a new graphic element called grid with all needed
@@ -205,10 +203,10 @@ define([
             function initGrid($container, gridConfig){
 
                 // @todo : Clear Everything
-                elements = {};
                 var paper = createCanvas($container, gridConfig);
                 var grid;
                 var $canvas = $(paper.canvas);
+                elements = {};
 
                 //intialize the grid only if the configuration is correct
                 if(_.isObject(gridConfig.x) &&
