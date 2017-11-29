@@ -1,6 +1,7 @@
 {
+    "model" : "IMSPCI",
     "typeIdentifier": "graphLineAndPointInteraction",
-    "label": "Graphing Line And Point",
+    "label": "IMS Graphing Line And Point",
     "short": "Line & Point",
     "description": "Graphing Line And Point",
     "version": "1.0.0",
@@ -10,8 +11,14 @@
         "cardinality": "record"
     },
     "runtime" : {
-        "hook" : "./runtime/graphLineAndPointInteraction.js",
-        "libraries" : [
+        "hook" : "runtime/graphLineAndPointInteraction.min.js",
+        "modules" : {
+            "graphLineAndPointInteraction/runtime/graphLineAndPointInteraction.min" : [
+                "runtime/graphLineAndPointInteraction.min.js"
+            ]
+        },
+        "src" : [
+            "./runtime/graphLineAndPointInteraction.js",
             "./runtime/wrappers/lines.js",
             "./runtime/wrappers/points.js",
             "./runtime/wrappers/segments.js",
@@ -24,7 +31,7 @@
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.js",
+        "hook": "./imsPciCreator.js",
         "libraries" : [
             "./creator/css/form.css",
             "./creator/libs/randomColor/LICENSE.md",

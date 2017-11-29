@@ -33,7 +33,7 @@ define([
     //manually register the pci from its manifest
     pciTestProvider.addManifestPath(
         'graphLineAndPointInteraction',
-        'parccTei/pciCreator/dev/graphLineAndPointInteraction/pciCreator.json');
+        'parccTei/pciCreator/ims/graphLineAndPointInteraction/pciCreator.json');
     ciRegistry.resetProviders();
     ciRegistry.registerProvider(pciTestProvider.getModuleName());
 

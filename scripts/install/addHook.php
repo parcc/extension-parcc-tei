@@ -19,4 +19,6 @@
  *
  */
 
+use oat\taoQtiItem\model\HookRegistry;
+
 HookRegistry::add('teiSystemItem', 'oat\parccTei\model\SystemItemHook');
