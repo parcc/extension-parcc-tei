@@ -33,7 +33,7 @@ define([
     //manually register the pci from its manifest
     pciTestProvider.addManifestPath(
         'graphLineAndPointInteraction',
-        'parccTei/pciCreator/ims/graphLineAndPointInteraction/pciCreator.json');
+        'parccTei/pciCreator/ims/graphLineAndPointInteraction/imsPciCreator.json');
     ciRegistry.resetProviders();
     ciRegistry.registerProvider(pciTestProvider.getModuleName());
 
@@ -62,6 +62,9 @@ define([
                 assert.equal($container.find('.qti-customInteraction .prompt').length, 1, 'the interaction contains a prompt');
 
                 QUnit.start();
+            })
+            .on('error', function(error) {
+                window.console.log(error);
             })
             .init()
             .render($container);
@@ -208,6 +211,9 @@ define([
                 assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
                 assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
             })
+            .on('error', function(error) {
+                window.console.log(error);
+            })
             .init()
             .render($container);
     });
@@ -221,6 +227,9 @@ define([
             .on('render', function(){
                 assert.equal($container.children().length, 1, 'the container a elements');
                 QUnit.start();
+            })
+            .on('error', function(error) {
+                window.console.log(error);
             })
             .init()
             .render($container);

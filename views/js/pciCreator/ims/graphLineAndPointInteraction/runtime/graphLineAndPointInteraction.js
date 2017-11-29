@@ -29,7 +29,8 @@ define([
     'graphLineAndPointInteraction/runtime/wrappers/points',
     'graphLineAndPointInteraction/runtime/wrappers/lines',
     'graphLineAndPointInteraction/runtime/wrappers/segments',
-    'graphLineAndPointInteraction/runtime/wrappers/solutionSet'
+    'graphLineAndPointInteraction/runtime/wrappers/solutionSet',
+    'css!graphLineAndPointInteraction/runtime/css/graphLineAndPointInteraction'
 ], function(
     $,
     qtiCustomInteractionContext,

@@ -24,9 +24,6 @@
             "./runtime/wrappers/segments.js",
             "./runtime/wrappers/setOfPoints.js",
             "./runtime/wrappers/solutionSet.js"
-        ],
-        "stylesheets" : [
-            "./runtime/css/graphLineAndPointInteraction.css"
         ]
     },
     "creator" : {

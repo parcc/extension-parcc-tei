@@ -136,21 +136,7 @@
         "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance",
         "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1"
     },
-    "stylesheets": {
-        "stylesheet_55e07bbc536b5903646080": {
-            "serial": "stylesheet_55e07bbc536b5903646080",
-            "qtiClass": "stylesheet",
-            "attributes": {
-                "href": "graphLineAndPointInteraction\/runtime\/css\/graphLineAndPointInteraction.css",
-                "type": "text\/css",
-                "media": "all",
-                "title": ""
-            },
-            "debug": {
-                "relatedItem": "item_55e07bbc52f5f491019567"
-            }
-        }
-    },
+    "stylesheets": {},
     "outcomes": {
         "outcomedeclaration_55e07bbc53dfb894093945": {
             "identifier": "SCORE",
