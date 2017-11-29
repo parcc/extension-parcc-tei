@@ -3,26 +3,26 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2015-2017 Parcc, Inc.
  */
-
-
 define([
     'jquery',
     'lodash',
     'taoQtiItem/runner/qtiItemRunner',
+    'taoQtiItem/portableElementRegistry/ciRegistry',
+    'taoQtiItem/portableElementRegistry/provider/localManifestProvider',
     'json!parccTei/test/samples/lineAndPoint.json'
-], function($, _, qtiItemRunner, itemData){
+], function($, _, qtiItemRunner, ciRegistry, pciTestProvider, itemData){
 
     'use strict';
 
@@ -30,20 +30,12 @@ define([
     var fixtureContainerId = 'item-container';
     var outsideContainerId = 'outside-container';
 
-    //override asset loading in order to resolve it from the runtime location
-    var strategies = [{
-            name : 'portableElementLocation',
-            handle : function handlePortableElementLocation(url){
-                if(/graphLineAndPointInteraction/.test(url.toString())){
-                    return '../../../parccTei/views/js/pciCreator/dev/' + url.toString();
-                }
-            }
-        }, {
-            name : 'default',
-            handle : function defaultStrategy(url){
-                return url.toString();
-            }
-        }];
+    //manually register the pci from its manifest
+    pciTestProvider.addManifestPath(
+        'graphLineAndPointInteraction',
+        'parccTei/pciCreator/dev/graphLineAndPointInteraction/pciCreator.json');
+    ciRegistry.resetProviders();
+    ciRegistry.registerProvider(pciTestProvider.getModuleName());
 
     module('Graph Line & Point Interaction', {
         teardown : function(){
@@ -71,13 +63,11 @@ define([
 
                 QUnit.start();
             })
-            .assets(strategies)
             .init()
             .render($container);
     });
 
     QUnit.asyncTest('response', function(assert){
-        
         var response = {
             record : [
                 {
@@ -140,18 +130,18 @@ define([
                 interaction.setResponse(response);
             })
             .on('responsechange', function(res){
-
                 QUnit.start();
                 assert.ok(_.isPlainObject(res), 'response changed');
                 assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
                 assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
             })
-            .assets(strategies)
+            .on('error', function(error) {
+                window.console.log(error);
+            })
             .init()
             .render($container);
-
     });
-    
+
     QUnit.asyncTest('state', function(assert){
 
         var response = {
@@ -205,7 +195,7 @@ define([
 
         runner = qtiItemRunner('qti', itemData)
             .on('render', function(){
-                
+
                 this.setState(state);
                 assert.deepEqual(this.getState(), state, 'state set/get ok');
             })
@@ -218,9 +208,22 @@ define([
                 assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
                 assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
             })
-            .assets(strategies)
             .init()
             .render($container);
-
     });
+
+    QUnit.module('Visual test');
+
+    QUnit.asyncTest('display and play', function(assert){
+        var $container = $('#' + outsideContainerId);
+
+        runner = qtiItemRunner('qti', itemData)
+            .on('render', function(){
+                assert.equal($container.children().length, 1, 'the container a elements');
+                QUnit.start();
+            })
+            .init()
+            .render($container);
+    });
+
 });
