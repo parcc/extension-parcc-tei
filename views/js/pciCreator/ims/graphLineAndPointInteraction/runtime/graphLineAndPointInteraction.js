@@ -70,6 +70,8 @@ define([
         'selected.solutionSet'
     ];
 
+    var _typeIdentifier = 'graphLineAndPointInteraction';
+
     var graphLineAndPointInteraction;
 
     /**
@@ -170,9 +172,103 @@ define([
     }
 
     graphLineAndPointInteraction = {
+
+        /*********************************
+         *
+         * IMS specific PCI API property and methods
+         *
+         *********************************/
+
+        typeIdentifier : _typeIdentifier,
+
+        /**
+         * @param {DOMELement} dom - the dom element the PCI can use
+         * @param {Object} config - the sandard configuration object
+         * @param {Object} [state] - the json serialized state object, returned by previous call to getStatus(), use to initialize an
+         */
+        getInstance : function getInstance(dom, config, state){
+            var response = config.boundTo;
+            //simply mapped to existing TAO PCI API
+            this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties);
+            this.setSerializedState(state);
+
+            //tell the rendering engine that I am ready
+            if (typeof config.onready === 'function') {
+                config.onready(this, this.getState());
+            }
+        },
+
+        /**
+         * Get the current state fo the PCI
+         * @returns {Object}
+         */
+        getState : function getState(){
+            return this.getSerializedState();
+        },
+
+        /**
+         * Called by delivery engine when PCI is fully completed
+         */
+        oncompleted : function oncompleted(){
+            this.destroy();
+        },
+
+        /*********************************
+         *
+         * TAO and IMS shared PCI API methods
+         *
+         *********************************/
+
+        /**
+         * Get the response in the json format described in
+         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
+         *
+         * @param {Object} interaction
+         * @returns {Object}
+         */
+        getResponse : function(){
+
+            var rawResponse = this.getRawResponse();
+            var response = {record : []};
+
+            _.each(rawResponse, function(element){
+                if(element.type === 'solutionSet'){
+                    _.each(element.selections, function(selection){
+                        response.record.push(formatResponseElement(element.id, selection));
+                    });
+                }else{
+                    response.record.push(formatResponseElement(element.id, element.points));
+                }
+
+            });
+
+            return response;
+        },
+        /**
+         * Reverse operation performed by render()
+         * After this function is executed, only the inital naked markup remains
+         * Event listeners are removed and the state and the response are reset
+         *
+         * @param {Object} interaction
+         */
+        destroy : function(){
+            var $container = $(this.dom);
+            $container.off().empty();
+        },
+
+
+        /*********************************
+         *
+         * TAO specific PCI API methods
+         *
+         *********************************/
+
+
+        // todo: what to do with this?
         id : -1,
+
         getTypeIdentifier : function(){
-            return 'graphLineAndPointInteraction';
+            return _typeIdentifier;
         },
         /**
          * Render the PCI :
@@ -558,31 +654,6 @@ define([
             }
         },
         /**
-         * Get the response in the json format described in
-         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         *
-         * @param {Object} interaction
-         * @returns {Object}
-         */
-        getResponse : function(){
-
-            var rawResponse = this.getRawResponse();
-            var response = {record : []};
-
-            _.each(rawResponse, function(element){
-                if(element.type === 'solutionSet'){
-                    _.each(element.selections, function(selection){
-                        response.record.push(formatResponseElement(element.id, selection));
-                    });
-                }else{
-                    response.record.push(formatResponseElement(element.id, element.points));
-                }
-
-            });
-
-            return response;
-        },
-        /**
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
          *
@@ -590,18 +661,6 @@ define([
          */
         resetResponse : function(){
 
-        },
-        /**
-         * Reverse operation performed by render()
-         * After this function is executed, only the inital naked markup remains
-         * Event listeners are removed and the state and the response are reset
-         *
-         * @param {Object} interaction
-         */
-        destroy : function(){
-
-            var $container = $(this.dom);
-            $container.off().empty();
         },
         /**
          * Restore the state of the interaction from the serializedState.

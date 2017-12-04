@@ -198,8 +198,6 @@ define([
 
         runner = qtiItemRunner('qti', itemData)
             .on('render', function(){
-
-                this.setState(state);
                 assert.deepEqual(this.getState(), state, 'state set/get ok');
             })
             .on('responsechange', function(res){
@@ -215,7 +213,7 @@ define([
                 window.console.log(error);
             })
             .init()
-            .render($container);
+            .render($container, { state: state });
     });
 
     QUnit.module('Visual test');
