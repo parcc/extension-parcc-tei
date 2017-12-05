@@ -158,7 +158,6 @@
                         </pci:properties>
                         <pci:markup>
                             <html5:div class="pointAndLineFunctionInteraction">
-                                <html5:div class="prompt"> </html5:div>
                                 <html5:div class="shape-panel">
                                     <html5:div class="shape-controls">
                                         <!-- Controls will be inserted here -->

@@ -1,5 +1,4 @@
 <div class="pointAndLineFunctionInteraction">
-    <div class="prompt">{{{prompt}}}</div>
     <div class="shape-panel">
         <div class="shape-controls">
             <!-- Controls will be inserted here -->

@@ -3,16 +3,16 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
@@ -22,7 +22,6 @@ define([
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/helper/popup',
-    'taoQtiItem/qtiCreator/editor/containerEditor',
     'taoQtiItem/qtiCreator/editor/colorPicker/colorPicker',
     'graphLineAndPointInteraction/creator/libs/randomColor/randomColor',
     'tpl!graphLineAndPointInteraction/creator/tpl/propertiesForm',
@@ -38,7 +37,6 @@ define([
     Question,
     formElement,
     popup,
-    containerEditor,
     colorPicker,
     randomColor,
     formTpl,
@@ -54,23 +52,8 @@ define([
 
     var StateQuestion = stateFactory.extend(Question, function(){
 
-        var interaction = this.widget.element,
-            $container = this.widget.$container;
-
-        //init prompt editor
-        containerEditor.create($container.find('.prompt'), {
-            change : function(text){
-                interaction.data('prompt', text);
-                interaction.updateMarkup();
-            },
-            markup : interaction.markup,
-            markupSelector : '.prompt',
-            related : interaction
-        });
-
     }, function(){
 
-        containerEditor.destroy(this.widget.$container.find('.prompt'));
     });
 
     var _tpl = {
@@ -211,7 +194,7 @@ define([
 
         /**
          * Check if the "more" button should be displayed
-         * 
+         *
          * @todo provides some caching system
          * @param {String} graphType
          */
@@ -228,7 +211,7 @@ define([
 
         /**
          * Common graph number change callback function
-         * 
+         *
          * @param {Object} interaction
          * @param {String} value - a number string
          * @param {String} graphType
@@ -317,10 +300,10 @@ define([
             checkMoreTriggerAvailability(type);
         });
     };
-    
+
     /**
      * Build the content of the graph otpion box
-     * 
+     *
      * @param {String} type
      * @param {Object} $panel - the JQuery container
      * @returns {undefined}
@@ -342,24 +325,24 @@ define([
         }
 
     };
-    
+
     /**
      * Destroy the content of the graph option box
-     * 
+     *
      * @param {Object} $panel - the JQuery container
      * @returns {undefined}
      */
     StateQuestion.prototype.destroyOptionsBoxContent = function($panel){
-        
+
         $panel.find('.color-trigger').each(function(){
             colorPicker.destroy($(this));
         });
         $panel.empty();
     };
-    
+
     /**
      * Build the form of a graph element
-     * 
+     *
      * @param {String} type - the type of graph the form of which to be built
      * @param {Object} element
      * @param {Object} interaction
@@ -391,7 +374,7 @@ define([
         };
 
         var $dom = $(tpl(data));
-        
+
         var changeCallbacks = {
             label : propChangeCallback,
             pointColor : propChangeCallback,
@@ -402,10 +385,10 @@ define([
             lineWeight : propChangeCallback,
             lineStyleToggle : propChangeCallback
         };
-        
+
         /**
          * Define the callback function for all property elements
-         * 
+         *
          * @param {Object} element
          * @param {Mixed} propValue
          * @param {String} propName
@@ -418,7 +401,7 @@ define([
 
         /**
          * Init the form elements
-         * 
+         *
          * @returns {undefined}
          */
         function init(){
