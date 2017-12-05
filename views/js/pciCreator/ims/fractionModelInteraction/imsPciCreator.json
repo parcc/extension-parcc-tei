@@ -1,6 +1,7 @@
 {
+    "model" : "IMSPCI",
     "typeIdentifier": "fractionModelInteraction",
-    "label": "Fraction Model",
+    "label": "IMS Fraction Model",
     "short": "Fractions",
     "description": "Select one or more fraction",
     "version": "1.0.0",
@@ -11,21 +12,20 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/fractionModelInteraction.js",
-        "libraries" : [
-            "./runtime/libs/pieChart.js"
-        ],
-        "stylesheets" : [
-            "./runtime/css/fractionModelInteraction.css"
-        ],
+        "hook" : "./runtime/fractionModelInteraction.min.js",
+        "modules": {
+            "fractionModelInteraction/runtime/fractionModelInteraction.min" : [
+                "runtime/fractionModelInteraction.min.js"
+            ]
+        },
         "src" : [
-        ],
-        "mediaFiles" : [
+            "./runtime/fractionModelInteraction.js",
+            "./runtime/libs/pieChart.js"
         ]
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.js",
+        "hook": "./imsPciCreator.js",
         "libraries" : [
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
