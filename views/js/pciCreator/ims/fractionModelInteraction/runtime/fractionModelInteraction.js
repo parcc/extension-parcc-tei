@@ -23,7 +23,8 @@ define([
     'taoQtiItem/portableLib/OAT/util/event',
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/scale.raphael',
-    'fractionModelInteraction/runtime/libs/pieChart'
+    'fractionModelInteraction/runtime/libs/pieChart',
+    'css!fractionModelInteraction/runtime/css/fractionModelInteraction.css'
 ], function($, qtiCustomInteractionContext, event, _, scaleRaphael){
 
     'use strict';

@@ -28,6 +28,6 @@ class RegisterPciFractionModelInteraction extends RegisterPortableElement
     protected function getSourceDirectory(){
         $serviceManager = ServiceManager::getServiceManager();
         $viewDir = $serviceManager->get(\common_ext_ExtensionsManager::SERVICE_ID)->getExtensionById('parccTei')->getConstant('DIR_VIEWS');
-        return $viewDir.implode(DIRECTORY_SEPARATOR, ['js', 'pciCreator', 'dev', 'fractionModelInteraction']);
+        return $viewDir.implode(DIRECTORY_SEPARATOR, ['js', 'pciCreator', 'ims', 'fractionModelInteraction']);
     }
 }
