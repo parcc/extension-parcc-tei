@@ -25,7 +25,8 @@ define([
     'taoQtiItem/portableLib/OAT/scale.raphael',
     'parccTei/portableLib/gridFactory',
     'parccTei/portableLib/pointFactory',
-    'parccTei/portableLib/plotFactory'
+    'parccTei/portableLib/plotFactory',
+    'css!graphFunctionInteraction/runtime/css/graphFunctionInteraction'
 ], function(
     $,
     qtiCustomInteractionContext,

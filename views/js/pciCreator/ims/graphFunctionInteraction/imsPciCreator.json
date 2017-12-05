@@ -1,4 +1,5 @@
 {
+    "model": "IMSPCI",
     "typeIdentifier": "graphFunctionInteraction",
     "label": "Graphing Function",
     "short": "Graphing f(x)",
@@ -10,20 +11,16 @@
         "cardinality": "record"
     },
     "runtime" : {
-        "hook" : "./runtime/graphFunctionInteraction.js",
-        "libraries" : [
-        ],
-        "stylesheets" : [
-            "./runtime/css/graphFunctionInteraction.css"
-        ],
-        "src" : [
-        ],
-        "mediaFiles" : [
-        ]
+        "hook" : "./runtime/graphFunctionInteraction.min.js",
+        "modules" : {
+            "graphFunctionInteraction/runtime/graphFunctionInteraction.min" : [
+                "runtime/graphFunctionInteraction.min.js"
+            ]
+        }
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.js",
+        "hook": "./imsPciCreator.js",
         "libraries" : [
             "./creator/css/form.css",
             "./creator/tpl/answerForm.tpl",
