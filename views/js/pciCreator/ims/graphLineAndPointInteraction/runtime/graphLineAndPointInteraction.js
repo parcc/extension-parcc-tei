@@ -264,9 +264,6 @@ define([
          *********************************/
 
 
-        // todo: what to do with this?
-        id : -1,
-
         getTypeIdentifier : function(){
             return _typeIdentifier;
         },
