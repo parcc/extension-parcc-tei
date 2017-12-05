@@ -11,12 +11,15 @@
         "cardinality": "record"
     },
     "runtime" : {
-        "hook" : "./runtime/graphFunctionInteraction.min.js",
+        "hook" : "runtime/graphFunctionInteraction.min.js",
         "modules" : {
             "graphFunctionInteraction/runtime/graphFunctionInteraction.min" : [
                 "runtime/graphFunctionInteraction.min.js"
             ]
-        }
+        },
+        "src": [
+            "./runtime/graphFunctionInteraction.js"
+        ]
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
