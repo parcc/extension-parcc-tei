@@ -2,8 +2,6 @@
 
 .fractionModelInteraction {width:100%;}
 
-.fractionModelInteraction .prompt {position:relative; border : 2px solid #EFEFEF;}
-
 .fractionModelInteraction .likert-label {min-width:90px; color: #444;}
 .fractionModelInteraction .likert-label-min {text-align: right;}
 .fractionModelInteraction .likert-label-max {text-align: left;}

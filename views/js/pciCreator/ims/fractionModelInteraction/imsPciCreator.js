@@ -99,8 +99,7 @@ define([
         getMarkupData : function(pci, defaultData){
 
             return _.defaults(defaultData , {
-                title : pci.prop('title'),
-                prompt : pci.data('prompt')
+                title : pci.prop('title')
             });
         }
     };

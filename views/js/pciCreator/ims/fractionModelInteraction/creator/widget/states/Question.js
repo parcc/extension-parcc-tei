@@ -3,16 +3,16 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
@@ -23,9 +23,8 @@ define([
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
-    'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!fractionModelInteraction/creator/tpl/propertiesForm'
-], function(_, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl){
+], function(_, stateFactory, Question, formElement, simpleEditor, formTpl){
 
     'use strict';
 
@@ -50,17 +49,6 @@ define([
             interaction.updateMarkup();
         });
 
-        //init prompt editor
-        containerEditor.create($container.find('.prompt'), {
-            change : function(text){
-                interaction.data('prompt', text);
-                interaction.updateMarkup();
-            },
-            markup : interaction.markup,
-            markupSelector : '.prompt',
-            related : interaction
-        });
-
         //init event listeners
         interaction
             .onPci('changepartition', changeCallback)
@@ -76,7 +64,6 @@ define([
 
         //destroy editors
         simpleEditor.destroy(this.widget.$container);
-        containerEditor.destroy(this.widget.$container.find('.prompt'));
         this.destroyColorPickers();
     });
 

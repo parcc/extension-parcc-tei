@@ -1,8 +1,5 @@
 <div class="fractionModelInteraction">
-    <div class="prompt">
-        {{{prompt}}}
-    </div>
-    <div class="shape-panel">
+   <div class="shape-panel">
         <h3 class="shape-title">{{{title}}}</h3>
         <div class="shape-container"></div>
         <div class="shape-controls">
