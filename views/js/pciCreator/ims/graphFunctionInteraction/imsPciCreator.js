@@ -3,16 +3,16 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
@@ -31,7 +31,7 @@ define([
     var likertScaleInteractionCreator = {
         /**
          * (required) Get the typeIdentifier of the custom interaction
-         * 
+         *
          * @returns {String}
          */
         getTypeIdentifier : function(){
@@ -40,7 +40,7 @@ define([
         /**
          * (required) Get the widget prototype
          * Used in the renderer
-         * 
+         *
          * @returns {Object} Widget
          */
         getWidget : function(){
@@ -49,7 +49,7 @@ define([
         /**
          * (optional) Get the default properties values of the pci.
          * Used on new pci instance creation
-         * 
+         *
          * @returns {Object}
          */
         getDefaultProperties : function(pci){
@@ -89,9 +89,9 @@ define([
             };
         },
         /**
-         * (optional) Callback to execute on the 
+         * (optional) Callback to execute on the
          * Used on new pci instance creation
-         * 
+         *
          * @returns {Object}
          */
         afterCreate : function(pci){
@@ -110,8 +110,8 @@ define([
             }};
         },
         /**
-         * (required) Gives the qti pci xml template 
-         * 
+         * (required) Gives the qti pci xml template
+         *
          * @returns {function} handlebar template
          */
         getMarkupTemplate : function(){
@@ -119,14 +119,12 @@ define([
         },
         /**
          * (optional) Allows passing additional data to xml template
-         * 
+         *
          * @returns {function} handlebar template
          */
         getMarkupData : function(pci, defaultData){
 
-            return _.defaults(defaultData, {
-                prompt : pci.data('prompt')
-            });
+            return _.defaults(defaultData);
         }
     };
 

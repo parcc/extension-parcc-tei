@@ -3,16 +3,16 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2014-2017 Parcc, Inc.
  */
 
@@ -21,35 +21,19 @@ define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
-    'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!graphFunctionInteraction/creator/tpl/propertiesForm',
     'lodash',
     'jquery'
-], function(stateFactory, Question, formElement, containerEditor, formTpl, _, $){
+], function(stateFactory, Question, formElement, formTpl, _, $){
+    'use strict'
 
     var StateQuestion = stateFactory.extend(Question, function(){
-
-        var interaction = this.widget.element,
-            $container = this.widget.$container;
-
-        //init prompt editor
-        containerEditor.create($container.find('.prompt'), {
-            change : function(text){
-                interaction.data('prompt', text);
-                interaction.updateMarkup();
-            },
-            markup : interaction.markup,
-            markupSelector : '.prompt',
-            related : interaction
-        });
-        
-        //custom interaction state extends
+       //custom interaction state extends
         this.initColorPickers();
 
     }, function(){
 
         //destroy editors
-        containerEditor.destroy(this.widget.$container.find('.prompt'));
         this.destroyColorPickers();
     });
 
