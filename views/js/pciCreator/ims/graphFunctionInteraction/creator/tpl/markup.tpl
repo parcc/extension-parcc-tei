@@ -1,7 +1,4 @@
 <div class="graphFunctionInteraction">
-    <div class="prompt">
-        {{{prompt}}}
-    </div>
     <div class="shape-panel">
         <div class="shape-controls">
             <button name="linear" value="linear" class="btn btn-info" type="button">Linear</button>
