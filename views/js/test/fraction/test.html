@@ -9,7 +9,7 @@
         <link rel="stylesheet" type="text/css" href="css/tao-main-style.css">
         <script type="text/javascript" src="js/lib/require.js"></script>
         <script type="text/javascript" src="js/lib/qunit/qunit.js"></script>
-        <script type="text/javascript" src="js/lib/blanket/blanket.min.js"  data-cover-flags="branchTracking" data-cover-only="fractionModelInteraction"></script>
+        <script type="text/javascript" src="js/lib/blanket/blanket.min.js"  data-cover-flags="branchTracking" data-cover-only="fractionModelInteraction.js"></script>
 
         <script  type="text/javascript">
         (function(){ 'use strict';
@@ -23,16 +23,6 @@
                 //add missing paths
                 require.config({
                     paths : {
-                        'IMSGlobal/jquery_2_1_1':   '../../../taoQtiItem/views/js/portableSharedLibraries/IMSGlobal/jquery_2_1_1',
-                        'OAT/lodash':               '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/lodash',
-                        'OAT/async':                '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/async',
-                        'OAT/raphael':              '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/raphael',
-                        'OAT/scale.raphael':        '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/scale.raphael',
-                        'OAT/util/xml':             '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/util/xml',
-                        'OAT/util/math':            '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/util/math',
-                        'OAT/util/html':            '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/util/html',
-                        'OAT/util/EventMgr':        '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/util/EventMgr',
-                        'OAT/util/event':           '../../../taoQtiItem/views/js/portableSharedLibraries/OAT/util/event',
                         'qtiCustomInteractionContext':    '../../../taoQtiItem/views/js/runtime/qtiCustomInteractionContext',
                     }
                 });

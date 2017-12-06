@@ -103,19 +103,6 @@
             "debug": {
                 "relatedItem": "item_578627a4c942a387100331"
             }
-        },
-        "stylesheet_578627a4cda1f665742700": {
-            "serial": "stylesheet_578627a4cda1f665742700",
-            "qtiClass": "stylesheet",
-            "attributes": {
-                "href": "graphFunctionInteraction\/runtime\/css\/graphFunctionInteraction.css",
-                "type": "text\/css",
-                "media": "all",
-                "title": ""
-            },
-            "debug": {
-                "relatedItem": "item_578627a4c942a387100331"
-            }
         }
     },
     "outcomes": {
@@ -167,7 +154,7 @@
     "responseProcessing": {
         "serial": "response_custom_578627a4d4b0e472626926",
         "qtiClass": "responseProcessing",
-        "attributes": [],
+        "attributes": {},
         "debug": {
             "relatedItem": ""
         },

@@ -24,7 +24,7 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/scale.raphael',
     'fractionModelInteraction/runtime/libs/pieChart',
-    'css!fractionModelInteraction/runtime/css/fractionModelInteraction.css'
+    'css!fractionModelInteraction/runtime/css/fractionModelInteraction'
 ], function($, qtiCustomInteractionContext, event, _, scaleRaphael){
 
     'use strict';
@@ -70,7 +70,7 @@ define([
 
             //tell the rendering engine that I am ready
             if (typeof config.onready === 'function') {
-                config.onready(this, this.getState());
+                config.onready(this, this.getSelectedPartitions());
             }
         },
 
@@ -103,7 +103,7 @@ define([
          * @returns {Object}
          */
         getResponse : function(){
-            var selection = _.values(this.getState());
+            var selection = _.values(this.getSelectedPartitions());
             var numerator = _.filter(selection).length;
             var denominator = selection.length;
             return {
@@ -191,6 +191,7 @@ define([
              * @returns {undefined}
              */
             this.setState = function setState(stateData){
+                var i;
                 if(_.isString(stateData)){
                     if(stateData.trim() === '' || stateData.trim() === '[]'){
                         //generate array
@@ -202,8 +203,15 @@ define([
                         denominator = selectedPartitions.length;//@todo fix this redundant information
                     }
                 }else if(_.isArray(stateData)){
-                    selectedPartitions = stateData;
-                    denominator = selectedPartitions.length;//@todo fix this redundant information
+                    if (stateData.length) {
+                        selectedPartitions = stateData;
+                        denominator = selectedPartitions.length;//@todo fix this redundant information
+                    } else {
+                        selectedPartitions = [];
+                        for (i = 0; i < denominator; i++) {
+                            selectedPartitions.push(false);
+                        }
+                    }
                 }else{
                     throw 'invalid format for selectedPartitions';
                 }
@@ -215,10 +223,11 @@ define([
              * The fraction model state is the interaction state
              * @returns {Array}
              */
-            this.getState = function(){
+            this.getSelectedPartitions = function(){
                 return _.clone(selectedPartitions);
             };
 
+            // debugger;
             //set fraction model
             this.setFractionModel(this.config.selectedPartitionsInit, this.config.partitionInit);
 
@@ -227,14 +236,14 @@ define([
 
             // Init the pieChart
             this.setState(config.selectedPartitions);
-            canvas.pieChart(this.getState(), this.config, $container);
+            canvas.pieChart(this.getSelectedPartitions(), this.config, $container);
 
             // Catch click on more or less
             $container.on('click.fraction', 'button.more', function(){
 
                 if(denominator < _this.config.partitionMax){
                     denominator += 1;
-                    var newState = _this.getState();
+                    var newState = _this.getSelectedPartitions();
                     newState.push(false);
                     _this.setState(newState);
                     $container.trigger('statechange.fraction');
@@ -244,7 +253,7 @@ define([
 
                 if(denominator > _this.config.partitionMin){
                     denominator -= 1;
-                    var newState = _this.getState();
+                    var newState = _this.getSelectedPartitions();
                     newState.pop();
                     _this.setState(newState);
                     $container.trigger('statechange.fraction');
@@ -260,10 +269,10 @@ define([
 
                 // Redraw the pieChart
                 canvas.clear();
-                canvas.pieChart(_this.getState(), _this.config, $container);
+                canvas.pieChart(_this.getSelectedPartitions(), _this.config, $container);
 
                 //communicate the response change to the interaction
-                _this.trigger('changepartition', [_this.getState()]);
+                _this.trigger('changepartition', [_this.getSelectedPartitions()]);
                 _this.trigger('responseChange', [_this.getResponse()]);
 
             }).on('select_slice.pieChart unselect_slice.pieChart', function(e, selectedPartitions, totalSelected){
@@ -287,7 +296,7 @@ define([
 
                 canvas.clear();
                 canvas = createCanvas($container, _this.config);
-                canvas.pieChart(_this.getState(), _this.config, $container);
+                canvas.pieChart(_this.getSelectedPartitions(), _this.config, $container);
             });
         },
         /**
@@ -346,7 +355,7 @@ define([
          */
         getSerializedState : function(){
             return {
-                selection : _.values(this.getState())
+                selection : _.values(this.getSelectedPartitions())
             };
         }
     };
