@@ -25,7 +25,7 @@ define([
     'lodash',
     'jquery'
 ], function(stateFactory, Question, formElement, formTpl, _, $){
-    'use strict'
+    'use strict';
 
     var StateQuestion = stateFactory.extend(Question, function(){
        //custom interaction state extends
