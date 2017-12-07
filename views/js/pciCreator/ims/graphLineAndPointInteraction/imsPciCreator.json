@@ -18,12 +18,7 @@
             ]
         },
         "src" : [
-            "./runtime/graphLineAndPointInteraction.js",
-            "./runtime/wrappers/lines.js",
-            "./runtime/wrappers/points.js",
-            "./runtime/wrappers/segments.js",
-            "./runtime/wrappers/setOfPoints.js",
-            "./runtime/wrappers/solutionSet.js"
+            "./runtime/graphLineAndPointInteraction.js"
         ]
     },
     "creator" : {

@@ -25,12 +25,12 @@ define([
     'taoQtiItem/portableLib/OAT/scale.raphael',
     'taoQtiItem/portableLib/raphael',
     'parccTei/portableLib/gridFactory',
-    'graphLineAndPointInteraction/runtime/wrappers/setOfPoints',
-    'graphLineAndPointInteraction/runtime/wrappers/points',
-    'graphLineAndPointInteraction/runtime/wrappers/lines',
-    'graphLineAndPointInteraction/runtime/wrappers/segments',
-    'graphLineAndPointInteraction/runtime/wrappers/solutionSet',
-    'css!graphLineAndPointInteraction/runtime/css/graphLineAndPointInteraction'
+    'parccTei/pciCreator/ims/graphLineAndPointInteraction/runtime/wrappers/setOfPoints',
+    'parccTei/pciCreator/ims/graphLineAndPointInteraction/runtime/wrappers/points',
+    'parccTei/pciCreator/ims/graphLineAndPointInteraction/runtime/wrappers/lines',
+    'parccTei/pciCreator/ims/graphLineAndPointInteraction/runtime/wrappers/segments',
+    'parccTei/pciCreator/ims/graphLineAndPointInteraction/runtime/wrappers/solutionSet',
+    'css!parccTei/pciCreator/ims/graphLineAndPointInteraction/runtime/css/graphLineAndPointInteraction'
 ], function(
     $,
     qtiCustomInteractionContext,

@@ -19,8 +19,7 @@
             ]
         },
         "src" : [
-            "./runtime/fractionModelInteraction.js",
-            "./runtime/libs/pieChart.js"
+            "./runtime/fractionModelInteraction.js"
         ]
     },
     "creator" : {

@@ -26,7 +26,7 @@ define([
     'parccTei/portableLib/gridFactory',
     'parccTei/portableLib/pointFactory',
     'parccTei/portableLib/plotFactory',
-    'css!graphFunctionInteraction/runtime/css/graphFunctionInteraction'
+    'css!parccTei/pciCreator/ims/graphFunctionInteraction/runtime/css/graphFunctionInteraction'
 ], function(
     $,
     qtiCustomInteractionContext,

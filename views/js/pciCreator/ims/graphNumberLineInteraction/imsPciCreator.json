@@ -14,13 +14,12 @@
     "runtime" : {
         "hook" : "runtime/graphNumberLineInteraction.min.js",
         "modules" : {
-            "runtime/graphNumberLineInteraction.min": [
+            "graphNumberLineInteraction/runtime/graphNumberLineInteraction.min": [
                 "runtime/graphNumberLineInteraction.min.js"
             ]
         },
         "src" : [
-            "./runtime/graphNumberLineInteraction.js",
-            "./runtime/libs/intervalFactory.js"
+            "./runtime/graphNumberLineInteraction.js"
         ]
     },
     "creator" : {
