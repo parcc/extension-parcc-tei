@@ -410,7 +410,6 @@ define([
                     activate(uid);
 
                     //response change
-                    console.log('about to trigger responseChange');
                     _.defer(function() {
                         _this.trigger('responseChange', [_this.getRawResponse()]);
                     });
