@@ -12,8 +12,6 @@
     overflow: auto;
 }
 
-.graphNumberLineInteraction .prompt {margin-bottom:20px;}
-
 .graphNumberLineInteraction .shape-controls .intervals-available {float:left; position : relative; border : 6px solid #f5f3f2; padding:4px; margin-right : 10px; margin-bottom:10px;}
 .graphNumberLineInteraction .shape-controls .intervals-available .intervals-overlay {position:absolute; width:100%; height : 100%; top:0; left:0; background: #ddd; opacity : 0.6; display:none;}
 .graphNumberLineInteraction .shape-controls .intervals-available .interval-available {display:none;}

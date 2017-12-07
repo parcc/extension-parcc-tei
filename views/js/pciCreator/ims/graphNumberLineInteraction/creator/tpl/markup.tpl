@@ -1,7 +1,4 @@
 <div class="graphNumberLineInteraction">
-    <div class="prompt">
-        {{{prompt}}}
-    </div>
     <div class="shape-panel">
         <div class="shape-container"></div>
         <div class="shape-controls clearfix">
