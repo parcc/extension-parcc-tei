@@ -24,8 +24,8 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/handlebars',
     'taoQtiItem/portableLib/OAT/waitForMedia',
-    'multiTabbedExhibit/runtime/lib/sly',
-    'css!multiTabbedExhibit/runtime/css/multiTabbedExhibit'
+    'parccTei/pciCreator/ims/multiTabbedExhibit/runtime/lib/sly',
+    'css!parccTei/pciCreator/ims/multiTabbedExhibit/runtime/css/multiTabbedExhibit'
 ], function(
     $,
     qtiCustomInteractionContext,

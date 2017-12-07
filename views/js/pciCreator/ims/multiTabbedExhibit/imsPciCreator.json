@@ -12,15 +12,14 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/multiTabbedExhibit.min.js",
+        "hook" : "runtime/multiTabbedExhibit.min.js",
         "modules": {
             "multiTabbedExhibit/runtime/multiTabbedExhibit.min" : [
                 "runtime/multiTabbedExhibit.min.js"
             ]
         },
         "src" : [
-            "./runtime/multiTabbedExhibit.js",
-            "./runtime/lib/sly.js"
+            "./runtime/multiTabbedExhibit.js"
         ]
     },
     "creator" : {
