@@ -410,7 +410,10 @@ define([
                     activate(uid);
 
                     //response change
-                    _this.trigger('responseChange', [_this.getRawResponse()]);
+                    console.log('about to trigger responseChange');
+                    _.defer(function() {
+                        _this.trigger('responseChange', [_this.getRawResponse()]);
+                    });
 
                     if(_.size(intervals) === selectionMax){
                         //deactivate the whole panel

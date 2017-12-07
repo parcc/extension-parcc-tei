@@ -76,7 +76,7 @@ define([
          * @returns {function} handlebar template
          */
         getMarkupTemplate : function(){
-            return handlebars.compile('<div></div>');
+            return handlebars.compile('<div> </div>');
         },
         /**
          * (optional) Allows passing additional data to xml template
