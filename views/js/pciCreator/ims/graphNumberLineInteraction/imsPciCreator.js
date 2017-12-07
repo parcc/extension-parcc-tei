@@ -20,7 +20,7 @@
 define([
     'lodash',
     'graphNumberLineInteraction/creator/widget/Widget',
-    'tpl!graphNumberLineInteraction/creator/tpl/markup'
+    'tpl!graphNumberLineInteraction/runtime/tpl/markup' //todo: remove me!!!
 ], function(_, Widget, markupTpl){
 
     var _typeIdentifier = 'graphNumberLineInteraction';

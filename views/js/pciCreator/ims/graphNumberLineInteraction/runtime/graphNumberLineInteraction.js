@@ -25,20 +25,36 @@ define([
     'taoQtiItem/portableLib/OAT/scale.raphael',
     'parccTei/portableLib/pointFactory',
     'parccTei/portableLib/axisFactory',
-    'graphNumberLineInteraction/runtime/libs/intervalFactory'
-    /*
-            './runtime/img/arrow-close.svg',
-            './runtime/img/arrow-open.svg',
-            './runtime/img/close-arrow.svg',
-            './runtime/img/close-close.svg',
-            './runtime/img/close-open.svg',
-            './runtime/img/open-arrow.svg',
-            './runtime/img/open-close.svg',
-            './runtime/img/open-open.svg',
-            './runtime/css/graphNumberLineInteraction.css'
-     */
-], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, IntervalFactory){
-
+    'tpl!graphNumberLineInteraction/runtime/tpl/markup',
+    'graphNumberLineInteraction/runtime/libs/intervalFactory',
+    'text!graphNumberLineInteraction/runtime/img/arrow-close.svg',
+    'text!graphNumberLineInteraction/runtime/img/arrow-open.svg',
+    'text!graphNumberLineInteraction/runtime/img/close-arrow.svg',
+    'text!graphNumberLineInteraction/runtime/img/close-close.svg',
+    'text!graphNumberLineInteraction/runtime/img/close-open.svg',
+    'text!graphNumberLineInteraction/runtime/img/open-arrow.svg',
+    'text!graphNumberLineInteraction/runtime/img/open-close.svg',
+    'text!graphNumberLineInteraction/runtime/img/open-open.svg',
+    'css!graphNumberLineInteraction/runtime/css/graphNumberLineInteraction'
+], function(
+    $,
+    qtiCustomInteractionContext,
+    _,
+    event,
+    scaleRaphael,
+    pointFactory,
+    axisFactory,
+    IntervalFactory,
+    markupTpl,
+    arrowCloseSvg,
+    arrowOpenSvg,
+    closeArrowSvg,
+    closeCloseSvg,
+    closeOpenSvg,
+    openArrowSvg,
+    openCloseSvg,
+    openOpenSvg
+){
     'use strict';
 
     function createCanvas($container, config){
