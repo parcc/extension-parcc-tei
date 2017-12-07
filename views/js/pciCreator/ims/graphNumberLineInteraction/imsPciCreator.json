@@ -28,7 +28,6 @@
         "hook": "./imsPciCreator.js",
         "libraries" : [
             "./creator/css/form.css",
-            "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
             "./creator/widget/states/Question.js",
             "./creator/widget/states/states.js",

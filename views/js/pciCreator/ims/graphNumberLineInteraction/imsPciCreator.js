@@ -19,9 +19,10 @@
 
 define([
     'lodash',
-    'graphNumberLineInteraction/creator/widget/Widget',
-    'tpl!graphNumberLineInteraction/runtime/tpl/markup' //todo: remove me!!!
-], function(_, Widget, markupTpl){
+    'handlebars',
+    'graphNumberLineInteraction/creator/widget/Widget'
+], function(_, handlebars, Widget){
+    'use strict';
 
     var _typeIdentifier = 'graphNumberLineInteraction';
 
@@ -75,7 +76,7 @@ define([
          * @returns {function} handlebar template
          */
         getMarkupTemplate : function(){
-            return markupTpl;
+            return handlebars.compile('<div></div>');
         },
         /**
          * (optional) Allows passing additional data to xml template
