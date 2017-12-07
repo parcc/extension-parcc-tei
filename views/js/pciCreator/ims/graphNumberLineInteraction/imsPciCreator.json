@@ -1,4 +1,5 @@
 {
+    "model" : "IMSPCI",
     "typeIdentifier": "graphNumberLineInteraction",
     "label": "Graphing Number Line",
     "short": "Number Line",
@@ -11,29 +12,20 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/graphNumberLineInteraction.js",
-        "libraries" : [
-        ],
-        "stylesheets" : [
-            "./runtime/css/graphNumberLineInteraction.css"
-        ],
+        "hook" : "runtime/graphNumberLineInteraction.min.js",
+        "modules" : {
+            "runtime/graphNumberLineInteraction.min": [
+                "runtime/graphNumberLineInteraction.min.js"
+            ]
+        },
         "src" : [
+            "./runtime/graphNumberLineInteraction.js",
             "./runtime/libs/intervalFactory.js"
-        ],
-        "mediaFiles" : [
-            "./runtime/img/arrow-close.svg",
-            "./runtime/img/arrow-open.svg",
-            "./runtime/img/close-arrow.svg",
-            "./runtime/img/close-close.svg",
-            "./runtime/img/close-open.svg",
-            "./runtime/img/open-arrow.svg",
-            "./runtime/img/open-close.svg",
-            "./runtime/img/open-open.svg"
         ]
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.js",
+        "hook": "./imsPciCreator.js",
         "libraries" : [
             "./creator/css/form.css",
             "./creator/tpl/markup.tpl",
