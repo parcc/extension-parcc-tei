@@ -1,4 +1,5 @@
 {
+    "model" : "IMSPCI",
     "typeIdentifier": "multiTabbedExhibit",
     "label": "Interactive Passage",
     "short": "iPassage",
@@ -11,22 +12,20 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/multiTabbedExhibit.js",
-        "libraries" : [
-            "./runtime/lib/sly.js",
-            "./runtime/lib/sly.min.js"
-        ],
-        "stylesheets" : [
-            "./runtime/css/multiTabbedExhibit.css"
-        ],
+        "hook" : "./runtime/multiTabbedExhibit.min.js",
+        "modules": {
+            "multiTabbedExhibit/runtime/multiTabbedExhibit.min" : [
+                "runtime/multiTabbedExhibit.min.js"
+            ]
+        },
         "src" : [
-        ],
-        "mediaFiles" : [
+            "./runtime/multiTabbedExhibit.js",
+            "./runtime/lib/sly.js"
         ]
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.js",
+        "hook": "./imsPciCreator.js",
         "libraries" : [
             "./creator/css/form.css",
             "./creator/tpl/markup.tpl",

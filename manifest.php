@@ -42,7 +42,8 @@ return array(
             \oat\parccTei\scripts\install\RegisterGraphFunctionInteraction::class,
             \oat\parccTei\scripts\install\RegisterPciFractionModelInteraction::class,
             \oat\parccTei\scripts\install\RegisterPciLineAndPointInteraction::class,
-            \oat\parccTei\scripts\install\RegisterPciGraphNumberLineInteraction::class
+            \oat\parccTei\scripts\install\RegisterPciGraphNumberLineInteraction::class,
+            \oat\parccTei\scripts\install\RegisterPciMultiTabbedExhibit::class
 		)
     ),
     'update' => 'oat\\parccTei\\scripts\\update\\Updater',
