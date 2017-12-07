@@ -57,6 +57,10 @@ define([
 ){
     'use strict';
 
+    var graphNumberLineInteraction;
+
+    var _typeIdentifier = 'graphNumberLineInteraction';
+
     function createCanvas($container, config){
 
         var padding = 2;
@@ -113,10 +117,120 @@ define([
         ];
     }
 
-    var graphNumberLineInteraction = {
-        id : -1,
+    graphNumberLineInteraction = {
+
+        /*********************************
+         *
+         * IMS specific PCI API property and methods
+         *
+         *********************************/
+
+        typeIdentifier : _typeIdentifier,
+
+        /**
+         * @param {DOMELement} dom - the dom element the PCI can use
+         * @param {Object} config - the sandard configuration object
+         * @param {Object} [state] - the json serialized state object, returned by previous call to getStatus(), use to initialize an
+         */
+        getInstance : function getInstance(dom, config, state){
+            var response = config.boundTo;
+            //simply mapped to existing TAO PCI API
+            this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties);
+            this.setSerializedState(state);
+
+            //tell the rendering engine that I am ready
+            if (typeof config.onready === 'function') {
+                config.onready(this, this.getState());
+            }
+        },
+
+        /**
+         * Get the current state fo the PCI
+         * @returns {Object}
+         */
+        getState : function getState(){
+            return this.getSerializedState();
+        },
+
+        /**
+         * Called by delivery engine when PCI is fully completed
+         */
+        oncompleted : function oncompleted(){
+            this.destroy();
+        },
+
+
+        /*********************************
+         *
+         * TAO and IMS shared PCI API methods
+         *
+         *********************************/
+
+
+        /**
+         * Get the response in the json format described in
+         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
+         *
+         * @param {Object} interaction
+         * @returns {Object}
+         */
+        getResponse : function(){
+
+            var types = [];
+            var values = [];
+            var rawResponse = this.getRawResponse();
+            if(_.isArray(rawResponse) && _.size(rawResponse)){
+                _.each(rawResponse, function(interval){
+                    types.push(interval.type);
+                    values.push([interval.start, interval.end]);
+                });
+                return {
+                    record : [
+                        {
+                            name : 'lineTypes',
+                            base : {
+                                list : {
+                                    'string' : types
+                                }
+                            }
+                        },
+                        {
+                            name : 'values',
+                            base : {
+                                list : {
+                                    pair : values
+                                }
+                            }
+                        }
+                    ]
+                };
+            }else{
+                return {base : null};
+            }
+        },
+        /**
+         * Reverse operation performed by render()
+         * After this function is executed, only the inital naked markup remains
+         * Event listeners are removed and the state and the response are reset
+         *
+         * @param {Object} interaction
+         */
+        destroy : function(){
+
+            var $container = $(this.dom);
+            $container.off().empty();
+        },
+
+
+        /*********************************
+         *
+         * TAO specific PCI API methods
+         *
+         *********************************/
+
+
         getTypeIdentifier : function(){
-            return 'graphNumberLineInteraction';
+            return _typeIdentifier;
         },
         /**
          * Render the PCI :
@@ -185,6 +299,18 @@ define([
                 });
                 intervals = {};
             }
+
+            // create base markup
+            $container.append(markupTpl({
+                closeClose:     closeCloseSvg,
+                closeOpen:      closeOpenSvg,
+                openClose:      openCloseSvg,
+                openOpen:       openOpenSvg,
+                arrowOpen:      arrowOpenSvg,
+                arrowClose:     arrowCloseSvg,
+                openArrow:      openArrowSvg,
+                closeArrow:     closeArrowSvg
+            }));
 
             //expose the reset() method
             this.reset = reset;
@@ -257,17 +383,17 @@ define([
              */
             function createInterval(intervalType, start, end){
 
-                var $button, uid, $img, $tpl, interval;
+                var $button, uid, $svg, $tpl, interval;
 
                 if(_.size(intervals) < selectionMax){
 
                     uid = _.uniqueId('interval_');
                     $button = $intervalsAvailable.find('button[value=' + intervalType + ']');
-                    $img = $button.find('img').clone();
+                    $svg = $button.find('svg').clone();
 
                     //append button
                     $tpl = $intervalTemplate.clone();
-                    $tpl.find('.btn').append($img);
+                    $tpl.find('.btn').append($svg);
                     $tpl.attr('data-uid', uid);
                     $intervalsSelected.append($tpl);
 
@@ -422,47 +548,6 @@ define([
             }
         },
         /**
-         * Get the response in the json format described in
-         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         *
-         * @param {Object} interaction
-         * @returns {Object}
-         */
-        getResponse : function(){
-
-            var types = [];
-            var values = [];
-            var rawResponse = this.getRawResponse();
-            if(_.isArray(rawResponse) && _.size(rawResponse)){
-                _.each(rawResponse, function(interval){
-                    types.push(interval.type);
-                    values.push([interval.start, interval.end]);
-                });
-                return {
-                    record : [
-                        {
-                            name : 'lineTypes',
-                            base : {
-                                list : {
-                                    'string' : types
-                                }
-                            }
-                        },
-                        {
-                            name : 'values',
-                            base : {
-                                list : {
-                                    pair : values
-                                }
-                            }
-                        }
-                    ]
-                };
-            }else{
-                return {base : null};
-            }
-        },
-        /**
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
          *
@@ -470,18 +555,6 @@ define([
          */
         resetResponse : function(){
             this.reset();
-        },
-        /**
-         * Reverse operation performed by render()
-         * After this function is executed, only the inital naked markup remains
-         * Event listeners are removed and the state and the response are reset
-         *
-         * @param {Object} interaction
-         */
-        destroy : function(){
-
-            var $container = $(this.dom);
-            $container.off().empty();
         },
         /**
          * Restore the state of the interaction from the serializedState.
