@@ -24,7 +24,8 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/handlebars',
     'taoQtiItem/portableLib/OAT/waitForMedia',
-    'multiTabbedExhibit/runtime/lib/sly.min'
+    'multiTabbedExhibit/runtime/lib/sly',
+    'css!multiTabbedExhibit/runtime/css/multiTabbedExhibit'
 ], function(
     $,
     qtiCustomInteractionContext,
@@ -34,6 +35,209 @@ define([
     ){
 
     'use strict';
+
+    var _typeIdentifier = 'multiTabbedExhibit';
+
+    var multiTabbedExhibit = {
+        /*********************************
+         *
+         * IMS specific PCI API property and methods
+         *
+         *********************************/
+
+        typeIdentifier : _typeIdentifier,
+
+        /**
+         * initialize the PCI object. As this object is cloned for each instance, using "this" is safe practice.
+         * @param {DOMELement} dom - the dom element the PCI can use
+         * @param {Object} config - the sandard configuration object
+         * @param {Object} [state] - the json serialized state object, returned by previous call to getStatus(), use to initialize an
+         */
+        getInstance : function getInstance(dom, config, state){
+            var response = config.boundTo;
+            //simply mapped to existing TAO PCI API
+            this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties, config.assetManager);
+            this.setSerializedState(state);
+
+            //tell the rendering engine that I am ready
+            if (typeof config.onready === 'function') {
+                config.onready(this, this.getState());
+            }
+        },
+
+        /**
+         * Get the current state fo the PCI
+         * @returns {Object}
+         */
+        getState : function getState(){
+            //simply mapped to existing TAO PCI API
+            return this.getSerializedState();
+        },
+
+        /**
+         * Called by delivery engine when PCI is fully completed
+         */
+        oncompleted : function oncompleted(){
+            this.destroy();
+        },
+
+        /*********************************
+         *
+         * TAO and IMS shared PCI API methods
+         *
+         *********************************/
+
+        /**
+         * Get the response in the json format described in
+         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
+         *
+         * @returns {Object}
+         */
+        getResponse : function(){
+            //for consistency with the response processing declaration, returns always true
+            return {base : {boolean : true}};
+        },
+
+        /**
+         * Reverse operation performed by render()
+         * After this function is executed, only the inital naked markup remains
+         * Event listeners are removed and the state and the response are reset
+         *
+         */
+        destroy : function(){
+
+            this.$dom.off().empty();
+            $(window).off('resize.multiTabbedExhibit.' + this.id);
+        },
+
+        /*********************************
+         *
+         * TAO specific PCI API methods
+         *
+         *********************************/
+
+        /**
+         * Get the type identifier of a pci
+         * @returns {string}
+         */
+        getTypeIdentifier : function(){
+            return _typeIdentifier;
+        },
+
+        /**
+         * Render the PCI :
+         * @param {String} id
+         * @param {Node} dom
+         * @param {Object} config - json
+         */
+        initialize : function(id, dom, config){
+
+            var self = this;
+
+            this.id = id;
+            this.$dom = $(dom);
+            this.config = config || {};
+
+            //add method on(), off() and trigger() to the current object
+            event.addEventMgr(this);
+
+            //load all widgets
+            init(this);
+
+            this.on('passagechange', function(markup, tabbed, state){
+
+                var $newMarkup = $(markup);
+
+                self.config.tabbed = tabbed;
+
+                //replace markup
+                self.$dom.children('.passages').replaceWith($newMarkup.children('.passages'));
+
+                //reload all widgets
+                init(self);
+
+                //restore state if applicable
+                if(state){
+                    self.setSerializedState(state);
+                }
+
+                //fires event "reloaded"
+                self.trigger('passagereload', [state]);
+            });
+        },
+
+        /**
+         * Programmatically set the response following the json schema described in
+         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
+         *
+         * @param {Object} response
+         */
+        setResponse : function(response){
+
+        },
+
+        /**
+         * Remove the current response set in the interaction
+         * The state may not be restored at this point.
+         *
+         */
+        resetResponse : function(){
+
+        },
+
+        /**
+         * Restore the state of the interaction from the serializedState.
+         *
+         * @param {Object} state
+         */
+        setSerializedState : function(state){
+
+            if(state && state.passage){
+                var $tabs = this.$dom.find('.passages-tabs');
+
+                //restoring a state only when the passage has tabs
+                if($tabs.length){
+                    var tabApi = $tabs.data('tabbing-api');
+                    tabApi.activate(state.passage);
+                    if (state.page) {
+                        var $passage = tabApi.getActive();
+                        if ($passage && $passage.hasClass('passage-paging')) {
+                            var pagingApi = $passage.data('paging-api');
+                            pagingApi.setActive(state.page);
+                        }
+                    }
+                }
+            }
+
+        },
+        /**
+         * Get the current state of the interaction as a string.
+         * It enables saving the state for later usage.
+         *
+         * @returns {Object} json format
+         */
+        getSerializedState : function(){
+
+            var tabApi, pagingApi, $passage, $page, state = {};
+            var $tabs = this.$dom.find('.passages-tabs');
+            if($tabs.length){
+                tabApi = $tabs.data('tabbing-api');
+                $passage = tabApi.getActive();
+                if($passage){
+                    state.passage = $passage.data('passage-id');
+                    if($passage.hasClass('passage-paging')){
+                        pagingApi = $passage.data('paging-api');
+                        $page = pagingApi.getActive();
+                        if($page){
+                            state.page = $page.data('page-id');
+                        }
+                    }
+                }
+            }
+
+            return state;
+        }
+    };
 
     /**
      * Init the paging widget to a passage
@@ -90,7 +294,7 @@ define([
         /**
          * Set the current page number in state
          *
-         * @param {Integer} num - the new page number (the page coutn starts from O)
+         * @param {Integer} num - the new page number (the page count starts from O)
          * @returns {undefined}
          */
         function setCurrent(num){
@@ -430,7 +634,7 @@ define([
     }
 
     /**
-     * The main function to init the ineractivity of the interaction
+     * The main function to init the interactivity of the interaction
      * @param {Object} pci - the standard pci object
      */
     function init(pci){
@@ -445,144 +649,6 @@ define([
         }
 
     }
-
-    var multiTabbedExhibit = {
-        id : -1,
-        getTypeIdentifier : function(){
-            return 'multiTabbedExhibit';
-        },
-        /**
-         * Render the PCI :
-         * @param {String} id
-         * @param {Node} dom
-         * @param {Object} config - json
-         */
-        initialize : function(id, dom, config){
-
-            var self = this;
-
-            this.id = id;
-            this.$dom = $(dom);
-            this.config = config || {};
-
-            //add method on(), off() and trigger() to the current object
-            event.addEventMgr(this);
-
-            //load all widgets
-            init(this);
-
-            this.on('passagechange', function(markup, tabbed, state){
-
-                var $newMarkup = $(markup);
-
-                self.config.tabbed = tabbed;
-
-                //replace markup
-                self.$dom.children('.passages').replaceWith($newMarkup.children('.passages'));
-
-                //reload all widgets
-                init(self);
-
-                //restore state if applicable
-                if(state){
-                    self.setSerializedState(state);
-                }
-
-                //fires event "reloaded"
-                self.trigger('passagereload', [state]);
-            });
-        },
-        /**
-         * Programmatically set the response following the json schema described in
-         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         *
-         * @param {Object} response
-         */
-        setResponse : function(response){
-
-        },
-        /**
-         * Get the response in the json format described in
-         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         *
-         * @returns {Object}
-         */
-        getResponse : function(){
-            //for consistency with the response processing declaration, returns always true
-            return {base : {boolean : true}};
-        },
-        /**
-         * Remove the current response set in the interaction
-         * The state may not be restored at this point.
-         *
-         */
-        resetResponse : function(){
-
-        },
-        /**
-         * Reverse operation performed by render()
-         * After this function is executed, only the inital naked markup remains
-         * Event listeners are removed and the state and the response are reset
-         *
-         */
-        destroy : function(){
-
-            this.$dom.off().empty();
-            $(window).off('resize.multiTabbedExhibit.' + this.id);
-        },
-        /**
-         * Restore the state of the interaction from the serializedState.
-         *
-         * @param {Object} state
-         */
-        setSerializedState : function(state){
-
-            if(state.passage){
-                var $tabs = this.$dom.find('.passages-tabs');
-
-                //restoring a state only when the passage has tabs
-                if($tabs.length){
-                    var tabApi = $tabs.data('tabbing-api');
-                    tabApi.activate(state.passage);
-                    if (state.page) {
-                        var $passage = tabApi.getActive();
-                        if ($passage && $passage.hasClass('passage-paging')) {
-                            var pagingApi = $passage.data('paging-api');
-                            pagingApi.setActive(state.page);
-                        }
-                    }
-                }
-            }
-
-        },
-        /**
-         * Get the current state of the interaction as a string.
-         * It enables saving the state for later usage.
-         *
-         * @returns {Object} json format
-         */
-        getSerializedState : function(){
-
-            var tabApi, pagingApi, $passage, $page, state = {};
-            var $tabs = this.$dom.find('.passages-tabs');
-            if($tabs.length){
-                tabApi = $tabs.data('tabbing-api');
-                $passage = tabApi.getActive();
-                if($passage){
-                    state.passage = $passage.data('passage-id');
-                    if($passage.hasClass('passage-paging')){
-                        pagingApi = $passage.data('paging-api');
-                        $page = pagingApi.getActive();
-                        if($page){
-                            state.page = $page.data('page-id');
-                        }
-                    }
-                }
-            }
-
-            return state;
-        }
-    };
 
     qtiCustomInteractionContext.register(multiTabbedExhibit);
 });

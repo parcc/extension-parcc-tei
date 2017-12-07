@@ -6,8 +6,6 @@
     padding : 5px;
 }
 
-.multiTabbedExhibit .prompt {margin-bottom:20px;}
-
 .multiTabbedExhibit .templates {display:none;}
 
 .multiTabbedExhibit .passage {position:relative; min-height: 100px;}

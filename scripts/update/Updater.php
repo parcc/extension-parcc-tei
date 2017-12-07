@@ -24,6 +24,7 @@ namespace oat\parccTei\scripts\update;
 use oat\parccTei\scripts\install\RegisterGraphFunctionInteraction;
 use oat\parccTei\scripts\install\RegisterPciFractionModelInteraction;
 use oat\parccTei\scripts\install\RegisterPciLineAndPointInteraction;
+use oat\parccTei\scripts\install\RegisterPciMultiTabbedExhibit;
 use oat\taoQtiItem\model\HookRegistry;
 
 /**
@@ -145,6 +146,7 @@ class Updater extends \common_ext_ExtensionUpdater
             call_user_func(new RegisterPciFractionModelInteraction(), ['1.0.0']);
             call_user_func(new RegisterPciLineAndPointInteraction(), ['1.0.0']);
             call_user_func(new RegisterGraphFunctionInteraction(), ['1.0.0']);
+            call_user_func(new RegisterPciMultiTabbedExhibit(), ['1.0.0']);
 
             $this->setVersion('0.5.0');
         }
