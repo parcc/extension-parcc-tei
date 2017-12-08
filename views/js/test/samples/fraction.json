@@ -1,11 +1,11 @@
 {
-    "identifier": "i15125675102967216",
-    "serial": "item_5a27f52f917a4376698729",
+    "identifier": "i15124849571846177",
+    "serial": "item_5a2a9c6d88a7c411343054",
     "qtiClass": "assessmentItem",
     "attributes": {
-        "identifier": "i15125675102967216",
-        "title": "Item 4",
-        "label": "Item 4",
+        "identifier": "i15124849571846177",
+        "title": "fractionModel",
+        "label": "fractionModel",
         "xml:lang": "en-US",
         "adaptive": false,
         "timeDependent": false,
@@ -14,21 +14,21 @@
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_5a27f52f91784106123828",
-        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_imsportablecustominteraction_5a27f52f97e4b423843939}}\n      <\/div>\n    <\/div>\n  ",
+        "serial": "container_containeritembody_5a2a9c6d88a5b696867374",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_imsportablecustominteraction_5a2a9c6d8d4ac661204810}}\n      <\/div>\n    <\/div>\n  ",
         "elements": {
-            "interaction_imsportablecustominteraction_5a27f52f97e4b423843939": {
-                "serial": "interaction_imsportablecustominteraction_5a27f52f97e4b423843939",
+            "interaction_imsportablecustominteraction_5a2a9c6d8d4ac661204810": {
+                "serial": "interaction_imsportablecustominteraction_5a2a9c6d8d4ac661204810",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_5a27f52f917a4376698729"
+                    "relatedItem": "item_5a2a9c6d88a7c411343054"
                 },
                 "choices": {},
                 "typeIdentifier": "fractionModelInteraction",
-                "markup": "\n              <div class=\"fractionModelInteraction\">\n                <div class=\"shape-panel\">\n                  <h3 class=\"shape-title\">Fraction Model<\/h3>\n                  <div class=\"shape-container\"><\/div>\n                  <div class=\"shape-controls\">\n                    <button value=\"fewer\" class=\"fewer btn btn-info\" type=\"button\">Fewer<\/button>\n                    <button value=\"more\" class=\"more btn btn-info\" type=\"button\">More<\/button>\n                    <button value=\"reset\" class=\"reset btn btn-info\" type=\"button\">Reset<\/button>\n                  <\/div>\n                <\/div>\n              <\/div>\n            ",
+                "markup": "\n              <div class=\"fractionModelInteraction\">\n                <div class=\"prompt\">\n        \n    <\/div>\n                <div class=\"shape-panel\">\n                  <h3 class=\"shape-title\">Fraction Model<\/h3>\n                  <div class=\"shape-container\"><\/div>\n                  <div class=\"shape-controls\">\n                    <button value=\"fewer\" class=\"fewer btn btn-info\" type=\"button\">Fewer<\/button>\n                    <button value=\"more\" class=\"more btn btn-info\" type=\"button\">More<\/button>\n                    <button value=\"reset\" class=\"reset btn btn-info\" type=\"button\">Reset<\/button>\n                  <\/div>\n                <\/div>\n              <\/div>\n            ",
                 "version": "0.0.0",
                 "properties": {
                     "title": "Fraction Model",
@@ -49,11 +49,11 @@
             }
         },
         "debug": {
-            "relatedItem": "item_5a27f52f917a4376698729"
+            "relatedItem": "item_5a2a9c6d88a7c411343054"
         }
     },
     "debug": {
-        "relatedItem": "item_5a27f52f917a4376698729"
+        "relatedItem": "item_5a2a9c6d88a7c411343054"
     },
     "namespaces": {
         "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2",
@@ -63,11 +63,25 @@
     "schemaLocations": {
         "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p2\/imsqti_v2p2.xsd"
     },
-    "stylesheets": {},
+    "stylesheets": {
+        "stylesheet_5a2a9c6d89e52116738956": {
+            "serial": "stylesheet_5a2a9c6d89e52116738956",
+            "qtiClass": "stylesheet",
+            "attributes": {
+                "href": "style\/custom\/tao-user-styles.css",
+                "type": "text\/css",
+                "media": "all",
+                "title": ""
+            },
+            "debug": {
+                "relatedItem": "item_5a2a9c6d88a7c411343054"
+            }
+        }
+    },
     "outcomes": {
-        "outcomedeclaration_5a27f52f944d0484997283": {
+        "outcomedeclaration_5a2a9c6d8b0d9090252591": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_5a27f52f944d0484997283",
+            "serial": "outcomedeclaration_5a2a9c6d8b0d9090252591",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -75,15 +89,15 @@
                 "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_5a27f52f917a4376698729"
+                "relatedItem": "item_5a2a9c6d88a7c411343054"
             },
             "defaultValue": null
         }
     },
     "responses": {
-        "responsedeclaration_5a27f52f939a5456620812": {
+        "responsedeclaration_5a2a9c6d8aa2d291393912": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_5a27f52f939a5456620812",
+            "serial": "responsedeclaration_5a2a9c6d8aa2d291393912",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
@@ -91,7 +105,7 @@
                 "baseType": "string"
             },
             "debug": {
-                "relatedItem": "item_5a27f52f917a4376698729"
+                "relatedItem": "item_5a2a9c6d88a7c411343054"
             },
             "defaultValue": [],
             "mapping": [],
@@ -106,7 +120,7 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_custom_5a27f52f997ed099435424",
+        "serial": "response_custom_5a2a9c6d8e69b771189040",
         "qtiClass": "responseProcessing",
         "attributes": {},
         "debug": {

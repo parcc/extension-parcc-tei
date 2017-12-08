@@ -24,7 +24,7 @@ define([
     'taoQtiItem/portableElementRegistry/ciRegistry',
     'taoQtiItem/portableElementRegistry/provider/localManifestProvider',
     'json!parccTei/test/samples/fraction.json'
-], function($, _, qtiItemRunner, ciRegistry, pciTestProvider, fractionData){
+], function($, _, qtiItemRunner, ciRegistry, pciTestProvider, itemData){
     'use strict';
 
 
@@ -53,7 +53,7 @@ define([
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
 
-        runner = qtiItemRunner('qti', fractionData)
+        runner = qtiItemRunner('qti', itemData)
             .on('render', function(){
 
                 assert.equal($container.children().length, 1, 'the container a elements');
@@ -77,7 +77,7 @@ define([
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
 
-        runner = qtiItemRunner('qti', fractionData)
+        runner = qtiItemRunner('qti', itemData)
             .on('render', function(){
                 var $more,
                     state;
@@ -114,8 +114,8 @@ define([
         var $container = $('#' + fixtureContainerId);
 
         //update the sample to start with 4 partitions
-        var updatedFractionData = _.cloneDeep(fractionData);
-        updatedFractionData.body.elements['interaction_imsportablecustominteraction_5a27f52f97e4b423843939'].properties.partitionInit = 4;
+        var updatedFractionData = _.cloneDeep(itemData);
+        updatedFractionData.body.elements['interaction_imsportablecustominteraction_5a2a9c6d8d4ac661204810'].properties.partitionInit = 4;
 
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
@@ -157,8 +157,8 @@ define([
         var $container = $('#' + fixtureContainerId);
 
         //update the sample to start with 4 partitions
-        var updatedFractionData = _.cloneDeep(fractionData);
-        updatedFractionData.body.elements['interaction_imsportablecustominteraction_5a27f52f97e4b423843939'].properties.partitionInit = 4;
+        var updatedFractionData = _.cloneDeep(itemData);
+        updatedFractionData.body.elements['interaction_imsportablecustominteraction_5a2a9c6d8d4ac661204810'].properties.partitionInit = 4;
 
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
@@ -209,7 +209,7 @@ define([
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
 
-        runner = qtiItemRunner('qti', fractionData)
+        runner = qtiItemRunner('qti', itemData)
             .on('render', function(){
                 var self = this,
                     $partitions,
@@ -237,14 +237,13 @@ define([
 
     QUnit.module('Visual test');
 
-
     QUnit.asyncTest('Display and play', function(assert){
         var $container = $('#' + outsideContainerId);
 
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
 
-        runner = qtiItemRunner('qti', fractionData)
+        runner = qtiItemRunner('qti', itemData)
             .on('render', function(){
                 QUnit.start();
             })

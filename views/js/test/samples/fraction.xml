@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="i15124849571846177" title="fractionModel" label="fractionModel" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.3.0-sprint64 1/2">
+  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="string"/>
+  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float"/>
+  <stylesheet href="style/custom/tao-user-styles.css" type="text/css" media="all" title=""/>
+  <itemBody>
+    <div class="grid-row">
+      <div class="col-12">
+        <customInteraction responseIdentifier="RESPONSE">
+          <portableCustomInteraction xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction_v1" customInteractionTypeIdentifier="fractionModelInteraction" data-version="">
+            <properties>
+              <property key="title">Fraction Model</property>
+              <property key="radius">110</property>
+              <property key="selectedPartitionsColor">#000000</property>
+              <property key="partitionColor">#ffffff</property>
+              <property key="outlineColor">#000000</property>
+              <property key="outlineThickness">5</property>
+              <property key="partitionMax">12</property>
+              <property key="partitionMin">2</property>
+              <property key="partitionInit">6</property>
+              <property key="selectedPartitionsInit">3</property>
+              <property key="selectedPartitions">[true,false,true,false,true,false]</property>
+            </properties>
+            <modules>
+                    </modules>
+            <markup xmlns="http://www.w3.org/1999/xhtml">
+              <div class="fractionModelInteraction">
+                <div class="prompt">
+        
+    </div>
+                <div class="shape-panel">
+                  <h3 class="shape-title">Fraction Model</h3>
+                  <div class="shape-container"/>
+                  <div class="shape-controls">
+                    <button value="fewer" class="fewer btn btn-info" type="button">Fewer</button>
+                    <button value="more" class="more btn btn-info" type="button">More</button>
+                    <button value="reset" class="reset btn btn-info" type="button">Reset</button>
+                  </div>
+                </div>
+              </div>
+            </markup>
+          </portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+  </itemBody>
+  <responseProcessing>
+    <responseCondition>
+      <responseIf>
+        <equal tolerance="0.000000000001" toleranceMode="absolute">
+          <divide>
+            <customOperator class="qti.customOperators.math.fraction.Numerator">
+              <variable identifier="RESPONSE"/>
+            </customOperator>
+            <customOperator class="qti.customOperators.math.fraction.Denominator">
+              <variable identifier="RESPONSE"/>
+            </customOperator>
+          </divide>
+          <divide>
+            <customOperator class="qti.customOperators.math.fraction.Numerator">
+              <correct identifier="RESPONSE"/>
+            </customOperator>
+            <customOperator class="qti.customOperators.math.fraction.Denominator">
+              <correct identifier="RESPONSE"/>
+            </customOperator>
+          </divide>
+        </equal>
+        <setOutcomeValue identifier="SCORE">
+          <sum>
+            <variable identifier="SCORE"/>
+            <baseValue baseType="float">1</baseValue>
+          </sum>
+        </setOutcomeValue>
+      </responseIf>
+      <responseElse>
+        <setOutcomeValue identifier="SCORE">
+          <baseValue baseType="float">0</baseValue>
+        </setOutcomeValue>
+      </responseElse>
+    </responseCondition>
+  </responseProcessing>
+</assessmentItem>

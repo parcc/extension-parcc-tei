@@ -23,7 +23,7 @@ define([
     'taoQtiItem/runner/qtiItemRunner',
     'taoQtiItem/portableElementRegistry/ciRegistry',
     'taoQtiItem/portableElementRegistry/provider/localManifestProvider',
-    'json!parccTei/test/samples/graphZoomNumberLineInteraction.json'
+    'json!parccTei/test/samples/zoomNumberLine.json'
 ], function($, _, qtiItemRunner, ciRegistry, pciTestProvider, graphZoomNumberLineInteractionData){
     'use strict';
 

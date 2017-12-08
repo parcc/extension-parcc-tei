@@ -1,56 +1,51 @@
-
 {
-    "identifier": "i15126552774802133",
-    "serial": "item_5a2a4dda97437804875971",
+    "identifier": "i1512741676151328",
+    "serial": "item_5a2a9c7d03204241330086",
     "qtiClass": "assessmentItem",
     "attributes": {
-        "identifier": "i15126552774802133",
-        "title": "item",
-        "label": "item",
+        "identifier": "i1512741676151328",
+        "title": "histogram",
+        "label": "histogram",
         "xml:lang": "en-US",
         "adaptive": false,
         "timeDependent": false,
         "toolName": "TAO",
-        "toolVersion": "3.3.0-sprint65",
+        "toolVersion": "3.3.0-sprint64 1\/2",
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_5a2a4dda97425652923822",
-        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_imsportablecustominteraction_5a2a4ddab8210575092709}}\n      <\/div>\n    <\/div>\n  ",
+        "serial": "container_containeritembody_5a2a9c7d031ec905206257",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_imsportablecustominteraction_5a2a9c7d04780712326147}}\n      <\/div>\n    <\/div>\n  ",
         "elements": {
-            "interaction_imsportablecustominteraction_5a2a4ddab8210575092709": {
-                "serial": "interaction_imsportablecustominteraction_5a2a4ddab8210575092709",
+            "interaction_imsportablecustominteraction_5a2a9c7d04780712326147": {
+                "serial": "interaction_imsportablecustominteraction_5a2a9c7d04780712326147",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_5a2a4dda97437804875971"
+                    "relatedItem": "item_5a2a9c7d03204241330086"
                 },
                 "choices": {},
                 "typeIdentifier": "histogramInteraction",
                 "markup": "\n              <div class=\"histogramInteraction\">\n                <div class=\"typeIdentifier\">typeIdentifier : histogramInteraction<\/div>\n                <div class=\"label\">label : Histogram<\/div>\n                <div class=\"description\">description : Histogram<\/div>\n              <\/div>\n            ",
-                "version": "1.0.0",
+                "version": "0.0.0",
                 "properties": {
                     "level": "5",
                     "label-min": "min",
                     "label-max": "max"
                 },
                 "config": [],
-                "modules": {
-                    "histogramInteraction\/runtime\/histogramInteraction.min": [
-                        "..\/runtime\/histogramInteraction.min.js"
-                    ]
-                },
+                "modules": {},
                 "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1"
             }
         },
         "debug": {
-            "relatedItem": "item_5a2a4dda97437804875971"
+            "relatedItem": "item_5a2a9c7d03204241330086"
         }
     },
     "debug": {
-        "relatedItem": "item_5a2a4dda97437804875971"
+        "relatedItem": "item_5a2a9c7d03204241330086"
     },
     "namespaces": {
         "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2",
@@ -60,25 +55,11 @@
     "schemaLocations": {
         "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p2\/imsqti_v2p2.xsd"
     },
-    "stylesheets": {
-        "stylesheet_5a2a4ddaa07a2290229960": {
-            "serial": "stylesheet_5a2a4ddaa07a2290229960",
-            "qtiClass": "stylesheet",
-            "attributes": {
-                "href": "style\/custom\/tao-user-styles.css",
-                "type": "text\/css",
-                "media": "all",
-                "title": ""
-            },
-            "debug": {
-                "relatedItem": "item_5a2a4dda97437804875971"
-            }
-        }
-    },
+    "stylesheets": {},
     "outcomes": {
-        "outcomedeclaration_5a2a4ddaa92e3912168833": {
+        "outcomedeclaration_5a2a9c7d03b3d275287096": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_5a2a4ddaa92e3912168833",
+            "serial": "outcomedeclaration_5a2a9c7d03b3d275287096",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -86,15 +67,15 @@
                 "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_5a2a4dda97437804875971"
+                "relatedItem": "item_5a2a9c7d03204241330086"
             },
             "defaultValue": null
         }
     },
     "responses": {
-        "responsedeclaration_5a2a4ddaa5c2e551620599": {
+        "responsedeclaration_5a2a9c7d0391c150864612": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_5a2a4ddaa5c2e551620599",
+            "serial": "responsedeclaration_5a2a9c7d0391c150864612",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
@@ -102,7 +83,7 @@
                 "baseType": "integer"
             },
             "debug": {
-                "relatedItem": "item_5a2a4dda97437804875971"
+                "relatedItem": "item_5a2a9c7d03204241330086"
             },
             "defaultValue": [],
             "mapping": [],
@@ -117,11 +98,11 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_templatesdriven_5a2a4ddabd97f209316927",
+        "serial": "response_templatesdriven_5a2a9c7d04fd9200370294",
         "qtiClass": "responseProcessing",
         "attributes": {},
         "debug": {
-            "relatedItem": "item_5a2a4dda97437804875971"
+            "relatedItem": "item_5a2a9c7d03204241330086"
         },
         "processingType": "templateDriven",
         "responseRules": [
@@ -185,4 +166,3 @@
     },
     "apipAccessibility": ""
 }
-

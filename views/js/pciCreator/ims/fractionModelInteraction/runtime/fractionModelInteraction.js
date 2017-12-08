@@ -66,8 +66,6 @@ define([
             var response = config.boundTo;
             //simply mapped to existing TAO PCI API
             this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties);
-            console.log('about to get instance with state:');
-            console.log(state);
             this.setSerializedState(state);
 
             //tell the rendering engine that I am ready

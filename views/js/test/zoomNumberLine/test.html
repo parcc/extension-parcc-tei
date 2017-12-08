@@ -2,14 +2,14 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>TEI - Graph Point Line Interaction Test</title>
+        <title>TEI - Graph Zoom Number Line Interaction Test</title>
         <base href="../../../../../tao/views/" />
 
         <link rel="stylesheet" type="text/css" href="js/lib/qunit/qunit.css">
         <link rel="stylesheet" type="text/css" href="css/tao-main-style.css">
         <script type="text/javascript" src="js/lib/require.js"></script>
         <script type="text/javascript" src="js/lib/qunit/qunit.js"></script>
-        <script type="text/javascript" src="js/lib/blanket/blanket.min.js"  data-cover-flags="branchTracking" data-cover-only="graphPointLineGraphInteraction.js"></script>
+        <script type="text/javascript" src="js/lib/blanket/blanket.min.js"  data-cover-flags="branchTracking" data-cover-only="graphZoomNumberLineInteraction.js"></script>
 
         <script  type="text/javascript">
         (function(){ 'use strict';
@@ -20,8 +20,15 @@
             //load the config
             require(['/tao/ClientConfig/config'], function(){
 
+                //add missing paths
+                require.config({
+                    paths : {
+                        'qtiCustomInteractionContext':    '../../../taoQtiItem/views/js/runtime/qtiCustomInteractionContext',
+                    }
+                });
+
                 //load the test
-                require(['parccTei/test/graphPointLineGraphInteraction/test'], function(){
+                require(['parccTei/test/zoomNumberLine/test'], function(){
 
                     //Tests loaded, run tests
                     QUnit.config.reorder = false;

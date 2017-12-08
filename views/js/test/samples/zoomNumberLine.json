@@ -1,96 +1,54 @@
-
 {
-    "identifier": "i15127289019771136",
-    "serial": "item_5a2a6feec40b8752583543",
+    "identifier": "i15127416008526319",
+    "serial": "item_5a2a9cac3f625939080492",
     "qtiClass": "assessmentItem",
     "attributes": {
-        "identifier": "i15127289019771136",
-        "title": "Item",
-        "label": "Item",
+        "identifier": "i15127416008526319",
+        "title": "zoomNumberLine",
+        "label": "zoomNumberLine",
         "xml:lang": "en-US",
         "adaptive": false,
         "timeDependent": false,
         "toolName": "TAO",
-        "toolVersion": "3.3.0-sprint65",
+        "toolVersion": "3.3.0-sprint64 1\/2",
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_5a2a6feec40a5938704389",
-        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_imsportablecustominteraction_5a2a6feee17fe746920280}}\n      <\/div>\n    <\/div>\n  ",
+        "serial": "container_containeritembody_5a2a9cac3f607671299817",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_imsportablecustominteraction_5a2a9cac40c64610371875}}\n      <\/div>\n    <\/div>\n  ",
         "elements": {
-            "interaction_imsportablecustominteraction_5a2a6feee17fe746920280": {
-                "serial": "interaction_imsportablecustominteraction_5a2a6feee17fe746920280",
+            "interaction_imsportablecustominteraction_5a2a9cac40c64610371875": {
+                "serial": "interaction_imsportablecustominteraction_5a2a9cac40c64610371875",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_5a2a6feec40b8752583543"
+                    "relatedItem": "item_5a2a9cac3f625939080492"
                 },
                 "choices": {},
-                "typeIdentifier": "graphPointLineGraphInteraction",
-                "markup": "\n              <div class=\"graphPointLineGraphInteraction\">\n                <div class=\"shape-panel\">\n                  <div class=\"shape-container\"><\/div>\n                <\/div>\n              <\/div>\n            ",
-                "version": "1.0.0",
+                "typeIdentifier": "graphZoomNumberLineInteraction",
+                "markup": "\n              <div class=\"graphZoomNumberLineInteraction\">\n                <div class=\"shape-panel\">\n                  <div class=\"shape-container\"><\/div>\n                <\/div>\n              <\/div>\n            ",
+                "version": "0.0.0",
                 "properties": {
-                    "draggable": "true",
-                    "graphTitle": "",
-                    "graphTitleRequired": "",
-                    "graphType": "line",
-                    "maxPoints": "6",
-                    "plotColor": "#0000FF",
-                    "plotThickness": "6",
-                    "pointColor": "#0000FF",
-                    "pointGlow": "true",
-                    "pointRadius": "8",
-                    "segment": "true",
-                    "weight": "1",
-                    "width": "450",
-                    "height": "300",
-                    "staticPoints": "[]",
-                    "staticPointColor": "#AA00AA",
-                    "staticPointGlow": "",
-                    "staticPointRadius": "6",
-                    "staticPointLabelSize": "10",
-                    "staticPointLabelWeight": "0",
-                    "staticPointLabelColor": "#FFF",
-                    "staticDisplayPoints": "true",
-                    "staticLineColor": "#AA00AA",
-                    "staticLineThickness": "4",
-                    "staticShowLine": "true",
-                    "xAllowOuter": "true",
-                    "xBorderWeight": "3",
-                    "xStep": "1",
-                    "xLabel": "",
-                    "xTitle": "",
-                    "xStart": "0",
-                    "xEnd": "7",
-                    "xSubStep": "2",
-                    "xWeight": "3",
-                    "yAllowOuter": "true",
-                    "yBorderWeight": "3",
-                    "yStep": "10",
-                    "yLabel": "",
-                    "yTitle": "",
-                    "yStart": "0",
-                    "yEnd": "100",
-                    "ySubStep": "2",
-                    "yWeight": "3"
+                    "color": "#266d9c",
+                    "min": "0",
+                    "max": "10",
+                    "unitSubDivision": "2",
+                    "increment": "1",
+                    "snapTo": "1"
                 },
                 "config": [],
-                "modules": {
-                    "graphPointLineGraphInteraction\/runtime\/graphPointLineGraphInteraction.min": [
-                        "..\/runtime\/graphPointLineGraphInteraction.min.js"
-                    ]
-                },
+                "modules": {},
                 "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1"
             }
         },
         "debug": {
-            "relatedItem": "item_5a2a6feec40b8752583543"
+            "relatedItem": "item_5a2a9cac3f625939080492"
         }
     },
     "debug": {
-        "relatedItem": "item_5a2a6feec40b8752583543"
+        "relatedItem": "item_5a2a9cac3f625939080492"
     },
     "namespaces": {
         "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2",
@@ -100,25 +58,11 @@
     "schemaLocations": {
         "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p2\/imsqti_v2p2.xsd"
     },
-    "stylesheets": {
-        "stylesheet_5a2a6feecb58c903306323": {
-            "serial": "stylesheet_5a2a6feecb58c903306323",
-            "qtiClass": "stylesheet",
-            "attributes": {
-                "href": "style\/custom\/tao-user-styles.css",
-                "type": "text\/css",
-                "media": "all",
-                "title": ""
-            },
-            "debug": {
-                "relatedItem": "item_5a2a6feec40b8752583543"
-            }
-        }
-    },
+    "stylesheets": {},
     "outcomes": {
-        "outcomedeclaration_5a2a6feed36d8082765941": {
+        "outcomedeclaration_5a2a9cac3ffa0946896456": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_5a2a6feed36d8082765941",
+            "serial": "outcomedeclaration_5a2a9cac3ffa0946896456",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -126,23 +70,23 @@
                 "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_5a2a6feec40b8752583543"
+                "relatedItem": "item_5a2a9cac3f625939080492"
             },
             "defaultValue": null
         }
     },
     "responses": {
-        "responsedeclaration_5a2a6feed0072627936697": {
+        "responsedeclaration_5a2a9cac3fd8a700277469": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_5a2a6feed0072627936697",
+            "serial": "responsedeclaration_5a2a9cac3fd8a700277469",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
-                "cardinality": "multiple",
-                "baseType": "string"
+                "cardinality": "single",
+                "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_5a2a6feec40b8752583543"
+                "relatedItem": "item_5a2a9cac3f625939080492"
             },
             "defaultValue": [],
             "mapping": [],
@@ -157,11 +101,11 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_templatesdriven_5a2a6feee65c3955731610",
+        "serial": "response_templatesdriven_5a2a9cac411a7361172542",
         "qtiClass": "responseProcessing",
         "attributes": {},
         "debug": {
-            "relatedItem": "item_5a2a6feec40b8752583543"
+            "relatedItem": "item_5a2a9cac3f625939080492"
         },
         "processingType": "templateDriven",
         "responseRules": [
@@ -225,4 +169,3 @@
     },
     "apipAccessibility": ""
 }
-

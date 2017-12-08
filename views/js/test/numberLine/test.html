@@ -19,6 +19,13 @@
             //load the config
             require(['/tao/ClientConfig/config'], function(){
 
+                //add missing paths
+                require.config({
+                    paths : {
+                        'qtiCustomInteractionContext':    '../../../taoQtiItem/views/js/runtime/qtiCustomInteractionContext',
+                    }
+                });
+
                 //load the test
                 require(['parccTei/test/numberLine/test'], function(){
 
