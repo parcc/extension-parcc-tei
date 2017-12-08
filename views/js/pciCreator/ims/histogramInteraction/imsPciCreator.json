@@ -1,4 +1,5 @@
 {
+    "model": "IMSPCI",
     "typeIdentifier": "histogramInteraction",
     "label": "Histogram",
     "short": "Histogram",
@@ -11,22 +12,19 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "",
-        "libraries" : [
-            "./runtime/libs/jquery.amd.js"
-        ],
-        "stylesheets" : [
-            "./runtime/css/histogramInteraction.css"
-        ],
+        "hook" : "runtime/histogramInteraction.min.js",
+        "modules" : {
+            "histogramInteraction/runtime/histogramInteraction.min" : [
+                "runtime/histogramInteraction.min.js"
+            ]
+        },
         "src" : [
             "./runtime/histogramInteraction.js"
-        ],
-        "mediaFiles" : [
         ]
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.js",
+        "hook": "./imsPciCreator.js",
         "libraries" : [
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
