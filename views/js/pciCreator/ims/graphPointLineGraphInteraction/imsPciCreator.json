@@ -1,30 +1,30 @@
 {
+    "model": "IMSPCI",
     "typeIdentifier": "graphPointLineGraphInteraction",
     "label": "Point Graph",
     "short": "Point Graph",
     "description": "Point Graph Interaction",
     "version": "1.0.0",
-    "author": "Sam Sipasseuth & Christophe Noël",
-    "email": "sam@taotesting.com & christophe@taotesting.com",
+    "author": "Sam Sipasseuth, Christophe Noël",
+    "email": "sam@taotesting.com",
     "response": {
         "baseType": "string",
         "cardinality": "multiple"
     },
     "runtime" : {
-        "hook" : "./runtime/graphPointLineGraphInteraction.js",
-        "libraries" : [
-        ],
-        "stylesheets" : [
-            "./runtime/css/graphPointLineGraphInteraction.css"
-        ],
+        "hook" : "./runtime/graphPointLineGraphInteraction.min.js",
+        "modules" : {
+            "graphPointLineGraphInteraction/runtime/graphPointLineGraphInteraction.min" : [
+                "runtime/graphPointLineGraphInteraction.min.js"
+            ]
+        },
         "src" : [
-        ],
-        "mediaFiles" : [
+            "./runtime/graphPointLineGraphInteraction.js"
         ]
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.js",
+        "hook": "./imsPciCreator.js",
         "libraries" : [
             "./creator/css/form.css",
             "./creator/tpl/equationFormElement.tpl",

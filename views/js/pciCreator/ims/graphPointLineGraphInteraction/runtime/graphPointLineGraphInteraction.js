@@ -25,7 +25,8 @@ define([
     'taoQtiItem/portableLib/OAT/scale.raphael',
     'parccTei/portableLib/gridFactory',
     'parccTei/portableLib/pointFactory',
-    'parccTei/portableLib/plotFactory'
+    'parccTei/portableLib/plotFactory',
+    'css!parccTei/pciCreator/ims/graphPointLineGraphInteraction/runtime/css/graphPointLineGraphInteraction'
 ], function(
     $,
     qtiCustomInteractionContext,
@@ -38,6 +39,8 @@ define([
     ){
 
     'use strict';
+
+    var _typeIdentifier = 'graphPointLineGraphInteraction';
 
     var buildGridConfig = function buildGridConfig(rawConfig){
 
@@ -161,10 +164,95 @@ define([
     };
 
     var graphPointLineGraphInteraction = {
-        id : -1,
-        getTypeIdentifier : function(){
-            return 'graphPointLineGraphInteraction';
+        /*********************************
+         *
+         * IMS specific PCI API property and methods
+         *
+         *********************************/
+
+        typeIdentifier : _typeIdentifier,
+
+        /**
+         * initialize the PCI object. As this object is cloned for each instance, using "this" is safe practice.
+         * @param {DOMELement} dom - the dom element the PCI can use
+         * @param {Object} config - the sandard configuration object
+         * @param {Object} [state] - the json serialized state object, returned by previous call to getStatus(), use to initialize an
+         */
+        getInstance : function getInstance(dom, config, state){
+            var response = config.boundTo;
+            //simply mapped to existing TAO PCI API
+            this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties, config.assetManager);
+            this.setSerializedState(state);
+
+            //tell the rendering engine that I am ready
+            if (typeof config.onready === 'function') {
+                config.onready(this, this.getState());
+            }
         },
+
+        /**
+         * Get the current state fo the PCI
+         * @returns {Object}
+         */
+        getState : function getState(){
+            //simply mapped to existing TAO PCI API
+            return this.getSerializedState();
+        },
+
+        /**
+         * Called by delivery engine when PCI is fully completed
+         */
+        oncompleted : function oncompleted(){
+            this.destroy();
+        },
+
+        /*********************************
+         *
+         * TAO and IMS shared PCI API methods
+         *
+         *********************************/
+
+        /**
+         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
+         * @returns {Object} See JSON schema in link above
+         */
+        getResponse : function(){
+            var raw = this.getRawResponse();
+            if(raw){
+                return {
+                    list : {
+                        string : raw
+                    }
+                };
+            }
+            return { base : null };
+        },
+
+        /**
+         * Reverse operation performed by render()
+         * After this function is executed, only the inital naked markup remains
+         * Event listeners are removed and the state and the response are reset
+         */
+        destroy : function(){
+
+            var $container = $(this.dom);
+            $container.off().empty();
+        },
+
+        /*********************************
+         *
+         * TAO specific PCI API methods
+         *
+         *********************************/
+
+        /**
+         * Get the type identifier of a pci
+         * @returns {string}
+         */
+        getTypeIdentifier : function(){
+            return _typeIdentifier;
+        },
+
         initialize : function(id, dom, config){
             var $container = $(dom),
                 self,
@@ -483,6 +571,7 @@ define([
                 initGrid($container, self.gridConfig);
             });
         },
+
         /**
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
          * @param {Object} response See JSON schema in link above
@@ -503,37 +592,13 @@ define([
         },
 
         /**
-         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         * @returns {Object} See JSON schema in link above
-         */
-        getResponse : function(){
-            var raw = this.getRawResponse();
-            if(raw){
-                return {
-                    list : {
-                        string : raw
-                    }
-                };
-            }
-            return { base : null };
-        },
-        /**
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
          */
         resetResponse : function(){
             //not implemented
         },
-        /**
-         * Reverse operation performed by render()
-         * After this function is executed, only the inital naked markup remains
-         * Event listeners are removed and the state and the response are reset
-         */
-        destroy : function(){
 
-            var $container = $(this.dom);
-            $container.off().empty();
-        },
         /**
          * Restore the state of the interaction from the serializedState.
          * @param {Object} state - json format
@@ -542,6 +607,7 @@ define([
             //state == response
             this.setResponse(state);
         },
+
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
