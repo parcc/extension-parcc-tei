@@ -21,11 +21,10 @@ define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
-    'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!graphZoomNumberLineInteraction/creator/tpl/propertiesForm',
     'lodash',
     'jquery'
-], function(stateFactory, Question, formElement, containerEditor, formTpl, _, $){
+], function(stateFactory, Question, formElement, formTpl, _, $){
 
     'use strict';
 
