@@ -2,21 +2,21 @@
 <assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd"
-                xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" 
+                xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction"
                 identifier="pci002" title="PCI 002" adaptive="false" timeDependent="false">
-    
+
     <responseDeclaration identifier="graphNumberLine1" cardinality="single" baseType="integer"/>
-    
+
     <!--item specific stylesheets will be added by the item in the method postRender()-->
     <stylesheet href="graphZoomNumberLineInteraction/runtime/css/graphZoomNumberLineInteraction" title="" type="text/css" media="all"></stylesheet>
-    
+
     <itemBody>
-        
+
         <customInteraction responseIdentifier="graphNumberLine1">
             <pci:portableCustomInteraction customInteractionTypeIdentifier="graphZoomNumberLineInteraction" hook="graphZoomNumberLineInteraction/runtime/graphZoomNumberLineInteraction.js">
 
                 <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
-                
+
                 <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
                     <pci:libraries>
                     </pci:libraries>
@@ -33,9 +33,6 @@
 
                 <pci:markup>
                     <html5:div class="graphZoomNumberLineInteraction">
-                        <html5:div class="prompt">
-                            Use the number line to plot the <html5:em>approximate</html5:em> area of a circle with a diamter of 2 units.
-                        </html5:div>
                         <html5:div class="shape-panel">
                             <html5:div class="shape-container"></html5:div>
                         </html5:div>
@@ -46,5 +43,5 @@
         </customInteraction>
 
     </itemBody>
-    
+
 </assessmentItem>

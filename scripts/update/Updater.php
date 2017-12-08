@@ -24,6 +24,7 @@ namespace oat\parccTei\scripts\update;
 use oat\parccTei\scripts\install\RegisterGraphFunctionInteraction;
 use oat\parccTei\scripts\install\RegisterPciFractionModelInteraction;
 use oat\parccTei\scripts\install\RegisterPciGraphNumberLineInteraction;
+use oat\parccTei\scripts\install\RegisterPciGraphZoomNumberLineInteraction;
 use oat\parccTei\scripts\install\RegisterPciHistogramInteraction;
 use oat\parccTei\scripts\install\RegisterPciLineAndPointInteraction;
 use oat\parccTei\scripts\install\RegisterPciMultiTabbedExhibit;
@@ -149,6 +150,7 @@ class Updater extends \common_ext_ExtensionUpdater
             call_user_func(new RegisterPciLineAndPointInteraction(), ['1.0.0']);
             call_user_func(new RegisterGraphFunctionInteraction(), ['1.0.0']);
             call_user_func(new RegisterPciGraphNumberLineInteraction(), ['1.0.0']);
+            call_user_func(new RegisterPciGraphZoomNumberLineInteraction(), ['1.0.0']);
             call_user_func(new RegisterPciHistogramInteraction(), ['1.0.0']);
             call_user_func(new RegisterPciMultiTabbedExhibit(), ['1.0.0']);
 

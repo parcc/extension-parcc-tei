@@ -1,0 +1,116 @@
+
+{
+    "identifier": "pci002",
+    "serial": "item_5a2a55629cca6347873621",
+    "qtiClass": "assessmentItem",
+    "attributes": {
+        "identifier": "pci002",
+        "title": "PCI 002",
+        "label": "",
+        "adaptive": false,
+        "timeDependent": false,
+        "toolName": "TAO",
+        "toolVersion": "3.3.0-sprint65",
+        "class": ""
+    },
+    "body": {
+        "serial": "container_containeritembody_5a2a55629cc95117427641",
+        "body": "\n\n        {{interaction_portablecustominteraction_5a2a5562b524b244457266}}\n\n    ",
+        "elements": {
+            "interaction_portablecustominteraction_5a2a5562b524b244457266": {
+                "serial": "interaction_portablecustominteraction_5a2a5562b524b244457266",
+                "qtiClass": "customInteraction",
+                "attributes": {
+                    "responseIdentifier": "graphNumberLine1"
+                },
+                "debug": {
+                    "relatedItem": "item_5a2a55629cca6347873621"
+                },
+                "choices": {},
+                "typeIdentifier": "graphZoomNumberLineInteraction",
+                "markup": "\n                    <div class=\"graphZoomNumberLineInteraction\">\n                        <div class=\"shape-panel\">\n                            <div class=\"shape-container\"><\/div>\n                        <\/div>\n                    <\/div>\n                ",
+                "version": "0.0.0",
+                "entryPoint": "graphZoomNumberLineInteraction\/runtime\/graphZoomNumberLineInteraction.js",
+                "libraries": [],
+                "stylesheets": [],
+                "mediaFiles": [],
+                "properties": {
+                    "color": "#266d9c",
+                    "min": "0",
+                    "max": "10",
+                    "unitSubDivision": "4",
+                    "increment": "1",
+                    "snapTo": "1"
+                },
+                "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction"
+            }
+        },
+        "debug": {
+            "relatedItem": "item_5a2a55629cca6347873621"
+        }
+    },
+    "debug": {
+        "relatedItem": "item_5a2a55629cca6347873621"
+    },
+    "namespaces": {
+        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
+        "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
+        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance"
+    },
+    "schemaLocations": {
+        "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
+    },
+    "stylesheets": {
+        "stylesheet_5a2a5562a4df4613712950": {
+            "serial": "stylesheet_5a2a5562a4df4613712950",
+            "qtiClass": "stylesheet",
+            "attributes": {
+                "href": "graphZoomNumberLineInteraction\/runtime\/css\/graphZoomNumberLineInteraction",
+                "type": "text\/css",
+                "media": "all",
+                "title": ""
+            },
+            "debug": {
+                "relatedItem": "item_5a2a55629cca6347873621"
+            }
+        }
+    },
+    "outcomes": {},
+    "responses": {
+        "responsedeclaration_5a2a5562a969d806178213": {
+            "identifier": "graphNumberLine1",
+            "serial": "responsedeclaration_5a2a5562a969d806178213",
+            "qtiClass": "responseDeclaration",
+            "attributes": {
+                "identifier": "graphNumberLine1",
+                "cardinality": "single",
+                "baseType": "integer"
+            },
+            "debug": {
+                "relatedItem": "item_5a2a55629cca6347873621"
+            },
+            "defaultValue": [],
+            "mapping": [],
+            "areaMapping": [],
+            "howMatch": "no_response_processing",
+            "correctResponses": [],
+            "mappingAttributes": {
+                "defaultValue": 0
+            },
+            "feedbackRules": {}
+        }
+    },
+    "feedbacks": {},
+    "responseProcessing": {
+        "serial": "response_templatesdriven_5a2a5562b99c7733864951",
+        "qtiClass": "responseProcessing",
+        "attributes": {},
+        "debug": {
+            "relatedItem": "item_5a2a55629cca6347873621"
+        },
+        "processingType": "templateDriven",
+        "responseRules": []
+    },
+    "apipAccessibility": ""
+}
+

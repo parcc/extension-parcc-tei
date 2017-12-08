@@ -25,85 +25,100 @@ define([
     'taoQtiItem/portableLib/OAT/scale.raphael',
     'parccTei/portableLib/pointFactory',
     'parccTei/portableLib/axisFactory',
-    'graphZoomNumberLineInteraction/runtime/libs/axisZoom'
+    'parccTei/pciCreator/ims/graphZoomNumberLineInteraction/runtime/libs/axisZoom',
+    'css!parccTei/pciCreator/ims/graphZoomNumberLineInteraction/runtime/css/graphZoomNumberLineInteraction'
 ], function($, qtiCustomInteractionContext, _, event, scaleRaphael, pointFactory, axisFactory, axisZoom){
 
-    /**
-     * Create the raphael canvas
-     *
-     * @param {JQuery} $container
-     * @param {Object} config
-     * @returns {Object}
-     */
-    function createCanvas($container, config){
+    'use strict';
 
-        var padding = 2;
-        var width = 2 * padding + config.unitSize * (2 + config.max - config.min);
-        var paper = scaleRaphael($('.shape-container', $container)[0], width, 260);
-
-        return paper;
-    }
-
-    /**
-     * Build the axis config
-     *
-     * @param {Object} rawConfig
-     * @returns {Object}
-     */
-    function buildAxisConfig(rawConfig){
-
-        var _default = {
-            top : 60,
-            left : 50,
-            unitSize : 50,
-            min : 0,
-            max : 10,
-            unitSubDivision : 2,
-            arrows : true,
-            point : {
-                color : '#266d9c'
-            }
-        };
-        return _.merge(_default, {
-            min : (rawConfig.min === undefined) ? undefined : parseInt(rawConfig.min),
-            max : (rawConfig.max === undefined) ? undefined : parseInt(rawConfig.max),
-            unitSubDivision : (rawConfig.unitSubDivision === undefined) ? undefined : parseInt(rawConfig.unitSubDivision),
-            point : {
-                color : rawConfig.graphColor
-            }
-        });
-    }
-
-    /**
-     * Format a float into a string maximum of 3 digits
-     *
-     * @param {Number} num
-     * @returns {String}
-     */
-    function _format(num){
-
-        var str = num + '';
-        if(str.length > 5){
-            if(str.match(/99999\d$/)){
-                str = Math.round(num* 10000) / 10000;
-            }else{
-                //cut :
-                str = Math.floor(num * 1000) / 1000;
-                str = str.toString();
-                if(str.match(/^\d+\.\d{3,}$/)){
-                    //ellipsis
-                    str += '...';
-                }
-            }
-        }
-        return str;
-    }
+    var _typeIdentifier = 'graphZoomNumberLineInteraction';
 
     var graphZoomNumberLineInteraction = {
-        id : -1,
-        getTypeIdentifier : function(){
-            return 'graphZoomNumberLineInteraction';
+        /**
+         * initialize the PCI object. As this object is cloned for each instance, using "this" is safe practice.
+         * @param {DOMELement} dom - the dom element the PCI can use
+         * @param {Object} config - the sandard configuration object
+         * @param {Object} [state] - the json serialized state object, returned by previous call to getStatus(), use to initialize an
+         */
+        getInstance : function getInstance(dom, config, state){
+            var response = config.boundTo;
+            //simply mapped to existing TAO PCI API
+            this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties, config.assetManager);
+            this.setSerializedState(state);
+
+            //tell the rendering engine that I am ready
+            if (typeof config.onready === 'function') {
+                config.onready(this, this.getState());
+            }
         },
+
+        /**
+         * Get the current state fo the PCI
+         * @returns {Object}
+         */
+        getState : function getState(){
+            //simply mapped to existing TAO PCI API
+            return this.getSerializedState();
+        },
+
+        /**
+         * Called by delivery engine when PCI is fully completed
+         */
+        oncompleted : function oncompleted(){
+            this.destroy();
+        },
+
+        /*********************************
+         *
+         * TAO and IMS shared PCI API methods
+         *
+         *********************************/
+
+        /**
+         * Get the response in the json format described in
+         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
+         *
+         * @param {Object} interaction
+         * @returns {Object}
+         */
+        getResponse : function(){
+
+            var value = this.getRawResponse();
+            if(value){
+                return {base : {float : value}};
+            }else{
+                return {base : null};
+            }
+
+        },
+
+        /**
+         * Reverse operation performed by render()
+         * After this function is executed, only the inital naked markup remains
+         * Event listeners are removed and the state and the response are reset
+         *
+         * @param {Object} interaction
+         */
+        destroy : function(){
+
+            var $container = $(this.dom);
+            $container.off().empty();
+        },
+
+        /*********************************
+         *
+         * TAO specific PCI API methods
+         *
+         *********************************/
+
+        /**
+         * Get the type identifier of a pci
+         * @returns {string}
+         */
+        getTypeIdentifier : function(){
+            return _typeIdentifier;
+        },
+
         /**
          * Render the PCI :
          * @param {String} id
@@ -389,6 +404,7 @@ define([
             //init event
             this.on('axischange', setAxis);
         },
+
         /**
          * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
@@ -399,23 +415,7 @@ define([
         setResponse : function(response){
 
         },
-        /**
-         * Get the response in the json format described in
-         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         *
-         * @param {Object} interaction
-         * @returns {Object}
-         */
-        getResponse : function(){
 
-            var value = this.getRawResponse();
-            if(value){
-                return {base : {float : value}};
-            }else{
-                return {base : null};
-            }
-
-        },
         /**
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
@@ -425,18 +425,7 @@ define([
         resetResponse : function(){
             this.reset();
         },
-        /**
-         * Reverse operation performed by render()
-         * After this function is executed, only the inital naked markup remains
-         * Event listeners are removed and the state and the response are reset
-         *
-         * @param {Object} interaction
-         */
-        destroy : function(){
 
-            var $container = $(this.dom);
-            $container.off().empty();
-        },
         /**
          * Restore the state of the interaction from the serializedState.
          *
@@ -446,6 +435,7 @@ define([
         setSerializedState : function(state){
 
         },
+
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
@@ -458,6 +448,77 @@ define([
             return {};
         }
     };
+
+    /**
+     * Create the raphael canvas
+     *
+     * @param {JQuery} $container
+     * @param {Object} config
+     * @returns {Object}
+     */
+    function createCanvas($container, config){
+
+        var padding = 2;
+        var width = 2 * padding + config.unitSize * (2 + config.max - config.min);
+        var paper = scaleRaphael($('.shape-container', $container)[0], width, 260);
+
+        return paper;
+    }
+
+    /**
+     * Build the axis config
+     *
+     * @param {Object} rawConfig
+     * @returns {Object}
+     */
+    function buildAxisConfig(rawConfig){
+
+        var _default = {
+            top : 60,
+            left : 50,
+            unitSize : 50,
+            min : 0,
+            max : 10,
+            unitSubDivision : 2,
+            arrows : true,
+            point : {
+                color : '#266d9c'
+            }
+        };
+        return _.merge(_default, {
+            min : (rawConfig.min === undefined) ? undefined : parseInt(rawConfig.min),
+            max : (rawConfig.max === undefined) ? undefined : parseInt(rawConfig.max),
+            unitSubDivision : (rawConfig.unitSubDivision === undefined) ? undefined : parseInt(rawConfig.unitSubDivision),
+            point : {
+                color : rawConfig.graphColor
+            }
+        });
+    }
+
+    /**
+     * Format a float into a string maximum of 3 digits
+     *
+     * @param {Number} num
+     * @returns {String}
+     */
+    function _format(num){
+
+        var str = num + '';
+        if(str.length > 5){
+            if(str.match(/99999\d$/)){
+                str = Math.round(num* 10000) / 10000;
+            }else{
+                //cut :
+                str = Math.floor(num * 1000) / 1000;
+                str = str.toString();
+                if(str.match(/^\d+\.\d{3,}$/)){
+                    //ellipsis
+                    str += '...';
+                }
+            }
+        }
+        return str;
+    }
 
     qtiCustomInteractionContext.register(graphZoomNumberLineInteraction);
 });

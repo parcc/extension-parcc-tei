@@ -1,4 +1,5 @@
 {
+    "model": "IMSPCI",
     "typeIdentifier": "graphZoomNumberLineInteraction",
     "label": "Graphing Zoom Number Line",
     "short": "Zoom Number Line",
@@ -11,21 +12,19 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/graphZoomNumberLineInteraction.js",
-        "libraries" : [
-        ],
-        "stylesheets" : [
-            "./runtime/css/graphZoomNumberLineInteraction.css"
-        ],
+        "hook" : "./runtime/graphZoomNumberLineInteraction.min.js",
+        "modules": {
+            "graphZoomNumberLineInteraction/runtime/graphZoomNumberLineInteraction.min" : [
+                "runtime/graphZoomNumberLineInteraction.min.js"
+            ]
+        },
         "src" : [
-            "./runtime/libs/axisZoom.js"
-        ],
-        "mediaFiles" : [
+            "./runtime/graphZoomNumberLineInteraction.js"
         ]
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.js",
+        "hook": "./imsPciCreator.js",
         "libraries" : [
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
