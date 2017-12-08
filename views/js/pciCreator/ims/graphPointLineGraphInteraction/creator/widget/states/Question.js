@@ -21,13 +21,12 @@ define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
-    'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!graphPointLineGraphInteraction/creator/tpl/propertiesForm',
     'tpl!graphPointLineGraphInteraction/creator/tpl/staticPoint',
     'lodash',
     'jquery',
     'ui/incrementer'
-], function(stateFactory, Question, formElement, containerEditor, formTpl, staticPointTpl, _, $, spinner){
+], function(stateFactory, Question, formElement, formTpl, staticPointTpl, _, $, spinner){
 
     'use strict';
 
