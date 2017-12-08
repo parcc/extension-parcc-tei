@@ -24,10 +24,10 @@ return array(
 	'label' => 'PARCC Portable Custom Interaction',
 	'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '0.5.0',
+    'version' => '0.6.0',
 	'author' => 'Open Assessment Technologies',
 	'requires' => array(
-        'qtiItemPci' => '>=0.1',
+        'qtiItemPci' => '>=4.0.1',
         'xmlEditRp' => '>=0.1.0'
     ),
     'acl' => array(
