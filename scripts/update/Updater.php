@@ -153,8 +153,6 @@ class Updater extends \common_ext_ExtensionUpdater
             call_user_func(new RegisterPciGraphNumberLineInteraction(), ['1.0.0']);
             call_user_func(new RegisterPciGraphPointLineGraphInteraction(), ['1.0.0']);
             call_user_func(new RegisterPciGraphZoomNumberLineInteraction(), ['1.0.0']);
-            call_user_func(new RegisterPciHistogramInteraction(), ['1.0.0']);
-            call_user_func(new RegisterPciMultiTabbedExhibit(), ['1.0.0']);
 
             $this->setVersion('0.5.0');
         }

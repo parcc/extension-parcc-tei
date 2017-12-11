@@ -46,8 +46,6 @@ return array(
             \oat\parccTei\scripts\install\RegisterPciGraphNumberLineInteraction::class,
             \oat\parccTei\scripts\install\RegisterPciGraphPointLineGraphInteraction::class,
             \oat\parccTei\scripts\install\RegisterPciGraphZoomNumberLineInteraction::class,
-            \oat\parccTei\scripts\install\RegisterPciHistogramInteraction::class,
-            \oat\parccTei\scripts\install\RegisterPciMultiTabbedExhibit::class
 		)
     ),
     'update' => 'oat\\parccTei\\scripts\\update\\Updater',
