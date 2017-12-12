@@ -18,6 +18,7 @@
 
 
 define(['taoQtiItem/portableLib/lodash'], function(_){
+    'use strict';
 
     function createZoomable(axis){
 

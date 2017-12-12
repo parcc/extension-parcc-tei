@@ -82,7 +82,6 @@ define([
          * @returns {Object}
          */
         getResponse : function(){
-
             var value = this.getRawResponse();
             if(value){
                 return {base : {float : value}};
@@ -143,23 +142,25 @@ define([
                 zoomEffect,
                 selectedRect,
                 selectedCoord,
+                subDivisionIncrement,
                 axisPoint,
-                zoomPoint;
+                zoomPoint,
+                rects;
 
             /**
-             * Found the selected rectangle representing the area of the axis to be zommed
+             * Found the selected rectangle representing the area of the axis to be zoomed
              *
-             * @param {Array} rects
+             * @param {Array} allRects
              * @param {Number} position
              * @returns {Object} the rectangle object
              */
-            function findRect(rects, position){
+            function findRect(allRects, position){
 
                 var ret;
-                var positions = _.pluck(rects, 'position');
+                var positions = _.pluck(allRects, 'position');
                 var stepWidth = positions[1] - positions[0];
 
-                _.each(rects, function(rect){
+                _.each(allRects, function(rect){
                     var pos = parseInt(rect.position);
                     if(pos < position && position < pos + stepWidth){
                         ret = rect;
@@ -167,6 +168,50 @@ define([
                     }
                 });
                 return ret;
+            }
+
+            function zoomOnRect(x) {
+                var rect = findRect(rects, x);
+
+                if(rect){
+
+                    //clear previous drawn elements
+                    if(selectedRect){
+                        selectedRect.rect.hide();
+                    }
+                    if(zoomEffect){
+                        zoomEffect.remove();
+                    }
+
+                    //updated selected rectangle and show it
+                    selectedRect = rect;
+                    zoomAxis.addCssClass(selectedRect.rect, 'scene scene-selected-rectangle');
+
+                    selectedRect.rect.show();
+
+                    //update the zoom axis label
+                    zoomAxis.setConfig('labels', [_format(selectedRect.coord), _format(selectedRect.coord + subDivisionIncrement)]);
+                    zoomAxis.render();
+
+                    //draw container box here, before setting the point
+                    var containerBox = zoomAxis.buildContainerBox({shadow : true});
+                    zoomAxis.addCssClass(containerBox, 'scene scene-zoom-popup');
+
+                    //set the previously selected point
+                    var left = getSelectedPointPositionLeft(selectedCoord);
+                    if(left !== undefined){
+                        drawZoomAxisPoint(left);
+                    }
+
+                    zoomAxis.clickable().click(function(e){
+                        drawZoomAxisPoint(e.layerX);
+                        updateAxisPoint();
+                    });
+
+                    //add zoom effect
+                    zoomEffect = axisZoom.drawZoomEffect(paper, selectedRect.rect, containerBox);
+                    zoomAxis.addCssClass(zoomEffect, 'scene scene-zoom-effect');
+                }
             }
 
             /**
@@ -238,7 +283,7 @@ define([
             }
 
             /**
-             * Get the cartesian coordinate of the point selected in the zommed axis
+             * Get the cartesian coordinate of the point selected in the zoomed axis
              *
              * @returns {Number}
              */
@@ -271,24 +316,29 @@ define([
                 selectedCoord = getZoomPointCoordinate();
                 //draw to axis point
                 drawAxisPoint(selectedCoord);
+
+                _.defer(function() {
+                    _this.trigger('responseChange');
+                });
             }
 
             /**
              * Init the axis
              *
-             * @param {JQuery} $container
+             * @param {JQuery} $canvasContainer
              * @param {Object} axisConfig
              */
-            function initAxis($container, axisConfig){
+            function initAxis($canvasContainer, axisConfig){
+                var axisSizePx, zoomAxisConfig;
 
                 //create paper
-                var subDivisionIncrement = 1 / axisConfig.unitSubDivision;
-                paper = createCanvas($container, axisConfig);
+                subDivisionIncrement = 1 / axisConfig.unitSubDivision;
+                paper = createCanvas($canvasContainer, axisConfig);
                 axis = new axisFactory(paper, axisConfig);
 
                 //build zoom axis config from the parent one
-                var axisSizePx = (axisConfig.max - axisConfig.min) * axisConfig.unitSize;
-                var zoomAxisConfig = _.defaults({
+                axisSizePx = (axisConfig.max - axisConfig.min) * axisConfig.unitSize;
+                zoomAxisConfig = _.defaults({
                     min : 0,
                     max : 1,
                     top : axisConfig.top + 150,
@@ -301,54 +351,12 @@ define([
                 zoomAxis.getSet().hide();
 
                 //create the zoomable rectangles
-                var rects = axisZoom.createZoomable(axis);
+                rects = axisZoom.createZoomable(axis);
 
                 //bind click event
-                axis.clickable().click(function(event){
-
-                    // Get the coordinate of the click
-                    var fx = event.layerX;
-                    var rect = findRect(rects, fx);
-
-                    if(rect){
-
-                        //clear previous drawn elements
-                        if(selectedRect){
-                            selectedRect.rect.hide();
-                        }
-                        if(zoomEffect){
-                            zoomEffect.remove();
-                        }
-
-                        //updated selected rectangle and show it
-                        selectedRect = rect;
-                        zoomAxis.addCssClass(selectedRect.rect, 'scene scene-selected-rectangle');
-
-                        selectedRect.rect.show();
-
-                        //update the zoom axis label
-                        zoomAxis.setConfig('labels', [_format(selectedRect.coord), _format(selectedRect.coord + subDivisionIncrement)]);
-                        zoomAxis.render();
-
-                        //draw container box here, before setting the point
-                        var containerBox = zoomAxis.buildContainerBox({shadow : true});
-                        zoomAxis.addCssClass(containerBox, 'scene scene-zoom-popup');
-
-                        //set the previously selected point
-                        var left = getSelectedPointPositionLeft();
-                        if(left !== undefined){
-                            drawZoomAxisPoint(left);
-                        }
-                        zoomAxis.clickable().click(function(e){
-                            drawZoomAxisPoint(e.layerX);
-                            updateAxisPoint();
-                        });
-
-                        //add zoom effect
-                        zoomEffect = axisZoom.drawZoomEffect(paper, selectedRect.rect, containerBox);
-                        zoomAxis.addCssClass(zoomEffect, 'scene scene-zoom-effect');
-                    }
-
+                axis.clickable().click(function(e){
+                    var fx = e.layerX;
+                    zoomOnRect(fx);
                 });
 
             }
@@ -397,6 +405,25 @@ define([
                 return selectedCoord;
             };
 
+            //expose the setRawResponse() method
+            /**
+             * @param selected - cartesion X coordinate of the selected point
+             */
+            this.setRawResponse = function(selected){
+                var axisSelectedX,
+                    zoomAxisSelectedX;
+
+                selectedCoord = selected;
+
+                axisSelectedX = axis.coordinateToPosition(selected).left + 1;
+                zoomOnRect(axisSelectedX);
+
+                zoomAxisSelectedX = getSelectedPointPositionLeft();
+                drawZoomAxisPoint(zoomAxisSelectedX);
+
+                updateAxisPoint();
+            };
+
             //init rendering
             this.axisConfig = buildAxisConfig(this.config);
             initAxis($container, this.axisConfig);
@@ -413,7 +440,9 @@ define([
          * @param {Object} response
          */
         setResponse : function(response){
-
+            if (response && response.base && response.base.float) {
+                this.setRawResponse(response.base.float);
+            }
         },
 
         /**
@@ -433,7 +462,8 @@ define([
          * @param {Object} serializedState - json format
          */
         setSerializedState : function(state){
-
+            //state == response
+            this.setResponse(state);
         },
 
         /**
@@ -444,8 +474,8 @@ define([
          * @returns {Object} json format
          */
         getSerializedState : function(){
-
-            return {};
+            //state == response
+            return this.getResponse();
         }
     };
 
