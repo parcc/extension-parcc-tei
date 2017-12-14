@@ -25,16 +25,6 @@ define([
     var GraphLineAndPointInteracitonWidget = Widget.clone();
 
     GraphLineAndPointInteracitonWidget.initCreator = function(){
-        // the "graphs" property is given as a serialized JSON, we convert it in an object so the widget can use it
-        var interaction = this.element;
-        var graphsProperty = interaction.prop('graphs');
-        var parsedGraphs;
-
-        try {
-            parsedGraphs = JSON.parse(graphsProperty);
-            interaction.prop('graphs', parsedGraphs);
-        } catch(e) { /* parsing failed */ }
-
 
         this.registerStates(states);
 

@@ -126,7 +126,12 @@ define([
                 showStaticLines: getBoolean(rawConfig.staticShowLine, true),
                 showStaticPoints: getBoolean(rawConfig.staticDisplayPoints, true),
                 staticPoints: rawConfig.staticPoints
-        };
+            };
+
+        // Parse the "staticPoints" property, which is given as a serialized Array
+        try {
+            gridConfig.staticPoints = JSON.parse(gridConfig.staticPoints );
+        } catch(e) { /* parsing failed */ }
 
         // override invalid values with safe defaults
         if (gridConfig.x.step < 1) {
