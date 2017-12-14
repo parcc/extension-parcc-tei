@@ -25,6 +25,7 @@ define(['lodash', 'jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], functio
         var $rpXml = $($.parseXML(rp.render(xmlRenderer.get())));
         var newRc = $rpXml[0].importNode($.parseXML(newResponseConditionXml).documentElement, true);
         var responseIdentifier = interaction.attr('responseIdentifier');
+        var responseDeclaration = interaction.getResponseDeclaration();
 
         //prepare replacement criteria
         criteria = _.defaults(criteria || {}, {
@@ -59,6 +60,7 @@ define(['lodash', 'jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], functio
 
             //programmatically modifying the response condition requires the whole item RP mode of item to turn into custom mode
             rp.setProcessingType('custom');
+            delete responseDeclaration.template;
 
             //serialize
             rp.xml = (new XMLSerializer()).serializeToString($rpXml[0].documentElement);
