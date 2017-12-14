@@ -3,16 +3,16 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2016-2017 Parcc, Inc.
  */
 
@@ -87,7 +87,7 @@ define([
     function initEquationBasedScoring(widget){
 
         var interaction = widget.element;
-        var item = interaction.getRelatedItem();
+        var item = interaction.getRootElement();
         var rp = item.responseProcessing;
         var $responseForm = widget.$responseForm;
         var $templateSelector = $responseForm.find('select[name="template"]').closest('.panel');
@@ -141,7 +141,7 @@ define([
      */
     function restoreCorrectRp(interaction){
         var responseDeclaration = interaction.getResponseDeclaration();
-        var item = interaction.getRelatedItem();
+        var item = interaction.getRootElement();
         var rp = item.responseProcessing;
         rp.setProcessingType('templateDriven');
         responseDeclaration.template = 'http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct';
