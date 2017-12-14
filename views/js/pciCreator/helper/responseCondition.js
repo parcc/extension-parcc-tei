@@ -22,7 +22,8 @@ define(['lodash', 'jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], functio
 
         var item = interaction.getRootElement();
         var rp = item.responseProcessing;
-        var $rpXml = $($.parseXML(rp.render(xmlRenderer.get())));
+        var renderedRp = rp.render(xmlRenderer.get()) || '<responseProcessing template=\"EMPTY\"/>';
+        var $rpXml = $($.parseXML(renderedRp));
         var newRc = $rpXml[0].importNode($.parseXML(newResponseConditionXml).documentElement, true);
         var responseIdentifier = interaction.attr('responseIdentifier');
         var responseDeclaration = interaction.getResponseDeclaration();

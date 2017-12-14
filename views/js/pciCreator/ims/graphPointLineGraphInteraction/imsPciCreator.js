@@ -21,8 +21,9 @@ define([
     'lodash',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'graphPointLineGraphInteraction/creator/widget/Widget',
-    'tpl!graphPointLineGraphInteraction/creator/tpl/markup'
-], function(_, ciRegistry, Widget, markupTpl){
+    'tpl!graphPointLineGraphInteraction/creator/tpl/markup',
+    'parccTei/pciCreator/helper/responseCondition'
+], function(_, ciRegistry, Widget, markupTpl, responseCondition){
 
     'use strict';
 
@@ -110,7 +111,7 @@ define([
          * @returns {Object}
          */
         afterCreate : function(pci){
-            //do some stuff
+            delete pci.getResponseDeclaration().template;
         },
         /**
          * (required) Gives the qti pci xml template

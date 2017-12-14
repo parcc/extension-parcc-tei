@@ -31,6 +31,7 @@
             "./creator/tpl/propertiesForm.tpl",
             "./creator/tpl/responseCondition.tpl",
             "./creator/widget/states/Answer.js",
+            "./creator/widget/states/Custom.js",
             "./creator/widget/states/Question.js",
             "./creator/widget/states/states.js",
             "./creator/widget/Widget.js"
