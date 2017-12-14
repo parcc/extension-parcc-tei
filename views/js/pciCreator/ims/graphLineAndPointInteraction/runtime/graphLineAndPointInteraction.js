@@ -188,6 +188,12 @@ define([
          */
         getInstance : function getInstance(dom, config, state){
             var response = config.boundTo;
+
+            // Parse the "graphs" property, which is given as a serialized JSON
+            try {
+                config.properties.graphs = JSON.parse(config.properties.graphs);
+            } catch(e) { /* parsing failed */ }
+
             //simply mapped to existing TAO PCI API
             this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties);
             this.setSerializedState(state);
