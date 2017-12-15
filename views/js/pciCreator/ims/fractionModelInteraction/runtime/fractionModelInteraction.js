@@ -227,7 +227,6 @@ define([
                 return _.clone(selectedPartitions);
             };
 
-            // debugger;
             //set fraction model
             this.setFractionModel(this.config.selectedPartitionsInit, this.config.partitionInit);
 
