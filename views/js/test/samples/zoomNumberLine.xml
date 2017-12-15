@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="i15127416008526319" title="zoomNumberLine" label="zoomNumberLine" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.3.0-sprint64 1/2">
+  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="float"/>
+  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float"/>
+  <itemBody>
+    <div class="grid-row">
+      <div class="col-12">
+        <customInteraction responseIdentifier="RESPONSE">
+          <portableCustomInteraction xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction_v1" customInteractionTypeIdentifier="graphZoomNumberLineInteraction" data-version="">
+            <properties>
+              <property key="color">#266d9c</property>
+              <property key="min">0</property>
+              <property key="max">10</property>
+              <property key="unitSubDivision">2</property>
+              <property key="increment">1</property>
+              <property key="snapTo">1</property>
+            </properties>
+            <modules>
+                    </modules>
+            <markup xmlns="http://www.w3.org/1999/xhtml">
+              <div class="graphZoomNumberLineInteraction">
+                <div class="shape-panel">
+                  <div class="shape-container"/>
+                </div>
+              </div>
+            </markup>
+          </portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+  </itemBody>
+  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+</assessmentItem>

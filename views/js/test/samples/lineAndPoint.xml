@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:html5="html5" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="i15124807543640118" title="LineAndPoint" label="LineAndPoint" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.3.0-sprint64 1/2">
+    <responseDeclaration identifier="RESPONSE" cardinality="record"/>
+    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float"/>
+    <stylesheet href="style/custom/tao-user-styles.css" type="text/css" media="all" title=""/>
+    <itemBody>
+        <div class="grid-row">
+            <div class="col-12">
+                <customInteraction responseIdentifier="RESPONSE">
+                    <portableCustomInteraction xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction_v1" customInteractionTypeIdentifier="graphLineAndPointInteraction" data-version="">
+                        <properties>
+                            <property key="graphs">{"points":{"label":"Points","count":1,"elements":[{"label":"Point A","uid":"points_1","pointColor":"#054872","pointRadius":10,"max":1,"maximumPoints":1}]},"setPoints":{"label":"Sets of Points","count":1,"elements":[{"label":"Point Set A","uid":"setPoints_3","pointColor":"#1c7f01","maximumPoints":5,"pointRadius":10}]},"segments":{"label":"Segments","count":1,"elements":[{"label":"Segment A","uid":"segments_4","pointColor":"#e1e510","lineColor":"#e1e510","lineStyle":"","lineStyleToggle":false,"lineWeight":3,"pointRadius":10,"segment":true}]},"lines":{"label":"Lines","count":1,"elements":[{"label":"Line A","uid":"lines_6","pointColor":"#87020d","lineColor":"#87020d","lineStyle":"","lineStyleToggle":false,"lineWeight":3,"pointRadius":10}]},"solutionSet":{"label":"Solution Sets","count":1,"elements":[{"label":"Solution Set","uid":"solutionSet_8","color":"#326399"}]}}</property>
+                            <property key="xMin">-10</property>
+                            <property key="xMax">10</property>
+                            <property key="yMin">-10</property>
+                            <property key="yMax">10</property>
+                        </properties>
+                        <modules>
+                        </modules>
+                        <markup xmlns="http://www.w3.org/1999/xhtml">
+                            <div class="pointAndLineFunctionInteraction">
+                                <div class="shape-panel">
+                                    <div class="shape-controls">
+                                        <!-- Controls will be inserted here -->
+                                    </div>
+                                    <div class="templates">
+                                        <div class="template-lines">
+                                            <div class="button-container clearfix">
+                                                <button class="btn btn-info" name="line"/>
+                                                <div class="triangle"/>
+                                                <ul class="plain line-styles">
+                                                    <li>
+                                                        <label>
+                                                            <input name="line-style" type="radio" value=""/>
+                                                            <span class="icon-radio"/>
+                                                            <span class="line-style line-style-plain"/>
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label>
+                                                            <input name="line-style" type="radio" value="-"/>
+                                                            <span class="icon-radio"/>
+                                                            <span class="line-style line-style-dashed"/>
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="template-points">
+                                            <div class="button-container clearfix">
+                                                <button class="btn btn-info" name="point"/>
+                                                <div class="triangle"/>
+                                            </div>
+                                        </div>
+                                        <div class="template-segments">
+                                            <div class="button-container clearfix">
+                                                <button class="btn btn-info" name="segment"/>
+                                                <div class="triangle"/>
+                                                <ul class="plain line-styles">
+                                                    <li>
+                                                        <label>
+                                                            <input name="line-style" type="radio" value=""/>
+                                                            <span class="icon-radio"/>
+                                                            <span class="line-style line-style-plain"/>
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label>
+                                                            <input name="line-style" type="radio" value="-"/>
+                                                            <span class="icon-radio"/>
+                                                            <span class="line-style line-style-dashed"/>
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="template-solutionSet">
+                                            <div class="button-container clearfix graph-solutionSet deactivated">
+                                                <button class="btn btn-info" name="solutionSet"/>
+                                                <div class="triangle"/>
+                                            </div>
+                                        </div>
+                                        <div class="template-setPoints">
+                                            <div class="button-container clearfix">
+                                                <button class="btn btn-info" name="setPoints"/>
+                                                <div class="triangle"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="shape-container"/>
+                                </div>
+                            </div>
+                        </markup>
+                    </portableCustomInteraction>
+                </customInteraction>
+            </div>
+        </div>
+    </itemBody>
+    <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+</assessmentItem>

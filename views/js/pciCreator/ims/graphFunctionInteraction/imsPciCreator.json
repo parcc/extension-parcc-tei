@@ -1,0 +1,40 @@
+{
+    "model": "IMSPCI",
+    "typeIdentifier": "graphFunctionInteraction",
+    "label": "Graphing Function",
+    "short": "Graphing f(x)",
+    "description": "Graphing functions",
+    "version": "1.0.0",
+    "author": "Sam Sipasseuth",
+    "email": "sam@taotesting.com",
+    "response": {
+        "cardinality": "record"
+    },
+    "runtime" : {
+        "hook" : "runtime/graphFunctionInteraction.min.js",
+        "modules" : {
+            "graphFunctionInteraction/runtime/graphFunctionInteraction.min" : [
+                "runtime/graphFunctionInteraction.min.js"
+            ]
+        },
+        "src": [
+            "./runtime/graphFunctionInteraction.js"
+        ]
+    },
+    "creator" : {
+        "icon": "./creator/img/icon.svg",
+        "hook": "./imsPciCreator.js",
+        "libraries" : [
+            "./creator/css/form.css",
+            "./creator/tpl/answerForm.tpl",
+            "./creator/tpl/markup.tpl",
+            "./creator/tpl/propertiesForm.tpl",
+            "./creator/tpl/responseCondition.tpl",
+            "./creator/widget/states/Answer.js",
+            "./creator/widget/states/Custom.js",
+            "./creator/widget/states/Question.js",
+            "./creator/widget/states/states.js",
+            "./creator/widget/Widget.js"
+        ]
+    }
+}

@@ -1,34 +1,35 @@
 {
-    "identifier": "i1440662017636060",
-    "serial": "item_55dec456ede2f169312612",
+    "identifier": "i15126417717614291",
+    "serial": "item_5a2981a664ca7158493329",
     "qtiClass": "assessmentItem",
     "attributes": {
-        "identifier": "i1440662017636060",
-        "title": "Item 12",
-        "label": "",
+        "identifier": "i15126417717614291",
+        "title": "NumberLine",
+        "label": "NumberLine",
+        "xml:lang": "en-US",
         "adaptive": false,
         "timeDependent": false,
         "toolName": "TAO",
-        "toolVersion": "3.1.0-sprint05"
+        "toolVersion": "3.3.0-sprint64 1\/2",
+        "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_55dec456ede13299371974",
-        "body": "\n        \n        <div class=\"grid-row\">\n            <div class=\"col-12\">\n                {{interaction_portablecustominteraction_55dec456ef801365179890}}\n            <\/div>\n        <\/div>\n        \n    ",
+        "serial": "container_containeritembody_5a2981a664c86021429760",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_imsportablecustominteraction_5a2981a66638b541513772}}\n      <\/div>\n    <\/div>\n  ",
         "elements": {
-            "interaction_portablecustominteraction_55dec456ef801365179890": {
-                "serial": "interaction_portablecustominteraction_55dec456ef801365179890",
+            "interaction_imsportablecustominteraction_5a2981a66638b541513772": {
+                "serial": "interaction_imsportablecustominteraction_5a2981a66638b541513772",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_55dec456ede2f169312612"
+                    "relatedItem": "item_5a2981a664ca7158493329"
                 },
                 "choices": {},
                 "typeIdentifier": "graphNumberLineInteraction",
-                "markup": "\n                            <div class=\"graphNumberLineInteraction\">\n                                <div class=\"prompt\">\n                                    <p>select intervals<\/p>\n\n                                <\/div>\n                                <div class=\"shape-panel\">\n                                    <div class=\"shape-container\"><\/div>\n                                    <div class=\"shape-controls clearfix\">\n                                        <div class=\"intervals-available\">\n                                            <div class=\"intervals-row\">\n                                                <button name=\"closed-closed\" value=\"closed-closed\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/close-close.svg\"><\/img>\n                                                <\/button>\n                                                <button name=\"closed-open\" value=\"closed-open\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/close-open.svg\"><\/img>\n                                                <\/button>\n                                                <button name=\"open-closed\" value=\"open-closed\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/open-close.svg\"><\/img>\n                                                <\/button>\n                                                <button name=\"open-open\" value=\"open-open\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/open-open.svg\"><\/img>\n                                                <\/button>\n                                            <\/div>\n                                            <div class=\"intervals-row\">\n                                                <button name=\"arrow-open\" value=\"arrow-open\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/arrow-open.svg\"><\/img>\n                                                <\/button>\n                                                <button name=\"arrow-closed\" value=\"arrow-closed\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/arrow-close.svg\"><\/img>\n                                                <\/button>\n                                                <button name=\"open-arrow\" value=\"open-arrow\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/open-arrow.svg\"><\/img>\n                                                <\/button>\n                                                <button name=\"closed-arrow\" value=\"closed-arrow\" class=\"interval-available btn btn-info\" type=\"button\">\n                                                    <img src=\"graphNumberLineInteraction\/runtime\/img\/close-arrow.svg\"><\/img>\n                                                <\/button>\n                                            <\/div>\n                                            <div class=\"intervals-overlay\"><\/div>\n                                        <\/div>\n                                        <div class=\"intervals-selected clearfix\"><\/div>\n                                        <div class=\"intervals-template\">\n                                            <div class=\"interval\" data-uid=\"\">\n                                                <!--<div class=\"interval-delete icon icon-bin\"><\/div>-->\n                                                <button class=\"btn btn-info\" type=\"button\"><\/button>\n                                                <a class=\"deleter\" title=\"delete the interval\" href=\"#\">delete<\/a>\n                                            <\/div>\n                                        <\/div>\n                                    <\/div>\n                                <\/div>\n                            <\/div>\n                        ",
-                "libraries": [
-                ],
+                "markup": "\n                <div> <\/div>\n            ",
+                "version": "0.0.0",
                 "properties": {
                     "intervals": "closed-closed,closed-open,open-closed,open-open,arrow-open,arrow-closed,open-arrow,closed-arrow",
                     "color": "#266d9c",
@@ -38,43 +39,31 @@
                     "increment": "1",
                     "snapTo": "1"
                 },
-                "entryPoint": "graphNumberLineInteraction\/runtime\/graphNumberLineInteraction.js"
+                "config": [],
+                "modules": {},
+                "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1"
             }
         },
         "debug": {
-            "relatedItem": "item_55dec456ede2f169312612"
+            "relatedItem": "item_5a2981a664ca7158493329"
         }
     },
     "debug": {
-        "relatedItem": "item_55dec456ede2f169312612"
+        "relatedItem": "item_5a2981a664ca7158493329"
     },
     "namespaces": {
-        "xml": "http:\/\/www.w3.org\/XML\/1998\/namespace",
-        "html5": "html5",
-        "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
+        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2",
         "m": "http:\/\/www.w3.org\/1998\/Math\/MathML",
-        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance",
-        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1"
+        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance"
     },
-    "stylesheets": {
-        "stylesheet_55dec456ee542282015282": {
-            "serial": "stylesheet_55dec456ee542282015282",
-            "qtiClass": "stylesheet",
-            "attributes": {
-                "href": "graphNumberLineInteraction\/runtime\/css\/graphNumberLineInteraction.css",
-                "type": "text\/css",
-                "media": "all",
-                "title": ""
-            },
-            "debug": {
-                "relatedItem": "item_55dec456ede2f169312612"
-            }
-        }
+    "schemaLocations": {
+        "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p2\/imsqti_v2p2.xsd"
     },
+    "stylesheets": {},
     "outcomes": {
-        "outcomedeclaration_55dec456eee1a493614118": {
+        "outcomedeclaration_5a2981a6656d5583143747": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_55dec456eee1a493614118",
+            "serial": "outcomedeclaration_5a2981a6656d5583143747",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -82,15 +71,15 @@
                 "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_55dec456ede2f169312612"
+                "relatedItem": "item_5a2981a664ca7158493329"
             },
             "defaultValue": null
         }
     },
     "responses": {
-        "responsedeclaration_55dec456eea3f741205341": {
+        "responsedeclaration_5a2981a6654d5857229908": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_55dec456eea3f741205341",
+            "serial": "responsedeclaration_5a2981a6654d5857229908",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
@@ -98,15 +87,13 @@
                 "baseType": "integer"
             },
             "debug": {
-                "relatedItem": "item_55dec456ede2f169312612"
+                "relatedItem": "item_5a2981a664ca7158493329"
             },
-            "correctResponses": [
-            ],
-            "mapping": [
-            ],
-            "areaMapping": [
-            ],
+            "defaultValue": [],
+            "mapping": [],
+            "areaMapping": [],
             "howMatch": "http:\/\/www.imsglobal.org\/question\/qti_v2p1\/rptemplates\/match_correct",
+            "correctResponses": [],
             "mappingAttributes": {
                 "defaultValue": 0
             },
@@ -115,12 +102,11 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_templatesdriven_55dec456eff22282898886",
+        "serial": "response_templatesdriven_5a2981a6669c0654295596",
         "qtiClass": "responseProcessing",
-        "attributes": [
-        ],
+        "attributes": {},
         "debug": {
-            "relatedItem": "item_55dec456ede2f169312612"
+            "relatedItem": "item_5a2981a664ca7158493329"
         },
         "processingType": "templateDriven",
         "responseRules": [
@@ -181,5 +167,6 @@
                 }
             }
         ]
-    }
+    },
+    "apipAccessibility": ""
 }

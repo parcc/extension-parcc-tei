@@ -1,1 +1,0 @@
-<span class="page-deleter icon-bin" title="Delete page" data-passage="{{passage}}" data-page="{{page}}"></span>
