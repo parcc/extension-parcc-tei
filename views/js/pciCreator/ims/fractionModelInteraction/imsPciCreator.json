@@ -1,0 +1,39 @@
+{
+    "model" : "IMSPCI",
+    "typeIdentifier": "fractionModelInteraction",
+    "label": "IMS Fraction Model",
+    "short": "Fractions",
+    "description": "Select one or more fraction",
+    "version": "1.0.0",
+    "author": "Thibault Milan",
+    "email": "contact@taotesting.com",
+    "response": {
+        "baseType": "string",
+        "cardinality": "single"
+    },
+    "runtime" : {
+        "hook" : "./runtime/fractionModelInteraction.min.js",
+        "modules": {
+            "fractionModelInteraction/runtime/fractionModelInteraction.min" : [
+                "runtime/fractionModelInteraction.min.js"
+            ]
+        },
+        "src" : [
+            "./runtime/fractionModelInteraction.js"
+        ]
+    },
+    "creator" : {
+        "icon": "./creator/img/icon.svg",
+        "hook": "./imsPciCreator.js",
+        "libraries" : [
+            "./creator/tpl/markup.tpl",
+            "./creator/tpl/propertiesForm.tpl",
+            "./creator/tpl/responseCondition.tpl",
+            "./creator/widget/states/Answer.js",
+            "./creator/widget/states/Custom.js",
+            "./creator/widget/states/Question.js",
+            "./creator/widget/states/states.js",
+            "./creator/widget/Widget.js"
+        ]
+    }
+}

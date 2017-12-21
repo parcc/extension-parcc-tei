@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="i15126417717614291" title="NumberLine" label="NumberLine" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.3.0-sprint64 1/2">
+  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="integer"/>
+  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float"/>
+  <itemBody>
+    <div class="grid-row">
+      <div class="col-12">
+        <customInteraction responseIdentifier="RESPONSE">
+          <portableCustomInteraction xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction_v1" customInteractionTypeIdentifier="graphNumberLineInteraction" data-version="">
+            <properties>
+              <property key="intervals">closed-closed,closed-open,open-closed,open-open,arrow-open,arrow-closed,open-arrow,closed-arrow</property>
+              <property key="color">#266d9c</property>
+              <property key="min">-5</property>
+              <property key="max">5</property>
+              <property key="unitSubDivision">2</property>
+              <property key="increment">1</property>
+              <property key="snapTo">1</property>
+            </properties>
+            <modules>
+                    </modules>
+            <markup xmlns="http://www.w3.org/1999/xhtml">
+                <div> </div>
+            </markup>
+          </portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+  </itemBody>
+  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+</assessmentItem>

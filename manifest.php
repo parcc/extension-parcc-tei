@@ -24,10 +24,11 @@ return array(
 	'label' => 'PARCC Portable Custom Interaction',
 	'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '0.4.0',
+    'version' => '0.5.0',
 	'author' => 'Open Assessment Technologies',
 	'requires' => array(
-        'qtiItemPci' => '>=0.1',
+	    'taoQtiItem' => '>=11.5.0',
+        'qtiItemPci' => '>=4.0.1',
         'xmlEditRp' => '>=0.1.0'
     ),
     'acl' => array(
@@ -39,7 +40,12 @@ return array(
 		),
         'php'	=> array(
 			dirname(__FILE__).'/scripts/install/addHook.php',
-			dirname(__FILE__).'/install/local/addPortableSharedLibraries.php'
+            \oat\parccTei\scripts\install\RegisterGraphFunctionInteraction::class,
+            \oat\parccTei\scripts\install\RegisterPciFractionModelInteraction::class,
+            \oat\parccTei\scripts\install\RegisterPciLineAndPointInteraction::class,
+            \oat\parccTei\scripts\install\RegisterPciGraphNumberLineInteraction::class,
+            \oat\parccTei\scripts\install\RegisterPciGraphPointLineGraphInteraction::class,
+            \oat\parccTei\scripts\install\RegisterPciGraphZoomNumberLineInteraction::class,
 		)
     ),
     'update' => 'oat\\parccTei\\scripts\\update\\Updater',

@@ -3,16 +3,16 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *  
+ *
  * Copyright (c) 2015-2017 Parcc, Inc.
  */
 
@@ -21,28 +21,23 @@ define([
     'jquery',
     'lodash',
     'taoQtiItem/runner/qtiItemRunner',
+    'taoQtiItem/portableElementRegistry/ciRegistry',
+    'taoQtiItem/portableElementRegistry/provider/localManifestProvider',
     'json!parccTei/test/samples/numberLine.json'
-], function($, _, qtiItemRunner, itemData){
+], function($, _, qtiItemRunner, ciRegistry, pciTestProvider, itemData){
 
     'use strict';
 
     var runner;
     var fixtureContainerId = 'item-container';
+    var outsideContainerId = 'outside-container';
 
-    //override asset loading in order to resolve it from the runtime location
-    var strategies = [{
-            name : 'portableElementLocation',
-            handle : function handlePortableElementLocation(url){
-                if(/graphNumberLineInteraction/.test(url.toString())){
-                    return '../../../parccTei/views/js/pciCreator/dev/' + url.toString();
-                }
-            }
-        }, {
-            name : 'default',
-            handle : function defaultStrategy(url){
-                return url.toString();
-            }
-        }];
+    //manually register the pci from its manifest
+    pciTestProvider.addManifestPath(
+        'graphNumberLineInteraction',
+        'parccTei/pciCreator/ims/graphNumberLineInteraction/imsPciCreator.json');
+    ciRegistry.resetProviders();
+    ciRegistry.registerProvider(pciTestProvider.getModuleName());
 
     module('Number Line Interaction', {
         teardown : function(){
@@ -65,15 +60,16 @@ define([
                 assert.equal($container.children('.qti-item').length, 1, 'the container contains a the root element .qti-item');
                 assert.equal($container.find('.qti-interaction').length, 1, 'the container contains an interaction .qti-interaction');
                 assert.equal($container.find('.qti-interaction.qti-customInteraction').length, 1, 'the container contains a custom interaction');
-                assert.equal($container.find('.qti-customInteraction .graphNumberLineInteraction').length, 1, 'the custom interaction is a fraction model');
-                assert.equal($container.find('.qti-customInteraction .prompt').length, 1, 'the interaction contains a prompt');
+                assert.equal($container.find('.qti-customInteraction .graphNumberLineInteraction').length, 1, 'the custom interaction is a graphNumberLineInteraction');
 
                 QUnit.start();
             })
             .on('responsechange', function(response){
-                console.log(response.RESPONSE);
+                window.console.log(response.RESPONSE);
             })
-            .assets(strategies)
+            .on('error', function(error) {
+                window.console.log(error);
+            })
             .init()
             .render($container);
 
@@ -123,14 +119,16 @@ define([
             })
             .on('responsechange', function(res){
 
-                if(++i == 2){
+                if(++i === 2){
                     QUnit.start();
                     assert.ok(_.isPlainObject(res), 'response changed');
                     assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
                     assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
                 }
             })
-            .assets(strategies)
+            .on('error', function(error) {
+                window.console.log(error);
+            })
             .init()
             .render($container);
 
@@ -170,12 +168,11 @@ define([
         runner = qtiItemRunner('qti', itemData)
             .on('render', function(){
 
-                this.setState(state);
                 assert.deepEqual(this.getState(), state, 'state set/get ok');
             })
             .on('responsechange', function(res){
 
-                if(++i == 2){
+                if(++i === 2){
                     QUnit.start();
 
                     //if the state has been set, the response should have changed
@@ -184,10 +181,30 @@ define([
                     assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
                 }
             })
-            .assets(strategies)
+            .on('error', function(error) {
+                window.console.log(error);
+            })
+            .init()
+            .render($container, { state: state });
+    });
+
+    QUnit.module('Visual test');
+
+    QUnit.asyncTest('Display and play', function(assert){
+        var $container = $('#' + outsideContainerId);
+
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        runner = qtiItemRunner('qti', itemData)
+            .on('render', function(){
+                QUnit.start();
+            })
+            .on('error', function(error) {
+                assert.ok(false, error);
+            })
             .init()
             .render($container);
-
     });
 
 });

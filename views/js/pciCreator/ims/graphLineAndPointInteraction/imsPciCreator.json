@@ -1,0 +1,43 @@
+{
+    "model" : "IMSPCI",
+    "typeIdentifier": "graphLineAndPointInteraction",
+    "label": "IMS Graphing Line And Point",
+    "short": "Line & Point",
+    "description": "Graphing Line And Point",
+    "version": "1.0.0",
+    "author": "Thibault Milan, Sam Sipasseuth",
+    "email": "contact@taotesting.com",
+    "response": {
+        "cardinality": "record"
+    },
+    "runtime" : {
+        "hook" : "runtime/graphLineAndPointInteraction.min.js",
+        "modules" : {
+            "graphLineAndPointInteraction/runtime/graphLineAndPointInteraction.min" : [
+                "runtime/graphLineAndPointInteraction.min.js"
+            ]
+        },
+        "src" : [
+            "./runtime/graphLineAndPointInteraction.js"
+        ]
+    },
+    "creator" : {
+        "icon": "./creator/img/icon.svg",
+        "hook": "./imsPciCreator.js",
+        "libraries" : [
+            "./creator/css/form.css",
+            "./creator/libs/randomColor/LICENSE.md",
+            "./creator/libs/randomColor/randomColor.js",
+            "./creator/tpl/lineForm.tpl",
+            "./creator/tpl/markup.tpl",
+            "./creator/tpl/pointForm.tpl",
+            "./creator/tpl/pointSetForm.tpl",
+            "./creator/tpl/propertiesForm.tpl",
+            "./creator/tpl/segmentForm.tpl",
+            "./creator/tpl/solutionSetForm.tpl",
+            "./creator/widget/states/Question.js",
+            "./creator/widget/states/states.js",
+            "./creator/widget/Widget.js"
+        ]
+    }
+}
