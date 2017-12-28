@@ -24,7 +24,8 @@ define(['lodash', 'jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], functio
         var rp = item.responseProcessing;
         var renderedRp = rp.render(xmlRenderer.get()) || '<responseProcessing template=\"EMPTY\"/>';
         var $rpXml = $($.parseXML(renderedRp));
-        var newRc = $rpXml[0].importNode($.parseXML(newResponseConditionXml).documentElement, true);
+        var rcXml = $.parseXML(newResponseConditionXml);
+        var newRc = $rpXml[0].importNode(rcXml.documentElement, true);
         var responseIdentifier = interaction.attr('responseIdentifier');
         var responseDeclaration = interaction.getResponseDeclaration();
 
@@ -44,7 +45,7 @@ define(['lodash', 'jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], functio
 
             }else{
                 //if it is not a standard template, replace its rc with the new one
-                var $respVar = $rpXml.find('variable[identifier="'+responseIdentifier+'"]');
+                var $respVar = $(rcXml).find('variable[identifier="'+responseIdentifier+'"]');
                 if($respVar.length === criteria.responseIdentifierCount){
 
                     //remove old node
