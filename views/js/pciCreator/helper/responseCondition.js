@@ -17,54 +17,58 @@
  */
 define(['lodash', 'jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], function(_, $, xmlRenderer){
     'use strict';
-    
+
     function replaceResponseCondition(interaction, newResponseConditionXml, criteria){
-        
-        var item = interaction.getRelatedItem();
+
+        var item = interaction.getRootElement();
         var rp = item.responseProcessing;
-        var $rpXml = $($.parseXML(rp.render(xmlRenderer.get())));
-        var newRc = $rpXml[0].importNode($.parseXML(newResponseConditionXml).documentElement, true);
+        var renderedRp = rp.render(xmlRenderer.get()) || '<responseProcessing template=\"EMPTY\"/>';
+        var $rpXml = $($.parseXML(renderedRp));
+        var rcXml = $.parseXML(newResponseConditionXml);
+        var newRc = $rpXml[0].importNode(rcXml.documentElement, true);
         var responseIdentifier = interaction.attr('responseIdentifier');
+        var responseDeclaration = interaction.getResponseDeclaration();
+        var $respVar = $(rcXml).find('variable[identifier="'+responseIdentifier+'"]');
 
         //prepare replacement criteria
         criteria = _.defaults(criteria || {}, {
-            responseIdentifierCount : 1
+            responseIdentifierCount : $respVar.length
         });
 
         if($rpXml.length){
             if($rpXml[0].documentElement.getAttribute('template')){
-                
+
                 //simply substitute the whole rp
                 $rpXml[0].documentElement.removeAttribute('template');
-                
+
                 //append the new one
                 $rpXml[0].documentElement.appendChild(newRc);
-                
+
             }else{
                 //if it is not a standard template, replace its rc with the new one
-                var $respVar = $rpXml.find('variable[identifier="'+responseIdentifier+'"]');
                 if($respVar.length === criteria.responseIdentifierCount){
-                    
+
                     //remove old node
                     var $respCond = $respVar.parents('responseCondition');
                     $respCond[0].parentNode.removeChild($respCond[0]);
-                    
+
                     //append the new one
                     $rpXml[0].documentElement.appendChild(newRc);
-                    
+
                 }else{
-                    throw 'unexpected number of rc found';
+                    throw new Error('Unexpected number of rc found');
                 }
             }
 
             //programmatically modifying the response condition requires the whole item RP mode of item to turn into custom mode
             rp.setProcessingType('custom');
-            
+            delete responseDeclaration.template;
+
             //serialize
             rp.xml = (new XMLSerializer()).serializeToString($rpXml[0].documentElement);
         }
     }
-    
+
     return {
         replace : replaceResponseCondition
     };

@@ -21,7 +21,14 @@
 
 namespace oat\parccTei\scripts\update;
 
-use oat\taoQtiItem\model\SharedLibrariesRegistry;
+use oat\parccTei\scripts\install\RegisterGraphFunctionInteraction;
+use oat\parccTei\scripts\install\RegisterPciFractionModelInteraction;
+use oat\parccTei\scripts\install\RegisterPciGraphNumberLineInteraction;
+use oat\parccTei\scripts\install\RegisterPciGraphPointLineGraphInteraction;
+use oat\parccTei\scripts\install\RegisterPciGraphZoomNumberLineInteraction;
+use oat\parccTei\scripts\install\RegisterPciHistogramInteraction;
+use oat\parccTei\scripts\install\RegisterPciLineAndPointInteraction;
+use oat\parccTei\scripts\install\RegisterPciMultiTabbedExhibit;
 use oat\taoQtiItem\model\HookRegistry;
 
 /**
@@ -42,38 +49,43 @@ class Updater extends \common_ext_ExtensionUpdater
         $libBasePath = ROOT_PATH.'taoQtiItem/views/js/portableSharedLibraries';
         $libRootUrl = ROOT_URL.'taoQtiItem/views/js/portableSharedLibraries';
         $installBasePath = ROOT_PATH.'parccTei/install/local/portableSharedLibraries';
-        $registry = new SharedLibrariesRegistry($libBasePath, $libRootUrl);
+        if (class_exists('\\oat\\taoQtiItem\\model\\SharedLibrariesRegistry')) {
+            $registry = new \oat\taoQtiItem\model\SharedLibrariesRegistry($libBasePath, $libRootUrl);
+        }
 
         $currentVersion = $initialVersion;
 
         //migrate from 0.1 to 0.1.1
         if($currentVersion == '0.1'){
 
-            $registry->registerFromFile('PARCC/graphFunction', $installBasePath.'/PARCC/graphFunction.js');
-            $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
-            $registry->registerFromFile('PARCC/plotFactory', $installBasePath.'/PARCC/plotFactory.js');
-            $registry->registerFromFile('PARCC/pointFactory', $installBasePath.'/PARCC/pointFactory.js');
-
+            if (isset($registry)) {
+                $registry->registerFromFile('PARCC/graphFunction', $installBasePath.'/PARCC/graphFunction.js');
+                $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
+                $registry->registerFromFile('PARCC/plotFactory', $installBasePath.'/PARCC/plotFactory.js');
+                $registry->registerFromFile('PARCC/pointFactory', $installBasePath.'/PARCC/pointFactory.js');
+            }
             $currentVersion = '0.1.1';
         }
 
         //migrate from 0.1.1 to 0.1.2
         if($currentVersion == '0.1.1'){
 
-            $registry->registerFromFile('PARCC/axisFactory', $installBasePath.'/PARCC/axisFactory.js');
-
+            if (isset($registry)) {
+                $registry->registerFromFile('PARCC/axisFactory', $installBasePath . '/PARCC/axisFactory.js');
+            }
             $currentVersion = '0.1.2';
         }
 
         //migrate from 0.1.2 to 0.1.3
         if($currentVersion == '0.1.2'){
 
-            $registry->registerFromFile('PARCC/graphFunction', $installBasePath.'/PARCC/graphFunction.js');
-            $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
-            $registry->registerFromFile('PARCC/plotFactory', $installBasePath.'/PARCC/plotFactory.js');
-            $registry->registerFromFile('PARCC/pointFactory', $installBasePath.'/PARCC/pointFactory.js');
-            $registry->registerFromFile('PARCC/axisFactory', $installBasePath.'/PARCC/axisFactory.js');
-
+            if (isset($registry)) {
+                $registry->registerFromFile('PARCC/graphFunction', $installBasePath . '/PARCC/graphFunction.js');
+                $registry->registerFromFile('PARCC/gridFactory', $installBasePath . '/PARCC/gridFactory.js');
+                $registry->registerFromFile('PARCC/plotFactory', $installBasePath . '/PARCC/plotFactory.js');
+                $registry->registerFromFile('PARCC/pointFactory', $installBasePath . '/PARCC/pointFactory.js');
+                $registry->registerFromFile('PARCC/axisFactory', $installBasePath . '/PARCC/axisFactory.js');
+            }
             $currentVersion = '0.1.3';
         }
 
@@ -88,9 +100,10 @@ class Updater extends \common_ext_ExtensionUpdater
         //migrate from 0.1.4 to 0.1.5
         if($currentVersion == '0.1.4'){
 
-            $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
-            $registry->registerFromFile('PARCC/axisFactory', $installBasePath.'/PARCC/axisFactory.js');
-
+            if (isset($registry)) {
+                $registry->registerFromFile('PARCC/gridFactory', $installBasePath . '/PARCC/gridFactory.js');
+                $registry->registerFromFile('PARCC/axisFactory', $installBasePath . '/PARCC/axisFactory.js');
+            }
             $currentVersion = '0.1.5';
         }
 
@@ -98,36 +111,53 @@ class Updater extends \common_ext_ExtensionUpdater
 
         if($this->isVersion('0.1.5')){
 
-            $registry->registerFromFile('PARCC/plotFactory', $installBasePath.'/PARCC/graphFunction.js');
-            $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
-            $registry->registerFromFile('PARCC/pointFactory', $installBasePath.'/PARCC/pointFactory.js');
-            $registry->registerFromFile('PARCC/plotFactory', $installBasePath.'/PARCC/plotFactory.js');
-
+            if (isset($registry)) {
+                $registry->registerFromFile('PARCC/plotFactory', $installBasePath . '/PARCC/graphFunction.js');
+                $registry->registerFromFile('PARCC/gridFactory', $installBasePath . '/PARCC/gridFactory.js');
+                $registry->registerFromFile('PARCC/pointFactory', $installBasePath . '/PARCC/pointFactory.js');
+                $registry->registerFromFile('PARCC/plotFactory', $installBasePath . '/PARCC/plotFactory.js');
+            }
             $this->setVersion('0.2.0');
         }
 
         if($this->isVersion('0.2.0')){
 
-            $registry->registerFromFile('PARCC/gridFactory', $installBasePath.'/PARCC/gridFactory.js');
-
+            if (isset($registry)) {
+                $registry->registerFromFile('PARCC/gridFactory', $installBasePath . '/PARCC/gridFactory.js');
+            }
             $this->setVersion('0.2.1');
         }
 
         if($this->isVersion('0.2.1')){
 
-            $registry->registerFromFile('PARCC/pointFactory', $installBasePath.'/PARCC/pointFactory.js');
-
+            if (isset($registry)) {
+                $registry->registerFromFile('PARCC/pointFactory', $installBasePath . '/PARCC/pointFactory.js');
+            }
             $this->setVersion('0.3.0');
         }
 
         if($this->isVersion('0.3.0')){
 
-            $registry->registerFromFile('PARCC/graphFunction', $installBasePath.'/PARCC/graphFunction.js');
-
+            if (isset($registry)) {
+                $registry->registerFromFile('PARCC/graphFunction', $installBasePath . '/PARCC/graphFunction.js');
+            }
             $this->setVersion('0.3.1');
         }
 
         $this->skip('0.3.1', '0.4.0');
+
+        if($this->isVersion('0.4.0')){
+            call_user_func(new RegisterPciFractionModelInteraction(), ['1.0.0']);
+            call_user_func(new RegisterPciLineAndPointInteraction(), ['1.0.0']);
+            call_user_func(new RegisterGraphFunctionInteraction(), ['1.0.0']);
+            call_user_func(new RegisterPciGraphNumberLineInteraction(), ['1.0.0']);
+            call_user_func(new RegisterPciGraphPointLineGraphInteraction(), ['1.0.0']);
+            call_user_func(new RegisterPciGraphZoomNumberLineInteraction(), ['1.0.0']);
+
+            $this->setVersion('0.5.0');
+        }
+
+        $this->skip('0.5.0', '0.5.1');
     }
 
 }

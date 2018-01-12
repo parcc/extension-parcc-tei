@@ -1,52 +1,44 @@
 {
-    "identifier": "i1468405819547274",
-    "serial": "item_578627a4c942a387100331",
+    "identifier": "i15124904722263196",
+    "serial": "item_5a28300d1a959348738633",
     "qtiClass": "assessmentItem",
     "attributes": {
-        "identifier": "i1468405819547274",
-        "title": "function",
-        "label": "",
+        "identifier": "i15124904722263196",
+        "title": "graphFunction",
+        "label": "graphFunction",
+        "xml:lang": "en-US",
         "adaptive": false,
         "timeDependent": false,
         "toolName": "TAO",
-        "toolVersion": "3.1.0-sprint15",
+        "toolVersion": "3.3.0-sprint64 1\/2",
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_578627a4c9412143096881",
-        "body": "\n        <div class=\"grid-row\">\n            <div class=\"col-12\">\n                {{interaction_portablecustominteraction_578627a4d2291484258881}}\n            <\/div>\n        <\/div>\n    ",
+        "serial": "container_containeritembody_5a28300d1a93a350686517",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_imsportablecustominteraction_5a28300d201f8019773905}}\n      <\/div>\n    <\/div>\n  ",
         "elements": {
-            "interaction_portablecustominteraction_578627a4d2291484258881": {
-                "serial": "interaction_portablecustominteraction_578627a4d2291484258881",
+            "interaction_imsportablecustominteraction_5a28300d201f8019773905": {
+                "serial": "interaction_imsportablecustominteraction_5a28300d201f8019773905",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_578627a4c942a387100331"
+                    "relatedItem": "item_5a28300d1a959348738633"
                 },
                 "choices": {},
                 "typeIdentifier": "graphFunctionInteraction",
-                "markup": "\n                            <div class=\"graphFunctionInteraction\">\n                                <div class=\"prompt\"><\/div>\n                                <div class=\"shape-panel\">\n                                    <div class=\"shape-controls\">\n                                        <button name=\"linear\" value=\"linear\" class=\"btn btn-info\" type=\"button\">Linear<\/button>\n                                        <button name=\"absolute\" value=\"absolute\" class=\"btn btn-info\" type=\"button\">Absolute Value<\/button>\n                                        <button name=\"quadratic\" value=\"quadratic\" class=\"btn btn-info\" type=\"button\">Quadratic<\/button>\n                                        <button name=\"exponential\" value=\"exponential\" class=\"btn btn-info\" type=\"button\">Exponential<\/button>\n                                        <button name=\"logarithmic\" value=\"logarithmic\" class=\"btn btn-info\" type=\"button\">Logarithmic<\/button>\n                                        <button name=\"cosine\" value=\"cosine\" class=\"btn btn-info\" type=\"button\">Sin\/Cos<\/button>\n                                        <button name=\"tangent\" value=\"tangent\" class=\"btn btn-info\" type=\"button\">Tan\/Cotan<\/button>\n                                    <\/div>\n                                    <div class=\"shape-container\"><\/div>\n                                <\/div>\n                            <\/div>\n                        ",
-                "libraries": [
-                    "IMSGlobal\/jquery_2_1_1",
-                    "PARCC\/graphFunction",
-                    "PARCC\/gridFactory",
-                    "PARCC\/pointFactory",
-                    "PARCC\/plotFactory"
-                ],
+                "markup": "\n              <div class=\"graphFunctionInteraction\">\n                <div class=\"shape-panel\">\n                  <div class=\"shape-controls\">\n                    <button name=\"linear\" value=\"linear\" class=\"btn btn-info\" type=\"button\">Linear<\/button>\n                    <button name=\"absolute\" value=\"absolute\" class=\"btn btn-info\" type=\"button\">Absolute Value<\/button>\n                    <button name=\"quadratic\" value=\"quadratic\" class=\"btn btn-info\" type=\"button\">Quadratic<\/button>\n                    <button name=\"exponential\" value=\"exponential\" class=\"btn btn-info\" type=\"button\">Exponential<\/button>\n                    <button name=\"logarithmic\" value=\"logarithmic\" class=\"btn btn-info\" type=\"button\">Logarithmic<\/button>\n                    <button name=\"cosine\" value=\"cosine\" class=\"btn btn-info\" type=\"button\">Sin\/Cos<\/button>\n                    <button name=\"tangent\" value=\"tangent\" class=\"btn btn-info\" type=\"button\">Tan\/Cotan<\/button>\n                  <\/div>\n                  <div class=\"shape-container\"><\/div>\n                <\/div>\n              <\/div>\n            ",
+                "version": "0.0.0",
                 "properties": {
                     "graphs": "linear,absolute,quadratic,exponential,logarithmic,cosine,tangent",
-                    "draggable": "true",
                     "graphTitle": "",
                     "graphTitleRequired": "",
-                    "graphType": "line",
                     "plotColor": "#0000FF",
                     "plotThickness": "6",
                     "pointColor": "#0000FF",
                     "pointGlow": "true",
                     "pointRadius": "8",
-                    "segment": "true",
                     "weight": "1",
                     "width": "450",
                     "height": "450",
@@ -69,30 +61,29 @@
                     "ySubStep": "2",
                     "yWeight": "3"
                 },
-                "entryPoint": "graphFunctionInteraction\/runtime\/graphFunctionInteraction.js"
+                "config": [],
+                "modules": {},
+                "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1"
             }
         },
         "debug": {
-            "relatedItem": "item_578627a4c942a387100331"
+            "relatedItem": "item_5a28300d1a959348738633"
         }
     },
     "debug": {
-        "relatedItem": "item_578627a4c942a387100331"
+        "relatedItem": "item_5a28300d1a959348738633"
     },
     "namespaces": {
-        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
-        "html5": "html5",
+        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2",
         "m": "http:\/\/www.w3.org\/1998\/Math\/MathML",
-        "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
-        "xml": "http:\/\/www.w3.org\/XML\/1998\/namespace",
         "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance"
     },
     "schemaLocations": {
-        "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
+        "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p2\/imsqti_v2p2.xsd"
     },
     "stylesheets": {
-        "stylesheet_578627a4cc83a024962758": {
-            "serial": "stylesheet_578627a4cc83a024962758",
+        "stylesheet_5a28300d1bc85771088333": {
+            "serial": "stylesheet_5a28300d1bc85771088333",
             "qtiClass": "stylesheet",
             "attributes": {
                 "href": "style\/custom\/tao-user-styles.css",
@@ -101,27 +92,14 @@
                 "title": ""
             },
             "debug": {
-                "relatedItem": "item_578627a4c942a387100331"
-            }
-        },
-        "stylesheet_578627a4cda1f665742700": {
-            "serial": "stylesheet_578627a4cda1f665742700",
-            "qtiClass": "stylesheet",
-            "attributes": {
-                "href": "graphFunctionInteraction\/runtime\/css\/graphFunctionInteraction.css",
-                "type": "text\/css",
-                "media": "all",
-                "title": ""
-            },
-            "debug": {
-                "relatedItem": "item_578627a4c942a387100331"
+                "relatedItem": "item_5a28300d1a959348738633"
             }
         }
     },
     "outcomes": {
-        "outcomedeclaration_578627a4cfc1d031534282": {
+        "outcomedeclaration_5a28300d1d251916391644": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_578627a4cfc1d031534282",
+            "serial": "outcomedeclaration_5a28300d1d251916391644",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -129,23 +107,24 @@
                 "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_578627a4c942a387100331"
+                "relatedItem": "item_5a28300d1a959348738633"
             },
             "defaultValue": null
         }
     },
     "responses": {
-        "responsedeclaration_578627a4ce651042152391": {
+        "responsedeclaration_5a28300d1c858462362709": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_578627a4ce651042152391",
+            "serial": "responsedeclaration_5a28300d1c858462362709",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
                 "cardinality": "record"
             },
             "debug": {
-                "relatedItem": "item_578627a4c942a387100331"
+                "relatedItem": "item_5a28300d1a959348738633"
             },
+            "defaultValue": [],
             "mapping": [],
             "areaMapping": [],
             "howMatch": null,
@@ -165,14 +144,14 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_custom_578627a4d4b0e472626926",
+        "serial": "response_custom_5a28300d2165e466038371",
         "qtiClass": "responseProcessing",
-        "attributes": [],
+        "attributes": {},
         "debug": {
             "relatedItem": ""
         },
         "processingType": "custom",
-        "data": "<responseProcessing>\n        <responseCondition>\n            <responseIf>\n                <and>\n                    <match>\n                        <index n=\"1\">\n                            <customOperator class=\"qti.customOperators.CsvToOrdered\">\n                                <fieldValue fieldIdentifier=\"points\">\n                                    <variable identifier=\"RESPONSE\"\/>\n                                <\/fieldValue>\n                            <\/customOperator>\n                        <\/index>\n                        <fieldValue fieldIdentifier=\"vertex\">\n                            <correct identifier=\"RESPONSE\"\/>\n                        <\/fieldValue>\n                    <\/match>\n                    <match>\n                        <fieldValue fieldIdentifier=\"functionGraphType\">\n                            <variable identifier=\"RESPONSE\"\/>\n                        <\/fieldValue>\n                        <fieldValue fieldIdentifier=\"functionGraphType\">\n                            <correct identifier=\"RESPONSE\"\/>\n                        <\/fieldValue>\n                    <\/match>\n                    <not>\n                        <match>\n                            <index n=\"1\">\n                                <customOperator class=\"qti.customOperators.CsvToOrdered\">\n                                    <fieldValue fieldIdentifier=\"points\">\n                                        <variable identifier=\"RESPONSE\"\/>\n                                    <\/fieldValue>\n                                <\/customOperator>\n                            <\/index>\n                            <index n=\"2\">\n                                <customOperator class=\"qti.customOperators.CsvToOrdered\">\n                                    <fieldValue fieldIdentifier=\"points\">\n                                        <variable identifier=\"RESPONSE\"\/>\n                                    <\/fieldValue>\n                                <\/customOperator>\n                            <\/index>\n                        <\/match>\n                    <\/not>\n                    <equal toleranceMode=\"exact\">\n                        <customOperator class=\"qti.customOperators.math.graph.CountPointsThatSatisfyEquation\">\n                            <customOperator class=\"qti.customOperators.CsvToMultiple\">\n                                <fieldValue fieldIdentifier=\"points\">\n                                    <variable identifier=\"RESPONSE\"\/>\n                                <\/fieldValue>\n                            <\/customOperator>\n                            <fieldValue fieldIdentifier=\"equation\">\n                                <correct identifier=\"RESPONSE\"\/>\n                            <\/fieldValue>\n                        <\/customOperator>\n                        <fieldValue fieldIdentifier=\"numberPointsRequired\">\n                            <correct identifier=\"RESPONSE\"\/>\n                        <\/fieldValue>\n                    <\/equal>\n                <\/and>\n                <setOutcomeValue identifier=\"SCORE\">\n                    <sum>\n                        <variable identifier=\"SCORE\"\/>\n                        <baseValue baseType=\"float\">1<\/baseValue>\n                    <\/sum>\n                <\/setOutcomeValue>\n            <\/responseIf>\n            <responseElse>\n                <setOutcomeValue identifier=\"SCORE\">\n                    <baseValue baseType=\"float\">0<\/baseValue>\n                <\/setOutcomeValue>\n            <\/responseElse>\n        <\/responseCondition>\n    <\/responseProcessing>",
+        "data": "<responseProcessing>\n    <responseCondition>\n      <responseIf>\n        <and>\n          <match>\n            <index n=\"1\">\n              <customOperator class=\"qti.customOperators.CsvToOrdered\">\n                <fieldValue fieldIdentifier=\"points\">\n                  <variable identifier=\"RESPONSE\"\/>\n                <\/fieldValue>\n              <\/customOperator>\n            <\/index>\n            <fieldValue fieldIdentifier=\"vertex\">\n              <correct identifier=\"RESPONSE\"\/>\n            <\/fieldValue>\n          <\/match>\n          <match>\n            <fieldValue fieldIdentifier=\"functionGraphType\">\n              <variable identifier=\"RESPONSE\"\/>\n            <\/fieldValue>\n            <fieldValue fieldIdentifier=\"functionGraphType\">\n              <correct identifier=\"RESPONSE\"\/>\n            <\/fieldValue>\n          <\/match>\n          <not>\n            <match>\n              <index n=\"1\">\n                <customOperator class=\"qti.customOperators.CsvToOrdered\">\n                  <fieldValue fieldIdentifier=\"points\">\n                    <variable identifier=\"RESPONSE\"\/>\n                  <\/fieldValue>\n                <\/customOperator>\n              <\/index>\n              <index n=\"2\">\n                <customOperator class=\"qti.customOperators.CsvToOrdered\">\n                  <fieldValue fieldIdentifier=\"points\">\n                    <variable identifier=\"RESPONSE\"\/>\n                  <\/fieldValue>\n                <\/customOperator>\n              <\/index>\n            <\/match>\n          <\/not>\n          <equal toleranceMode=\"exact\">\n            <customOperator class=\"qti.customOperators.math.graph.CountPointsThatSatisfyEquation\">\n              <customOperator class=\"qti.customOperators.CsvToMultiple\">\n                <fieldValue fieldIdentifier=\"points\">\n                  <variable identifier=\"RESPONSE\"\/>\n                <\/fieldValue>\n              <\/customOperator>\n              <fieldValue fieldIdentifier=\"equation\">\n                <correct identifier=\"RESPONSE\"\/>\n              <\/fieldValue>\n            <\/customOperator>\n            <fieldValue fieldIdentifier=\"numberPointsRequired\">\n              <correct identifier=\"RESPONSE\"\/>\n            <\/fieldValue>\n          <\/equal>\n        <\/and>\n        <setOutcomeValue identifier=\"SCORE\">\n          <sum>\n            <variable identifier=\"SCORE\"\/>\n            <baseValue baseType=\"float\">1<\/baseValue>\n          <\/sum>\n        <\/setOutcomeValue>\n      <\/responseIf>\n      <responseElse>\n        <setOutcomeValue identifier=\"SCORE\">\n          <baseValue baseType=\"float\">0<\/baseValue>\n        <\/setOutcomeValue>\n      <\/responseElse>\n    <\/responseCondition>\n  <\/responseProcessing>",
         "responseRules": [
             {
                 "qtiClass": "responseCondition",

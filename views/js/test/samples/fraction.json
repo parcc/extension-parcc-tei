@@ -1,33 +1,35 @@
 {
-    "identifier": "i14399049126620265",
-    "serial": "item_55d335dc07943950208728",
+    "identifier": "i15124849571846177",
+    "serial": "item_5a2a9c6d88a7c411343054",
     "qtiClass": "assessmentItem",
     "attributes": {
-        "identifier": "i14399049126620265",
-        "title": "Fraction",
-        "label": "",
+        "identifier": "i15124849571846177",
+        "title": "fractionModel",
+        "label": "fractionModel",
+        "xml:lang": "en-US",
         "adaptive": false,
         "timeDependent": false,
         "toolName": "TAO",
-        "toolVersion": "3.1.0-sprint04"
+        "toolVersion": "3.3.0-sprint64 1\/2",
+        "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_55d335dc07920801518324",
-        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_55d335dc09320426692022}}\n      <\/div>\n    <\/div>\n  ",
+        "serial": "container_containeritembody_5a2a9c6d88a5b696867374",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_imsportablecustominteraction_5a2a9c6d8d4ac661204810}}\n      <\/div>\n    <\/div>\n  ",
         "elements": {
-            "interaction_portablecustominteraction_55d335dc09320426692022": {
-                "serial": "interaction_portablecustominteraction_55d335dc09320426692022",
+            "interaction_imsportablecustominteraction_5a2a9c6d8d4ac661204810": {
+                "serial": "interaction_imsportablecustominteraction_5a2a9c6d8d4ac661204810",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_55d335dc07943950208728"
+                    "relatedItem": "item_5a2a9c6d88a7c411343054"
                 },
                 "choices": {},
                 "typeIdentifier": "fractionModelInteraction",
-                "markup": "\n              <div class=\"fractionModelInteraction\">\n                <div class=\"prompt\">\n                  <p>Reprensent the given fraction: <math><semantics><mstyle displaystyle=\"true\" scriptlevel=\"0\"><mrow class=\"MJX-TeXAtom-ORD\"><mfrac><mn>3<\/mn><mn>5<\/mn><\/mfrac><\/mrow><\/mstyle><annotation encoding=\"latex\">\\frac{3}{5}<\/annotation><\/semantics><\/math><\/p>\n                <\/div>\n                <div class=\"shape-panel\">\n                  <h3 class=\"shape-title\">Fraction Model<\/h3>\n                  <div class=\"shape-container\"><\/div>\n                  <div class=\"shape-controls\">\n                    <button value=\"fewer\" class=\"fewer btn btn-info\" type=\"button\">Fewer<\/button>\n                    <button value=\"more\" class=\"more btn btn-info\" type=\"button\">More<\/button>\n                    <button value=\"reset\" class=\"reset btn btn-info\" type=\"button\">Reset<\/button>\n                  <\/div>\n                <\/div>\n              <\/div>\n            ",
-                "libraries": [],
+                "markup": "\n              <div class=\"fractionModelInteraction\">\n                <div class=\"prompt\">\n        \n    <\/div>\n                <div class=\"shape-panel\">\n                  <h3 class=\"shape-title\">Fraction Model<\/h3>\n                  <div class=\"shape-container\"><\/div>\n                  <div class=\"shape-controls\">\n                    <button value=\"fewer\" class=\"fewer btn btn-info\" type=\"button\">Fewer<\/button>\n                    <button value=\"more\" class=\"more btn btn-info\" type=\"button\">More<\/button>\n                    <button value=\"reset\" class=\"reset btn btn-info\" type=\"button\">Reset<\/button>\n                  <\/div>\n                <\/div>\n              <\/div>\n            ",
+                "version": "0.0.0",
                 "properties": {
                     "title": "Fraction Model",
                     "radius": "100",
@@ -39,45 +41,47 @@
                     "partitionMin": "1",
                     "partitionInit": "2",
                     "selectedPartitionsInit": "0",
-                    "selectedPartitions": "[]"
+                    "selectedPartitions": []
                 },
-                "entryPoint": "fractionModelInteraction\/runtime\/fractionModelInteraction.js"
+                "config": [],
+                "modules": {},
+                "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1"
             }
         },
         "debug": {
-            "relatedItem": "item_55d335dc07943950208728"
+            "relatedItem": "item_5a2a9c6d88a7c411343054"
         }
     },
     "debug": {
-        "relatedItem": "item_55d335dc07943950208728"
+        "relatedItem": "item_5a2a9c6d88a7c411343054"
     },
     "namespaces": {
-        "xml": "http:\/\/www.w3.org\/XML\/1998\/namespace",
-        "html5": "html5",
-        "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
+        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2",
         "m": "http:\/\/www.w3.org\/1998\/Math\/MathML",
-        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance",
-        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1"
+        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance"
+    },
+    "schemaLocations": {
+        "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p2\/imsqti_v2p2.xsd"
     },
     "stylesheets": {
-        "stylesheet_55d335dc083ab093818599": {
-            "serial": "stylesheet_55d335dc083ab093818599",
+        "stylesheet_5a2a9c6d89e52116738956": {
+            "serial": "stylesheet_5a2a9c6d89e52116738956",
             "qtiClass": "stylesheet",
             "attributes": {
-                "href": "fractionModelInteraction\/runtime\/css\/fractionModelInteraction.css",
+                "href": "style\/custom\/tao-user-styles.css",
                 "type": "text\/css",
                 "media": "all",
                 "title": ""
             },
             "debug": {
-                "relatedItem": "item_55d335dc07943950208728"
+                "relatedItem": "item_5a2a9c6d88a7c411343054"
             }
         }
     },
     "outcomes": {
-        "outcomedeclaration_55d335dc08a4d022758132": {
+        "outcomedeclaration_5a2a9c6d8b0d9090252591": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_55d335dc08a4d022758132",
+            "serial": "outcomedeclaration_5a2a9c6d8b0d9090252591",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -85,28 +89,29 @@
                 "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_55d335dc07943950208728"
+                "relatedItem": "item_5a2a9c6d88a7c411343054"
             },
             "defaultValue": null
         }
     },
     "responses": {
-        "responsedeclaration_55d335dc0874a209424066": {
+        "responsedeclaration_5a2a9c6d8aa2d291393912": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_55d335dc0874a209424066",
+            "serial": "responsedeclaration_5a2a9c6d8aa2d291393912",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
                 "cardinality": "single",
-                "baseType": "integer"
+                "baseType": "string"
             },
             "debug": {
-                "relatedItem": "item_55d335dc07943950208728"
+                "relatedItem": "item_5a2a9c6d88a7c411343054"
             },
-            "correctResponses": [],
+            "defaultValue": [],
             "mapping": [],
             "areaMapping": [],
-            "howMatch": "http:\/\/www.imsglobal.org\/question\/qti_v2p1\/rptemplates\/match_correct",
+            "howMatch": null,
+            "correctResponses": [],
             "mappingAttributes": {
                 "defaultValue": 0
             },
@@ -115,32 +120,91 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_templatesdriven_55d335dc09c5a449566031",
+        "serial": "response_custom_5a2a9c6d8e69b771189040",
         "qtiClass": "responseProcessing",
-        "attributes": [],
+        "attributes": {},
         "debug": {
-            "relatedItem": "item_55d335dc07943950208728"
+            "relatedItem": ""
         },
-        "processingType": "templateDriven",
+        "processingType": "custom",
+        "data": "<responseProcessing>\n    <responseCondition>\n      <responseIf>\n        <equal tolerance=\"0.000000000001\" toleranceMode=\"absolute\">\n          <divide>\n            <customOperator class=\"qti.customOperators.math.fraction.Numerator\">\n              <variable identifier=\"RESPONSE\"\/>\n            <\/customOperator>\n            <customOperator class=\"qti.customOperators.math.fraction.Denominator\">\n              <variable identifier=\"RESPONSE\"\/>\n            <\/customOperator>\n          <\/divide>\n          <divide>\n            <customOperator class=\"qti.customOperators.math.fraction.Numerator\">\n              <correct identifier=\"RESPONSE\"\/>\n            <\/customOperator>\n            <customOperator class=\"qti.customOperators.math.fraction.Denominator\">\n              <correct identifier=\"RESPONSE\"\/>\n            <\/customOperator>\n          <\/divide>\n        <\/equal>\n        <setOutcomeValue identifier=\"SCORE\">\n          <sum>\n            <variable identifier=\"SCORE\"\/>\n            <baseValue baseType=\"float\">1<\/baseValue>\n          <\/sum>\n        <\/setOutcomeValue>\n      <\/responseIf>\n      <responseElse>\n        <setOutcomeValue identifier=\"SCORE\">\n          <baseValue baseType=\"float\">0<\/baseValue>\n        <\/setOutcomeValue>\n      <\/responseElse>\n    <\/responseCondition>\n  <\/responseProcessing>",
         "responseRules": [
             {
                 "qtiClass": "responseCondition",
                 "responseIf": {
                     "qtiClass": "responseIf",
                     "expression": {
-                        "qtiClass": "match",
+                        "qtiClass": "equal",
+                        "attributes": {
+                            "tolerance": "0.000000000001",
+                            "toleranceMode": "absolute"
+                        },
                         "expressions": [
                             {
-                                "qtiClass": "variable",
-                                "attributes": {
-                                    "identifier": "RESPONSE"
-                                }
+                                "qtiClass": "divide",
+                                "expressions": [
+                                    {
+                                        "qtiClass": "customOperator",
+                                        "attributes": {
+                                            "class": "qti.customOperators.math.fraction.Numerator"
+                                        },
+                                        "expressions": [
+                                            {
+                                                "qtiClass": "variable",
+                                                "attributes": {
+                                                    "identifier": "RESPONSE"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "qtiClass": "customOperator",
+                                        "attributes": {
+                                            "class": "qti.customOperators.math.fraction.Denominator"
+                                        },
+                                        "expressions": [
+                                            {
+                                                "qtiClass": "variable",
+                                                "attributes": {
+                                                    "identifier": "RESPONSE"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
                             },
                             {
-                                "qtiClass": "correct",
-                                "attributes": {
-                                    "identifier": "RESPONSE"
-                                }
+                                "qtiClass": "divide",
+                                "expressions": [
+                                    {
+                                        "qtiClass": "customOperator",
+                                        "attributes": {
+                                            "class": "qti.customOperators.math.fraction.Numerator"
+                                        },
+                                        "expressions": [
+                                            {
+                                                "qtiClass": "correct",
+                                                "attributes": {
+                                                    "identifier": "RESPONSE"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "qtiClass": "customOperator",
+                                        "attributes": {
+                                            "class": "qti.customOperators.math.fraction.Denominator"
+                                        },
+                                        "expressions": [
+                                            {
+                                                "qtiClass": "correct",
+                                                "attributes": {
+                                                    "identifier": "RESPONSE"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -151,11 +215,22 @@
                                 "identifier": "SCORE"
                             },
                             "expression": {
-                                "qtiClass": "baseValue",
-                                "attributes": {
-                                    "baseType": "float"
-                                },
-                                "value": "1"
+                                "qtiClass": "sum",
+                                "expressions": [
+                                    {
+                                        "qtiClass": "variable",
+                                        "attributes": {
+                                            "identifier": "SCORE"
+                                        }
+                                    },
+                                    {
+                                        "qtiClass": "baseValue",
+                                        "attributes": {
+                                            "baseType": "float"
+                                        },
+                                        "value": "1"
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -180,5 +255,6 @@
                 }
             }
         ]
-    }
+    },
+    "apipAccessibility": ""
 }
