@@ -24,13 +24,15 @@ define(['lodash', 'jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], functio
         var rp = item.responseProcessing;
         var renderedRp = rp.render(xmlRenderer.get()) || '<responseProcessing template=\"EMPTY\"/>';
         var $rpXml = $($.parseXML(renderedRp));
-        var newRc = $rpXml[0].importNode($.parseXML(newResponseConditionXml).documentElement, true);
+        var rcXml = $.parseXML(newResponseConditionXml);
+        var newRc = $rpXml[0].importNode(rcXml.documentElement, true);
         var responseIdentifier = interaction.attr('responseIdentifier');
         var responseDeclaration = interaction.getResponseDeclaration();
+        var $respVar = $(rcXml).find('variable[identifier="'+responseIdentifier+'"]');
 
         //prepare replacement criteria
         criteria = _.defaults(criteria || {}, {
-            responseIdentifierCount : 1
+            responseIdentifierCount : $respVar.length
         });
 
         if($rpXml.length){
@@ -44,7 +46,6 @@ define(['lodash', 'jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], functio
 
             }else{
                 //if it is not a standard template, replace its rc with the new one
-                var $respVar = $rpXml.find('variable[identifier="'+responseIdentifier+'"]');
                 if($respVar.length === criteria.responseIdentifierCount){
 
                     //remove old node
@@ -55,7 +56,7 @@ define(['lodash', 'jquery', 'taoQtiItem/qtiCreator/helper/xmlRenderer'], functio
                     $rpXml[0].documentElement.appendChild(newRc);
 
                 }else{
-                    throw 'unexpected number of rc found';
+                    throw new Error('Unexpected number of rc found');
                 }
             }
 
