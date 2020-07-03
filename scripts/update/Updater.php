@@ -34,6 +34,7 @@ use oat\taoQtiItem\model\HookRegistry;
 /**
  *
  * @author Sam <sam@taotesting.com>
+ * @deprecated use migrations instead. See https://github.com/oat-sa/generis/wiki/Tao-Update-Process
  */
 class Updater extends \common_ext_ExtensionUpdater
 {
@@ -157,7 +158,12 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('0.5.0');
         }
 
-        $this->skip('0.5.0', '0.5.2');
+        $this->skip('0.5.0', '0.5.3');
+        
+        //Updater files are deprecated. Please use migrations.
+        //See: https://github.com/oat-sa/generis/wiki/Tao-Update-Process
+
+        $this->setVersion($this->getExtension()->getManifest()->getVersion());
     }
 
 }
