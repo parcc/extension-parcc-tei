@@ -1,0 +1,297 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TAO 3.4.0-sprint117\n"
+"PO-Revision-Date: 2020-09-22T16:02:17\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: ja-JP\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: ja-JP\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid " Display lines"
+msgstr "ラインを表示"
+
+msgid " Display points"
+msgstr "ポイント表示"
+
+msgid " points Glow"
+msgstr "ポイントを強調"
+
+msgid "Add a static point"
+msgstr "静的なポイントを追加"
+
+msgid "allow points on border"
+msgstr "境界を許可"
+
+msgid "Allow solution set"
+msgstr "ソリューションセットを許可"
+
+msgid "Available Graphs"
+msgstr "利用可能なグラフ"
+
+msgid "Available Intervals"
+msgstr "利用可能なインターバル"
+
+msgid "by increment of"
+msgstr "の増加分だけ"
+
+msgid "Close"
+msgstr "閉じる"
+
+msgid "Color selector"
+msgstr "色指定"
+
+msgid "Default Partition"
+msgstr "デフォルト　パーテーション"
+
+msgid "Define equation based response processing."
+msgstr "式に基づく応答処理を定義します。"
+
+msgid "Define which graphs are availabe for the test taker to use."
+msgstr "受験者が使用できるグラフを定義します。"
+
+msgid "Define which interval types are availabe for the test taker to use."
+msgstr "受験者が使用する間隔のタイプを定義します。"
+
+msgid "Delete this static point"
+msgstr "この静的な点を削除する"
+
+msgid "Display Title"
+msgstr "タイトルを表示"
+
+msgid "Draggable"
+msgstr "ドラッグ可能"
+
+msgid "Edit options"
+msgstr "編集オプション"
+
+msgid "End Point"
+msgstr "エンドポイント"
+
+msgid "Equation"
+msgstr "式"
+
+msgid "Equation Response Processing Wizard"
+msgstr "式対応処理ウィザード"
+
+msgid "from"
+msgstr "から"
+
+msgid "Graduation"
+msgstr "目盛り"
+
+msgid "Graph Appearance"
+msgstr "グラフ表示"
+
+msgid "Graph Color"
+msgstr "グラフ色"
+
+msgid "Graph properties"
+msgstr "グラフプロパティ"
+
+msgid "Graph type"
+msgstr "グラフ種類"
+
+msgid "height"
+msgstr "高さ"
+
+msgid "inner line weight"
+msgstr "内部ラインウェイト"
+
+msgid "Interval"
+msgstr "間隔"
+
+msgid "label"
+msgstr "ラベル"
+
+msgid "Label Color"
+msgstr "ラベル色"
+
+msgid "Label font size"
+msgstr "ラベルフォントサイズ"
+
+msgid "Label font weight"
+msgstr "ラベルフォントウェイト"
+
+msgid "Line"
+msgstr "線"
+
+msgid "Line color"
+msgstr "線色"
+
+msgid "Line name"
+msgstr "線名前"
+
+msgid "Line style"
+msgstr "線のスタイル"
+
+msgid "Line style toggle"
+msgstr "千のスタイル　トグル"
+
+msgid "Line thickness"
+msgstr "千の太さ"
+
+msgid "Max number of points"
+msgstr "最大ポイント数"
+
+msgid "Max. Segments"
+msgstr "最大セグメント"
+
+msgid "Maximum number of segments allowed."
+msgstr "許可されるセグメントの最大数。"
+
+msgid "Maximum of Points"
+msgstr "ポイントの最大値"
+
+msgid "Min. Segments"
+msgstr "最小セグメント"
+
+msgid "Mininum number of segments allowed."
+msgstr "許可されるセグメントの最小数。"
+
+msgid "Outline"
+msgstr "アウトライン"
+
+msgid "Outline Thickness"
+msgstr "アウトラインの太さ"
+
+msgid "Outline Thickness Description"
+msgstr "アウトライン太さ説明"
+
+msgid "Pie Chart Colors"
+msgstr "円グラフの色"
+
+msgid "Please enter the equation"
+msgstr "式を入力してください"
+
+msgid "Point color"
+msgstr "点の色"
+
+msgid "Point Color"
+msgstr "点の色"
+
+msgid "Point name"
+msgstr "点の名前"
+
+msgid "Point Radius"
+msgstr "ポイント半径"
+
+msgid "Point radius"
+msgstr "ポイント半径"
+
+msgid "Point set name"
+msgstr "ポイント名前"
+
+msgid "Radius"
+msgstr "半径"
+
+msgid "Radius Description"
+msgstr "半径の説明"
+
+msgid "Required points"
+msgstr "必要なポイント"
+
+msgid "Response identifier"
+msgstr "応答識別子"
+
+msgid "Scatterplot"
+msgstr "散布図"
+
+msgid "Score"
+msgstr "記録"
+
+msgid "Segment color"
+msgstr "セグメント色"
+
+msgid "Segment mode"
+msgstr "セグメントモード"
+
+msgid "Segment name"
+msgstr "セグメント名"
+
+msgid "Segment style"
+msgstr "セグメントスタイル"
+
+msgid "Segment style toggle"
+msgstr "セグメントスタイル　トグル"
+
+msgid "Segment thickness"
+msgstr "セグメント幅"
+
+msgid "Selected Partition"
+msgstr "選ばれたパーテーション"
+
+msgid "Small Mark"
+msgstr "スモールマーク"
+
+msgid "Snap to Int."
+msgstr "スナップからイント"
+
+msgid "Solution set name"
+msgstr "ソリューションセット名"
+
+msgid "Some Property"
+msgstr "いくつかのプロパティ"
+
+msgid "Some Property Description"
+msgstr "いくつかのプロパティ説明"
+
+msgid "Start point"
+msgstr "スタートポイント"
+
+msgid "Static points"
+msgstr "静的ポイント"
+
+msgid "sub step (snapping)"
+msgstr "サブステップ"
+
+msgid "Switch to equation based scoring"
+msgstr "式に基づいたスコアリングに切り替える"
+
+msgid "The equation to be match against the student response points."
+msgstr "学生の回答ポイントと一致させる式。"
+
+msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
+msgstr "選択肢の識別子。この識別子は、他の応答または項目変数で使用されてはなりません。識別子は、文字またはアンダースコア(\"_\")で始まらなければならない文字列であり、文字、アンダースコア、ハイフン(\"-\")、ピリオド(\"-\.A\", a.k.a. full-stop)、ディジット、CombiningCharsおよびエクステンダーのみを含んでいる。"
+
+msgid "The identifier of your choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
+msgstr "選択した識別子。この識別子は、他の応答または項目変数で使用されてはなりません。識別子は、文字またはアンダースコア(\"_\")で始まらなければならない文字列であり、文字、アンダースコア、ハイフン(\"-\")、ピリオド(\"-\.A\", a.k.a. full-stop)、ディジット、CombiningCharsおよびエクステンダーのみを含んでいる。"
+
+msgid "The response processing will turn into qti custom mode using this equation to score this interaction. Subsequent changes need to be done in the global item custom response processing editor."
+msgstr "応答処理は、このインタラクションをスコア化するために、この式を使用して qti カスタムモードになります。その後の変更は、グローバル項目カスタム応答処理エディタで行う必要があります。"
+
+msgid "Thickness"
+msgstr "太さ"
+
+msgid "title"
+msgstr "タイトル"
+
+msgid "Title"
+msgstr "タイトル"
+
+msgid "to"
+msgstr "から"
+
+msgid "Type of Elements"
+msgstr "エレメントタイプ"
+
+msgid "width"
+msgstr "幅"
+
+msgid "X"
+msgstr "X"
+
+msgid "X axis"
+msgstr "X軸"
+
+msgid "Y"
+msgstr "Y"
+
+msgid "Y axis"
+msgstr "Y軸"
+
