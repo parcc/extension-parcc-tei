@@ -8,8 +8,7 @@
     "author": "Sam Sipasseuth",
     "email": "sam@taotesting.com",
     "response": {
-        "baseType": "integer",
-        "cardinality": "single"
+        "cardinality": "record"
     },
     "runtime" : {
         "hook" : "runtime/graphNumberLineInteraction.min.js",
