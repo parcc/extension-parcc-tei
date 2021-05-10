@@ -1,0 +1,82 @@
+.graphNumberLineInteraction {
+    width: 100%;
+    padding: 30px 30px 50px;
+    margin: 20px 0;
+    padding: 20px;
+    border: 6px solid #f5f3f2;
+
+    .shape-controls {
+      .clearfix {
+        overflow: auto;
+      }
+
+      .intervals-available {
+        float: left;
+        position: relative;
+        border: 6px solid #f5f3f2;
+        padding: 4px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+
+        .intervals-overlay {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          background: #ddd;
+          opacity: 0.6;
+          display: none;
+        }
+
+        .interval-available {
+          display: none;
+
+          &.activated {
+            display: inline-block;
+          }
+        }
+      }
+
+      .intervals-selected {
+        float: left;
+
+        .interval {
+          float: left;
+          position: relative;
+          width: 92px;
+          border: 6px solid #f5f3f2;
+          padding: 4px;
+          margin-right: 10px;
+
+          .deleter {
+            cursor: pointer;
+
+            &:before {
+              font-size: 1.25rem;
+              margin-right: 3px;
+            }
+          }
+
+          .btn {
+            margin-bottom: 10px;
+          }
+        }
+      }
+
+      button {
+        padding: 0 6px 8px;
+        height: 36px;
+        width: 72px;
+        margin-right: 2px;
+      }
+
+      .intervals-template {
+        display: none;
+      }
+
+      .intervals-row {
+        margin-bottom: 2px;
+      }
+    }
+  }
