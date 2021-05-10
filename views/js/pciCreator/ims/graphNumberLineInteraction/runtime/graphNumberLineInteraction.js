@@ -188,18 +188,14 @@ define([
                     record : [
                         {
                             name : 'lineTypes',
-                            base : {
-                                list : {
-                                    'string' : types
-                                }
+                            list : {
+                                'string' : types
                             }
                         },
                         {
                             name : 'values',
-                            base : {
-                                list : {
-                                    pair : values
-                                }
+                            list : {
+                                pair : values
                             }
                         }
                     ]
@@ -524,18 +520,16 @@ define([
                 response.record[0] &&
                 response.record[1] &&
                 response.record[0].name === 'lineTypes' &&
-                response.record[0].base &&
-                response.record[0].base.list &&
-                _.isArray(response.record[0].base.list.string) &&
+                response.record[0].list &&
+                _.isArray(response.record[0].list.string) &&
                 response.record[1].name === 'values' &&
-                response.record[1].base &&
-                response.record[1].base.list &&
-                _.isArray(response.record[1].base.list.pair) &&
-                response.record[0].base.list.length === response.record[1].base.list.length
+                response.record[1].list &&
+                _.isArray(response.record[1].list.pair) &&
+                response.record[0].list.length === response.record[1].list.length
                 ){
 
-                lineTypes = response.record[0].base.list.string;
-                values = response.record[1].base.list.pair;
+                lineTypes = response.record[0].list.string;
+                values = response.record[1].list.pair;
 
                 for(i = 0; i < lineTypes.length; i++){
                     point = values[i];
