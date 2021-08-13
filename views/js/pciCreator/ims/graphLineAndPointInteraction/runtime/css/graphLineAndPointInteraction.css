@@ -42,3 +42,10 @@
 
 .pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container.deactivated .btn {background : #AFB4BB !important; text-shadow:none;}
 .pointAndLineFunctionInteraction .shape-panel .shape-controls .button-container.deactivated .btn:hover {opacity:1; cursor:default;}
+
+.pointAndLineFunctionInteraction .scene-text {
+    user-select: none;
+}
+.pointAndLineFunctionInteraction .line {
+    pointer-events: none;
+}

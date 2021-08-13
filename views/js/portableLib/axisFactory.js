@@ -169,6 +169,8 @@ define(['taoQtiItem/portableLib/lodash'], function(_){
                     label.attr({
                         'font-size' : config.fontSize
                     });
+                    label.node.setAttribute('data-type', 'axis-label');
+
                     addCssClass(label, 'scene scene-text');
                     set.push(label);
 

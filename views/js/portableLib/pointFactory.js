@@ -79,6 +79,13 @@ define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/lodash'],
             children : paper.set(),
             /** @type {string} Unique ID */
             uid : _.uniqueId(),
+            /** @type {boolean} is drag in progress */
+            moved: false,
+            /** @type {Object} Store the original bounding box */
+            oBB: null,
+            /** @type {Object} The current bounding box */
+            bb: null,
+
             /**
              * Set _color value
              * @param {String} color
@@ -174,27 +181,28 @@ define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/lodash'],
             /**
              * Draw the point with his glow around it if applicable
              */
-            render : function(){
-
+            render : function() {
                 //clear all first:
                 this.remove();
 
                 /** @type {Object} Raphaël element object with type “circle” */
                 var circle = paper.circle(_x, _y, _r);
-                if(options.fill){
+
+                if(options.fill) {
                     circle.attr({
                         fill : _color,
                         stroke : '#000',
                         cursor : 'move'
                     });
-                }else{
+                } else {
                     circle.attr({
                         stroke : _color,
                         'stroke-width' : 3,
                         cursor : 'move'
                     });
                 }
-
+                circle.node.setAttribute('data-type', 'handle');
+                circle.node.setAttribute('uid', this.uid);
                 this.children.push(circle);
 
                 if(options.glow){
@@ -214,7 +222,6 @@ define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/lodash'],
             },
             /**
              * Remove the point from the canvas
-             * @returns {undefined}
              */
             remove : function(){
                 if(this.children.length > 0){
@@ -224,106 +231,148 @@ define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/lodash'],
             removeOnClic : function() {
                 var self = this;
 
-                this.children.click(function () {
+                this.children.click(function() {
                     if (options.removable && _dragEnabled === false) {
-                        self.remove();
-                        $(paper.canvas).trigger('removed.point', self);
+                        self.deletePoint.call(self);
                     }
                 });
             },
+            deletePoint: function() {
+                this.remove();
+                $(paper.canvas).trigger('removed.point', this);
+            },
+
+            /**
+             * On drag end handler
+             * @param {number} x x position of the mouse
+             * @param {number} y y position of the mouse
+             * @param {Object} event DOM event object
+             * deleteing and creating a point in order to workaround a re-positioning issue.
+             */
+            onDragStart: function(x, y, event) {
+                this.isDragging = false;
+
+                $(paper.canvas).on('mouseleave.drag', this.cancelDrag.bind(this));
+
+                //trigger event
+                if(typeof _events.dragStart === 'function'){
+                    _events.dragStart.call(this);
+                }
+
+                this.oBB = this.children.getBBox();
+            },
+
+            /**
+             * On drag end handler
+             * @param {number} dx shift by x from the start point
+             * @param {number} dy shift by y from the start point
+             * @param {number} x x position of the mouse
+             * @param {number} y y position of the mouse
+             * @param {Object} event DOM event object
+             * deleteing and creating a point in order to workaround a re-positioning issue.
+             */
+            onDragging: function(dx, dy, x, y, event) {
+                this.isDragging = true;
+                this.bb = this.children.getBBox();
+                var newX = (this.oBB.x - this.bb.x + dx),
+                    newY = (this.oBB.y - this.bb.y + dy);
+
+                // Handle x or y axis restrictions
+                if(options.axis === 'x') {
+                    newY = this.getY() - (this.bb.y + (this.bb.width / 2));
+                } else if(options.axis === 'y') {
+                    newX = this.getX() - (this.bb.x + (this.bb.width / 2));
+                }
+
+                // Handle min/max of x/y axis
+                var absoluteX = (this.bb.x + this.bb.width / 2);
+                var absoluteY = (this.bb.y + this.bb.height / 2);
+
+                if(options.xMin && absoluteX + newX < options.xMin) {
+                    newX = options.xMin - absoluteX;
+                } else if(options.xMax && absoluteX + newX > options.xMax) {
+                    newX = options.xMax - absoluteX;
+                }
+                if(options.yMin && absoluteY + newY < options.yMin) {
+                    newY = options.yMin - absoluteY;
+                } else if(options.yMax && absoluteY + newY > options.yMax) {
+                    newY = options.yMax - absoluteY;
+                }
+
+                //trigger event
+                if(typeof _events.drag === 'function') {
+                    _events.drag.call(this, newX, newY);
+                }
+
+                this.children.translate(newX, newY);
+            },
+
+            /**
+             * On drag end handler
+             * @param {Object} event DOM event object
+             * deleteing and creating a point in order to workaround a re-positioning issue.
+             */
+            onDragEnd: function(event) {
+                if(this.isDragging) {
+                    this.updatePosition();
+
+                } else if(options.removable) {
+                    this.deletePoint();
+                }
+
+                //trigger event
+                if(typeof _events.dragStop === 'function') {
+                    _events.dragStop.call(this, this.getX(), this.getY());
+                }
+
+                this.isDragging = false;
+                $(paper.canvas).off('mouseleave.drag');
+            },
+
+            /**
+             * Update point position,
+             * deleteing and creating a point in order to workaround a re-positioning issue.
+             */
+            updatePosition: function(newX, newY) {
+                var newX = (this.bb.x + (this.bb.width / 2)),
+                    newY = (this.bb.y + (this.bb.height / 2));
+
+                this.setCoord(newX,newY);
+                this.render();
+
+                if(this.children.length === 2){
+                    $(paper.canvas).trigger('moved.point');
+                }
+
+                this.drag();
+            },
+
             /**
              * Activate the dran'n'drop capability provide by RaphaelJS
              */
-            drag : function(){
-
-                var self = this,
-                    bb,
-                    moved = false;
-
+            drag: function() {
                 _dragEnabled = true;
-
-                this.children.drag(function(dx, dy){
-
-                    moved = true;
-                    /** @type {Object} The current bounding box */
-                    bb = self.children.getBBox();
-                    var newX = (self.oBB.x - bb.x + dx),
-                        newY = (self.oBB.y - bb.y + dy);
-
-                    if(options.axis === 'x'){
-                        newY = self.getY() - (bb.y + (bb.width / 2));
-                    }else if(options.axis === 'y'){
-                        newX = self.getX() - (bb.x + (bb.width / 2));
-                    }
-
-                    var absoluteX = (bb.x + bb.width / 2);
-                    var absoluteY = (bb.y + bb.height / 2);
-                    if(options.xMin && absoluteX + newX < options.xMin){
-                        newX = options.xMin - absoluteX;
-                    }else if(options.xMax && absoluteX + newX > options.xMax){
-                        newX = options.xMax - absoluteX;
-                    }
-                    if(options.yMin && absoluteY + newY < options.yMin){
-                        newY = options.yMin - absoluteY;
-                    }else if(options.yMax && absoluteY + newY > options.yMax){
-                        newY = options.yMax - absoluteY;
-                    }
-
-                    //trigger event
-                    if(typeof _events.drag === 'function'){
-                        _events.drag.call(self, newX, newY);
-                    }
-
-                    self.children.translate(newX, newY);
-
-                }, function(){
-
-                    moved = false;
-                    //trigger event
-                    if(typeof _events.dragStart === 'function'){
-                        _events.dragStart.call(self);
-                    }
-
-                    /** @type {Object} Store the original bounding box
-                     Since it's not just circle, it's impossible to use cx & cy
-                     instead, we'll use a bounding box representation and use their values*/
-                    self.oBB = self.children.getBBox();
-
-                }, function(){
-
-                    if(moved){
-
-                        var newX = (bb.x + (bb.width / 2)),
-                            newY = (bb.y + (bb.height / 2));
-
-                        /** Set Coordinate with center of the bounding box */
-                        self.setCoord(newX, newY);
-                        /** Call for a render again */
-
-                        //@todo this method is not correct sometimes
-                        self.children.translate(parseInt(self.getX() - newX), parseInt(self.getY() - newY));
-
-                        //trigger event
-                        if(typeof _events.dragStop === 'function'){
-                            _events.dragStop.call(self, self.getX(), self.getY());
-                        }
-                        $(paper.canvas).trigger('moved.point', self);
-
-                    }else if(options.removable){
-
-                        self.remove();
-                        $(paper.canvas).trigger('removed.point', self);
-                    }
-
-                });
+                this.children.drag(this.onDragging.bind(this), this.onDragStart.bind(this), this.onDragEnd.bind(this));
             },
+
             /**
              * De-Activate the drag'n'drop capavility provided by RapahelJS
              */
-            unDrag : function(){
+            unDrag: function() {
+                $(paper.canvas).off('.drag');
                 this.children.undrag();
                 _dragEnabled = false;
             },
+
+            /**
+             * Cancel drag'n'drop with dropping point on last valid point
+             */
+            cancelDrag: function() {
+                this.unDrag();
+                this.updatePosition();
+                this.drag();
+            },
+
             /**
              * Add glowing on point
              */
@@ -339,6 +388,8 @@ define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/lodash'],
                 if(this.children.length > 1){
                     this.children.pop().remove();
                 }
+                // glow.drag(this.onDragging.bind(this), this.onDragStart.bind(this), this.onDragEnd.bind(this));
+
                 this.children.push(glow);
                 this.children.attr('cursor', 'move');
             },
@@ -350,6 +401,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/lodash'],
                     this.children.pop().remove();
                 }
                 this.children.attr('cursor', 'default');
+                // this.unDrag();
             },
             setOption : function(key, value){
                 options[key] = value;

@@ -58,7 +58,6 @@ define([
         }
 
         function plot(){
-
             var point1 = points[0],
                 point2 = points[1],
                 plotConf = {color : config.lineColor, segment : segment, thickness : config.lineWeight, opacity : .8};
@@ -78,6 +77,8 @@ define([
                     line.attr({'stroke-dasharray' : config.lineStyle});
                 }
 
+                line.node.setAttribute('class', 'line');
+
                 $paperCanvas.trigger('drawn.lines', [line]);
             }
         }
@@ -92,7 +93,6 @@ define([
         }
 
         function addPoint(x, y, cartesian){
-
             var gridBBox = grid.getBBox();
 
             var newPoint = pointFactory(paper, grid, {
@@ -128,7 +128,6 @@ define([
         function bindEvents(){
 
             $paperCanvas.on('click_grid.' + uid, function(event, coord){
-
                 if(points.length < 2){
 
                     addPoint(coord.x, coord.y);
@@ -148,7 +147,11 @@ define([
                     plot();
                 }
 
-            }).on('removed.point.' + uid, function(event, removedPoint){
+            })
+            .on('moved.point.' + uid, function(event, coord) {
+                plot();
+            })
+            .on('removed.point.' + uid, function(event, removedPoint) {
                 if(points){
                     // get the point to remove from the "registry"
                     var pointToDelete = _.findIndex(points, {uid : removedPoint.uid});
